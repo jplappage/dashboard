@@ -1,0 +1,6 @@
+deploy-*.zip
+deploy-log.txt
+__pycache__/
+*.py[cod]
+.watcher.lock
+.wdc/
