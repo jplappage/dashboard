@@ -527,7 +527,7 @@
 </div>
 
 <div class="last-updated">
-  Last updated: 13 May 2026 (refresh #23) · Auto-deploy active ✓ · Sources: WhenToStream, JustWatch, Wikipedia · GitHub Pages
+  Last updated: 13 May 2026 (refresh #23) · Auto-deploy active ✓ · Sources: WhenToStream, JustWatch, Wikipedia
 </div>
 
 <script>
@@ -963,7 +963,7 @@ const CAL_EVENTS = (() => {
     add(f.vodDate, f.title, past ? 'cal-film-out' : 'cal-film-soon' + (f.estimated ? ' cal-est' : ''));
   });
   TV_SHOWS.forEach(s => {
-    add(s.streamDate, s.title + ' S' + s.season, 'cal-tv');
+    add(s.streamDate, s.title + (s.season ? ' S' + s.season : ''), 'cal-tv');
   });
   return map;
 })();
