@@ -37,10 +37,14 @@ try {
                 $lastDeploy = $now
                 Log "Change detected ($currentWrite). Pushing to GitHub..."
 
+                # Prevent GCM from opening browser/GUI prompts in headless mode
+                $env:GIT_TERMINAL_PROMPT = '0'
+                $env:GCM_INTERACTIVE     = 'never'
+
                 Push-Location $watchFolder
                 $result = git add -A 2>&1
                 $result += git commit -m "refresh $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1
-                $result += git push 2>&1
+                $result += git push --no-progress 2>&1
                 Pop-Location
 
                 if ($LASTEXITCODE -eq 0) {
