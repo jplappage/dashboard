@@ -42,15 +42,16 @@ try {
                     Log "Change detected ($currentWrite). Pushing to GitHub..."
 
                     Push-Location $watchFolder
-                    $result  = git add -A 2>&1
-                    $result += git commit -m "refresh $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1
-                    $result += git push --no-progress 2>&1
+                    git add -A 2>&1 | Out-Null
+                    git commit -m "refresh $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1 | Out-Null
+                    $pushOut = git push --no-progress 2>&1
+                    $pushOk  = $LASTEXITCODE
                     Pop-Location
 
-                    if ($LASTEXITCODE -eq 0) {
+                    if ($pushOk -eq 0) {
                         Log "Push succeeded."
                     } else {
-                        Log "Push FAILED: $result"
+                        Log "Push FAILED: $($pushOut -join ' ')"
                     }
                 }
             }
