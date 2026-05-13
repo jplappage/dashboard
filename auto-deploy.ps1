@@ -20,39 +20,42 @@ Set-Content $lockFile $PID
 
 Log "Watcher started (GitHub Pages mode)."
 
+$env:GIT_TERMINAL_PROMPT = '0'
+$env:GCM_INTERACTIVE     = 'never'
+
 $lastWrite  = (Get-Item $watchFile).LastWriteTime
 $lastDeploy = [DateTime]::MinValue
 
 try {
     while ($true) {
-        Start-Sleep -Seconds 5
+        try {
+            Start-Sleep -Seconds 5
 
-        $currentWrite = (Get-Item $watchFile).LastWriteTime
+            $currentWrite = (Get-Item $watchFile).LastWriteTime
 
-        if ($currentWrite -ne $lastWrite) {
-            $lastWrite = $currentWrite
-            $now = [DateTime]::Now
+            if ($currentWrite -ne $lastWrite) {
+                $lastWrite = $currentWrite
+                $now = [DateTime]::Now
 
-            if (($now - $lastDeploy).TotalSeconds -gt 15) {
-                $lastDeploy = $now
-                Log "Change detected ($currentWrite). Pushing to GitHub..."
+                if (($now - $lastDeploy).TotalSeconds -gt 15) {
+                    $lastDeploy = $now
+                    Log "Change detected ($currentWrite). Pushing to GitHub..."
 
-                # Prevent GCM from opening browser/GUI prompts in headless mode
-                $env:GIT_TERMINAL_PROMPT = '0'
-                $env:GCM_INTERACTIVE     = 'never'
+                    Push-Location $watchFolder
+                    $result  = git add -A 2>&1
+                    $result += git commit -m "refresh $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1
+                    $result += git push --no-progress 2>&1
+                    Pop-Location
 
-                Push-Location $watchFolder
-                $result = git add -A 2>&1
-                $result += git commit -m "refresh $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1
-                $result += git push --no-progress 2>&1
-                Pop-Location
-
-                if ($LASTEXITCODE -eq 0) {
-                    Log "Push succeeded."
-                } else {
-                    Log "Push FAILED: $result"
+                    if ($LASTEXITCODE -eq 0) {
+                        Log "Push succeeded."
+                    } else {
+                        Log "Push FAILED: $result"
+                    }
                 }
             }
+        } catch {
+            Log "Loop error (continuing): $_"
         }
     }
 } finally {
