@@ -265,7 +265,7 @@
     .filter-btn {
       padding: 6px 16px;
       border-radius: 100px;
-      border: 1px solid #2a2a3e;
+      border: 1px solid #333;
       background: transparent;
       color: #888888;
       font-size: 0.82rem;
@@ -274,9 +274,9 @@
     }
 
     .filter-btn:hover, .filter-btn.active {
-      background: #e6007a;
-      border-color: #e6007a;
-      color: white;
+      background: #ffe81f;
+      border-color: #ffe81f;
+      color: #000;
     }
 
     .section {
@@ -323,8 +323,8 @@
 
     .card:hover {
       transform: translateY(-4px);
-      border-color: #e6007a;
-      box-shadow: 0 8px 32px rgba(230, 0, 122, 0.2);
+      border-color: #ffe81f;
+      box-shadow: 0 8px 32px rgba(255,232,31,0.25);
     }
 
     .card:hover .card-overlay {
@@ -334,7 +334,7 @@
     .card-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(230, 0, 122, 0.15);
+      background: rgba(255,232,31,0.08);
       opacity: 0;
       transition: opacity 0.2s ease;
       display: flex;
@@ -344,7 +344,7 @@
     }
 
     .card-overlay-text {
-      background: #e6007a;
+      background: #ffe81f;
       color: white;
       font-size: 0.7rem;
       font-weight: 600;
@@ -522,7 +522,7 @@
 
     .cal-cell.cal-empty { background: transparent; border-color: transparent; }
 
-    .cal-cell.cal-today { border-color: #e6007a; background: #1a1020; }
+    .cal-cell.cal-today { border-color: #ffe81f; background: #1a1020; }
 
     .cal-day-num {
       font-size: 0.75rem;
@@ -531,7 +531,7 @@
       margin-bottom: 5px;
     }
 
-    .cal-cell.cal-today .cal-day-num { color: #e6007a; }
+    .cal-cell.cal-today .cal-day-num { color: #ffe81f; }
 
     .cal-event {
       display: block;
@@ -558,7 +558,7 @@
   <div class="header-left">
     <h1>THE WATCHLIST</h1>
   </div>
-<button id="cal-toggle-btn" onclick="toggleCalendar()" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#e8e8f0;padding:8px 18px;border-radius:100px;font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.15s ease;position:relative;z-index:1;" onmouseover="this.style.background='#e6007a';this.style.borderColor='#e6007a'" onmouseout="if(!calendarOpen)this.style.background='rgba(255,255,255,0.07)';if(!calendarOpen)this.style.borderColor='rgba(255,255,255,0.15)'">📅 Calendar</button>
+<button id="cal-toggle-btn" onclick="toggleCalendar()" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#e8e8f0;padding:8px 18px;border-radius:100px;font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.15s ease;position:relative;z-index:1;" onmouseover="this.style.background='#ffe81f';this.style.borderColor='#ffe81f'" onmouseout="if(!calendarOpen)this.style.background='rgba(255,255,255,0.07)';if(!calendarOpen)this.style.borderColor='rgba(255,255,255,0.15)'">📅 Calendar</button>
 </header>
 
 <div class="filter-bar">
@@ -1042,8 +1042,8 @@ function toggleCalendar() {
   document.getElementById('calendar-view').style.display  = calendarOpen ? 'block' : 'none';
   document.querySelector('.filter-bar').style.display     = calendarOpen ? 'none' : '';
   btn.textContent = calendarOpen ? '🎬 Back to List' : '📅 Calendar';
-  btn.style.background    = calendarOpen ? '#e6007a' : 'rgba(255,255,255,0.07)';
-  btn.style.borderColor   = calendarOpen ? '#e6007a' : 'rgba(255,255,255,0.15)';
+  btn.style.background    = calendarOpen ? '#ffe81f' : 'rgba(255,255,255,0.07)';
+  btn.style.borderColor   = calendarOpen ? '#ffe81f' : 'rgba(255,255,255,0.15)';
   if (calendarOpen) renderCalendar();
 }
 
