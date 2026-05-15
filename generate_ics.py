@@ -23,6 +23,7 @@ ICS_FILE   = os.path.join(SCRIPT_DIR, 'watchlist.ics')
 # IMPORTANT: once an entry is in this list, never update or re-check it.
 # No IMDB rating lookups, no date refreshes. It is a permanent record as-is.
 WATCHED = [
+    { 'title': 'Lord of the Flies', 'vodDate': '2026-05-04', 'imdbRating': 6.7 },
     { 'title': 'Ready or Not 2: Here I Come', 'vodDate': '2026-05-05', 'imdbRating': 7.8 },
     { 'title': 'Gary', 'vodDate': '2026-05-05', 'imdbRating': 7.7 },
     { 'title': 'The Punisher: One Last Kill', 'vodDate': '2026-05-12', 'imdbRating': 5.7 },
