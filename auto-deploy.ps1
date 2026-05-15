@@ -42,6 +42,13 @@ try {
                     Log "Change detected ($currentWrite). Pushing to GitHub..."
 
                     Push-Location $watchFolder
+                    # Regenerate ICS so calendar stays in sync
+                    try {
+                        python generate_ics.py 2>&1 | Out-Null
+                        Log "ICS regenerated."
+                    } catch {
+                        Log "ICS generation failed (continuing): $_"
+                    }
                     git add -A 2>&1 | Out-Null
                     git commit -m "refresh $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1 | Out-Null
                     $pushOut = git push --no-progress 2>&1

@@ -1,60 +1,91 @@
 # Watchlist VOD Dashboard — Refresh Instructions
 
-When the user asks to refresh the watchlist dashboard (`watchlist-dashboard.html`), follow these steps in order:
+## Step 1 — Check Letterboxd for film changes
+→ `https://letterboxd.com/zidanejp/watchlist/`
 
-## 1. Re-scrape the Letterboxd watchlist
-```bash
-curl -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
-  "https://letterboxd.com/zidanejp/watchlist/" \
-  | grep -o 'data-item-full-display-name="[^"]*"' \
-  | sed 's/data-item-full-display-name="//;s/"//'
+Compare the watchlist against the FILMS array in `watchlist-dashboard.html`.
+- **Added** films: note them for Step 3
+- **Removed** films: note them for Step 4
+
+## Step 2 — Check IMDB for TV show changes
+→ `https://www.imdb.com/user/p.ddabjmjar4tan4zozpsg3dpe7a/watchlist/`
+
+Compare against the TV_SHOWS array in `watchlist-dashboard.html`.
+- **Added** shows: note them for Step 3
+- **Removed** shows: note them for Step 4
+- For each existing show, check for upcoming season/premiere/finale dates and update `streamDate`, `finaleDate`, `note`, `isNew` as needed
+
+## Step 3 — Add new films and shows
+For each new film from Step 1:
+```js
+{
+  title: '',
+  year: 2026,
+  slug: '',           // letterboxd slug (from the film's letterboxd URL)
+  poster: '',         // https://a.ltrbxd.com/resized/film-poster/...
+  vodDate: null,
+  platform: null,
+  estimated: false,
+  imdbRating: 7.5,    // only if the film has been released and is rated on imdb.com
+}
 ```
-- Compare the result against the current FILMS array in `watchlist-dashboard.html`
-- Note any **added** or **removed** films
-- For newly added films, also fetch poster URLs:
-  ```bash
-  curl -s -A "Mozilla/5.0" "https://letterboxd.com/film/{slug}/" \
-    | grep -o '"image":"https://a\.ltrbxd[^"]*"'
-  ```
-
-## 2. Check for VOD date updates
-For any film currently showing `vodDate: null` (i.e. `??`), run WebSearch queries like:
-> `"{Film Title}" {year} VOD digital release date streaming`
-
-Priority sources (in order): WhenToStream, JustWatch, Bingebase, DreadCentral, ScreenRant.
-
-Also re-check films with `estimated: true` — they may now have confirmed dates.
-
-## 3. Highlight new release dates
-In the updated HTML, mark any **newly discovered VOD dates** (dates that were previously `null` or estimated) with a `🆕` icon next to the date in the card body, e.g.:
-```html
-<div class="card-date date-soon">🆕 12 Jun 2026</div>
+For each new TV show from Step 2:
+```js
+{
+  title: '',
+  season: 1,
+  slug: '',
+  poster: '',
+  streamDate: 'YYYY-MM-DD',
+  finaleDate: null,
+  platform: '',
+  note: '',
+  isNew: true,
+  imdbRating: 8.0,
+}
 ```
-This highlight should persist in the file (it's just a visual marker — no auto-expiry needed).
 
-## 4. Update the dashboard
-- Add any new films (with poster, vodDate, platform, estimated fields)
-- Remove any films no longer on the watchlist
-- Update changed dates
-- Update the `Last updated:` line at the bottom of the HTML
+## Step 4 — Archive removed films and shows
+For any film/show no longer on the Letterboxd or IMDB watchlist:
+- Check `https://letterboxd.com/zidanejp/films/diary/` to confirm it was watched
+- Remove it from the FILMS or TV_SHOWS array in the dashboard
+- Add it to the `WATCHED` list in `generate_ics.py` with the watched date if known
 
-## TV Shows (IMDB Watchlist)
-IMDB is blocked by the sandbox proxy so the watchlist cannot be scraped automatically. Instead, maintain the TV_SHOWS array manually in the HTML based on what the user tells you.
+## Step 5 — Look up streaming dates
+For every film/show with `vodDate: null` or `estimated: true`:
+- Search for a confirmed streaming date
+- **Only update if the film is confirmed as actually streaming** — not pre-order, not "coming soon" listings
+- Verify on the platform's own website (e.g. sky.com/watch, primevideo.com, mubi.com)
+- Update `vodDate`, `platform`, and set `estimated: false` if now confirmed
 
-**Current TV shows to track:**
-- The Boys (Prime Video) — check current season streaming status each refresh
-- Spider-Noir (Prime Video) — Season 1 premieres May 27, 2026
+---
 
-**On each refresh, for each TV show:**
-- WebSearch: `"{Show Title}" season {N} streaming {platform} 2026`
-- Update `streamDate` if a new season has started
-- Update `note` with episode count / finale date info
-- Set `isNew: true` if the season just started since the last refresh
-- If user tells you a show has been added/removed from their IMDB watchlist, add/remove it from the TV_SHOWS array
+## Finally
+- Update the footer: `Last updated: DD Mon YYYY (refresh #N)`
+- The ICS calendar regenerates and deploys automatically on save
 
-## Notes
-- The user only cares about **VOD/digital/streaming** dates, NOT cinema release dates
-- Plex links use the pattern: `https://watch.plex.tv/en-GB/movie/{letterboxd-slug}`
-- `whentostream.com` is blocked by the sandbox proxy — use WebSearch instead
-- `a.ltrbxd.com` poster images load fine in the browser but can't be curl-fetched from the sandbox
-- Today's context: user is JP (jplappage@outlook.com), based in GB
+---
+
+## Data Quality Rules
+
+**VOD dates:**
+- Pre-order ≠ available. Only mark `vodDate` if it is streaming right now.
+- Always verify on the platform's own site, not search results or aggregators.
+
+**IMDB ratings:**
+- Only add `imdbRating` if the film has been released and has a rating on its IMDB page.
+- Films releasing today or in future will not have a real rating yet.
+
+**Platform names — use consistent formatting:**
+`'Prime Video'` · `'Netflix'` · `'Disney+'` · `'Apple TV+'` · `'MUBI'` · `'Sky Cinema / NOW'` · `'Paramount+'`
+For multiple: `'Prime Video / Apple TV+'`
+
+---
+
+## Reference
+- JP is based in **GB** — use UK streaming platforms and dates
+- Cinema release dates are irrelevant — VOD/streaming only
+- Live site: `https://jplappage.github.io/dashboard/`
+- Letterboxd: `https://letterboxd.com/zidanejp/watchlist/`
+- Plex links: `https://watch.plex.tv/en-GB/movie/{letterboxd-slug}`
+- `whentostream.com` is blocked in the sandbox — use WebSearch instead
