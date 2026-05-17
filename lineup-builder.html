@@ -947,13 +947,4 @@ try { localStorage.removeItem('liverpool_lineup_v1'); } catch(e) {}
 
 // Apply France CSS vars on load
 const root = document.documentElement;
-Object.entries(TEAM_CONFIG.france.css).forEach(([k,v]) => root.style.setProperty(k,v));
-
-loadState();
-requestAnimationFrame(() => refresh());
-</script>
-<footer style="text-align:center;padding:16px;font-size:0.72rem;color:#888;border-top:1px solid #222;margin-top:24px;">
-  <a href="/dashboard/" style="color:#ffe81f;text-decoration:none;font-family:-apple-system,sans-serif;">⬡ All dashboards</a>
-</footer>
-</body>
-</html>
+Object.

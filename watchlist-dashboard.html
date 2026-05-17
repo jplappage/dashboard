@@ -1074,22 +1074,4 @@ function renderCalendar() {
     const cell = document.createElement('div');
     cell.className = 'cal-cell' + (new Date(calYear,calMonth,d).getTime()===TODAY.getTime() ? ' cal-today' : '');
     const num = document.createElement('div');
-    num.className = 'cal-day-num';
-    num.textContent = d;
-    cell.appendChild(num);
-    (CAL_EVENTS[ds] || []).forEach(ev => {
-      const s = document.createElement('span');
-      s.className = 'cal-event ' + ev.cls;
-      s.textContent = ev.title;
-      s.title = ev.title;
-      cell.appendChild(s);
-    });
-    grid.appendChild(cell);
-  }
-}
-
-renderFilms();
-</script>
-
-</body>
-</html>
+    num.clas

@@ -63,9 +63,4 @@ try {
                 }
             }
         } catch {
-            Log "Loop error (continuing): $_"
-        }
-    }
-} finally {
-    Remove-Item $lockFile -ErrorAction SilentlyContinue
-}
+            Log "L
