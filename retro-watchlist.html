@@ -277,7 +277,11 @@
     </select>
   </div>
   <button id="toggle-watched" onclick="toggleWatched()" style="align-self:flex-end;padding:6px 14px;background:transparent;border:1px solid #444;border-radius:6px;color:#888;font-size:0.78rem;cursor:pointer;white-space:nowrap;">＋ Show watched</button>
-  <select id="filter-status" style="display:none"></select>
+  <select id="filter-status" style="display:none">
+    <option value="">All Films</option>
+    <option value="unwatched">Unwatched</option>
+    <option value="watched">Watched</option>
+  </select>
   <div class="filter-group">
     <span class="filter-label">Search</span>
     <input type="text" class="search-input" id="filter-search" placeholder="Search title…" oninput="applyFilters()">
