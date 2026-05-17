@@ -27,6 +27,7 @@ WATCHED = [
     { 'title': 'Ready or Not 2: Here I Come', 'vodDate': '2026-05-05', 'imdbRating': 7.8 },
     { 'title': 'Gary', 'vodDate': '2026-05-05', 'imdbRating': 7.7 },
     { 'title': 'The Punisher: One Last Kill', 'vodDate': '2026-05-12', 'imdbRating': 5.7 },
+    { 'title': 'Faces of Death', 'vodDate': '2026-05-12', 'imdbRating': 6.8 },
 ]
 
 
