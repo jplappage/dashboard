@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lineup Builder</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --header-g1: #001a5c;
+  --header-g2: #0032c8;
+  --header-border: #ED2939;
+  --accent: #ED2939;
+  --accent-light: #ff7080;
+  --squad-bg: rgba(0,50,200,0.22);
+  --squad-color: #7aaaff;
+  --squad-border: rgba(0,50,200,0.3);
+  --squad-bg-dv: rgba(0,50,200,0.42);
+  --squad-border-dv: #5599ff;
+  --pcard-sq-bg: rgba(0,40,160,0.28);
+  --pcard-sq-hover: rgba(0,40,160,0.55);
+}
+
+body {
+  background: #0d1117;
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER ── */
+header {
+  background: linear-gradient(135deg, var(--header-g1), var(--header-g2));
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 3px solid var(--header-border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.flag { font-size: 26px; }
+.title h1 { font-size: 16px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+.title .sub { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; }
+
+/* ── TEAM TABS ── */
+.team-tabs { display: flex; gap: 6px; }
+.ttab {
+  background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.75); padding: 7px 16px; border-radius: 10px;
+  cursor: pointer; font-size: 13px; font-weight: 700; transition: all 0.15s; white-space: nowrap;
+  display: flex; align-items: center; gap: 9px;
+}
+.ttab:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.3); }
+.ttab.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.5); color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.15); }
+.ttab-logo { height: 26px; width: auto; display: block; }
+.ttab-logo.invert { filter: brightness(0) invert(1); opacity: 0.9; }
+
+/* ── FORMATION BAR ── */
+.fbar { margin-left: auto; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.fbar-label { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
+.fbtn {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.85); padding: 5px 11px; border-radius: 20px;
+  cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.14s;
+}
+.fbtn:hover { background: rgba(255,255,255,0.18); color: #fff; }
+.fbtn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.reset-btn {
+  margin-left: 6px; background: transparent; border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.7); padding: 5px 13px; border-radius: 7px;
+  cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.14s;
+}
+.reset-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── MAIN ── */
+.main { display: flex; flex: 1; padding: 10px 12px; gap: 10px; overflow: hidden; min-height: 0; }
+
+/* ── SIDEBARS ── */
+.sidebar {
+  flex-shrink: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+.left-sidebar  { width: 390px; }
+.right-sidebar { width: 320px; }
+.left-sidebar  .player-grid { grid-template-columns: repeat(5, 1fr); }
+.right-sidebar .player-grid { grid-template-columns: repeat(4, 1fr); }
+
+/* Section headers */
+.sec-hdr {
+  display: flex; align-items: center; gap: 7px; padding: 8px 10px;
+  font-size: 10.5px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  border-radius: 7px; border: 1.5px solid transparent; transition: all 0.14s;
+  cursor: default; margin-bottom: 6px; flex-shrink: 0;
+}
+.sec-hdr.squad { background: var(--squad-bg); color: var(--squad-color); border-color: var(--squad-border); }
+.sec-hdr.squad.dv { background: var(--squad-bg-dv); border-color: var(--squad-border-dv); color: #fff; }
+.sec-hdr.fringe { background: rgba(80,80,80,0.18); color: rgba(255,255,255,0.48); border-color: rgba(255,255,255,0.08); margin-top: 10px; }
+.sec-hdr.fringe.dv { background: rgba(80,80,80,0.38); border-color: rgba(255,255,255,0.35); color: #fff; }
+.sec-hdr.unavail { background: rgba(160,20,20,0.2); color: rgba(255,120,120,0.85); border-color: rgba(200,40,40,0.3); margin-top: 10px; }
+.sec-hdr.away { background: rgba(20,80,160,0.2); color: rgba(100,180,255,0.85); border-color: rgba(40,120,220,0.3); margin-top: 10px; }
+
+.pos-grp { margin-bottom: 0; }
+.pos-ttl {
+  grid-column: 1 / -1;
+  font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.28); padding: 4px 2px 1px;
+}
+
+/* ── PLAYER GRID ── */
+.player-grid { display: grid; gap: 4px; padding: 2px 2px 6px; }
+
+/* ── PCARD ── */
+.pcard {
+  display: flex; flex-direction: column; align-items: center;
+  border-radius: 8px; padding: 5px 2px 4px; cursor: grab;
+  border: 1.5px solid transparent; transition: background 0.13s, border-color 0.13s;
+  position: relative;
+}
+.pcard:active { cursor: grabbing; }
+.pcard.squad  { background: var(--pcard-sq-bg); border-color: rgba(255,255,255,0.07); }
+.pcard.fringe { background: rgba(70,70,70,0.22); border-color: rgba(255,255,255,0.06); }
+.pcard.on-pitch { opacity: 0.22; pointer-events: none; }
+.pcard.squad:not(.on-pitch):hover  { background: var(--pcard-sq-hover); border-color: rgba(255,255,255,0.25); }
+.pcard.fringe:not(.on-pitch):hover { background: rgba(70,70,70,0.45); border-color: rgba(255,255,255,0.2); }
+.pcard.injured   { border-color: #e74c3c !important; box-shadow: 0 0 0 1px rgba(231,76,60,0.5); }
+.pcard.suspended { border-color: #f1c40f !important; box-shadow: 0 0 0 1px rgba(241,196,15,0.5); }
+
+/* Card avatar */
+.pcard-av {
+  width: 68px; height: 68px; border-radius: 50%; overflow: hidden;
+  background: rgba(0,0,0,0.3); flex-shrink: 0; margin-bottom: 3px;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+.pcard-img { width: 100%; height: 100%; object-fit: cover; object-position: center 28%; display: block; }
+
+.pcard-name {
+  font-size: 9.5px; font-weight: 600; text-align: center; width: 100%;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: rgba(255,255,255,0.88); padding: 0 1px; margin-bottom: 4px;
+}
+
+/* Status buttons */
+.pcard-overlay { display: flex; flex-direction: row; gap: 2px; justify-content: center; width: 100%; }
+.pcard-btn {
+  flex: 1; max-width: 26px; height: 21px; border-radius: 4px; cursor: pointer;
+  border: 1.5px solid transparent; font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.14s; user-select: none;
+}
+.pcard-btn.inj  { background: rgba(231,76,60,0.15);  border-color: rgba(231,76,60,0.35); }
+.pcard-btn.inj:hover  { background: rgba(231,76,60,0.35);  border-color: #e74c3c; }
+.pcard-btn.inj.on     { background: #c0392b; border-color: #e74c3c; box-shadow: 0 0 6px rgba(231,76,60,0.7); }
+.pcard-btn.sus  { background: rgba(180,20,20,0.12);  border-color: rgba(200,30,30,0.32); }
+.pcard-btn.sus:hover  { background: rgba(180,20,20,0.35);  border-color: #c0392b; }
+.pcard-btn.sus.on     { background: #7b241c; border-color: #c0392b; box-shadow: 0 0 6px rgba(180,20,20,0.8); }
+.pcard-btn.away { background: rgba(52,152,219,0.12); border-color: rgba(52,152,219,0.3); }
+.pcard-btn.away:hover { background: rgba(52,152,219,0.32); border-color: #3498db; }
+.pcard-btn.away.on    { background: #1a6090; border-color: #3498db; box-shadow: 0 0 6px rgba(52,152,219,0.7); }
+
+/* ── PITCH ── */
+.pitch-wrap { flex: 1; display: flex; justify-content: center; align-items: stretch; min-width: 0; }
+.pitch {
+  position: relative; width: 100%; max-width: 580px;
+  background: #2d8b3a; border: 3px solid rgba(255,255,255,0.62); border-radius: 4px; overflow: visible;
+}
+.pitch::before {
+  content: ''; position: absolute; inset: 0; border-radius: 2px; pointer-events: none;
+  background: repeating-linear-gradient(180deg,
+    rgba(0,0,0,0.07) 0px, rgba(0,0,0,0.07) 55px, transparent 55px, transparent 110px);
+}
+.pitch-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
+/* ── SLOTS ── */
+.slot-wrap {
+  position: absolute; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 3px; z-index: 10;
+}
+.slot-tag {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase;
+  color: rgba(255,255,255,0.9); text-shadow: 0 1px 5px rgba(0,0,0,1);
+  background: rgba(0,0,0,0.55); padding: 1px 6px; border-radius: 4px;
+}
+.slot-circle {
+  width: 96px; height: 96px; border-radius: 50%; overflow: hidden;
+  border: 2px dashed rgba(255,255,255,0.38); background: rgba(0,0,0,0.14);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; transition: all 0.17s; cursor: default;
+}
+.slot-circle:not(.hp):hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.55); }
+.slot-circle.hp {
+  border: 3px solid rgba(255,255,255,0.85); border-style: solid; cursor: grab;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.55);
+}
+.slot-circle.hp:hover { transform: scale(1.06); }
+.slot-circle.hp:active { cursor: grabbing; }
+.slot-circle.dv { border: 3px solid #fff; background: rgba(255,255,255,0.22); transform: scale(1.1); }
+.slot-circle.inj-ring { box-shadow: 0 0 0 3px #e74c3c, 0 4px 18px rgba(0,0,0,0.5); }
+.slot-circle.sus-ring { box-shadow: 0 0 0 3px #f1c40f, 0 4px 18px rgba(0,0,0,0.5); }
+
+.slot-img { width: 100%; height: 100%; object-fit: cover; object-position: center 28%; pointer-events: none; display: block; }
+.slot-empty { font-size: 22px; opacity: 0.2; pointer-events: none; }
+.slot-badge { position: absolute; bottom: 2px; right: 2px; font-size: 15px; filter: drop-shadow(0 1px 3px rgba(0,0,0,1)); pointer-events: none; }
+.slot-name {
+  font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap;
+  text-shadow: 0 1px 5px rgba(0,0,0,1); background: rgba(0,0,0,0.6);
+  padding: 2px 6px; border-radius: 4px; max-width: 88px;
+  overflow: hidden; text-overflow: ellipsis; text-align: center;
+}
+
+/* ── XI COUNTER ── */
+.xi-counter {
+  display: flex; align-items: center; gap: 10px; margin-left: 10px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; padding: 4px 12px;
+}
+.xi-counter .xi-label { font-size: 11px; color: rgba(255,255,255,0.5); white-space: nowrap; }
+.xi-counter .xi-num { font-size: 17px; font-weight: 900; color: var(--accent); min-width: 22px; text-align: right; }
+.xi-counter .xi-denom { font-size: 12px; color: rgba(255,255,255,0.4); }
+.prog-bg { width: 60px; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 3px; transition: width 0.3s ease; }
+
+/* ── TRIBUTE CARD ── */
+.tribute-section { margin-top: 12px; padding: 0 2px 6px; }
+.tribute-card {
+  position: relative; border-radius: 10px; overflow: hidden;
+  background: linear-gradient(135deg, #120606 0%, #2a0a0a 60%, #1a0000 100%);
+  border: 1.5px solid rgba(200,16,46,0.45);
+  padding: 10px 12px 10px 12px; display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  cursor: default; user-select: none;
+}
+.tribute-forever {
+  position: absolute; top: 8px; left: 10px;
+  background: #111; color: #fff; font-size: 8.5px; font-weight: 900;
+  letter-spacing: 2.5px; padding: 3px 9px; border-radius: 20px;
+  text-transform: uppercase; border: 1px solid rgba(255,255,255,0.12);
+}
+.tribute-info { flex: 1; padding-top: 18px; min-width: 0; }
+.tribute-jersey {
+  font-size: 40px; font-weight: 900; color: rgba(255,255,255,0.13);
+  line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -1px;
+}
+.tribute-name { font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.88); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tribute-pos  { font-size: 9.5px; color: rgba(200,16,46,0.85); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 3px; }
+.tribute-photo {
+  width: 74px; height: 74px; border-radius: 50%; overflow: hidden;
+  border: 2px solid rgba(200,16,46,0.5); background: rgba(0,0,0,0.4);
+  flex-shrink: 0; opacity: 0.9;
+}
+.tribute-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="flag" id="teamFlag"><img src="https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg&w=80&output=png" style="height:36px;width:auto;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.6))"></span>
+  <div class="title">
+    <h1 id="teamName">France</h1>
+    <div class="sub" id="teamSub">World Cup 2026 · Lineup Builder</div>
+  </div>
+  <div class="team-tabs">
+    <button class="ttab active" data-team="france">
+      <img class="ttab-logo" src="https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg&w=80&output=png">
+      France
+    </button>
+    <button class="ttab" data-team="liverpool">
+      <img class="ttab-logo invert" src="https://a.espncdn.com/i/teamlogos/soccer/500/364.png">
+      Liverpool
+    </button>
+  </div>
+  <div class="fbar">
+    <span class="fbar-label">Formation</span>
+    <button class="fbtn active" data-f="4-3-3">4-3-3</button>
+    <button class="fbtn" data-f="4-4-2">4-4-2</button>
+    <button class="fbtn" data-f="4-2-3-1">4-2-3-1</button>
+    <button class="fbtn" data-f="4-1-4-1">4-1-4-1</button>
+    <button class="fbtn" data-f="3-5-2">3-5-2</button>
+    <button class="fbtn" data-f="3-4-3">3-4-3</button>
+    <button class="fbtn" data-f="5-3-2">5-3-2</button>
+    <button class="reset-btn" id="resetBtn">↺ Reset</button>
+    <div class="xi-counter">
+      <span class="xi-label">Selected</span>
+      <span class="xi-num" id="cntNum">0</span>
+      <span class="xi-denom">/11</span>
+      <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+  <div class="sidebar left-sidebar" ondragover="event.preventDefault()" ondrop="onDropSidebar(event)">
+    <div class="sec-hdr squad" id="squadHdr"
+      ondragover="hdrOver(event,'squad')" ondragleave="hdrLeave('squad')" ondrop="hdrDrop(event,'squad')">
+      🟦 SQUAD
+    </div>
+    <div id="squad-pool"></div>
+  </div>
+
+  <div class="pitch-wrap">
+    <div class="pitch" id="pitch"
+      ondragover="event.preventDefault()" ondrop="onDropPitchBg(event)">
+      <svg class="pitch-svg" viewBox="0 0 434 100%" preserveAspectRatio="none"
+           xmlns="http://www.w3.org/2000/svg" id="pitchSvg"></svg>
+    </div>
+  </div>
+
+  <div class="sidebar right-sidebar" ondragover="event.preventDefault()" ondrop="onDropSidebar(event)">
+    <div class="sec-hdr fringe" id="fringeHdr"
+      ondragover="hdrOver(event,'fringe')" ondragleave="hdrLeave('fringe')" ondrop="hdrDrop(event,'fringe')">
+      ⚪ FRINGE
+    </div>
+    <div id="fringe-pool"></div>
+    <div class="sec-hdr unavail" id="unavailHdr" style="display:none">⛔ UNAVAILABLE</div>
+    <div id="unavail-pool" style="display:none"></div>
+    <div id="tribute-section" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  IMAGE SYSTEM
+// ════════════════════════════════════════════════════════
+const POS_GRAD = {
+  GK:  ['#7a5200','#c98a00'],
+  DEF: ['#0d3a82','#1a6ad4'],
+  MID: ['#0d5c2a','#1ca050'],
+  ATT: ['#7a1010','#d42020'],
+};
+
+function makeSVG(full, pos) {
+  const parts = full.trim().split(/\s+/);
+  const ini = (parts.length > 1)
+    ? parts[0][0].toUpperCase() + parts[parts.length-1][0].toUpperCase()
+    : parts[0].slice(0,2).toUpperCase();
+  const [c1, c2] = POS_GRAD[pos] || ['#002395','#1a5cb3'];
+  return 'data:image/svg+xml,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/>
+      </linearGradient></defs>
+      <rect width="80" height="80" fill="url(#g)"/>
+      <text x="40" y="38" font-family="Arial,sans-serif" font-size="30" font-weight="900"
+            fill="white" text-anchor="middle" dominant-baseline="middle">${ini}</text>
+      <rect x="0" y="58" width="80" height="22" fill="rgba(0,0,0,0.45)"/>
+      <text x="40" y="73" font-family="Arial,sans-serif" font-size="11" font-weight="700"
+            fill="rgba(255,255,255,0.85)" text-anchor="middle">${pos}</text>
+    </svg>`
+  );
+}
+
+function loadImg(el, sfId, tmImg, full, pos, lfcImg) {
+  const svgSrc = makeSVG(full, pos);
+  const sources = [];
+  if (lfcImg) sources.push(lfcImg);
+  if (tmImg) {
+    const raw = `img.a.transfermarkt.technology/portrait/medium/${tmImg}`;
+    sources.push(`https://images.weserv.nl/?url=${encodeURIComponent(raw)}&w=220&fit=cover&a=top&output=jpg`);
+    sources.push(`https://img.a.transfermarkt.technology/portrait/medium/${tmImg}`);
+  }
+  if (sfId) {
+    sources.push(`https://cdn.sofifa.net/players/${sfId}/25_120.png`);
+    sources.push(`https://cdn.sofifa.net/players/${sfId}/24_120.png`);
+  }
+  function tryNext(idx) {
+    if (idx >= sources.length) { el.src = svgSrc; el.onerror = null; return; }
+    el.onerror = () => tryNext(idx + 1);
+    el.src = sources[idx];
+  }
+  if (sources.length) tryNext(0); else el.src = svgSrc;
+}
+
+// ════════════════════════════════════════════════════════
+//  TEAM DATA
+// ════════════════════════════════════════════════════════
+const FRANCE_PLAYERS = [
+  // ── GK
+  { id:'maignan',    name:'Maignan',      full:'Mike Maignan',         pos:'GK',  sec:'squad',  sfId:222344,  tmImg:'182906-1681459155.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/932290dc27718ee1faef74bd6a4a6573.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'samba',      name:'Samba',        full:'Brice Samba',          pos:'GK',  sec:'squad',  sfId:215463,  tmImg:'191056-1602242038.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/575ff01edb644b401d2bf0805186fdc8.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'risser',     name:'Risser',       full:'Robin Risser',         pos:'GK',  sec:'squad',  sfId:null,    tmImg:'743515-1732575159.png'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/e4a2305b964565a5eabdf92138aff88e.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  // ── DEF
+  { id:'digne',      name:'Digne',        full:'Lucas Digne',          pos:'DEF', sec:'squad',  sfId:188566,  tmImg:'126664-1736160616.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/3dd7cb2b58120608786018114e78ddfb.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'gusto',      name:'Gusto',        full:'Malo Gusto',           pos:'DEF', sec:'squad',  sfId:264090,  tmImg:'620322-1752061866.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/80b978e54bbc05e7e6cebd526d0d0f8c.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'lhernandez', name:'L.Hernandez',  full:'Lucas Hernandez',      pos:'DEF', sec:'squad',  sfId:206161,  tmImg:'281963-1667830435.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/6248d8a33e0e4a1afe647265464f1de4.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'thernandez', name:'T.Hernandez',  full:'Theo Hernandez',       pos:'DEF', sec:'squad',  sfId:215386,  tmImg:'339808-1725532072.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/bc5a35a9e8b6423017dff836a87a9002.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'konate',     name:'Konaté',       full:'Ibrahima Konaté',      pos:'DEF', sec:'squad',  sfId:247369,  tmImg:'357119-1669190550.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/03d0798f41cf20f6a25fbc4c0b8e2409.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'kounde',     name:'Koundé',       full:'Jules Koundé',         pos:'DEF', sec:'squad',  sfId:240456,  tmImg:'411975-1702502639.jpg',  lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/049a3b337d4590f9c68e5cdeae6311f5.jpeg?twic=v1/focus=2059x1456/cover=440x560' },
+  { id:'saliba',     name:'Saliba',       full:'William Saliba',       pos:'DEF', sec:'squad',  sfId:241545,  tmImg:'495666-1718697201.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/50d17fc8f02be9b179b2b65c6bd39253.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'upamecano',  name:'Upamecano',    full:'Dayot Upamecano',      pos:'DEF', sec:'squad',  sfId:237762,  tmImg:'344695-1701245272.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/6ea81b688679f8c7c8f5a7548edca82b.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'lacroix',    name:'Lacroix',      full:'Maxence Lacroix',      pos:'DEF', sec:'squad',  sfId:246578,  tmImg:'434224-1657202248.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/c4e954cd163330e183fadbde7f827439.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  // ── MID
+  { id:'kante',      name:"Kanté",        full:"N'Golo Kanté",         pos:'MID', sec:'squad',  sfId:189615,  tmImg:'225083-1770653003.png'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/5f84991041d63ea47b6840f12b764c7d.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'kone',       name:'Koné',         full:'Manu Koné',            pos:'MID', sec:'squad',  sfId:254672,  tmImg:'624690-1757931309.jpg',  lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/d407189e760b38356eade419a663772f.jpeg?twic=v1/focus=2032x1176/cover=440x560' },
+  { id:'rabiot',     name:'Rabiot',       full:'Adrien Rabiot',        pos:'MID', sec:'squad',  sfId:200389,  tmImg:'182913-1681462009.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/71d0cbe3c377caa515b4a86667f1e2f3.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'tchouameni', name:'Tchouaméni',   full:'Aurélien Tchouaméni',  pos:'MID', sec:'squad',  sfId:248035,  tmImg:'413112-1668500754.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/4d3be1223c680613d1a68e43030b21ed.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'zaireemery', name:'Zaïre-Emery',  full:'Warren Zaïre-Emery',   pos:'MID', sec:'squad',  sfId:266741,  tmImg:'810092-1777411744.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/dc56020d1eb06b8a33496793162c4a0f.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  // ── ATT
+  { id:'akliouche',  name:'Akliouche',    full:'Maghnés Akliouche',    pos:'ATT', sec:'squad',  sfId:265018,  tmImg:'745200-1717406573.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/0aa87cd41623745bcfe60efb379f8fa4.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'barcola',    name:'Barcola',      full:'Bradley Barcola',      pos:'ATT', sec:'squad',  sfId:263993,  tmImg:'708265-1653406915.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/34b039e6d26592e8ab2797bef2cc643d.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'cherki',     name:'Cherki',       full:'Rayan Cherki',         pos:'ATT', sec:'squad',  sfId:269072,  tmImg:'607223-1773302431.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/df3123a6c38bba48301851fbc342da89.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'dembele',    name:'Dembélé',      full:'Ousmane Dembélé',      pos:'ATT', sec:'squad',  sfId:221439,  tmImg:'288230-1684148641.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/564683a99ff82dbb62982478c185ced9.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'doue',       name:'Doué',         full:'Désiré Doué',          pos:'ATT', sec:'squad',  sfId:268960,  tmImg:'914562-1667317075.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/e04b9b08e1bdc310cb6aae9dd6572b08.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'mateta',     name:'Mateta',       full:'J-Ph. Mateta',         pos:'ATT', sec:'squad',  sfId:225034,  tmImg:'420002-1723202650.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/4d7fd7fa19b3b779a3c88abd6b60a1e4.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'mbappe',     name:'Mbappé',       full:'Kylian Mbappé',        pos:'ATT', sec:'squad',  sfId:231747,  tmImg:'342229-1682683695.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/6603fdc34dc59cdc97f993a1260e5432.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'olise',      name:'Olise',        full:'Michael Olise',        pos:'ATT', sec:'squad',  sfId:258177,  tmImg:'566723-1762944477.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/2a1f9a654eda3a124018bcebcb46223f.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  { id:'thuram',     name:'Thuram',       full:'Marcus Thuram',        pos:'ATT', sec:'squad',  sfId:259358,  tmImg:'318528-1746041509.jpg'  , lfcImg:'https://images.weserv.nl/?url=media.fff.fr/uploads/images/b6c575766c446f10634e366e142e9528.png&w=220&h=300&fit=cover&a=top&output=jpg' },
+  // ── FRINGE DEF
+  { id:'pavard',     name:'Pavard',       full:'Benjamin Pavard',      pos:'DEF', sec:'fringe', sfId:213741,  tmImg:'353366-1713819215.jpg'  },
+  { id:'clauss',     name:'Clauss',       full:'Jonathan Clauss',      pos:'DEF', sec:'fringe', sfId:207984,  tmImg:'175639-1756827010.jpg'  },
+  { id:'disasi',     name:'Disasi',       full:'Axel Disasi',          pos:'DEF', sec:'fringe', sfId:246977,  tmImg:'386047-1727785671.jpg'  },
+  { id:'bade',       name:'Badé',         full:'Loïc Badé',            pos:'DEF', sec:'fringe', sfId:null,    tmImg:'730581-1758704021.jpg'  },
+  // ── FRINGE MID
+  { id:'camavinga',  name:'Camavinga',    full:'E. Camavinga',         pos:'MID', sec:'fringe', sfId:254195,  tmImg:'640428-1668500874.jpg'  },
+  { id:'fofana',     name:'Fofana',       full:'Youssouf Fofana',      pos:'MID', sec:'fringe', sfId:248032,  tmImg:'569598-1725528517.jpg'  },
+  { id:'guendouzi',  name:'Guendouzi',    full:'M. Guendouzi',         pos:'MID', sec:'fringe', sfId:233616,  tmImg:'465830-1770049970.png'  },
+  // ── FRINGE ATT
+  { id:'kolomuani',  name:'Kolo Muani',   full:'R. Kolo Muani',        pos:'ATT', sec:'fringe', sfId:248034,  tmImg:'487969-1718697120.jpg'  },
+  { id:'coman',      name:'Coman',        full:'Kingsley Coman',       pos:'ATT', sec:'fringe', sfId:224222,  tmImg:'243714-1700040256.jpg'  },
+  { id:'nkunku',     name:'Nkunku',       full:'Ch. Nkunku',           pos:'ATT', sec:'fringe', sfId:246978,  tmImg:'344381-1663686834.jpg'  },
+  { id:'ekitike',    name:'Ekitike',      full:'Hugo Ekitike',         pos:'ATT', sec:'fringe', sfId:267921,  tmImg:'709726-1758714741.jpg'  },
+];
+
+const LFC = 'https://backend.liverpoolfc.com/sites/default/files/styles/sm/public/';
+const LIVERPOOL_PLAYERS = [
+  // ── GK
+  { id:'alisson',       name:'Alisson',       full:'Alisson Becker',       pos:'GK',  sec:'squad',  sfId:212831, tmImg:'105470-1668522221.jpg',  lfcImg:LFC+'2025-08/alisson-becker-2526-headshot_f35b5aa555acef22155c96b6f4c3e9ba.webp?itok=MVICWQU4' },
+  { id:'mamardashvili', name:'Mamardashvili', full:'Giorgi Mamardashvili', pos:'GK',  sec:'squad',  sfId:257795, tmImg:'502676-1716542116.jpg',  lfcImg:LFC+'2025-08/giorgi-mamardashvili-2025-26-headshot_a2eae9952133dcc8e9aacb1a8642140a.webp?itok=pQCzsQwK' },
+  // ── DEF
+  { id:'vandijk',       name:'Van Dijk',      full:'Virgil van Dijk',      pos:'DEF', sec:'squad',  sfId:203376, tmImg:'139208-1702049837.jpg',  lfcImg:LFC+'2025-08/virgil-van-dijk-2526-headshot_033767a976452d65656252df4490ed25.webp?itok=qtF9wMTv' },
+  { id:'konate_liv',    name:'Konaté',        full:'Ibrahima Konaté',      pos:'DEF', sec:'squad',  sfId:247369, tmImg:'357119-1669190550.jpg',  lfcImg:LFC+'2025-08/ibrahima-konate-2526-headshot_9d075b4f1f045d78abdf52dbf26b85f9.webp?itok=zjCmIsav' },
+  { id:'leoni',         name:'Leoni',         full:'Giovanni Leoni',       pos:'DEF', sec:'squad',  sfId:null,   tmImg:'1086619-1751532399.jpg', lfcImg:LFC+'2025-09/giovanni-leoni-new-headshot-2025-26_a4d03499db49f59cad4e27e76c13a3dd.webp?itok=mZwAyAPD' },
+  { id:'frimpong',      name:'Frimpong',      full:'Jeremie Frimpong',     pos:'DEF', sec:'squad',  sfId:244802, tmImg:'484547-1689710682.jpg',  lfcImg:LFC+'2025-08/jeremie-frimpong-2025-26-headshot-new_13f177217421c9d5132867f43fdb56c8.webp?itok=KnP9g20s' },
+  { id:'robertson',     name:'Robertson',     full:'Andrew Robertson',     pos:'DEF', sec:'squad',  sfId:219716, tmImg:'234803-1709147379.jpg',  lfcImg:LFC+'2025-08/andy-robertson-2526-headshot_5f60b134f301c1544fa5e077468dd19c.webp?itok=QFz-tI8W' },
+  { id:'kerkez',        name:'Kerkez',        full:'Milos Kerkez',         pos:'DEF', sec:'squad',  sfId:261764, tmImg:'730861-1773172293.jpg',  lfcImg:LFC+'2025-08/milos-kerkez-2025-26-headshot-new_c40ac1ab8d4dab784b97ae267eb645ff.webp?itok=cfeuWht5' },
+  { id:'bradley',       name:'Bradley',       full:'Conor Bradley',        pos:'DEF', sec:'squad',  sfId:261777, tmImg:'624258-1762340233.jpg',  lfcImg:LFC+'2025-08/conor-bradley-2526-headshot_3c9621aab6846cad518224692f1797bb.webp?itok=InWdGSLu' },
+  { id:'gomez',         name:'Gomez',         full:'Joe Gomez',            pos:'DEF', sec:'squad',  sfId:210514, tmImg:'256178-1746645094.jpg',  lfcImg:LFC+'2025-08/joe-gomez-2526-headshot_5db3b4247adc04b913835a26c1d4f121.webp?itok=qwd8FzQv' },
+  // ── MID
+  { id:'gravenberch',   name:'Gravenberch',   full:'Ryan Gravenberch',     pos:'MID', sec:'squad',  sfId:261399, tmImg:'478573-1718097194.jpg',  lfcImg:LFC+'2025-08/ryan-gravenberch-2526-headshot_c5513f6edfd83f3f49a81df8abd42c46.webp?itok=UFIp1sMe' },
+  { id:'macallister',   name:'Mac Allister',  full:'Alexis Mac Allister',  pos:'MID', sec:'squad',  sfId:249166, tmImg:'534033-1669835342.jpg',  lfcImg:LFC+'2025-08/alexis-mac-allister-2526-headshot_e882d35d30e4284ca9d16bbbad80c0a9.webp?itok=froaxZ1x' },
+  { id:'szoboszlai',    name:'Szoboszlai',    full:'Dominik Szoboszlai',   pos:'MID', sec:'squad',  sfId:259186, tmImg:'451276-1758715234.jpg',  lfcImg:LFC+'2025-08/dominik-szoboszlai-2526-headshot_572491e21442d1d6fc53951c3db89d9f.webp?itok=luo_p9Z_' },
+  { id:'wirtz',         name:'Wirtz',         full:'Florian Wirtz',        pos:'MID', sec:'squad',  sfId:262683, tmImg:'598577-1689710503.jpg',  lfcImg:LFC+'2025-08/florian-wirtz-2025-26-headshot-new_0684d444a48cc2e9d5f0b12518d5f00a.webp?itok=9d4lOP0e' },
+  { id:'jones_liv',     name:'C. Jones',      full:'Curtis Jones',         pos:'MID', sec:'squad',  sfId:240782, tmImg:'433188-1701681163.jpg',  lfcImg:LFC+'2025-08/curtis-jones-2526-headshot_418ac4455a6f0957b574f2cd223d6940.webp?itok=gS3HQiWK' },
+  { id:'endo',          name:'Endo',          full:'Wataru Endo',          pos:'MID', sec:'squad',  sfId:189058, tmImg:'146310-1657181542.jpg',  lfcImg:LFC+'2025-08/wataru-endo-2526-headshot_172332c9ea3f69f17dc498618b0d11f8.webp?itok=uw3PHyWP' },
+  // ── ATT
+  { id:'salah',         name:'Salah',         full:'Mohamed Salah',        pos:'ATT', sec:'squad',  sfId:209331, tmImg:'148455-1727337594.jpg',  lfcImg:LFC+'2025-09/mohamed-salah-2025-26-headshot-straight_d3131fc8d0587fe6937b5592e4afcfd5.webp?itok=OATKXCBP' },
+  { id:'isak',          name:'Isak',          full:'Alexander Isak',       pos:'ATT', sec:'squad',  sfId:246580, tmImg:'349066-1680791339.jpg',  lfcImg:LFC+'2025-09/alexander-isak-2025-26-headshot-final_cb487af1c9829aff4f8621de1f52978c.webp?itok=9LKHQ-g0' },
+  { id:'gakpo',         name:'Gakpo',         full:'Cody Gakpo',           pos:'ATT', sec:'squad',  sfId:254252, tmImg:'434675-1682690965.jpg',  lfcImg:LFC+'2025-08/cody-gakpo-2526-headshot_2edb4161c04b9058db9a58ec1404d725.webp?itok=ezeOmjh2' },
+  { id:'chiesa',        name:'Chiesa',        full:'Federico Chiesa',      pos:'ATT', sec:'squad',  sfId:213384, tmImg:'341092-1663576975.jpg',  lfcImg:LFC+'2025-08/federico-chiesa-2526-headshot_803c6f459c1210287113f8f60d643fe0.webp?itok=p3ZKg2yR' },
+  { id:'ekitike_liv',   name:'Ekitiké',       full:'Hugo Ekitiké',         pos:'ATT', sec:'squad',  sfId:267921, tmImg:'709726-1758714741.jpg',  lfcImg:LFC+'2025-08/hugo-ekitike-2025-26-headshot-new_fb23de32b937c3df7ce15db4f2f16822.webp?itok=anDjKCtu' },
+  { id:'ngumoha',       name:'Rio',           full:'Rio Ngumoha',          pos:'ATT', sec:'squad',  sfId:null,   tmImg:'1108466-1730834754.jpg', lfcImg:LFC+'2025-08/rio-ngumoha-2025-26-headshot_1f61bc41e85c2219fdf20f0f6f852b4e.webp?itok=V2grpbSw' },
+  // ── FRINGE GK
+  { id:'woodman',       name:'Woodman',       full:'Freddie Woodman',      pos:'GK',  sec:'fringe', sfId:null,   tmImg:'226049-1737883837.jpg',  lfcImg:LFC+'2025-08/freddie-woodman-2025-26-headshot_6bacb5c25573043641c3ea81b5a2660c.webp?itok=yLtpQqTb' },
+  // ── FRINGE MID
+  { id:'bajcetic',      name:'Bajcetic',      full:'Stefan Bajcetic',      pos:'MID', sec:'fringe', sfId:267456, tmImg:'864799-1661441233.jpg',  lfcImg:null },
+  { id:'nyoni',         name:'Nyoni',         full:'Trey Nyoni',           pos:'MID', sec:'fringe', sfId:null,   tmImg:'1045123-1708933240.jpg', lfcImg:LFC+'2025-08/trey-nyoni-2025-26-headshot-v2_a19195196b120a86b21342dd719d4303.webp?itok=HqZg7n7G' },
+];
+
+// Stamp original section on each player
+FRANCE_PLAYERS.forEach(p => p._origSec = p.sec);
+LIVERPOOL_PLAYERS.forEach(p => p._origSec = p.sec);
+
+const TEAM_CONFIG = {
+  france: {
+    name: 'France', flag: '🇫🇷', logoHtml: '<img src="https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg&w=80&output=png" style="height:36px;width:auto;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.6))">', sub: 'World Cup 2026 · Lineup Builder',
+    saveKey: 'france_lineup_v1', defaultFormation: '4-3-3',
+    players: FRANCE_PLAYERS,
+    css: {
+      '--header-g1': '#001a5c', '--header-g2': '#0032c8', '--header-border': '#ED2939',
+      '--accent': '#ED2939', '--accent-light': '#ff7080',
+      '--squad-bg': 'rgba(0,50,200,0.22)', '--squad-color': '#7aaaff', '--squad-border': 'rgba(0,50,200,0.3)',
+      '--squad-bg-dv': 'rgba(0,50,200,0.42)', '--squad-border-dv': '#5599ff',
+      '--pcard-sq-bg': 'rgba(0,40,160,0.28)', '--pcard-sq-hover': 'rgba(0,40,160,0.55)',
+    }
+  },
+  liverpool: {
+    name: 'Liverpool', flag: '🔴', logoHtml: '<img src="https://a.espncdn.com/i/teamlogos/soccer/500/364.png" style="height:36px;width:auto;filter:brightness(0) invert(1);opacity:0.9">', sub: 'Premier League · Lineup Builder',
+    saveKey: 'liverpool_lineup_v2', defaultFormation: '4-3-3',
+    players: LIVERPOOL_PLAYERS,
+    css: {
+      '--header-g1': '#1a0000', '--header-g2': '#8b0000', '--header-border': '#C8102E',
+      '--accent': '#C8102E', '--accent-light': '#ff4d6e',
+      '--squad-bg': 'rgba(200,16,46,0.2)', '--squad-color': '#ff9999', '--squad-border': 'rgba(200,16,46,0.35)',
+      '--squad-bg-dv': 'rgba(200,16,46,0.4)', '--squad-border-dv': '#ff6680',
+      '--pcard-sq-bg': 'rgba(160,10,30,0.28)', '--pcard-sq-hover': 'rgba(160,10,30,0.55)',
+    }
+  }
+};
+
+// ════════════════════════════════════════════════════════
+//  FORMATIONS
+// ════════════════════════════════════════════════════════
+const FORMATIONS = {
+  '4-3-3': [
+    {id:'gk', l:'GK', x:50,y:88},
+    {id:'rb', l:'RB', x:83,y:64}, {id:'cb1',l:'CB', x:62,y:64}, {id:'cb2',l:'CB',x:38,y:64}, {id:'lb',l:'LB',x:17,y:64},
+    {id:'cm1',l:'CM', x:18,y:40}, {id:'cm2',l:'CM', x:50,y:40}, {id:'cm3',l:'CM',x:82,y:40},
+    {id:'lw', l:'LW', x:16,y:16}, {id:'st', l:'ST', x:50,y:16}, {id:'rw', l:'RW',x:84,y:16},
+  ],
+  '4-4-2': [
+    {id:'gk', l:'GK', x:50,y:88},
+    {id:'rb', l:'RB', x:83,y:64}, {id:'cb1',l:'CB', x:61,y:64}, {id:'cb2',l:'CB',x:39,y:64}, {id:'lb',l:'LB',x:17,y:64},
+    {id:'rm', l:'RM', x:83,y:40}, {id:'cm1',l:'CM', x:60,y:40}, {id:'cm2',l:'CM',x:40,y:40}, {id:'lm',l:'LM',x:17,y:40},
+    {id:'st1',l:'ST', x:63,y:16}, {id:'st2',l:'ST', x:37,y:16},
+  ],
+  '4-2-3-1': [
+    {id:'gk',  l:'GK',  x:50,y:88},
+    {id:'rb',  l:'RB',  x:83,y:70}, {id:'cb1',l:'CB', x:61,y:70}, {id:'cb2',l:'CB',x:39,y:70}, {id:'lb',l:'LB',x:17,y:70},
+    {id:'cdm1',l:'CDM', x:63,y:52}, {id:'cdm2',l:'CDM',x:37,y:52},
+    {id:'lam', l:'LAM', x:20,y:34}, {id:'cam', l:'CAM',x:50,y:34}, {id:'ram',l:'RAM',x:80,y:34},
+    {id:'st',  l:'ST',  x:50,y:16},
+  ],
+  '4-1-4-1': [
+    {id:'gk',  l:'GK',  x:50,y:88},
+    {id:'rb',  l:'RB',  x:83,y:70}, {id:'cb1',l:'CB', x:61,y:70}, {id:'cb2',l:'CB',x:39,y:70}, {id:'lb',l:'LB',x:17,y:70},
+    {id:'cdm', l:'CDM', x:50,y:52},
+    {id:'lm',  l:'LM',  x:17,y:34}, {id:'cm1',l:'CM', x:39,y:34}, {id:'cm2',l:'CM',x:61,y:34}, {id:'rm',l:'RM',x:83,y:34},
+    {id:'st',  l:'ST',  x:50,y:16},
+  ],
+  '3-5-2': [
+    {id:'gk',  l:'GK',  x:50,y:88},
+    {id:'cb1', l:'CB',  x:72,y:64}, {id:'cb2',l:'CB', x:50,y:64}, {id:'cb3',l:'CB',x:28,y:64},
+    {id:'lwb', l:'LWB', x:10,y:40}, {id:'cm1',l:'CM', x:31,y:40}, {id:'cm2',l:'CM',x:50,y:40}, {id:'cm3',l:'CM',x:69,y:40}, {id:'rwb',l:'RWB',x:90,y:40},
+    {id:'st1', l:'ST',  x:37,y:16}, {id:'st2',l:'ST', x:63,y:16},
+  ],
+  '3-4-3': [
+    {id:'gk',  l:'GK',  x:50,y:88},
+    {id:'cb1', l:'CB',  x:70,y:64}, {id:'cb2',l:'CB', x:50,y:64}, {id:'cb3',l:'CB',x:30,y:64},
+    {id:'lm',  l:'LM',  x:18,y:40}, {id:'cm1',l:'CM', x:39,y:40}, {id:'cm2',l:'CM',x:61,y:40}, {id:'rm',l:'RM',x:82,y:40},
+    {id:'lw',  l:'LW',  x:20,y:16}, {id:'st', l:'ST', x:50,y:16}, {id:'rw', l:'RW',x:80,y:16},
+  ],
+  '5-3-2': [
+    {id:'gk',  l:'GK',  x:50,y:88},
+    {id:'lwb', l:'LWB', x:12,y:64}, {id:'cb1',l:'CB', x:31,y:64}, {id:'cb2',l:'CB',x:50,y:64}, {id:'cb3',l:'CB',x:69,y:64}, {id:'rwb',l:'RWB',x:88,y:64},
+    {id:'cm1', l:'CM',  x:30,y:40}, {id:'cm2',l:'CM', x:50,y:40}, {id:'cm3',l:'CM',x:70,y:40},
+    {id:'st1', l:'ST',  x:37,y:16}, {id:'st2',l:'ST', x:63,y:16},
+  ],
+};
+
+// ════════════════════════════════════════════════════════
+//  ACTIVE STATE  (mutated by switchTeam)
+// ════════════════════════════════════════════════════════
+let activeTeam = 'france';
+let PLAYERS    = FRANCE_PLAYERS;
+let PM         = Object.fromEntries(PLAYERS.map(p => [p.id, p]));
+let formation  = '4-3-3';
+let slots      = {};
+let conditions = {};
+let dragPid    = null;
+let dragFrom   = null;
+
+// ════════════════════════════════════════════════════════
+//  SAVE / LOAD
+// ════════════════════════════════════════════════════════
+function saveKey() { return TEAM_CONFIG[activeTeam].saveKey; }
+
+function saveState() {
+  try {
+    localStorage.setItem(saveKey(), JSON.stringify({
+      formation, slots, conditions,
+      playerSecs: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec]))
+    }));
+  } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(saveKey());
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (s.formation && FORMATIONS[s.formation]) formation = s.formation;
+    if (s.slots) slots = s.slots;
+    if (s.conditions) conditions = s.conditions;
+    if (s.playerSecs) PLAYERS.forEach(p => { if (s.playerSecs[p.id]) p.sec = s.playerSecs[p.id]; });
+    document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════════════════════
+//  SWITCH TEAM
+// ════════════════════════════════════════════════════════
+function switchTeam(teamId) {
+  if (teamId === activeTeam) return;
+
+  // Save current team first
+  saveState();
+
+  // Switch
+  activeTeam = teamId;
+  const cfg = TEAM_CONFIG[teamId];
+
+  // Reset player sections to originals for new team
+  cfg.players.forEach(p => p.sec = p._origSec);
+
+  // Set active data
+  PLAYERS    = cfg.players;
+  PM         = Object.fromEntries(PLAYERS.map(p => [p.id, p]));
+  formation  = cfg.defaultFormation;
+  slots      = {};
+  conditions = {};
+
+  // Apply CSS variables
+  const root = document.documentElement;
+  Object.entries(cfg.css).forEach(([k, v]) => root.style.setProperty(k, v));
+
+  // Update header text
+  document.getElementById('teamFlag').innerHTML = cfg.logoHtml;
+  document.getElementById('teamName').textContent = cfg.name;
+  document.getElementById('teamSub').textContent  = cfg.sub;
+
+  // Update tab active state
+  document.querySelectorAll('.ttab').forEach(t => t.classList.toggle('active', t.dataset.team === teamId));
+
+  // Formation buttons back to default, then loadState will correct
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
+
+  // Load saved state for new team
+  loadState();
+  refresh();
+}
+
+// ════════════════════════════════════════════════════════
+//  BUILD CARD
+// ════════════════════════════════════════════════════════
+function buildPill(p, onPitch, isUnavail = false) {
+  const cond = conditions[p.id] || null;
+  const div = document.createElement('div');
+  div.className = ['pcard', p.sec, onPitch?'on-pitch':'', isUnavail?'unavail-card':'',
+    cond==='injured'?'injured':'', cond==='suspended'?'suspended':''].filter(Boolean).join(' ');
+  div.dataset.pid = p.id;
+
+  const av = document.createElement('div'); av.className = 'pcard-av';
+  const img = document.createElement('img'); img.className = 'pcard-img';
+  loadImg(img, p.sfId, p.tmImg, p.full, p.pos, p.lfcImg||null);
+  av.appendChild(img);
+
+  const nm = document.createElement('div'); nm.className = 'pcard-name'; nm.textContent = p.name;
+
+  const overlay = document.createElement('div'); overlay.className = 'pcard-overlay';
+  const injB  = document.createElement('div'); injB.className  = 'pcard-btn inj'  + (cond==='injured'   ?' on':''); injB.title  = 'Injured';   injB.textContent  = '✚';
+  const susB  = document.createElement('div'); susB.className  = 'pcard-btn sus'  + (cond==='suspended' ?' on':''); susB.title  = 'Suspended'; susB.textContent  = '■';
+  const awayB = document.createElement('div'); awayB.className = 'pcard-btn away' + (cond==='away'      ?' on':''); awayB.title = 'Away';      awayB.textContent = '✈';
+  injB.addEventListener('click',  e => { e.stopPropagation(); toggleCond(p.id,'injured');   });
+  susB.addEventListener('click',  e => { e.stopPropagation(); toggleCond(p.id,'suspended'); });
+  awayB.addEventListener('click', e => { e.stopPropagation(); toggleCond(p.id,'away');      });
+  overlay.append(injB, susB, awayB);
+
+  div.append(av, nm, overlay);
+  div.draggable = !onPitch && !isUnavail;
+
+  if (!onPitch && !isUnavail) {
+    div.addEventListener('dragstart', e => {
+      dragPid  = p.id; dragFrom = p.sec + '-pool';
+      e.dataTransfer.effectAllowed = 'move';
+      requestAnimationFrame(() => div.style.opacity = '0.35');
+    });
+    div.addEventListener('dragend', () => { div.style.opacity = ''; });
+  }
+  return div;
+}
+
+// ════════════════════════════════════════════════════════
+//  TRIBUTE CARD  (Diogo Jota — Liverpool only)
+// ════════════════════════════════════════════════════════
+function buildTributeCard() {
+  const card = document.createElement('div');
+  card.className = 'tribute-card';
+
+  const forever = document.createElement('div');
+  forever.className = 'tribute-forever';
+  forever.textContent = 'FOREVER';
+
+  const info = document.createElement('div');
+  info.className = 'tribute-info';
+
+  const jersey = document.createElement('div');
+  jersey.className = 'tribute-jersey';
+  jersey.textContent = '20';
+
+  const name = document.createElement('div');
+  name.className = 'tribute-name';
+  name.textContent = 'Diogo Jota';
+
+  const pos = document.createElement('div');
+  pos.className = 'tribute-pos';
+  pos.textContent = 'Forward';
+
+  info.append(jersey, name, pos);
+
+  const photo = document.createElement('div');
+  photo.className = 'tribute-photo';
+  const img = document.createElement('img');
+  // Official LFC 24-25 headshot → SoFIFA 24 → SVG fallback
+  loadImg(
+    img, 231690, null, 'Diogo Jota', 'ATT',
+    'https://backend.liverpoolfc.com/sites/default/files/styles/sm/public/2024-06/diogo-jota-profile-headshot-202425.webp?itok=CsWBVQ4v'
+  );
+  photo.appendChild(img);
+
+  card.append(forever, info, photo);
+  return card;
+}
+
+// ════════════════════════════════════════════════════════
+//  RENDER SIDEBAR
+// ════════════════════════════════════════════════════════
+function renderSidebar() {
+  const assigned   = new Set(Object.values(slots));
+  const ORDER      = ['GK','DEF','MID','ATT'];
+  const unavailIds = new Set(
+    Object.entries(conditions)
+      .filter(([,v]) => v === 'injured' || v === 'suspended' || v === 'away')
+      .map(([k]) => k)
+  );
+
+  ['squad','fringe'].forEach(sec => {
+    const cont = document.getElementById(sec + '-pool');
+    cont.innerHTML = '';
+    const grid = document.createElement('div');
+    grid.className = 'player-grid';
+    ORDER.forEach(pos => {
+      const grp = PLAYERS.filter(p => p.sec === sec && p.pos === pos && !unavailIds.has(p.id));
+      if (!grp.length) return;
+      const lbl = document.createElement('div'); lbl.className = 'pos-ttl';
+      lbl.style.gridColumn = '1 / -1'; lbl.textContent = pos;
+      grid.appendChild(lbl);
+      grp.forEach(p => grid.appendChild(buildPill(p, assigned.has(p.id))));
+    });
+    cont.appendChild(grid);
+  });
+
+  function renderSpecialSection(hdrId, poolId, players) {
+    const hdr = document.getElementById(hdrId);
+    const pool = document.getElementById(poolId);
+    if (players.length) {
+      hdr.style.display = 'flex'; pool.style.display = 'block'; pool.innerHTML = '';
+      const grid = document.createElement('div'); grid.className = 'player-grid';
+      players.forEach(p => grid.appendChild(buildPill(p, false, true)));
+      pool.appendChild(grid);
+    } else {
+      hdr.style.display = 'none'; pool.style.display = 'none';
+    }
+  }
+
+  const unavailPlayers = PLAYERS.filter(p => { const c = conditions[p.id]; return c==='injured'||c==='suspended'||c==='away'; });
+  renderSpecialSection('unavailHdr', 'unavail-pool', unavailPlayers);
+
+  // Tribute card — Liverpool only
+  const tributeSection = document.getElementById('tribute-section');
+  if (activeTeam === 'liverpool') {
+    tributeSection.style.display = 'block';
+    tributeSection.innerHTML = '';
+    tributeSection.appendChild(buildTributeCard());
+  } else {
+    tributeSection.style.display = 'none';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+//  PITCH LINES
+// ════════════════════════════════════════════════════════
+function drawLines() {
+  const pitch = document.getElementById('pitch');
+  const W = pitch.clientWidth, H = pitch.clientHeight;
+  if (!W || !H) return;
+  const mx = 10, my = 10;
+  const iw = W - mx*2, ih = H - my*2;
+  const paW = iw*0.55, paH = ih*0.155, paX = mx+(iw-paW)/2;
+  const gaW = iw*0.28, gaH = ih*0.07,  gaX = mx+(iw-gaW)/2;
+  const cx = W/2, cy = H/2, cr = Math.min(iw,ih)*0.085;
+  const svg = document.getElementById('pitchSvg');
+  const ns = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  function r(x,y,w,h) {
+    const el = document.createElementNS(ns,'rect');
+    el.setAttribute('x',x); el.setAttribute('y',y); el.setAttribute('width',w); el.setAttribute('height',h);
+    el.setAttribute('fill','none'); el.setAttribute('stroke','rgba(255,255,255,0.42)'); el.setAttribute('stroke-width','1.8');
+    svg.appendChild(el);
+  }
+  function l(x1,y1,x2,y2) {
+    const el = document.createElementNS(ns,'line');
+    el.setAttribute('x1',x1); el.setAttribute('y1',y1); el.setAttribute('x2',x2); el.setAttribute('y2',y2);
+    el.setAttribute('stroke','rgba(255,255,255,0.42)'); el.setAttribute('stroke-width','1.8');
+    svg.appendChild(el);
+  }
+  function c(cx,cy,radius,filled) {
+    const el = document.createElementNS(ns,'circle');
+    el.setAttribute('cx',cx); el.setAttribute('cy',cy); el.setAttribute('r',radius);
+    el.setAttribute('fill',filled?'rgba(255,255,255,0.42)':'none');
+    el.setAttribute('stroke','rgba(255,255,255,0.42)'); el.setAttribute('stroke-width','1.8');
+    svg.appendChild(el);
+  }
+  r(mx,my,iw,ih); l(mx,cy,mx+iw,cy); c(cx,cy,cr,false); c(cx,cy,3,true);
+  r(paX,my,paW,paH); r(gaX,my,gaW,gaH); c(cx,my+paH,3,true);
+  r(paX,my+ih-paH,paW,paH); r(gaX,my+ih-gaH,gaW,gaH); c(cx,my+ih-paH,3,true);
+}
+
+// ════════════════════════════════════════════════════════
+//  RENDER PITCH SLOTS
+// ════════════════════════════════════════════════════════
+function renderPitch() {
+  const pitch = document.getElementById('pitch');
+  pitch.querySelectorAll('.slot-wrap').forEach(s => s.remove());
+  drawLines();
+
+  FORMATIONS[formation].forEach(sd => {
+    const wrap = document.createElement('div'); wrap.className = 'slot-wrap';
+    wrap.style.left = sd.x + '%'; wrap.style.top = sd.y + '%';
+    const tag = document.createElement('div'); tag.className = 'slot-tag'; tag.textContent = sd.l;
+    const circle = document.createElement('div'); circle.className = 'slot-circle'; circle.dataset.slotId = sd.id;
+    const pid = slots[sd.id];
+    const cond = pid ? (conditions[pid] || null) : null;
+
+    if (pid) {
+      const player = PM[pid];
+      if (!player) { delete slots[sd.id]; }
+      else {
+        circle.classList.add('hp');
+        if (cond==='injured')   circle.classList.add('inj-ring');
+        if (cond==='suspended') circle.classList.add('sus-ring');
+        circle.draggable = true;
+        const img = document.createElement('img'); img.className = 'slot-img';
+        loadImg(img, player.sfId, player.tmImg, player.full, player.pos, player.lfcImg||null);
+        circle.appendChild(img);
+        if (cond) {
+          const b = document.createElement('div'); b.className = 'slot-badge';
+          b.textContent = cond==='injured' ? '🤕' : '🟡';
+          circle.appendChild(b);
+        }
+        const nm = document.createElement('div'); nm.className = 'slot-name'; nm.textContent = player.name;
+        wrap.append(tag, circle, nm);
+        circle.addEventListener('click', () => { delete slots[sd.id]; refresh(); });
+        circle.addEventListener('dragstart', e => {
+          dragPid = pid; dragFrom = sd.id; e.dataTransfer.effectAllowed = 'move';
+          requestAnimationFrame(() => circle.style.opacity = '0.25');
+        });
+        circle.addEventListener('dragend', () => { circle.style.opacity = ''; });
+      }
+    }
+
+    if (!pid || !PM[pid]) {
+      const ei = document.createElement('div'); ei.className = 'slot-empty'; ei.textContent = '+';
+      circle.appendChild(ei);
+      wrap.append(tag, circle);
+    }
+
+    circle.addEventListener('dragover',  e => { e.preventDefault(); circle.classList.add('dv'); });
+    circle.addEventListener('dragleave', () => circle.classList.remove('dv'));
+    circle.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation(); circle.classList.remove('dv'); dropOnSlot(sd.id);
+    });
+    pitch.appendChild(wrap);
+  });
+}
+
+// ════════════════════════════════════════════════════════
+//  DROP HANDLERS
+// ════════════════════════════════════════════════════════
+function dropOnSlot(targetId) {
+  if (!dragPid) return;
+  const existing = slots[targetId];
+  const fromSlot = dragFrom && dragFrom !== 'squad-pool' && dragFrom !== 'fringe-pool';
+  if (fromSlot && dragFrom !== targetId) {
+    if (existing) slots[dragFrom] = existing; else delete slots[dragFrom];
+  }
+  slots[targetId] = dragPid;
+  dragPid = null; dragFrom = null; refresh();
+}
+function onDropSidebar(e) {
+  if (dragPid && dragFrom && dragFrom !== 'squad-pool' && dragFrom !== 'fringe-pool') delete slots[dragFrom];
+  dragPid = null; dragFrom = null; refresh();
+}
+function onDropPitchBg(e) { dragPid = null; dragFrom = null; }
+function hdrOver(e, sec) {
+  e.preventDefault();
+  document.getElementById(sec==='squad'?'squadHdr':'fringeHdr').classList.add('dv');
+}
+function hdrLeave(sec) {
+  document.getElementById(sec==='squad'?'squadHdr':'fringeHdr').classList.remove('dv');
+}
+function hdrDrop(e, targetSec) {
+  e.preventDefault(); e.stopPropagation(); hdrLeave(targetSec);
+  if (!dragPid) return;
+  const p = PM[dragPid]; if (!p) return;
+  if (dragFrom && dragFrom !== 'squad-pool' && dragFrom !== 'fringe-pool') delete slots[dragFrom];
+  p.sec = targetSec; dragPid = null; dragFrom = null; refresh();
+}
+
+// ════════════════════════════════════════════════════════
+//  CONDITION TOGGLE
+// ════════════════════════════════════════════════════════
+function toggleCond(pid, cond) {
+  conditions[pid] = conditions[pid] === cond ? null : cond;
+  if (conditions[pid]) {
+    for (const [slotId, p] of Object.entries(slots)) {
+      if (p === pid) { delete slots[slotId]; break; }
+    }
+  }
+  refresh();
+}
+
+// ════════════════════════════════════════════════════════
+//  FORMATION / RESET
+// ════════════════════════════════════════════════════════
+function setFormation(name) {
+  formation = name; slots = {};
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === name));
+  refresh();
+}
+function reset() {
+  slots = {}; conditions = {};
+  PLAYERS.forEach(p => p.sec = p._origSec);
+  refresh();
+}
+
+// ════════════════════════════════════════════════════════
+//  HEADER COUNTER
+// ════════════════════════════════════════════════════════
+function updateInfo() {
+  const count = Object.values(slots).filter(v => PM[v]).length;
+  document.getElementById('cntNum').textContent = count;
+  document.getElementById('progFill').style.width = (count / 11 * 100) + '%';
+}
+
+// ════════════════════════════════════════════════════════
+//  REFRESH
+// ════════════════════════════════════════════════════════
+function refresh() { renderPitch(); renderSidebar(); updateInfo(); saveState(); }
+window.addEventListener('resize', () => drawLines());
+
+// ════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════
+document.querySelectorAll('.fbtn').forEach(b => b.addEventListener('click', () => setFormation(b.dataset.f)));
+document.getElementById('resetBtn').addEventListener('click', reset);
+document.querySelectorAll('.ttab').forEach(t => t.addEventListener('click', () => switchTeam(t.dataset.team)));
+
+// Clean up stale save keys from older versions
+try { localStorage.removeItem('liverpool_lineup_v1'); } catch(e) {}
+
+// Apply France CSS vars on load
+const root = document.documentElement;
+Object.entries(TEAM_CONFIG.france.css).forEach(([k,v]) => root.style.setProperty(k,v));
+
+loadState();
+requestAnimationFrame(() => refresh());
+</script>
+</body>
+</html>
