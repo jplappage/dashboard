@@ -23,7 +23,7 @@ Log "Watcher started (GitHub Pages mode)."
 $env:GIT_TERMINAL_PROMPT = '0'
 $env:GCM_INTERACTIVE     = 'never'
 
-$lastWrite  = (Get-Item $watchFile).LastWriteTime
+$lastWrite  = (Get-ChildItem $watchFolder -File | Measure-Object -Property LastWriteTime -Maximum).Maximum
 $lastDeploy = [DateTime]::MinValue
 
 try {
@@ -31,7 +31,7 @@ try {
         try {
             Start-Sleep -Seconds 5
 
-            $currentWrite = (Get-Item $watchFile).LastWriteTime
+            $currentWrite = (Get-ChildItem $watchFolder -File | Measure-Object -Property LastWriteTime -Maximum).Maximum
 
             if ($currentWrite -ne $lastWrite) {
                 $lastWrite = $currentWrite
