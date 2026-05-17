@@ -97,7 +97,7 @@
 
     /* ── STATS ── */
     .stats {
-      display: grid; grid-template-columns: repeat(4, 1fr);
+      display: grid; grid-template-columns: repeat(5, 1fr);
       gap: 0; background: var(--surface);
       border-bottom: 1px solid var(--border);
     }
@@ -258,6 +258,11 @@
   </div>
   <div class="stat-card" style="display:flex;align-items:center;justify-content:center;">
     <button id="toggle-watched" onclick="toggleWatchedFilter()" style="padding:10px 20px;background:transparent;border:1px solid rgba(255,232,31,0.3);border-radius:8px;color:#ffe81f;font-size:0.85rem;cursor:pointer;white-space:nowrap;letter-spacing:0.5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,232,31,0.1)'" onmouseout="this.style.background='transparent'">＋ Show watched</button>
+  </div>
+  <div class="stat-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;">
+    <div class="stat-label">Randomiser</div>
+    <div id="random-result" style="font-size:0.78rem;color:var(--text-muted);min-height:32px;line-height:1.4;"></div>
+    <button onclick="pickRandom()" style="padding:8px 16px;background:transparent;border:1px solid rgba(255,232,31,0.3);border-radius:8px;color:#ffe81f;font-size:0.8rem;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,232,31,0.1)'" onmouseout="this.style.background='transparent'">🎲 Pick one</button>
   </div>
 </div>
 
@@ -639,6 +644,18 @@ function getFiltered() {
 }
 
 function applyFilters() { renderTable(); }
+
+function pickRandom() {
+  const unwatched = FILMS.filter(f => !watchedData[f.id]);
+  if (!unwatched.length) {
+    document.getElementById('random-result').innerHTML = '<em>All watched!</em>';
+    return;
+  }
+  const f = unwatched[Math.floor(Math.random() * unwatched.length)];
+  document.getElementById('random-result').innerHTML =
+    `<strong style="color:var(--text);font-size:0.85rem;">${f.title}</strong><br>
+     <span style="color:var(--text-dim)">${f.year} · ${f.genre} · ${f.runtime} min</span>`;
+}
 
 function toggleWatchedFilter() {
   const sel = document.getElementById('filter-status');
