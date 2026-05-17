@@ -33,25 +33,34 @@ try {
 
             $currentWrite = (Get-ChildItem $watchFolder -File | Measure-Object -Property LastWriteTime -Maximum).Maximum
 
-            # Check for file changes
+            # Check for file timestamp changes
             $hasFileChange = $currentWrite -ne $lastWrite
             if ($hasFileChange) { $lastWrite = $currentWrite }
 
-            # Check for unpushed commits
             Push-Location $watchFolder
+
+            # Check for unstaged changes (catches edits that don't update LastWriteTime)
+            $gitStatus = git status --porcelain 2>$null
+            $hasUnstaged = ($gitStatus -ne $null -and $gitStatus -ne '')
+
+            # Check for unpushed commits
             $unpushed = git log origin/main..HEAD --oneline 2>$null
-            Pop-Location
             $hasUnpushed = ($unpushed -ne $null -and $unpushed -ne '')
 
-            if ($hasFileChange -or $hasUnpushed) {
+            Pop-Location
+
+            $needsDeploy = $hasFileChange -or $hasUnstaged -or $hasUnpushed
+
+            if ($needsDeploy) {
                 $now = [DateTime]::Now
 
                 if (($now - $lastDeploy).TotalSeconds -gt 15) {
                     $lastDeploy = $now
-                    Log "$(if ($hasFileChange) { "Change detected ($currentWrite)" } else { "Unpushed commits detected" }). Pushing to GitHub..."
+                    $reason = if ($hasFileChange) { "File timestamp change" } elseif ($hasUnstaged) { "Unstaged changes detected" } else { "Unpushed commits detected" }
+                    Log "$reason. Pushing to GitHub..."
 
                     Push-Location $watchFolder
-                    if ($hasFileChange) {
+                    if ($hasFileChange -or $hasUnstaged) {
                         # New file changes — regenerate ICS, commit, then push
                         try {
                             python generate_ics.py 2>&1 | Out-Null
