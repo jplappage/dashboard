@@ -263,8 +263,7 @@ header {
   <span class="flag" id="teamFlag"><img src="https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg&w=80&output=png" style="height:36px;width:auto;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.6))"></span>
   <div class="title">
     <h1 id="teamName">France</h1>
-    <div class="sub" id="teamSub">World Cup 2026 · Lineup Builder</div>
-    <a href="/dashboard/" style="color:rgba(255,232,31,0.7);font-size:0.65rem;text-decoration:none;letter-spacing:0.5px;margin-top:2px;">⬡ All dashboards</a>
+    <div class="sub" id="teamSub">World Cup 2026 · Lineup Builder · <a href="/dashboard/" style="color:rgba(255,232,31,0.7);text-decoration:none;">⬡ All dashboards</a></div>
   </div>
   <div class="team-tabs">
     <button class="ttab active" data-team="france">
@@ -612,7 +611,7 @@ function switchTeam(teamId) {
   // Update header text
   document.getElementById('teamFlag').innerHTML = cfg.logoHtml;
   document.getElementById('teamName').textContent = cfg.name;
-  document.getElementById('teamSub').textContent  = cfg.sub;
+  document.getElementById('teamSub').innerHTML = cfg.sub + ' · <a href="/dashboard/" style="color:rgba(255,232,31,0.7);text-decoration:none;">⬡ All dashboards</a>';
 
   // Update tab active state
   document.querySelectorAll('.ttab').forEach(t => t.classList.toggle('active', t.dataset.team === teamId));
@@ -947,4 +946,10 @@ try { localStorage.removeItem('liverpool_lineup_v1'); } catch(e) {}
 
 // Apply France CSS vars on load
 const root = document.documentElement;
-Object.
+Object.entries(TEAM_CONFIG.france.css).forEach(([k,v]) => root.style.setProperty(k,v));
+
+loadState();
+requestAnimationFrame(() => refresh());
+</script>
+</body>
+</html>

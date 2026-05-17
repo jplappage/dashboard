@@ -33,13 +33,23 @@ try {
 
             $currentWrite = (Get-ChildItem $watchFolder -File | Measure-Object -Property LastWriteTime -Maximum).Maximum
 
-            if ($currentWrite -ne $lastWrite) {
-                $lastWrite = $currentWrite
+            # Check for file changes
+            $hasFileChange = $currentWrite -ne $lastWrite
+            if ($hasFileChange) { $lastWrite = $currentWrite }
+
+            # Check for unpushed commits
+            Push-Location $watchFolder
+            $unpushed = git log origin/main..HEAD --oneline 2>$null
+            Pop-Location
+            $hasUnpushed = ($unpushed -ne $null -and $unpushed -ne '')
+
+            if ($hasFileChange -or $hasUnpushed) {
                 $now = [DateTime]::Now
 
                 if (($now - $lastDeploy).TotalSeconds -gt 15) {
                     $lastDeploy = $now
-                    Log "Change detected ($currentWrite). Pushing to GitHub..."
+                    $reason = if ($hasFileChange) { "Change detected ($currentWrite)" } else { "Unpushed commits detected" }
+                    Log "$reason. Pushing to GitHub..."
 
                     Push-Location $watchFolder
                     # Regenerate ICS so calendar stays in sync
@@ -63,4 +73,9 @@ try {
                 }
             }
         } catch {
-            Log "L
+            Log "Loop error (continuing): $_"
+        }
+    }
+} finally {
+    Remove-Item $lockFile -ErrorAction SilentlyContinue
+}
