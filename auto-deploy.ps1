@@ -48,19 +48,21 @@ try {
 
                 if (($now - $lastDeploy).TotalSeconds -gt 15) {
                     $lastDeploy = $now
-                    $reason = if ($hasFileChange) { "Change detected ($currentWrite)" } else { "Unpushed commits detected" }
-                    Log "$reason. Pushing to GitHub..."
+                    Log "$(if ($hasFileChange) { "Change detected ($currentWrite)" } else { "Unpushed commits detected" }). Pushing to GitHub..."
 
                     Push-Location $watchFolder
-                    # Regenerate ICS so calendar stays in sync
-                    try {
-                        python generate_ics.py 2>&1 | Out-Null
-                        Log "ICS regenerated."
-                    } catch {
-                        Log "ICS generation failed (continuing): $_"
+                    if ($hasFileChange) {
+                        # New file changes — regenerate ICS, commit, then push
+                        try {
+                            python generate_ics.py 2>&1 | Out-Null
+                            Log "ICS regenerated."
+                        } catch {
+                            Log "ICS generation failed (continuing): $_"
+                        }
+                        git add -A 2>&1 | Out-Null
+                        git commit -m "refresh $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1 | Out-Null
                     }
-                    git add -A 2>&1 | Out-Null
-                    git commit -m "refresh $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1 | Out-Null
+                    # Always push (handles both new commits and pre-existing unpushed commits)
                     $pushOut = git push --no-progress 2>&1
                     $pushOk  = $LASTEXITCODE
                     Pop-Location
