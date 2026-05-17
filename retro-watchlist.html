@@ -98,7 +98,7 @@
 
     /* ── STATS ── */
     .stats {
-      display: grid; grid-template-columns: repeat(5, 1fr);
+      display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 0; background: #000;
       border-bottom: 1px solid rgba(255,232,31,0.2);
     }
@@ -146,6 +146,14 @@
       font-family: inherit;
     }
     .btn-reset:hover { border-color: var(--gold); color: var(--gold); background: rgba(255,232,31,0.05); }
+    .btn-toggle-watched {
+      background: transparent; border: 1px solid rgba(255,232,31,0.35);
+      color: #ffe81f; padding: 7px 16px; border-radius: 100px;
+      cursor: pointer; font-size: 0.82rem; transition: all 0.15s;
+      font-family: inherit; white-space: nowrap; letter-spacing: 0.3px;
+      align-self: flex-end;
+    }
+    .btn-toggle-watched:hover, .btn-toggle-watched.showing { background: rgba(255,232,31,0.1); border-color: #ffe81f; }
 
     /* ── TABLE META ── */
     .table-meta {
@@ -264,9 +272,6 @@
     <div class="stat-value" id="stat-est">—</div>
     <div class="stat-sub" id="stat-est-sub">based on your watching pace</div>
   </div>
-  <div class="stat-card" style="display:flex;align-items:center;justify-content:center;">
-    <button id="toggle-watched" onclick="toggleWatchedFilter()" style="padding:10px 20px;background:transparent;border:1px solid rgba(255,232,31,0.3);border-radius:8px;color:#ffe81f;font-size:0.85rem;cursor:pointer;white-space:nowrap;letter-spacing:0.5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,232,31,0.1)'" onmouseout="this.style.background='transparent'">＋ Show watched</button>
-  </div>
   <div class="stat-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;">
     <div class="stat-label">Randomiser</div>
     <div id="random-result" style="font-size:0.78rem;color:var(--text-muted);min-height:32px;line-height:1.4;"></div>
@@ -303,6 +308,7 @@
     <span class="filter-label">Search</span>
     <input type="text" class="search-input" id="filter-search" placeholder="Search title…" oninput="applyFilters()">
   </div>
+  <button id="toggle-watched" class="btn-toggle-watched" onclick="toggleWatchedFilter()">＋ Show watched</button>
   <button class="btn-reset" onclick="resetFilters()">↺ Reset</button>
 </div>
 
@@ -654,12 +660,13 @@ function getFiltered() {
 function applyFilters() { renderTable(); }
 
 function pickRandom() {
-  const unwatched = FILMS.filter(f => !watchedData[f.id]);
-  if (!unwatched.length) {
-    document.getElementById('random-result').innerHTML = '<em>All watched!</em>';
+  // Use current filters, but always exclude already-watched films
+  const pool = getFiltered().filter(f => !watchedData[f.id]);
+  if (!pool.length) {
+    document.getElementById('random-result').innerHTML = '<em style="color:var(--text-muted)">None in current filters!</em>';
     return;
   }
-  const f = unwatched[Math.floor(Math.random() * unwatched.length)];
+  const f = pool[Math.floor(Math.random() * pool.length)];
   document.getElementById('random-result').innerHTML =
     `<strong style="color:var(--text);font-size:0.85rem;">${f.title}</strong><br>
      <span style="color:var(--text-dim)">${f.year} · ${f.genre} · ${f.runtime} min</span>`;
