@@ -937,11 +937,11 @@ function renderCard(film) {
   const badgeClass = { out: 'badge-out', soon: 'badge-soon', waiting: 'badge-waiting', notout: 'badge-notout' }[status];
   const badgeText = { out: 'Out Now', soon: 'Coming', waiting: '⏳ Waiting', notout: 'Not Out Yet' }[status];
   const dateClass = { out: 'date-out', soon: 'date-soon', waiting: 'date-unknown', notout: 'date-unknown' }[status];
-  const dateText = (status === 'out' || status === 'soon') ? formatDate(film.vodDate) : 'Stream date TBC';
+  const dateText = film.estimated
+    ? (film.vodDate ? `Stream date ${formatDate(film.vodDate)} TBC` : 'Stream date TBC')
+    : (status === 'out' || status === 'soon') ? formatDate(film.vodDate) : 'Stream date TBC';
 
-  const estHtml = film.estimated
-    ? `<div class="date-estimated">* estimated</div>`
-    : '';
+  const estHtml = '';
 
   const newBadge = film.isNew ? `<span style="display:inline-block;background:#7c3aed;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px;vertical-align:middle;">🆕 NEW</span>` : '';
 
