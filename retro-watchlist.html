@@ -276,7 +276,7 @@
       <option value="long">Over 120 min</option>
     </select>
   </div>
-  <button id="toggle-watched" onclick="toggleWatched()" style="align-self:flex-end;padding:6px 14px;background:transparent;border:1px solid #444;border-radius:6px;color:#888;font-size:0.78rem;cursor:pointer;white-space:nowrap;">＋ Show watched</button>
+  <button id="toggle-watched" onclick="toggleWatchedFilter()" style="align-self:flex-end;padding:6px 14px;background:transparent;border:1px solid #444;border-radius:6px;color:#888;font-size:0.78rem;cursor:pointer;white-space:nowrap;">＋ Show watched</button>
   <select id="filter-status" style="display:none">
     <option value="">All Films</option>
     <option value="unwatched">Unwatched</option>
@@ -634,7 +634,7 @@ function getFiltered() {
 
 function applyFilters() { renderTable(); }
 
-function toggleWatched() {
+function toggleWatchedFilter() {
   const sel = document.getElementById('filter-status');
   const btn = document.getElementById('toggle-watched');
   if (sel.value === 'unwatched') {
