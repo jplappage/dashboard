@@ -691,15 +691,14 @@ function saveState() {
 }
 
 // Emergency save when page is hidden (mobile home button / app switch)
+// Uses fetch keepalive — completes after page closes AND supports auth headers
+// (sendBeacon can't set X-Master-Key so JSONBin would reject it with 401)
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden' && syncDirty) {
     clearTimeout(saveTimer);
-    if (binCache) {
-      binCache[cloudKey(activeTeam)] = currentStateObj();
-      const blob = new Blob([JSON.stringify(binCache)], { type: 'application/json' });
-      navigator.sendBeacon ? navigator.sendBeacon(BIN_URL, blob)
-        : fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(binCache) }).catch(() => {});
-    }
+    const cache = binCache || {};
+    cache[cloudKey(activeTeam)] = currentStateObj();
+    fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(cache), keepalive: true }).catch(() => {});
   }
 });
 
