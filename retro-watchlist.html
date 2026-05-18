@@ -631,6 +631,30 @@ function setSyncStatus(state) {
   el.className = 'sync-status sync-' + state;
 }
 
+function getLocalData() {
+  // Returns valid watched data from localStorage, or falls back to Letterboxd defaults.
+  // Validates that entries have positive integer keys + date string values
+  // (guards against corrupted data like {"NaN":{}} from earlier bug)
+  try {
+    const saved = localStorage.getItem('jpWatchlist_v2');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const valid = Object.keys(parsed).filter(k => {
+        const n = Number(k);
+        return Number.isInteger(n) && n > 0 && typeof parsed[k] === 'string';
+      });
+      if (valid.length > 0) {
+        const result = {};
+        valid.forEach(k => { result[Number(k)] = parsed[k]; });
+        return result;
+      }
+    }
+  } catch(_) {}
+  // Clear any bad localStorage and use Letterboxd defaults
+  localStorage.removeItem('jpWatchlist_v2');
+  return {...LETTERBOXD};
+}
+
 async function loadFromCloud() {
   setSyncStatus('loading');
   try {
