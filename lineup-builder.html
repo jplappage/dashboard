@@ -708,17 +708,21 @@ document.addEventListener('visibilitychange', () => {
 function switchTeam(teamId) {
   if (teamId === activeTeam) return;
 
-  // Save current team first
-  saveState();
+  // 1. Flush old team to binCache immediately — cancel debounce to avoid it
+  //    firing later with activeTeam already pointing at the new team (race condition)
+  clearTimeout(saveTimer);
+  const oldTeam = activeTeam;
+  try { localStorage.setItem(TEAM_CONFIG[oldTeam].saveKey, JSON.stringify(currentStateObj())); } catch(e) {}
+  if (binCache) binCache[cloudKey(oldTeam)] = currentStateObj();
 
-  // Switch
+  // 2. Switch active team
   activeTeam = teamId;
   const cfg = TEAM_CONFIG[teamId];
 
   // Reset player sections to originals for new team
   cfg.players.forEach(p => p.sec = p._origSec);
 
-  // Set active data
+  // Set active data to defaults (applyStateData below will override)
   PLAYERS    = cfg.players;
   PM         = Object.fromEntries(PLAYERS.map(p => [p.id, p]));
   formation  = cfg.defaultFormation;
@@ -737,11 +741,29 @@ function switchTeam(teamId) {
   // Update tab active state
   document.querySelectorAll('.ttab').forEach(t => t.classList.toggle('active', t.dataset.team === teamId));
 
-  // Formation buttons back to default, then loadState will correct
+  // Formation buttons back to default (applyStateData will correct if saved)
   document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
 
-  // Load saved state for new team from cloud — renderOnly to avoid spurious save
-  loadStateFromCloud(teamId).then(() => renderOnly());
+  // 3. Apply new team state from binCache (already up to date from page load)
+  //    Avoids a cloud round-trip and the race condition caused by loadStateFromCloud
+  if (binCache && binCache[cloudKey(teamId)]) {
+    applyStateData(binCache[cloudKey(teamId)]);
+  } else {
+    // binCache null or team not in it — fall back to localStorage
+    try {
+      const raw = localStorage.getItem(cfg.saveKey);
+      if (raw) applyStateData(JSON.parse(raw));
+    } catch(_) {}
+  }
+  renderOnly();
+
+  // 4. Push the updated binCache (contains both teams' latest state) to cloud once
+  if (binCache) {
+    setSyncStatus('loading');
+    fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(binCache) })
+      .then(r => { if (r.ok) { syncDirty = false; setSyncStatus('ok'); } else throw new Error(); })
+      .catch(() => setSyncStatus('error'));
+  }
 }
 
 // ════════════════════════════════════════════════════════
