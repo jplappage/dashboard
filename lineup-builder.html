@@ -673,7 +673,12 @@ function saveState() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
     try {
-      if (!binCache) binCache = {};
+      // If binCache is null (cloud load failed at startup), fetch before PUT
+      // to avoid overwriting other teams' data with an empty object
+      if (!binCache) {
+        const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+        binCache = gr.ok ? ((await gr.json()).record || {}) : {};
+      }
       binCache[cloudKey(activeTeam)] = currentStateObj();
       const r = await fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(binCache) });
       if (!r.ok) throw new Error();
@@ -1067,10 +1072,10 @@ try { localStorage.removeItem('liverpool_lineup_v1'); } catch(e) {}
 const root = document.documentElement;
 Object.entries(TEAM_CONFIG.france.css).forEach(([k,v]) => root.style.setProperty(k,v));
 
-// Load from cloud then render
+// Load from cloud then render — renderOnly so init doesn't trigger a save
 (async () => {
   await loadStateFromCloud(activeTeam);
-  requestAnimationFrame(() => refresh());
+  requestAnimationFrame(() => renderOnly());
 })();
 </script>
 </body>
