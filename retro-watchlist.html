@@ -717,15 +717,13 @@ async function saveToCloud() {
 }
 
 // Force sync when page is hidden (tab switch, home button, app switch on mobile)
-document.addEventListener('visibilitychange', async () => {
+// Uses fetch keepalive — completes after page closes AND supports auth headers
+// (sendBeacon can't set X-Master-Key so JSONBin would reject it with 401)
+document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden' && syncDirty) {
-    // Use sendBeacon as a last resort — works even as page is closing
     // Merge into cached bin so lineup keys survive
     const payload = binCache ? Object.assign({}, binCache, watchedData) : watchedData;
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    navigator.sendBeacon
-      ? navigator.sendBeacon(BIN_URL, blob)
-      : fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(payload) }).catch(() => {});
+    fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
   }
 });
 
