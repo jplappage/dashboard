@@ -60,6 +60,8 @@ For every film/show with `vodDate: null` or `estimated: true`:
 - Update `vodDate`, `platform`, and set `estimated: false` if now confirmed
 - US digital release dates count — JP can access US digital platforms (Amazon, Apple TV, etc.)
 
+**⚠️ JustWatch lag warning:** JustWatch often goes weeks without updating digital availability. Do NOT rely on JustWatch alone to conclude a film is still cinema-only. For any film whose theatrical release was **6+ weeks ago**, always do a direct check — search `amazon.co.uk`, `skystore.com`, or `tv.apple.com` for the film title directly, or search `"[film title]" rent buy UK` to confirm whether it has quietly appeared on digital.
+
 ---
 
 ## Finally
