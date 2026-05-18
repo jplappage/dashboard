@@ -53,10 +53,12 @@ For any film/show no longer on the Letterboxd or IMDB watchlist:
 
 ## Step 5 — Look up streaming dates
 For every film/show with `vodDate: null` or `estimated: true`:
+- **First source:** `https://whentostream.com/` — check homepage for recent announcements, then search for the specific film
 - Search for a confirmed streaming date
 - **Only update if the film is confirmed as actually streaming** — not pre-order, not "coming soon" listings
 - Verify on the platform's own website (e.g. sky.com/watch, primevideo.com, mubi.com)
 - Update `vodDate`, `platform`, and set `estimated: false` if now confirmed
+- **UK note:** US digital dates (e.g. Roadside Attractions, Lionsgate US) do not apply if the UK platform is Sky Cinema/NOW or another UK-exclusive service
 
 ---
 
