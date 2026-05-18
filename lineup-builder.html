@@ -600,24 +600,28 @@ let dragFrom   = null;
 // ════════════════════════════════════════════════════════
 //  JSONBIN SYNC
 // ════════════════════════════════════════════════════════
-const BIN_ID  = '6a0b8c4c6610dd3ae8686daa';
-const BIN_KEY = '$2a$10$SJVrSiNiFsJsoMmOpmqGJOQmdrFpT0rTGMjv4ADrfdu5QfYyzkqLS';
-const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const BIN_ID      = '6a0b8c4c6610dd3ae8686daa';
+const BIN_KEY     = '$2a$10$SJVrSiNiFsJsoMmOpmqGJOQmdrFpT0rTGMjv4ADrfdu5QfYyzkqLS';
+const BIN_URL     = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const BIN_HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY };
 
-// Lineup data is stored under "lineup_france" / "lineup_liverpool" keys
-// alongside the watchlist numeric keys — no conflict
-function cloudKey(team) { return 'lineup_' + team; }
+let binCache  = null;  // full bin record cached in memory
+let saveTimer = null;
+let syncDirty = false;
 
-function saveKey() { return TEAM_CONFIG[activeTeam].saveKey; }
+function cloudKey(team) { return 'lineup_' + team; }
+function saveKey()       { return TEAM_CONFIG[activeTeam].saveKey; }
 
 function currentStateObj() {
-  return {
-    f:  formation,
-    s:  slots,
-    c:  conditions,
-    ps: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec]))
-  };
+  return { f: formation, s: slots, c: conditions,
+           ps: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec])) };
+}
+
+function setSyncStatus(state) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = { loading: '⟳ Syncing…', ok: '✓ Synced', error: '⚠ Offline' }[state] || '';
+  el.className = 'sync-status sync-' + state;
 }
 
 function applyStateData(s) {
@@ -631,47 +635,54 @@ function applyStateData(s) {
   if (s.ps) PLAYERS.forEach(p => { if (s.ps[p.id]) p.sec = s.ps[p.id]; });
 }
 
-let syncDirty = false;
-
-async function saveState() {
-  // Always persist locally first
-  try { localStorage.setItem(saveKey(), JSON.stringify(currentStateObj())); } catch(e) {}
-  syncDirty = true;
-  // Push to cloud
-  try {
-    // Fetch current bin so we don't overwrite other team's data or watchlist data
-    const get = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
-    const current = get.ok ? ((await get.json()).record || {}) : {};
-    current[cloudKey(activeTeam)] = currentStateObj();
-    await fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(current) });
-    syncDirty = false;
-  } catch(e) { /* offline — local save is the fallback */ }
-}
-
 async function loadStateFromCloud(teamId) {
+  setSyncStatus('loading');
   try {
     const r = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
     if (!r.ok) throw new Error();
-    const record = (await r.json()).record || {};
-    const s = record[cloudKey(teamId)];
-    if (s) { applyStateData(s); return true; }
-  } catch(e) {}
-  // Fallback to localStorage
-  try {
-    const raw = localStorage.getItem(TEAM_CONFIG[teamId].saveKey);
-    if (raw) { applyStateData(JSON.parse(raw)); }
-  } catch(e) {}
-  return false;
+    binCache = (await r.json()).record || {};
+    applyStateData(binCache[cloudKey(teamId)]);
+    setSyncStatus('ok');
+  } catch(e) {
+    setSyncStatus('error');
+    try {
+      const raw = localStorage.getItem(TEAM_CONFIG[teamId].saveKey);
+      if (raw) applyStateData(JSON.parse(raw));
+    } catch(_) {}
+  }
 }
 
-// Save on page hide (mobile home button / tab switch)
+function saveState() {
+  // Always write localStorage immediately
+  try { localStorage.setItem(saveKey(), JSON.stringify(currentStateObj())); } catch(e) {}
+  syncDirty = true;
+  setSyncStatus('loading');
+  // Debounce cloud saves — 300ms batches rapid changes (drags etc.)
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try {
+      if (!binCache) binCache = {};
+      binCache[cloudKey(activeTeam)] = currentStateObj();
+      const r = await fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(binCache) });
+      if (!r.ok) throw new Error();
+      syncDirty = false;
+      setSyncStatus('ok');
+    } catch(e) {
+      setSyncStatus('error');
+    }
+  }, 300);
+}
+
+// Emergency save when page is hidden (mobile home button / app switch)
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden' && syncDirty) {
-    const payload = {};
-    payload[cloudKey(activeTeam)] = currentStateObj();
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    navigator.sendBeacon ? navigator.sendBeacon(BIN_URL, blob)
-      : fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(payload) }).catch(() => {});
+    clearTimeout(saveTimer);
+    if (binCache) {
+      binCache[cloudKey(activeTeam)] = currentStateObj();
+      const blob = new Blob([JSON.stringify(binCache)], { type: 'application/json' });
+      navigator.sendBeacon ? navigator.sendBeacon(BIN_URL, blob)
+        : fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(binCache) }).catch(() => {});
+    }
   }
 });
 
