@@ -643,39 +643,21 @@ async function loadFromCloud() {
     const cloudEntries = Object.keys(raw).filter(k => !isNaN(Number(k)) && typeof raw[k] === 'string');
 
     if (cloudEntries.length > 0) {
-      // Cloud has data — use it
+      // Cloud has valid data — use it
       watchedData = {};
       cloudEntries.forEach(k => { watchedData[Number(k)] = raw[k]; });
       localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
       setSyncStatus('ok');
     } else {
       // Cloud is empty — seed from localStorage or Letterboxd defaults
-      const saved = localStorage.getItem('jpWatchlist_v2');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          watchedData = {};
-          Object.keys(parsed).forEach(k => { watchedData[Number(k)] = parsed[k]; });
-        } catch(_) { watchedData = {...LETTERBOXD}; }
-      } else {
-        watchedData = {...LETTERBOXD};
-      }
+      watchedData = getLocalData();
       // Push the seeded data up to the cloud
       await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(watchedData) });
       setSyncStatus('ok');
     }
   } catch(e) {
     // Offline — fall back to localStorage or Letterboxd defaults
-    const saved = localStorage.getItem('jpWatchlist_v2');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        watchedData = {};
-        Object.keys(parsed).forEach(k => { watchedData[Number(k)] = parsed[k]; });
-      } catch(_) { watchedData = {...LETTERBOXD}; }
-    } else {
-      watchedData = {...LETTERBOXD};
-    }
+    watchedData = getLocalData();
     setSyncStatus('error');
   }
 }
