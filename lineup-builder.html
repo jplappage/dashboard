@@ -598,9 +598,48 @@ let dragPid    = null;
 let dragFrom   = null;
 
 // ════════════════════════════════════════════════════════
-//  SAVE / LOAD
+//  SAVE / LOAD  +  URL HASH SYNC
 // ════════════════════════════════════════════════════════
 function saveKey() { return TEAM_CONFIG[activeTeam].saveKey; }
+
+function encodeHash() {
+  try {
+    const state = {
+      t:  activeTeam,
+      f:  formation,
+      s:  slots,
+      c:  conditions,
+      ps: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec]))
+    };
+    history.replaceState(null, '', '#' + btoa(JSON.stringify(state)));
+  } catch(e) {}
+}
+
+function decodeHash() {
+  try {
+    const h = location.hash.slice(1);
+    if (!h) return null;
+    return JSON.parse(atob(h));
+  } catch(e) { return null; }
+}
+
+function applyStateData(s) {
+  if (s.f && FORMATIONS[s.f]) {
+    formation = s.f;
+    document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
+  }
+  if (s.s) slots = s.s;
+  if (s.c) conditions = s.c;
+  if (s.ps) PLAYERS.forEach(p => { if (s.ps[p.id]) p.sec = s.ps[p.id]; });
+  // legacy localStorage shape
+  if (s.slots)      slots      = s.slots;
+  if (s.conditions) conditions = s.conditions;
+  if (s.playerSecs) PLAYERS.forEach(p => { if (s.playerSecs[p.id]) p.sec = s.playerSecs[p.id]; });
+  if (s.formation && FORMATIONS[s.formation]) {
+    formation = s.formation;
+    document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
+  }
+}
 
 function saveState() {
   try {
@@ -609,18 +648,14 @@ function saveState() {
       playerSecs: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec]))
     }));
   } catch(e) {}
+  encodeHash();
 }
 
 function loadState() {
   try {
     const raw = localStorage.getItem(saveKey());
     if (!raw) return;
-    const s = JSON.parse(raw);
-    if (s.formation && FORMATIONS[s.formation]) formation = s.formation;
-    if (s.slots) slots = s.slots;
-    if (s.conditions) conditions = s.conditions;
-    if (s.playerSecs) PLAYERS.forEach(p => { if (s.playerSecs[p.id]) p.sec = s.playerSecs[p.id]; });
-    document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
+    applyStateData(JSON.parse(raw));
   } catch(e) {}
 }
 
