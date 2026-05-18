@@ -602,52 +602,84 @@ const LETTERBOXD = {
 let watchedData = {};  // id (number) -> date string
 let currentSort = { col: null, dir: 1 };
 let displayOrder = [...FILMS];
+let syncPending  = false;
 
-// ── URL HASH SYNC ──────────────────────────────────────────
-function encodeHash() {
-  try {
-    history.replaceState(null, '', '#' + btoa(JSON.stringify(watchedData)));
-  } catch(e) {}
+// ── JSONBIN SYNC ───────────────────────────────────────────
+const BIN_ID  = '6a0b8c4c6610dd3ae8686daa';
+const BIN_KEY = '$2a$10$SJVrSiNiFsJsoMmOpmqGJOQmdrFpT0rTGMjv4ADrfdu5QfYyzkqLS';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY };
+
+function setSyncStatus(state) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  const map = {
+    loading: '⟳ Syncing…',
+    ok:      '✓ Synced',
+    error:   '⚠ Offline — changes saved locally',
+  };
+  el.textContent = map[state] || '';
+  el.className = 'sync-status sync-' + state;
 }
 
-function decodeHash() {
+async function loadFromCloud() {
+  setSyncStatus('loading');
   try {
-    const h = location.hash.slice(1);
-    if (!h) return null;
-    const parsed = JSON.parse(atob(h));
-    const result = {};
-    Object.keys(parsed).forEach(k => { result[Number(k)] = parsed[k]; });
-    return result;
-  } catch(e) { return null; }
-}
-
-// ── INIT ──────────────────────────────────────────────────
-function init() {
-  const fromHash = decodeHash();
-  if (fromHash) {
-    watchedData = fromHash;
-  } else {
+    const r = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+    if (!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    const raw = j.record || {};
+    watchedData = {};
+    Object.keys(raw).forEach(k => { if (raw[k]) watchedData[Number(k)] = raw[k]; });
+    localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
+    setSyncStatus('ok');
+  } catch(e) {
+    // Fall back to localStorage
     const saved = localStorage.getItem('jpWatchlist_v2');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         watchedData = {};
         Object.keys(parsed).forEach(k => { watchedData[Number(k)] = parsed[k]; });
-      } catch(e) { watchedData = {...LETTERBOXD}; }
+      } catch(_) { watchedData = {...LETTERBOXD}; }
     } else {
       watchedData = {...LETTERBOXD};
-      save();
     }
+    setSyncStatus('error');
   }
+}
+
+let saveTimer = null;
+async function saveToCloud() {
+  localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    setSyncStatus('loading');
+    try {
+      const r = await fetch(BIN_URL, {
+        method: 'PUT',
+        headers: HEADERS,
+        body: JSON.stringify(watchedData)
+      });
+      if (!r.ok) throw new Error(r.status);
+      setSyncStatus('ok');
+    } catch(e) {
+      setSyncStatus('error');
+    }
+  }, 600); // debounce rapid ticks
+}
+
+// ── INIT ──────────────────────────────────────────────────
+async function init() {
   document.getElementById('filter-status').value = 'unwatched';
   populateFilters();
+  await loadFromCloud();
   renderTable();
   updateStats();
 }
 
 function save() {
-  localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
-  encodeHash();
+  saveToCloud();
 }
 
 // ── FILTERS ───────────────────────────────────────────────
