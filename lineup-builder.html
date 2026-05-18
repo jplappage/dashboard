@@ -736,8 +736,8 @@ function switchTeam(teamId) {
   // Formation buttons back to default, then loadState will correct
   document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
 
-  // Load saved state for new team from cloud
-  loadStateFromCloud(teamId).then(() => refresh());
+  // Load saved state for new team from cloud — renderOnly to avoid spurious save
+  loadStateFromCloud(teamId).then(() => renderOnly());
 }
 
 // ════════════════════════════════════════════════════════
@@ -1047,7 +1047,10 @@ function updateInfo() {
 // ════════════════════════════════════════════════════════
 //  REFRESH
 // ════════════════════════════════════════════════════════
-function refresh() { renderPitch(); renderSidebar(); updateInfo(); saveState(); }
+// renderOnly: re-draw without triggering a save (used after load/init)
+function renderOnly() { renderPitch(); renderSidebar(); updateInfo(); }
+// refresh: re-draw AND persist (used after user-initiated changes)
+function refresh() { renderOnly(); saveState(); }
 window.addEventListener('resize', () => drawLines());
 
 // ════════════════════════════════════════════════════════
