@@ -53,14 +53,19 @@ For any film/show no longer on the Letterboxd or IMDB watchlist:
 
 ## Step 5 — Look up streaming dates
 For every film/show with `vodDate: null` or `estimated: true`:
-- **First source:** `https://whentostream.com/` — check homepage for recent announcements, then search for the specific film
-- Search for a confirmed streaming date
-- **Only update if the film is confirmed as actually streaming** — not pre-order, not "coming soon" listings
-- Verify on the platform's own website (e.g. sky.com/watch, primevideo.com, mubi.com)
-- Update `vodDate`, `platform`, and set `estimated: false` if now confirmed
-- US digital release dates count — JP can access US digital platforms (Amazon, Apple TV, etc.)
 
-**⚠️ JustWatch lag warning:** JustWatch often goes weeks without updating digital availability. Do NOT rely on JustWatch alone to conclude a film is still cinema-only. For any film whose theatrical release was **6+ weeks ago**, always do a direct check — search `amazon.co.uk`, `skystore.com`, or `tv.apple.com` for the film title directly, or search `"[film title]" rent buy UK` to confirm whether it has quietly appeared on digital.
+**~90% of announcements will appear on whentostream first. This is the primary sweep.**
+
+1. Go to `https://whentostream.com/` — check the homepage for recent announcements
+2. Search for each film by name on the site
+3. If whentostream shows a confirmed date, update `vodDate`, `platform`, set `estimated: false`
+4. US digital release dates count — JP can access US digital platforms (Amazon, Apple TV, etc.)
+
+**For films with no whentostream result:**
+- If the theatrical release was **6+ weeks ago**, don't assume it's still cinema-only — search `"[film title]" rent buy UK` or check `amazon.co.uk`/`skystore.com` directly, as it may have quietly appeared on digital without a major announcement
+- Only mark `vodDate` if confirmed actually streaming now — not pre-order, not "coming soon"
+
+**⚠️ JustWatch lag warning:** JustWatch data can be weeks out of date. Never use it as the sole source to conclude a film hasn't hit digital yet.
 
 ---
 
