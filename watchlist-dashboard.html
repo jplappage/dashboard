@@ -812,10 +812,15 @@ const FILMS = [
   },
 ];
 
+// Parse YYYY-MM-DD in local time (avoids UTC-midnight timezone shift)
+function parseLocalDate(s) {
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
 function getStatus(film) {
   if (!film.vodDate || film.estimated) return film.imdbRating ? 'waiting' : 'notout';
-  const d = new Date(film.vodDate);
-  return d <= TODAY ? 'out' : 'soon';
+  return parseLocalDate(film.vodDate) <= TODAY ? 'out' : 'soon';
 }
 
 function formatDate(dateStr) {
