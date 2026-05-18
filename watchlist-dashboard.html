@@ -899,7 +899,7 @@ function renderFilms() {
 
 
 function renderTVCard(show) {
-  const isOut = new Date(show.streamDate) <= TODAY;
+  const isOut = parseLocalDate(show.streamDate) <= TODAY;
   const badgeText = isOut ? 'Out Now' : 'Coming';
   const badgeClass = isOut ? 'badge-out' : 'badge-soon';
   const dateClass = isOut ? 'date-out' : 'date-soon';
@@ -1001,7 +1001,7 @@ const CAL_EVENTS = (() => {
   };
   FILMS.forEach(f => {
     if (!f.vodDate) return;
-    const past = new Date(f.vodDate) <= TODAY;
+    const past = parseLocalDate(f.vodDate) <= TODAY;
     add(f.vodDate, f.title, past ? 'cal-film-out' : 'cal-film-soon' + (f.estimated ? ' cal-est' : ''));
   });
   TV_SHOWS.forEach(s => {
