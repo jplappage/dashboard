@@ -686,25 +686,37 @@ async function loadFromCloud() {
   }
 }
 
-let saveTimer = null;
+let syncDirty = false;
+
 async function saveToCloud() {
+  // Always save to localStorage immediately — never lose data on exit
   localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => {
-    setSyncStatus('loading');
-    try {
-      const r = await fetch(BIN_URL, {
-        method: 'PUT',
-        headers: HEADERS,
-        body: JSON.stringify(watchedData)
-      });
-      if (!r.ok) throw new Error(r.status);
-      setSyncStatus('ok');
-    } catch(e) {
-      setSyncStatus('error');
-    }
-  }, 600); // debounce rapid ticks
+  syncDirty = true;
+  setSyncStatus('loading');
+  try {
+    const r = await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: HEADERS,
+      body: JSON.stringify(watchedData)
+    });
+    if (!r.ok) throw new Error(r.status);
+    syncDirty = false;
+    setSyncStatus('ok');
+  } catch(e) {
+    setSyncStatus('error');
+  }
 }
+
+// Force sync when page is hidden (tab switch, home button, app switch on mobile)
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'hidden' && syncDirty) {
+    // Use sendBeacon as a last resort — works even as page is closing
+    const blob = new Blob([JSON.stringify(watchedData)], { type: 'application/json' });
+    navigator.sendBeacon
+      ? navigator.sendBeacon(BIN_URL, blob)
+      : fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(watchedData) }).catch(() => {});
+  }
+});
 
 // ── INIT ──────────────────────────────────────────────────
 async function init() {
