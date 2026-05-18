@@ -319,11 +319,11 @@ header {
     <div class="sub" id="teamSub">World Cup 2026 · Lineup Builder</div>
   </div>
   <div class="team-tabs">
-    <button class="ttab active" data-team="france">
+    <button class="ttab" data-team="france">
       <img class="ttab-logo" src="https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg&w=80&output=png">
       France
     </button>
-    <button class="ttab" data-team="liverpool">
+    <button class="ttab active" data-team="liverpool">
       <img class="ttab-logo invert" src="https://a.espncdn.com/i/teamlogos/soccer/500/364.png">
       Liverpool
     </button>
@@ -599,8 +599,8 @@ const FORMATIONS = {
 // ════════════════════════════════════════════════════════
 //  ACTIVE STATE  (mutated by switchTeam)
 // ════════════════════════════════════════════════════════
-let activeTeam = 'france';
-let PLAYERS    = FRANCE_PLAYERS;
+let activeTeam = 'liverpool';
+let PLAYERS    = LIVERPOOL_PLAYERS;
 let PM         = Object.fromEntries(PLAYERS.map(p => [p.id, p]));
 let formation  = '4-3-3';
 let slots      = {};
