@@ -252,6 +252,7 @@ header {
   .fbtn { flex-shrink: 0; }
   .reset-btn { flex-shrink: 0; }
   .xi-counter { flex-shrink: 0; }
+  .sync-status { flex-shrink: 0; }
   .main {
     flex-direction: column;
     overflow: visible;
@@ -268,6 +269,12 @@ header {
     height: 480px;
     flex: none;
   }
+  /* Scale down pitch slots so players don't overlap on narrow screens */
+  .slot-circle { width: 54px; height: 54px; }
+  .slot-name   { font-size: 9px; max-width: 52px; padding: 1px 4px; }
+  .slot-tag    { font-size: 8px; padding: 1px 4px; }
+  .slot-badge  { font-size: 11px; }
+  .slot-empty  { font-size: 16px; }
 }
 
 /* ── TRIBUTE CARD ── */
