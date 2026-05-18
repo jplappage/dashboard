@@ -713,9 +713,8 @@ function switchTeam(teamId) {
   // Formation buttons back to default, then loadState will correct
   document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
 
-  // Load saved state for new team
-  loadState();
-  refresh();
+  // Load saved state for new team from cloud
+  loadStateFromCloud(teamId).then(() => refresh());
 }
 
 // ════════════════════════════════════════════════════════
@@ -1042,32 +1041,11 @@ try { localStorage.removeItem('liverpool_lineup_v1'); } catch(e) {}
 const root = document.documentElement;
 Object.entries(TEAM_CONFIG.france.css).forEach(([k,v]) => root.style.setProperty(k,v));
 
-// Restore from URL hash (cross-device sync) or fall back to localStorage
-const hashState = decodeHash();
-if (hashState) {
-  // Switch team silently if hash specifies a different one
-  if (hashState.t && hashState.t !== activeTeam && TEAM_CONFIG[hashState.t]) {
-    activeTeam = hashState.t;
-    const cfg  = TEAM_CONFIG[hashState.t];
-    cfg.players.forEach(p => p.sec = p._origSec);
-    PLAYERS    = cfg.players;
-    PM         = Object.fromEntries(PLAYERS.map(p => [p.id, p]));
-    formation  = cfg.defaultFormation;
-    slots      = {};
-    conditions = {};
-    Object.entries(cfg.css).forEach(([k,v]) => root.style.setProperty(k,v));
-    document.getElementById('teamFlag').innerHTML  = cfg.logoHtml;
-    document.getElementById('teamName').textContent = cfg.name;
-    document.getElementById('teamSub').textContent  = cfg.sub;
-    document.querySelectorAll('.ttab').forEach(t => t.classList.toggle('active', t.dataset.team === activeTeam));
-    document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
-  }
-  applyStateData(hashState);
-} else {
-  loadState();
-}
-
-requestAnimationFrame(() => refresh());
+// Load from cloud then render
+(async () => {
+  await loadStateFromCloud(activeTeam);
+  requestAnimationFrame(() => refresh());
+})();
 </script>
 </body>
 </html>
