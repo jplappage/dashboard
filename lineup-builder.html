@@ -598,32 +598,30 @@ let dragPid    = null;
 let dragFrom   = null;
 
 // ════════════════════════════════════════════════════════
-//  SAVE / LOAD  +  URL HASH SYNC
+//  JSONBIN SYNC
 // ════════════════════════════════════════════════════════
+const BIN_ID  = '6a0b8c4c6610dd3ae8686daa';
+const BIN_KEY = '$2a$10$SJVrSiNiFsJsoMmOpmqGJOQmdrFpT0rTGMjv4ADrfdu5QfYyzkqLS';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const BIN_HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY };
+
+// Lineup data is stored under "lineup_france" / "lineup_liverpool" keys
+// alongside the watchlist numeric keys — no conflict
+function cloudKey(team) { return 'lineup_' + team; }
+
 function saveKey() { return TEAM_CONFIG[activeTeam].saveKey; }
 
-function encodeHash() {
-  try {
-    const state = {
-      t:  activeTeam,
-      f:  formation,
-      s:  slots,
-      c:  conditions,
-      ps: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec]))
-    };
-    history.replaceState(null, '', '#' + btoa(JSON.stringify(state)));
-  } catch(e) {}
-}
-
-function decodeHash() {
-  try {
-    const h = location.hash.slice(1);
-    if (!h) return null;
-    return JSON.parse(atob(h));
-  } catch(e) { return null; }
+function currentStateObj() {
+  return {
+    f:  formation,
+    s:  slots,
+    c:  conditions,
+    ps: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec]))
+  };
 }
 
 function applyStateData(s) {
+  if (!s) return;
   if (s.f && FORMATIONS[s.f]) {
     formation = s.f;
     document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
@@ -631,33 +629,51 @@ function applyStateData(s) {
   if (s.s) slots = s.s;
   if (s.c) conditions = s.c;
   if (s.ps) PLAYERS.forEach(p => { if (s.ps[p.id]) p.sec = s.ps[p.id]; });
-  // legacy localStorage shape
-  if (s.slots)      slots      = s.slots;
-  if (s.conditions) conditions = s.conditions;
-  if (s.playerSecs) PLAYERS.forEach(p => { if (s.playerSecs[p.id]) p.sec = s.playerSecs[p.id]; });
-  if (s.formation && FORMATIONS[s.formation]) {
-    formation = s.formation;
-    document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
+}
+
+let syncDirty = false;
+
+async function saveState() {
+  // Always persist locally first
+  try { localStorage.setItem(saveKey(), JSON.stringify(currentStateObj())); } catch(e) {}
+  syncDirty = true;
+  // Push to cloud
+  try {
+    // Fetch current bin so we don't overwrite other team's data or watchlist data
+    const get = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+    const current = get.ok ? ((await get.json()).record || {}) : {};
+    current[cloudKey(activeTeam)] = currentStateObj();
+    await fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(current) });
+    syncDirty = false;
+  } catch(e) { /* offline — local save is the fallback */ }
+}
+
+async function loadStateFromCloud(teamId) {
+  try {
+    const r = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+    if (!r.ok) throw new Error();
+    const record = (await r.json()).record || {};
+    const s = record[cloudKey(teamId)];
+    if (s) { applyStateData(s); return true; }
+  } catch(e) {}
+  // Fallback to localStorage
+  try {
+    const raw = localStorage.getItem(TEAM_CONFIG[teamId].saveKey);
+    if (raw) { applyStateData(JSON.parse(raw)); }
+  } catch(e) {}
+  return false;
+}
+
+// Save on page hide (mobile home button / tab switch)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && syncDirty) {
+    const payload = {};
+    payload[cloudKey(activeTeam)] = currentStateObj();
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    navigator.sendBeacon ? navigator.sendBeacon(BIN_URL, blob)
+      : fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(payload) }).catch(() => {});
   }
-}
-
-function saveState() {
-  try {
-    localStorage.setItem(saveKey(), JSON.stringify({
-      formation, slots, conditions,
-      playerSecs: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec]))
-    }));
-  } catch(e) {}
-  encodeHash();
-}
-
-function loadState() {
-  try {
-    const raw = localStorage.getItem(saveKey());
-    if (!raw) return;
-    applyStateData(JSON.parse(raw));
-  } catch(e) {}
-}
+});
 
 // ════════════════════════════════════════════════════════
 //  SWITCH TEAM
