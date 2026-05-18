@@ -227,6 +227,45 @@ header {
 .prog-bg { width: 60px; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
 .prog-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 3px; transition: width 0.3s ease; }
 
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  .fbar {
+    width: 100%;
+    margin-left: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .fbar::-webkit-scrollbar { display: none; }
+  .fbar-label { display: none; }
+  .fbtn { flex-shrink: 0; }
+  .reset-btn { flex-shrink: 0; }
+  .xi-counter { flex-shrink: 0; }
+  .main {
+    flex-direction: column;
+    overflow: visible;
+    padding: 8px;
+    gap: 8px;
+  }
+  .sidebar {
+    width: 100% !important;
+    overflow-y: visible;
+  }
+  .left-sidebar  .player-grid { grid-template-columns: repeat(5, 1fr); }
+  .right-sidebar .player-grid { grid-template-columns: repeat(4, 1fr); }
+  .pitch-wrap {
+    height: 480px;
+    flex: none;
+  }
+}
+
 /* ── TRIBUTE CARD ── */
 .tribute-section { margin-top: 12px; padding: 0 2px 6px; }
 .tribute-card {
