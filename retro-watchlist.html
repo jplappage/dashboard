@@ -704,8 +704,12 @@ async function saveToCloud() {
       const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
       binCache = gr.ok ? ((await gr.json()).record || {}) : {};
     }
-    // Merge watchlist entries into the full bin (preserves lineup_* keys)
-    const merged = Object.assign({}, binCache, watchedData);
+    // Build merged bin: non-watchlist keys from binCache (lineup_* etc.) + watchedData
+    // Cannot use Object.assign(binCache, watchedData) — it can't express deletions,
+    // so unticked films would survive in binCache and reappear on next load.
+    const merged = {};
+    Object.keys(binCache).forEach(k => { if (isNaN(Number(k))) merged[k] = binCache[k]; });
+    Object.assign(merged, watchedData);
     const r = await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(merged) });
     if (!r.ok) throw new Error(r.status);
     binCache = merged;
