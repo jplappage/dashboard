@@ -655,28 +655,35 @@ function getLocalData() {
   return {...LETTERBOXD};
 }
 
+// Full bin cached in memory — lets us merge watchlist data without wiping
+// lineup data (lineup_france / lineup_liverpool live in the same bin)
+let binCache  = null;
+let syncDirty = false;
+
 async function loadFromCloud() {
   setSyncStatus('loading');
   try {
     const r = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
     if (!r.ok) throw new Error(r.status);
     const j = await r.json();
-    const raw = j.record || {};
+    binCache = j.record || {};
 
     // Check if cloud has real watched entries (numeric keys with date values)
-    const cloudEntries = Object.keys(raw).filter(k => !isNaN(Number(k)) && typeof raw[k] === 'string');
+    const cloudEntries = Object.keys(binCache).filter(k => !isNaN(Number(k)) && typeof binCache[k] === 'string');
 
     if (cloudEntries.length > 0) {
       // Cloud has valid data — use it
       watchedData = {};
-      cloudEntries.forEach(k => { watchedData[Number(k)] = raw[k]; });
+      cloudEntries.forEach(k => { watchedData[Number(k)] = binCache[k]; });
       localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
       setSyncStatus('ok');
     } else {
       // Cloud is empty — seed from localStorage or Letterboxd defaults
       watchedData = getLocalData();
-      // Push the seeded data up to the cloud
-      await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(watchedData) });
+      // Merge into binCache before seeding so lineup keys aren't lost
+      const merged = Object.assign({}, binCache, watchedData);
+      await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(merged) });
+      binCache = merged;
       setSyncStatus('ok');
     }
   } catch(e) {
@@ -686,20 +693,22 @@ async function loadFromCloud() {
   }
 }
 
-let syncDirty = false;
-
 async function saveToCloud() {
   // Always save to localStorage immediately — never lose data on exit
   localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
   syncDirty = true;
   setSyncStatus('loading');
   try {
-    const r = await fetch(BIN_URL, {
-      method: 'PUT',
-      headers: HEADERS,
-      body: JSON.stringify(watchedData)
-    });
+    // If binCache is null (load failed), fetch before PUT to preserve lineup keys
+    if (!binCache) {
+      const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+      binCache = gr.ok ? ((await gr.json()).record || {}) : {};
+    }
+    // Merge watchlist entries into the full bin (preserves lineup_* keys)
+    const merged = Object.assign({}, binCache, watchedData);
+    const r = await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(merged) });
     if (!r.ok) throw new Error(r.status);
+    binCache = merged;
     syncDirty = false;
     setSyncStatus('ok');
   } catch(e) {
@@ -711,10 +720,12 @@ async function saveToCloud() {
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'hidden' && syncDirty) {
     // Use sendBeacon as a last resort — works even as page is closing
-    const blob = new Blob([JSON.stringify(watchedData)], { type: 'application/json' });
+    // Merge into cached bin so lineup keys survive
+    const payload = binCache ? Object.assign({}, binCache, watchedData) : watchedData;
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
     navigator.sendBeacon
       ? navigator.sendBeacon(BIN_URL, blob)
-      : fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(watchedData) }).catch(() => {});
+      : fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(payload) }).catch(() => {});
   }
 });
 
