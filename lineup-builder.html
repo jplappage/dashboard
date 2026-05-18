@@ -77,6 +77,10 @@ header {
   cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.14s;
 }
 .reset-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.sync-status { font-size: 10px; letter-spacing: 0.5px; padding: 3px 9px; border-radius: 20px; border: 1px solid transparent; white-space: nowrap; }
+.sync-loading { color: #888;    border-color: #333; }
+.sync-ok      { color: #4ade80; border-color: rgba(74,222,128,0.3); }
+.sync-error   { color: #f87171; border-color: rgba(248,113,113,0.3); }
 
 /* ── MAIN ── */
 .main { display: flex; flex: 1; padding: 10px 12px; gap: 10px; overflow: hidden; min-height: 0; }
@@ -334,6 +338,7 @@ header {
       <span class="xi-denom">/11</span>
       <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
     </div>
+    <span id="sync-status" class="sync-status"></span>
   </div>
 </header>
 
