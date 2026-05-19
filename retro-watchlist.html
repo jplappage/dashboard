@@ -197,6 +197,7 @@
 
     td { padding: 9px 12px; vertical-align: middle; }
     td.td-num, th.td-num { display: none; }
+    td.td-title, th.th-title { width: 44%; }
     td.td-title { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       position: sticky; left: 0; z-index: 2; background: #000;
       border-left: 3px solid transparent; }
@@ -204,18 +205,19 @@
     tbody tr.watched-row td.td-title { background: #1a1600; border-left-color: rgba(255,232,31,0.6); }
     tbody tr.watched-row:hover td.td-title { background: #221d00; border-left-color: rgba(255,232,31,0.8); }
     thead th.th-title { position: sticky; left: 0; z-index: 11; background: #000; }
-    td.td-year  { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+    td.td-year, th.th-year   { width: 62px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+    td.td-genre, th.th-genre { width: 110px; }
     td.td-genre span {
       background: rgba(255,232,31,0.07); padding: 3px 9px; border-radius: 100px;
       font-size: 11px; color: #888; border: 1px solid rgba(255,232,31,0.15);
       white-space: nowrap;
     }
-    td.td-runtime { color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    td.td-rating  { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.8rem; }
+    td.td-runtime, th.th-runtime { width: 82px; color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    td.td-rating, th.th-rating   { width: 66px; white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.8rem; }
     .lb-star { color: #00c030; font-size: 0.75rem; }
     td.td-rating .lb-val { color: var(--text-muted); }
-    td.td-check { text-align: center; }
-    td.td-date  { }
+    td.td-check, th.th-check { width: 44px; text-align: center; }
+    td.td-date, th.th-date   { width: 130px; }
 
     input[type="checkbox"] {
       width: 16px; height: 16px; cursor: pointer;
