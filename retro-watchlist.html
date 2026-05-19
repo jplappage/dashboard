@@ -663,25 +663,36 @@ let syncDirty = false;
 async function loadFromCloud() {
   setSyncStatus('loading');
   try {
-    const r = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+    // cache: 'no-store' prevents the browser returning a stale cached response
+    // after a PUT (which would undo recent unticks on refresh)
+    const r = await fetch(BIN_URL + '/latest', {
+      headers: { 'X-Master-Key': BIN_KEY },
+      cache: 'no-store'
+    });
     if (!r.ok) throw new Error(r.status);
     const j = await r.json();
     binCache = j.record || {};
 
-    // Check if cloud has real watched entries (numeric keys with date values)
-    const cloudEntries = Object.keys(binCache).filter(k => !isNaN(Number(k)) && typeof binCache[k] === 'string');
+    const allKeys      = Object.keys(binCache);
+    const cloudEntries = allKeys.filter(k => !isNaN(Number(k)) && typeof binCache[k] === 'string');
 
     if (cloudEntries.length > 0) {
-      // Cloud has valid data — use it
+      // Cloud has watched films — use them as source of truth
       watchedData = {};
       cloudEntries.forEach(k => { watchedData[Number(k)] = binCache[k]; });
       localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
       setSyncStatus('ok');
+    } else if (allKeys.length > 0) {
+      // Bin has data (e.g. lineup keys) but zero watched films —
+      // user has unticked everything; treat as intentional empty state
+      watchedData = {};
+      localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
+      setSyncStatus('ok');
     } else {
-      // Cloud is empty — seed from localStorage or Letterboxd defaults
+      // Bin is genuinely empty (first-time setup) — seed from localStorage or Letterboxd defaults
       watchedData = getLocalData();
-      // Merge into binCache before seeding so lineup keys aren't lost
-      const merged = Object.assign({}, binCache, watchedData);
+      const merged = {};
+      Object.assign(merged, watchedData);
       await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(merged) });
       binCache = merged;
       setSyncStatus('ok');
