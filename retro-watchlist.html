@@ -986,7 +986,7 @@ function sortBy(col) {
   });
 
   // Update header indicators
-  ['title','year','genre','runtime','date'].forEach(c => {
+  ['title','year','genre','runtime','lbRating','date'].forEach(c => {
     const el = document.getElementById('sort-' + c);
     if (el) el.textContent = '↕';
     const th = el && el.closest('th');
@@ -1029,6 +1029,7 @@ function renderTable() {
       <td class="td-year">${f.year}</td>
       <td class="td-genre"><span>${f.genre}</span></td>
       <td class="td-runtime">${f.runtime} min</td>
+      <td class="td-rating">${f.lbRating != null ? `<span class="lb-star">★</span><span class="lb-val"> ${f.lbRating.toFixed(1)}</span>` : '—'}</td>
       <td class="td-check">
         <input type="checkbox" ${watched ? 'checked' : ''}
           onchange="toggleWatched(${f.id}, this)">
