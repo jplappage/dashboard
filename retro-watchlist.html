@@ -199,12 +199,12 @@
     td.td-num, th.td-num { display: none; }
     td.td-title, th.th-title { width: 26%; min-width: 180px; }
     td.td-title { font-size: 17px; font-weight: 600;
-      position: sticky; left: 0; z-index: 2; background: #000;
+      position: -webkit-sticky; position: sticky; left: 0; z-index: 10; background: #000;
       border-left: 3px solid transparent; }
     tbody tr:hover td.td-title { background: #080808; }
     tbody tr.watched-row td.td-title { background: #1a1600; border-left-color: rgba(255,232,31,0.6); }
     tbody tr.watched-row:hover td.td-title { background: #221d00; border-left-color: rgba(255,232,31,0.8); }
-    thead th.th-title { position: sticky; left: 0; z-index: 11; background: #000; }
+    thead th.th-title { position: -webkit-sticky; position: sticky; left: 0; z-index: 20; background: #000; }
     td.td-year, th.th-year   { width: 62px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
     td.td-genre, th.th-genre { width: 110px; }
     td.td-genre span {
