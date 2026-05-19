@@ -300,6 +300,20 @@
 </head>
 <body>
 
+<!-- Watch confirmation modal -->
+<div class="watch-modal-overlay" id="watch-modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="watch-modal">
+    <h3>Mark as Watched</h3>
+    <div class="wm-title" id="wm-title"></div>
+    <label for="wm-date">Date watched</label>
+    <input type="date" id="wm-date">
+    <div class="wm-buttons">
+      <button class="wm-cancel" onclick="cancelWatch()">Cancel</button>
+      <button class="wm-confirm" onclick="confirmWatch()">Confirm</button>
+    </div>
+  </div>
+</div>
+
 <div style="background:#000;border-bottom:1px solid rgba(255,232,31,0.2);padding:8px 20px;">
   <a href="/dashboard/" style="color:#ffe81f;font-size:1.5rem;text-decoration:none;line-height:1;display:inline-block;transition:transform 0.15s;" onmouseover="this.style.transform='translateX(-4px)'" onmouseout="this.style.transform='none'">←</a>
 </div>
@@ -961,15 +975,54 @@ function esc(s) {
 }
 
 // ── WATCHED TOGGLE ────────────────────────────────────────
+let _pendingWatchId = null;
+
 function toggleWatched(id, cb) {
   if (cb.checked) {
-    watchedData[id] = new Date().toISOString().slice(0,10);
+    // Revert checkbox — wait for modal confirmation before saving
+    cb.checked = false;
+    _pendingWatchId = id;
+    const film = FILMS.find(f => f.id === id);
+    document.getElementById('wm-title').textContent = film ? film.title : '';
+    document.getElementById('wm-date').value = new Date().toISOString().slice(0, 10);
+    document.getElementById('watch-modal-overlay').classList.add('open');
+    // Focus the date input so the user is prompted to confirm/adjust it
+    setTimeout(() => document.getElementById('wm-date').focus(), 50);
   } else {
     delete watchedData[id];
+    save();
+    renderTable();
+    updateStats();
   }
-  save();
-  renderTable();
-  updateStats();
+}
+
+function confirmWatch() {
+  const dateVal = document.getElementById('wm-date').value;
+  if (!dateVal) {
+    document.getElementById('wm-date').focus();
+    return;
+  }
+  if (_pendingWatchId !== null) {
+    watchedData[_pendingWatchId] = dateVal;
+    save();
+    renderTable();
+    updateStats();
+  }
+  closeWatchModal();
+}
+
+function cancelWatch() {
+  closeWatchModal();
+}
+
+function closeWatchModal() {
+  document.getElementById('watch-modal-overlay').classList.remove('open');
+  _pendingWatchId = null;
+}
+
+function handleOverlayClick(e) {
+  // Dismiss if clicking the backdrop (not the modal itself)
+  if (e.target === document.getElementById('watch-modal-overlay')) cancelWatch();
 }
 
 function updateDate(id, val) {
