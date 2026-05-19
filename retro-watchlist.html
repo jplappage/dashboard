@@ -205,6 +205,9 @@
       white-space: nowrap;
     }
     td.td-runtime { color: var(--text-muted); white-space: nowrap; width: 76px; font-variant-numeric: tabular-nums; }
+    td.td-rating  { white-space: nowrap; width: 64px; font-variant-numeric: tabular-nums; font-size: 0.8rem; }
+    .lb-star { color: #00c030; font-size: 0.75rem; }
+    td.td-rating .lb-val { color: var(--text-muted); }
     td.td-check { text-align: center; width: 56px; }
     td.td-date { width: 140px; }
 
@@ -398,6 +401,7 @@
         <th onclick="sortBy('year')">Year <span class="sort-arrow" id="sort-year">↕</span></th>
         <th onclick="sortBy('genre')">Genre <span class="sort-arrow" id="sort-genre">↕</span></th>
         <th onclick="sortBy('runtime')">Runtime <span class="sort-arrow" id="sort-runtime">↕</span></th>
+        <th onclick="sortBy('lbRating')">LB <span class="sort-arrow" id="sort-lbRating">↕</span></th>
         <th class="no-sort td-check">✓</th>
         <th onclick="sortBy('date')" class="no-sort" id="th-date">Date Watched <span class="sort-arrow" id="sort-date">↕</span></th>
       </tr>
