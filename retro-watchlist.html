@@ -819,36 +819,103 @@ function save() {
 }
 
 // ── FILTERS ───────────────────────────────────────────────
-function populateFilters() {
-  const genres  = [...new Set(FILMS.map(f => f.genre))].sort();
-  const decades = [...new Set(FILMS.map(f => f.decade))].sort();
-  const gSel = document.getElementById('filter-genre');
-  const dSel = document.getElementById('filter-decade');
-  genres.forEach(g  => { const o = document.createElement('option'); o.value = g; o.textContent = g; gSel.appendChild(o); });
-  decades.forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; dSel.appendChild(o); });
-}
 
-function getFiltered() {
-  const genre   = document.getElementById('filter-genre').value;
-  const decade  = document.getElementById('filter-decade').value;
-  const runtime = document.getElementById('filter-runtime').value;
-  const status  = document.getElementById('filter-status').value;
-  const search  = document.getElementById('filter-search').value.toLowerCase().trim();
+// All possible genre / decade values (fixed at load time)
+const ALL_GENRES  = [...new Set(FILMS.map(f => f.genre))].sort();
+const ALL_DECADES = [...new Set(FILMS.map(f => f.decade))].sort();
+const RUNTIME_OPTS = [
+  { value: 'r100',     label: 'Under 100 mins'  },
+  { value: 'r120',     label: 'Under 2 hours'   },
+  { value: 'r150',     label: 'Under 2.5 hours' },
+  { value: 'r150plus', label: 'Over 2.5 hours'  },
+];
+
+// Core filter engine — pass overrides to temporarily ignore a specific filter
+// e.g. filterFilms({ genre: '' }) applies all filters except genre
+function filterFilms({ genre, decade, runtime, status, search } = {}) {
+  const g = genre   !== undefined ? genre   : document.getElementById('filter-genre').value;
+  const d = decade  !== undefined ? decade  : document.getElementById('filter-decade').value;
+  const r = runtime !== undefined ? runtime : document.getElementById('filter-runtime').value;
+  const s = status  !== undefined ? status  : document.getElementById('filter-status').value;
+  const q = search  !== undefined ? search  : document.getElementById('filter-search').value.toLowerCase().trim();
   return displayOrder.filter(f => {
-    if (genre  && f.genre  !== genre)  return false;
-    if (decade && f.decade !== decade) return false;
-    if (runtime === 'r100'     && f.runtime >= 100) return false;
-    if (runtime === 'r120'     && f.runtime >= 120) return false;
-    if (runtime === 'r150'     && f.runtime >= 150) return false;
-    if (runtime === 'r150plus' && f.runtime <  150) return false;
-    if (status === 'watched'   && !watchedData[f.id]) return false;
-    if (status === 'unwatched' &&  watchedData[f.id]) return false;
-    if (search && !f.title.toLowerCase().includes(search)) return false;
+    if (g && f.genre  !== g)  return false;
+    if (d && f.decade !== d)  return false;
+    if (r === 'r100'     && f.runtime >= 100) return false;
+    if (r === 'r120'     && f.runtime >= 120) return false;
+    if (r === 'r150'     && f.runtime >= 150) return false;
+    if (r === 'r150plus' && f.runtime <  150) return false;
+    if (s === 'watched'   && !watchedData[f.id]) return false;
+    if (s === 'unwatched' &&  watchedData[f.id]) return false;
+    if (q && !f.title.toLowerCase().includes(q)) return false;
     return true;
   });
 }
 
-function applyFilters() { renderTable(); }
+function getFiltered() { return filterFilms(); }
+
+// Rebuild each dropdown to only show options with at least one matching result
+// given all the OTHER currently active filters.
+function updateFilterOptions() {
+  // For each filter, apply all OTHER filters to get the candidate pool
+  const forGenre   = filterFilms({ genre: '' });
+  const forDecade  = filterFilms({ decade: '' });
+  const forRuntime = filterFilms({ runtime: '' });
+
+  const validGenres  = new Set(forGenre.map(f => f.genre));
+  const validDecades = new Set(forDecade.map(f => f.decade));
+
+  const validRuntimes = new Set();
+  forRuntime.forEach(f => {
+    if (f.runtime < 100)  validRuntimes.add('r100');
+    if (f.runtime < 120)  validRuntimes.add('r120');
+    if (f.runtime < 150)  validRuntimes.add('r150');
+    if (f.runtime >= 150) validRuntimes.add('r150plus');
+  });
+
+  // Genre dropdown
+  const gSel = document.getElementById('filter-genre');
+  const curGenre = gSel.value;
+  gSel.innerHTML = '<option value="">All Genres</option>';
+  ALL_GENRES.forEach(g => {
+    if (!validGenres.has(g)) return;
+    const o = document.createElement('option');
+    o.value = g; o.textContent = g;
+    if (g === curGenre) o.selected = true;
+    gSel.appendChild(o);
+  });
+  if (curGenre && !validGenres.has(curGenre)) gSel.value = '';
+
+  // Decade dropdown
+  const dSel = document.getElementById('filter-decade');
+  const curDecade = dSel.value;
+  dSel.innerHTML = '<option value="">All Decades</option>';
+  ALL_DECADES.forEach(d => {
+    if (!validDecades.has(d)) return;
+    const o = document.createElement('option');
+    o.value = d; o.textContent = d;
+    if (d === curDecade) o.selected = true;
+    dSel.appendChild(o);
+  });
+  if (curDecade && !validDecades.has(curDecade)) dSel.value = '';
+
+  // Runtime dropdown
+  const rSel = document.getElementById('filter-runtime');
+  const curRuntime = rSel.value;
+  rSel.innerHTML = '<option value="">Any Length</option>';
+  RUNTIME_OPTS.forEach(({ value, label }) => {
+    if (!validRuntimes.has(value)) return;
+    const o = document.createElement('option');
+    o.value = value; o.textContent = label;
+    if (value === curRuntime) o.selected = true;
+    rSel.appendChild(o);
+  });
+  if (curRuntime && !validRuntimes.has(curRuntime)) rSel.value = '';
+}
+
+function populateFilters() { updateFilterOptions(); }
+
+function applyFilters() { updateFilterOptions(); renderTable(); }
 
 function pickRandom() {
   // Use current filters, but always exclude already-watched films
