@@ -197,11 +197,12 @@
 
     td { padding: 9px 12px; vertical-align: middle; }
     td.td-num, th.td-num { display: none; }
-    td.td-title { width: 28%; font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      position: sticky; left: 0; z-index: 2; background: #000; }
+    td.td-title { width: 38%; font-size: 15px; font-weight: 600;
+      position: sticky; left: 0; z-index: 2; background: #000;
+      border-left: 3px solid transparent; }
     tbody tr:hover td.td-title { background: #080808; }
-    tbody tr.watched-row td.td-title { background: #0a0900; }
-    tbody tr.watched-row:hover td.td-title { background: #121002; }
+    tbody tr.watched-row td.td-title { background: #1a1600; border-left-color: rgba(255,232,31,0.6); }
+    tbody tr.watched-row:hover td.td-title { background: #221d00; border-left-color: rgba(255,232,31,0.8); }
     thead th.th-title { position: sticky; left: 0; z-index: 11; background: #000; }
     td.td-year  { color: var(--text-muted); width: 56px; font-variant-numeric: tabular-nums; }
     td.td-genre { width: 120px; }
