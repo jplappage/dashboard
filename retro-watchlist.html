@@ -196,8 +196,13 @@
     tbody tr.watched-row:hover { background: rgba(255,232,31,0.07); }
 
     td { padding: 9px 12px; vertical-align: middle; }
-    td.td-num   { color: var(--text-dim); width: 36px; font-size: 12px; font-variant-numeric: tabular-nums; }
-    td.td-title { width: 28%; font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    td.td-num, th.td-num { display: none; }
+    td.td-title { width: 28%; font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      position: sticky; left: 0; z-index: 2; background: #000; }
+    tbody tr:hover td.td-title { background: #080808; }
+    tbody tr.watched-row td.td-title { background: #0a0900; }
+    tbody tr.watched-row:hover td.td-title { background: #121002; }
+    thead th.th-title { position: sticky; left: 0; z-index: 11; background: #000; }
     td.td-year  { color: var(--text-muted); width: 56px; font-variant-numeric: tabular-nums; }
     td.td-genre { width: 120px; }
     td.td-genre span {
