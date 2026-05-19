@@ -301,11 +301,10 @@
     <span class="filter-label">Runtime</span>
     <select id="filter-runtime" onchange="applyFilters()">
       <option value="">Any Length</option>
-      <option value="r90">90 min or under</option>
-      <option value="r90120">91–120 min</option>
-      <option value="r120150">121–150 min</option>
-      <option value="r150180">151–180 min</option>
-      <option value="r180">Over 180 min</option>
+      <option value="r100">Under 100 mins</option>
+      <option value="r120">Under 2 hours</option>
+      <option value="r150">Under 2.5 hours</option>
+      <option value="r150plus">Over 2.5 hours</option>
     </select>
   </div>
   <select id="filter-status" style="display:none">
@@ -352,7 +351,7 @@
 <script>
 // ── FILM DATA ──────────────────────────────────────────────
 const FILMS = [
-  {id:1,  title:"Nosferatu",                          year:1922, decade:"1920s", genre:"Horror",    runtime:94},
+  {id:1,  title:"Nosferatu",                          year:1922, decade:"1920s", genre:"Foreign",   runtime:94},
   {id:2,  title:"The Graduate",                       year:1967, decade:"1960s", genre:"Drama",     runtime:106},
   {id:3,  title:"Breakfast at Tiffany's",             year:1961, decade:"1960s", genre:"Romance",   runtime:115},
   {id:4,  title:"The Sound of Music",                 year:1965, decade:"1960s", genre:"Musical",   runtime:172},
@@ -777,11 +776,10 @@ function getFiltered() {
   return displayOrder.filter(f => {
     if (genre  && f.genre  !== genre)  return false;
     if (decade && f.decade !== decade) return false;
-    if (runtime === 'r90'     && f.runtime > 90)                          return false;
-    if (runtime === 'r90120'  && (f.runtime <= 90  || f.runtime > 120))  return false;
-    if (runtime === 'r120150' && (f.runtime <= 120 || f.runtime > 150))  return false;
-    if (runtime === 'r150180' && (f.runtime <= 150 || f.runtime > 180))  return false;
-    if (runtime === 'r180'    && f.runtime <= 180)                        return false;
+    if (runtime === 'r100'     && f.runtime >= 100) return false;
+    if (runtime === 'r120'     && f.runtime >= 120) return false;
+    if (runtime === 'r150'     && f.runtime >= 150) return false;
+    if (runtime === 'r150plus' && f.runtime <  150) return false;
     if (status === 'watched'   && !watchedData[f.id]) return false;
     if (status === 'unwatched' &&  watchedData[f.id]) return false;
     if (search && !f.title.toLowerCase().includes(search)) return false;
