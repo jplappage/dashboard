@@ -195,21 +195,22 @@
     tbody tr.watched-row { background: var(--green-bg); border-left: 2px solid rgba(255,232,31,0.25); }
     tbody tr.watched-row:hover { background: rgba(255,232,31,0.07); }
 
-    td { padding: 9px 14px; vertical-align: middle; }
-    td.td-num { color: var(--text-dim); width: 44px; font-size: 12px; font-variant-numeric: tabular-nums; }
-    td.td-title { font-weight: 500; min-width: 180px; max-width: 260px; }
-    td.td-year { color: var(--text-muted); width: 54px; font-variant-numeric: tabular-nums; }
+    td { padding: 9px 12px; vertical-align: middle; }
+    td.td-num   { color: var(--text-dim); width: 36px; font-size: 12px; font-variant-numeric: tabular-nums; }
+    td.td-title { width: 28%; font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    td.td-year  { color: var(--text-muted); width: 56px; font-variant-numeric: tabular-nums; }
+    td.td-genre { width: 120px; }
     td.td-genre span {
       background: rgba(255,232,31,0.07); padding: 3px 9px; border-radius: 100px;
       font-size: 11px; color: #888; border: 1px solid rgba(255,232,31,0.15);
       white-space: nowrap;
     }
-    td.td-runtime { color: var(--text-muted); white-space: nowrap; width: 76px; font-variant-numeric: tabular-nums; }
-    td.td-rating  { white-space: nowrap; width: 64px; font-variant-numeric: tabular-nums; font-size: 0.8rem; }
+    td.td-runtime { color: var(--text-muted); white-space: nowrap; width: 78px; font-variant-numeric: tabular-nums; }
+    td.td-rating  { white-space: nowrap; width: 62px; font-variant-numeric: tabular-nums; font-size: 0.8rem; }
     .lb-star { color: #00c030; font-size: 0.75rem; }
     td.td-rating .lb-val { color: var(--text-muted); }
-    td.td-check { text-align: center; width: 56px; }
-    td.td-date { width: 140px; }
+    td.td-check { text-align: center; width: 48px; }
+    td.td-date  { width: 136px; }
 
     input[type="checkbox"] {
       width: 16px; height: 16px; cursor: pointer;
