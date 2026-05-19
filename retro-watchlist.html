@@ -400,26 +400,16 @@
 
 <div class="table-wrap">
   <table id="films-table">
-    <colgroup>
-      <col style="width:0">        <!-- # hidden -->
-      <col style="width:44%">      <!-- title -->
-      <col style="width:6%">       <!-- year -->
-      <col style="width:13%">      <!-- genre -->
-      <col style="width:9%">       <!-- runtime -->
-      <col style="width:7%">       <!-- lb -->
-      <col style="width:5%">       <!-- ✓ -->
-      <col style="width:16%">      <!-- date watched -->
-    </colgroup>
     <thead>
       <tr>
         <th class="no-sort td-num">#</th>
         <th class="th-title" onclick="sortBy('title')">Title <span class="sort-arrow" id="sort-title">↕</span></th>
-        <th onclick="sortBy('year')">Year <span class="sort-arrow" id="sort-year">↕</span></th>
-        <th onclick="sortBy('genre')">Genre <span class="sort-arrow" id="sort-genre">↕</span></th>
-        <th onclick="sortBy('runtime')">Runtime <span class="sort-arrow" id="sort-runtime">↕</span></th>
-        <th onclick="sortBy('lbRating')">LB <span class="sort-arrow" id="sort-lbRating">↕</span></th>
-        <th class="no-sort td-check">✓</th>
-        <th onclick="sortBy('date')" class="no-sort" id="th-date">Date Watched <span class="sort-arrow" id="sort-date">↕</span></th>
+        <th class="th-year" onclick="sortBy('year')">Year <span class="sort-arrow" id="sort-year">↕</span></th>
+        <th class="th-genre" onclick="sortBy('genre')">Genre <span class="sort-arrow" id="sort-genre">↕</span></th>
+        <th class="th-runtime" onclick="sortBy('runtime')">Runtime <span class="sort-arrow" id="sort-runtime">↕</span></th>
+        <th class="th-rating" onclick="sortBy('lbRating')">LB <span class="sort-arrow" id="sort-lbRating">↕</span></th>
+        <th class="no-sort th-check">✓</th>
+        <th class="th-date no-sort" id="th-date">Date Watched <span class="sort-arrow" id="sort-date">↕</span></th>
       </tr>
     </thead>
     <tbody id="films-tbody"></tbody>
