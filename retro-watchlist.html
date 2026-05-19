@@ -712,7 +712,7 @@ async function saveToCloud() {
   try {
     // If binCache is null (load failed), fetch before PUT to preserve lineup keys
     if (!binCache) {
-      const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+      const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY }, cache: 'no-store' });
       binCache = gr.ok ? ((await gr.json()).record || {}) : {};
     }
     // Build merged bin: non-watchlist keys from binCache (lineup_* etc.) + watchedData
