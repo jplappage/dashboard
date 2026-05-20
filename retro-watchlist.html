@@ -886,7 +886,7 @@ async function saveToCloud() {
       const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY }, cache: 'no-store' });
       binCache = gr.ok ? ((await gr.json()).record || {}) : {};
     }
-    // Build merged bin: non-watchlist keys from binCache (lineup_* etc.) + watchedData + myRatings
+    // Build merged bin: non-watchlist keys from binCache (lineup_* etc.) + watchedData
     // Cannot use Object.assign(binCache, watchedData) — it can't express deletions,
     // so unticked films would survive in binCache and reappear on next load.
     const merged = {};
