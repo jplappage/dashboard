@@ -917,6 +917,9 @@ document.addEventListener('visibilitychange', () => {
 // ── INIT ──────────────────────────────────────────────────
 async function init() {
   document.getElementById('filter-status').value = 'unwatched';
+  // Show year column as active sort on load
+  const yearArrow = document.getElementById('sort-year');
+  if (yearArrow) { yearArrow.textContent = '↑'; yearArrow.closest('th').classList.add('sorted'); }
   await loadFromCloud();
   updateFilterOptions();
   renderTable();
