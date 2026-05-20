@@ -879,8 +879,18 @@ function renderFilms() {
   const groups = {
     out:     visible.filter(f => getStatus(f) === 'out').sort((a, b) => new Date(b.vodDate) - new Date(a.vodDate)),
     soon:    visible.filter(f => getStatus(f) === 'soon').sort((a, b) => new Date(a.vodDate) - new Date(b.vodDate)),
-    waiting: visible.filter(f => getStatus(f) === 'waiting'),
-    notout:  visible.filter(f => getStatus(f) === 'notout'),
+    waiting: visible.filter(f => getStatus(f) === 'waiting').sort((a, b) => {
+      if (!a.vodDate && !b.vodDate) return 0;
+      if (!a.vodDate) return 1;
+      if (!b.vodDate) return -1;
+      return new Date(a.vodDate) - new Date(b.vodDate);
+    }),
+    notout:  visible.filter(f => getStatus(f) === 'notout').sort((a, b) => {
+      if (!a.vodDate && !b.vodDate) return 0;
+      if (!a.vodDate) return 1;
+      if (!b.vodDate) return -1;
+      return new Date(a.vodDate) - new Date(b.vodDate);
+    }),
   };
 
   const elOut = document.getElementById('count-out'); if (elOut) elOut.textContent = groups.out.length;
