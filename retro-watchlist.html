@@ -715,9 +715,91 @@ const LETTERBOXD = {
   170:"2025-02-16"  // Ferris Bueller's Day Off
 };
 
+// ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
+const MY_RATINGS = {
+  2:   3.0,  // The Graduate
+  8:   2.0,  // The Rocky Horror Picture Show
+  9:   2.5,  // Suspiria 70
+  11:  3.5,  // Life of Brian
+  12:  3.0,  // Mean Streets
+  18:  3.5,  // Dead Poets Society
+  21:  3.0,  // My Neighbor Totoro
+  22:  3.5,  // Stand by Me
+  26:  2.0,  // The Evil Dead
+  27:  3.5,  // Airplane
+  33:  3.0,  // Girl, Interrupted
+  34:  3.5,  // Notting Hill
+  37:  2.5,  // Dazed and Confused
+  39:  3.5,  // The Talented Mr. Ripley
+  40:  3.5,  // The Iron Giant
+  44:  3.5,  // Cure
+  45:  3.5,  // You've Got Mail
+  49:  3.5,  // (500) Days of Summer
+  52:  2.5,  // The Devil Wears Prada
+  55:  3.5,  // Almost Famous
+  58:  2.0,  // Thir13en Ghosts
+  59:  3.0,  // Bend It Like Beckham
+  60:  3.5,  // About a Boy
+  61:  2.5,  // Cabin Fever
+  62:  4.0,  // Love Actually
+  64:  2.5,  // Monster's Ball
+  68:  3.5,  // Million Dollar Baby
+  74:  2.5,  // The Devil's Rejects
+  75:  3.0,  // Marie Antoinette
+  76:  3.5,  // The Holiday
+  81:  3.5,  // Let the Right One In
+  82:  3.0,  // Yes Man
+  83:  2.5,  // Vicky Cristina Barcelona
+  90:  3.5,  // Kung Fu Panda 2
+  91:  3.0,  // Moonrise Kingdom
+  94:  4.5,  // About Time
+  96:  4.5,  // Inside Llewyn Davis
+  98:  3.0,  // Warm Bodies
+  100: 4.0,  // How to Train Your Dragon 2
+  101: 2.0,  // Inherent Vice
+  103: 3.0,  // The Lobster
+  104: 3.5,  // Crimson Peak
+  105: 3.5,  // Me and Earl and the Dying Girl
+  106: 4.5,  // Bone Tomahawk
+  107: 3.0,  // Paper Towns
+  108: 4.0,  // Joy
+  110: 3.5,  // Nocturnal Animals
+  111: 2.5,  // Swiss Army Man
+  113: 3.0,  // Alice Through the Looking Glass
+  114: 3.0,  // Call Me by Your Name
+  119: 4.0,  // Mary Poppins Returns
+  120: 4.0,  // Frozen II
+  121: 4.0,  // The King
+  122: 3.5,  // How to Train Your Dragon 3
+  124: 3.0,  // The Devil All the Time
+  131: 2.5,  // Elvis
+  135: 3.5,  // Fresh
+  137: 4.0,  // Cha Cha Real Smooth
+  150: 3.5,  // Fruitvale Station
+  151: 3.5,  // Thief
+  152: 3.5,  // Holes
+  153: 3.0,  // Before Sunrise
+  154: 3.0,  // Fargo
+  155: 3.0,  // Big Fish
+  156: 4.0,  // The Game
+  157: 2.5,  // I, Tonya
+  158: 2.0,  // Terrifier
+  159: 3.0,  // An American Werewolf in London
+  160: 4.0,  // Mystic River
+  161: 3.5,  // The Devil's Advocate
+  162: 3.5,  // Singin' in the Rain
+  163: 3.0,  // Natural Born Killers
+  164: 2.0,  // Crossroads
+  165: 4.0,  // How to Lose a Guy in 10 Days
+  166: 2.5,  // The Cat in the Hat
+  167: 3.5,  // Walk the Line
+  168: 4.0,  // The Secret Life of Walter Mitty
+  169: 3.5,  // The Princess Bride
+  170: 3.0,  // Ferris Bueller's Day Off
+};
+
 // ── STATE ──────────────────────────────────────────────────
 let watchedData = {};  // id (number) -> date string
-let myRatings   = {};  // id (number) -> personal rating (0.5–5)
 let currentSort = { col: null, dir: 1 };
 let displayOrder = [...FILMS];
 let syncPending  = false;
