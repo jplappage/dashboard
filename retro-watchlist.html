@@ -863,10 +863,11 @@ async function saveToCloud() {
 // (sendBeacon can't set X-Master-Key so JSONBin would reject it with 401)
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden' && syncDirty) {
-    // Non-watchlist keys from binCache + watchedData (Object.assign can't express deletions)
+    // Non-watchlist keys from binCache + watchedData + myRatings
     const payload = {};
-    if (binCache) Object.keys(binCache).forEach(k => { if (isNaN(Number(k))) payload[k] = binCache[k]; });
+    if (binCache) Object.keys(binCache).forEach(k => { if (isNaN(Number(k)) && !k.startsWith('r_')) payload[k] = binCache[k]; });
     Object.assign(payload, watchedData);
+    Object.keys(myRatings).forEach(id => { payload['r_' + id] = myRatings[id]; });
     fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
   }
 });
