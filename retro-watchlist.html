@@ -793,6 +793,14 @@ async function loadFromCloud() {
 
     const allKeys      = Object.keys(binCache);
     const cloudEntries = allKeys.filter(k => !isNaN(Number(k)) && typeof binCache[k] === 'string');
+    const ratingEntries = allKeys.filter(k => k.startsWith('r_'));
+
+    // Load personal ratings
+    myRatings = {};
+    ratingEntries.forEach(k => {
+      const id = Number(k.slice(2));
+      if (id > 0) myRatings[id] = binCache[k];
+    });
 
     if (cloudEntries.length > 0) {
       // Cloud has watched films — use them as source of truth
@@ -833,12 +841,13 @@ async function saveToCloud() {
       const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY }, cache: 'no-store' });
       binCache = gr.ok ? ((await gr.json()).record || {}) : {};
     }
-    // Build merged bin: non-watchlist keys from binCache (lineup_* etc.) + watchedData
+    // Build merged bin: non-watchlist keys from binCache (lineup_* etc.) + watchedData + myRatings
     // Cannot use Object.assign(binCache, watchedData) — it can't express deletions,
     // so unticked films would survive in binCache and reappear on next load.
     const merged = {};
-    Object.keys(binCache).forEach(k => { if (isNaN(Number(k))) merged[k] = binCache[k]; });
+    Object.keys(binCache).forEach(k => { if (isNaN(Number(k)) && !k.startsWith('r_')) merged[k] = binCache[k]; });
     Object.assign(merged, watchedData);
+    Object.keys(myRatings).forEach(id => { merged['r_' + id] = myRatings[id]; });
     const r = await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(merged) });
     if (!r.ok) throw new Error(r.status);
     binCache = merged;
