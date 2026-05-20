@@ -877,7 +877,7 @@ function renderFilms() {
                : all;
 
   const groups = {
-    out:     visible.filter(f => getStatus(f) === 'out').sort((a, b) => new Date(b.vodDate) - new Date(a.vodDate)),
+    out:     visible.filter(f => getStatus(f) === 'out').sort((a, b) => new Date(a.vodDate) - new Date(b.vodDate)),
     soon:    visible.filter(f => getStatus(f) === 'soon').sort((a, b) => new Date(a.vodDate) - new Date(b.vodDate)),
     waiting: visible.filter(f => getStatus(f) === 'waiting').sort((a, b) => {
       if (!a.vodDate && !b.vodDate) return 0;
