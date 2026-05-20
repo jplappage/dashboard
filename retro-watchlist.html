@@ -771,8 +771,8 @@ const MY_RATINGS = {
 
 // ── STATE ──────────────────────────────────────────────────
 let watchedData = {};  // id (number) -> date string
-let currentSort = { col: null, dir: 1 };
-let displayOrder = [...FILMS];
+let currentSort = { col: 'year', dir: 1 };
+let displayOrder = [...FILMS].sort((a, b) => a.year - b.year || a.title.localeCompare(b.title));
 let syncPending  = false;
 
 // Convert a 0.5–5 rating to ⭐ emoji string
