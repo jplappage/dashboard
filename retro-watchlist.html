@@ -875,14 +875,6 @@ async function loadFromCloud() {
 
     const allKeys      = Object.keys(binCache);
     const cloudEntries = allKeys.filter(k => !isNaN(Number(k)) && typeof binCache[k] === 'string');
-    const ratingEntries = allKeys.filter(k => k.startsWith('r_'));
-
-    // Load personal ratings
-    myRatings = {};
-    ratingEntries.forEach(k => {
-      const id = Number(k.slice(2));
-      if (id > 0) myRatings[id] = binCache[k];
-    });
 
     if (cloudEntries.length > 0) {
       // Cloud has watched films — use them as source of truth
@@ -927,9 +919,8 @@ async function saveToCloud() {
     // Cannot use Object.assign(binCache, watchedData) — it can't express deletions,
     // so unticked films would survive in binCache and reappear on next load.
     const merged = {};
-    Object.keys(binCache).forEach(k => { if (isNaN(Number(k)) && !k.startsWith('r_')) merged[k] = binCache[k]; });
+    Object.keys(binCache).forEach(k => { if (isNaN(Number(k))) merged[k] = binCache[k]; });
     Object.assign(merged, watchedData);
-    Object.keys(myRatings).forEach(id => { merged['r_' + id] = myRatings[id]; });
     const r = await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(merged) });
     if (!r.ok) throw new Error(r.status);
     binCache = merged;
@@ -945,11 +936,9 @@ async function saveToCloud() {
 // (sendBeacon can't set X-Master-Key so JSONBin would reject it with 401)
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden' && syncDirty) {
-    // Non-watchlist keys from binCache + watchedData + myRatings
     const payload = {};
-    if (binCache) Object.keys(binCache).forEach(k => { if (isNaN(Number(k)) && !k.startsWith('r_')) payload[k] = binCache[k]; });
+    if (binCache) Object.keys(binCache).forEach(k => { if (isNaN(Number(k))) payload[k] = binCache[k]; });
     Object.assign(payload, watchedData);
-    Object.keys(myRatings).forEach(id => { payload['r_' + id] = myRatings[id]; });
     fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
   }
 });
