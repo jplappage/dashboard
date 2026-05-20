@@ -444,7 +444,7 @@
         <th class="th-year" onclick="sortBy('year')">Year <span class="sort-arrow" id="sort-year">↕</span></th>
         <th class="th-genre" onclick="sortBy('genre')">Genre <span class="sort-arrow" id="sort-genre">↕</span></th>
         <th class="th-runtime" onclick="sortBy('runtime')">Runtime <span class="sort-arrow" id="sort-runtime">↕</span></th>
-        <th class="th-rating" onclick="sortBy('lbRating')">LB <span class="sort-arrow" id="sort-lbRating">↕</span></th>
+        <th class="th-rating" onclick="sortBy('lbRating')">Rating <span class="sort-arrow" id="sort-lbRating">↕</span></th>
         <th class="no-sort th-check">✓</th>
         <th class="th-date no-sort" id="th-date">Date Watched <span class="sort-arrow" id="sort-date">↕</span></th>
       </tr>
@@ -717,9 +717,19 @@ const LETTERBOXD = {
 
 // ── STATE ──────────────────────────────────────────────────
 let watchedData = {};  // id (number) -> date string
+let myRatings   = {};  // id (number) -> personal rating (0.5–5)
 let currentSort = { col: null, dir: 1 };
 let displayOrder = [...FILMS];
 let syncPending  = false;
+
+// Convert a 0.5–5 rating to ⭐ emoji string
+function starsHtml(rating) {
+  if (!rating) return '';
+  const full = Math.floor(rating);
+  const half = (rating % 1) >= 0.5;
+  const stars = '⭐'.repeat(full) + (half ? '<span class="my-stars-half">½</span>' : '');
+  return `<span class="my-stars" title="${rating} stars">${stars}</span>`;
+}
 
 // ── JSONBIN SYNC ───────────────────────────────────────────
 const BIN_ID  = '6a0b8c4c6610dd3ae8686daa';
