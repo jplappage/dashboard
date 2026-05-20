@@ -1163,11 +1163,9 @@ function renderTable() {
       <td class="td-year">${f.year}</td>
       <td class="td-genre"><span>${f.genre}</span></td>
       <td class="td-runtime">${f.runtime} min</td>
-      <td class="td-rating ${watched ? 'rateable' : ''}" onclick="${watched ? `openStarPicker(event,${f.id})` : ''}">
+      <td class="td-rating">
         ${watched
-          ? (myRatings[f.id]
-              ? `<div class="star-picker-wrap">${starsHtml(myRatings[f.id])}</div>`
-              : `<span class="rate-prompt">rate ★</span>`)
+          ? (MY_RATINGS[f.id] ? starsHtml(MY_RATINGS[f.id]) : '—')
           : (f.lbRating != null ? `<span class="lb-star">★</span><span class="lb-val"> ${f.lbRating.toFixed(1)}</span>` : '—')
         }
       </td>
@@ -1185,67 +1183,6 @@ function renderTable() {
 
 function esc(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ── STAR PICKER ───────────────────────────────────────────
-let _pickerOpen = null; // currently open picker element
-
-function openStarPicker(e, id) {
-  e.stopPropagation();
-  // Close any open picker
-  if (_pickerOpen) { _pickerOpen.remove(); _pickerOpen = null; }
-
-  const cell = e.currentTarget;
-  const current = myRatings[id] || 0;
-
-  // Build picker
-  const picker = document.createElement('div');
-  picker.className = 'star-picker open';
-
-  const label = document.createElement('span');
-  label.className = 'star-picker-label';
-  label.textContent = 'Your rating';
-  picker.appendChild(label);
-
-  const STEPS = [0.5,1,1.5,2,2.5,3,3.5,4,4.5,5];
-  STEPS.forEach(val => {
-    const btn = document.createElement('button');
-    btn.className = 'sp-btn' + (val <= current ? ' lit' : '');
-    btn.textContent = val % 1 === 0 ? '★' : '½';
-    btn.title = val + ' stars';
-    btn.onmouseenter = () => picker.querySelectorAll('.sp-btn').forEach((b,i) => b.classList.toggle('lit', STEPS[i] <= val));
-    btn.onmouseleave = () => picker.querySelectorAll('.sp-btn').forEach((b,i) => b.classList.toggle('lit', STEPS[i] <= (myRatings[id]||0)));
-    btn.onclick = (ev) => { ev.stopPropagation(); setMyRating(id, val); picker.remove(); _pickerOpen = null; };
-    picker.appendChild(btn);
-  });
-
-  if (current) {
-    const clr = document.createElement('button');
-    clr.className = 'sp-clear';
-    clr.textContent = '✕';
-    clr.title = 'Clear rating';
-    clr.onclick = (ev) => { ev.stopPropagation(); clearMyRating(id); picker.remove(); _pickerOpen = null; };
-    picker.appendChild(clr);
-  }
-
-  cell.style.position = 'relative';
-  cell.appendChild(picker);
-  _pickerOpen = picker;
-}
-
-// Close picker when clicking elsewhere
-document.addEventListener('click', () => { if (_pickerOpen) { _pickerOpen.remove(); _pickerOpen = null; } });
-
-function setMyRating(id, rating) {
-  myRatings[id] = rating;
-  save();
-  renderTable();
-}
-
-function clearMyRating(id) {
-  delete myRatings[id];
-  save();
-  renderTable();
 }
 
 // ── WATCHED TOGGLE ────────────────────────────────────────
