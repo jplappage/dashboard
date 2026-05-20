@@ -217,9 +217,40 @@
       white-space: nowrap;
     }
     td.td-runtime, th.th-runtime { width: 82px; color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    td.td-rating, th.th-rating   { width: 66px; white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.8rem; }
+    td.td-rating, th.th-rating   { width: 80px; white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.8rem; cursor: default; }
     .lb-star { color: #00c030; font-size: 0.75rem; }
     td.td-rating .lb-val { color: var(--text-muted); }
+    td.td-rating.rateable { cursor: pointer; }
+    td.td-rating.rateable:hover { background: rgba(255,232,31,0.06); }
+    .my-stars { font-size: 0.85rem; letter-spacing: 1px; }
+    .my-stars-half { font-size: 0.7em; vertical-align: middle; color: #ffe81f; opacity: 0.85; }
+    .rate-prompt { font-size: 0.7rem; color: #444; letter-spacing: 0.5px; }
+    td.td-rating.rateable:hover .rate-prompt { color: #888; }
+
+    /* ── STAR PICKER POPOVER ── */
+    .star-picker-wrap { position: relative; display: inline-block; }
+    .star-picker {
+      display: none; position: absolute; bottom: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a; border: 1px solid rgba(255,232,31,0.3);
+      border-radius: 10px; padding: 8px 10px;
+      white-space: nowrap; z-index: 50;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .star-picker.open { display: flex; gap: 3px; align-items: center; }
+    .star-picker-label { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
+    .sp-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.1rem; padding: 2px 1px; line-height: 1;
+      opacity: 0.25; transition: opacity 0.1s; color: #ffe81f;
+    }
+    .sp-btn:hover, .sp-btn.lit { opacity: 1; }
+    .sp-clear {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.65rem; color: #555; padding: 2px 4px; margin-left: 4px;
+      border-left: 1px solid #333; transition: color 0.15s;
+    }
+    .sp-clear:hover { color: #f87171; }
     td.td-check, th.th-check { width: 44px; text-align: center; }
     td.td-date, th.th-date   { width: 130px; }
 
