@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHOW LOG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      background: #000000;
+      color: #e8e8f0;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #000;
+      padding: 36px 32px 28px;
+      border-bottom: 1px solid rgba(255,232,31,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1.5px 1.5px at  3%  8%, #fff 100%, transparent),
+        radial-gradient(2px   2px   at  7% 72%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 12% 35%, #fff 100%, transparent),
+        radial-gradient(2px   2px   at 18% 91%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 22%  5%, #fff 100%, transparent),
+        radial-gradient(2px   2px   at 28% 58%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 34% 22%, #fff 100%, transparent),
+        radial-gradient(2px   2px   at 41% 77%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 47% 14%, #fff 100%, transparent),
+        radial-gradient(2px   2px   at 53% 45%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 59% 88%, #fff 100%, transparent),
+        radial-gradient(2px   2px   at 66% 31%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 73% 67%, #fff 100%, transparent),
+        radial-gradient(2px   2px   at 79%  3%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 84% 52%, #fff 100%, transparent),
+        radial-gradient(2px   2px   at 91% 19%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 96% 83%, #fff 100%, transparent),
+        radial-gradient(1px 1px at  2% 47%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at  6% 18%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 11% 82%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 16% 29%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 20% 64%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 25% 11%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 30% 73%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 35% 38%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 44% 55%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 55% 25%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 64% 70%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 74% 92%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 83% 61%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(1px 1px at 93% 78%, rgba(255,255,255,0.85) 100%, transparent),
+        radial-gradient(0.5px 0.5px at  4% 62%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at  9% 28%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 13% 75%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 19%  3%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 23% 88%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 27% 42%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 36% 66%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 46% 22%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 54% 37%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 65% 53%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 76% 97%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 85% 68%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 95% 31%, rgba(255,255,255,0.55) 100%, transparent),
+        radial-gradient(0.5px 0.5px at  2% 33%, rgba(255,255,255,0.35) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 10% 57%, rgba(255,255,255,0.35) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 21% 71%, rgba(255,255,255,0.35) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 32% 89%, rgba(255,255,255,0.35) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 48% 11%, rgba(255,255,255,0.35) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 56% 82%, rgba(255,255,255,0.35) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 67% 41%, rgba(255,255,255,0.35) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 77% 85%, rgba(255,255,255,0.35) 100%, transparent),
+        radial-gradient(0.5px 0.5px at 90% 72%, rgba(255,255,255,0.35) 100%, transparent);
+      pointer-events: none;
+    }
+
+    .header-left {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-left h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffe81f 0%, #fff7a0 50%, #ffe81f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .header-left p {
+      font-size: 0.82rem;
+      color: #888888;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .header-nav {
+      font-size: 0.78rem;
+      color: #888;
+      text-decoration: none;
+      border: 1px solid #333;
+      border-radius: 100px;
+      padding: 6px 14px;
+      transition: all 0.15s;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.5px;
+    }
+    .header-nav:hover { color: #ffe81f; border-color: #ffe81f; }
+
+    .header-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .stat-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    .dot-ongoing  { background: #3b82f6; }
+    .dot-finished { background: #6b7280; }
+    .dot-cancelled{ background: #ef4444; }
+    .dot-watched  { background: #22c55e; }
+    .dot-skipped  { background: #f59e0b; }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      padding: 14px 24px;
+      background: #000;
+      border-bottom: 1px solid rgba(255,232,31,0.2);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-btn {
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid #333;
+      background: transparent;
+      color: #888;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: #666; color: #ccc; }
+    .filter-btn.active { background: #ffe81f; border-color: #ffe81f; color: #000; font-weight: 600; }
+
+    .filter-spacer { flex: 1; }
+
+    .clear-btn {
+      padding: 5px 14px;
+      border-radius: 100px;
+      border: 1px solid #333;
+      background: transparent;
+      color: #666;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .clear-btn:hover { border-color: #ef4444; color: #ef4444; }
+
+    /* ── Main content ── */
+    .content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .section-head {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin: 28px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-head:first-child { margin-top: 0; }
+    .section-head::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,232,31,0.2);
+    }
+    .section-count {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      color: #ffe81f;
+      opacity: 0.7;
+    }
+
+    /* ── Show row ── */
+    .show-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 6px;
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .show-row:hover { border-color: rgba(255,232,31,0.2); background: rgba(255,232,31,0.03); }
+    .show-row.watched  { opacity: 0.5; }
+    .show-row.skipped  { opacity: 0.4; }
+    .show-row.watched .show-name  { text-decoration: line-through; color: #6b7280; }
+    .show-row.skipped .show-name  { text-decoration: line-through; color: #6b7280; }
+
+    .show-info { flex: 1; min-width: 0; }
+
+    .show-name {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: #e8e8f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .show-meta {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .show-seasons {
+      font-size: 0.75rem;
+      color: #888;
+      white-space: nowrap;
+      text-align: right;
+      min-width: 100px;
+    }
+
+    /* Status badges */
+    .status-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .badge-ongoing   { background: rgba(59,130,246,0.15);  color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+    .badge-finished  { background: rgba(107,114,128,0.15); color: #9ca3af; border: 1px solid rgba(107,114,128,0.3); }
+    .badge-cancelled { background: rgba(239,68,68,0.15);   color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+
+    /* Action buttons */
+    .actions { display: flex; gap: 6px; }
+
+    .act-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #333;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .act-btn.tick { color: #4ade80; border-color: #1a3a28; }
+    .act-btn.tick:hover, .act-btn.tick.active { background: #166534; border-color: #22c55e; color: #4ade80; }
+    .act-btn.tick.active { background: #14532d; box-shadow: 0 0 8px rgba(34,197,94,0.3); }
+
+    .act-btn.cross { color: #f87171; border-color: #3a1a1a; }
+    .act-btn.cross:hover, .act-btn.cross.active { background: #7f1d1d; border-color: #ef4444; color: #f87171; }
+    .act-btn.cross.active { background: #7f1d1d; box-shadow: 0 0 8px rgba(239,68,68,0.3); }
+
+    /* Empty state */
+    .empty { text-align: center; padding: 48px 24px; color: #6b7280; font-size: 0.9rem; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 32px;
+      font-size: 0.75rem;
+      color: #444;
+      border-top: 1px solid rgba(255,232,31,0.1);
+      margin-top: 24px;
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      header { padding: 24px 16px 20px; }
+      .header-left h1 { font-size: 1.4rem; }
+      .content { padding: 16px; }
+      .show-seasons { display: none; }
+      .filter-bar { padding: 10px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Show Log</h1>
+    <p id="header-sub">Track your TV watching</p>
+  </div>
+  <div class="header-stats" id="header-stats"></div>
+  <a href="watchlist-dashboard.html" class="header-nav">← Watchlist</a>
+</header>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+  <button class="filter-btn" onclick="setFilter('ongoing', this)">Ongoing</button>
+  <button class="filter-btn" onclick="setFilter('finished', this)">Finished</button>
+  <button class="filter-btn" onclick="setFilter('cancelled', this)">Cancelled</button>
+  <button class="filter-btn" onclick="setFilter('watched', this)">Watched</button>
+  <button class="filter-btn" onclick="setFilter('skipped', this)">Not watching</button>
+  <div class="filter-spacer"></div>
+  <button class="clear-btn" onclick="clearAll()">Clear all marks</button>
+</div>
+
+<div class="content" id="content"></div>
+
+<footer id="footer"></footer>
+
+<script>
+const SHOWS = [
+  {name:"The Last of Us",note:"HBO",seasons:"2 aired, S3 in dev",status:"ongoing"},
+  {name:"Monarch: Legacy of Monsters",note:"Apple TV+",seasons:"2 aired, S3 possible",status:"ongoing"},
+  {name:"Ted",note:"Peacock · renewal unconfirmed",seasons:"1",status:"ongoing"},
+  {name:"A Knight of the Seven Kingdoms",note:"HBO · S2 filming 2027",seasons:"1 aired",status:"ongoing"},
+  {name:"It: Welcome to Derry",note:"Max · 3 seasons planned",seasons:"1 aired",status:"ongoing"},
+  {name:"Splinter Cell: Deathwatch",note:"Netflix animated",seasons:"1 aired, S2 confirmed",status:"ongoing"},
+  {name:"Alien: Earth",note:"FX/Disney+",seasons:"1 aired, S2 confirmed",status:"ongoing"},
+  {name:"The Paper",note:"Renewal unconfirmed",seasons:"1",status:"ongoing"},
+  {name:"Peacemaker",note:"Max",seasons:"2 aired, future TBC",status:"ongoing"},
+  {name:"The Studio",note:"Apple TV+",seasons:"1 aired, S2 TBC",status:"ongoing"},
+  {name:"Dexter: Resurrection",note:"Paramount+",seasons:"1 aired, S2 Fall 2026",status:"ongoing"},
+  {name:"MobLand",note:"Paramount+",seasons:"1 aired, S2 confirmed",status:"ongoing"},
+  {name:"Dune: Prophecy",note:"Max",seasons:"1 aired, S2 late 2026",status:"ongoing"},
+  {name:"Twisted Metal",note:"Peacock",seasons:"2 aired, S3 confirmed",status:"ongoing"},
+  {name:"The Witcher",note:"Netflix · 5 seasons planned",seasons:"3 aired, S4–5 filming",status:"ongoing"},
+  {name:"Fallout",note:"Prime Video",seasons:"2 aired",status:"ongoing"},
+  {name:"The Gentlemen",note:"Netflix",seasons:"1 aired, S2 Fall 2026",status:"ongoing"},
+  {name:"Severance",note:"Apple TV+",seasons:"2 aired, S3–4 confirmed",status:"ongoing"},
+  {name:"Rings of Power",note:"Prime Video · 5 seasons planned",seasons:"2 aired, S3 Nov 2026",status:"ongoing"},
+  {name:"House of the Dragon",note:"HBO · 4 seasons total",seasons:"2 aired, S3 Jun 2026",status:"ongoing"},
+  {name:"Ted Lasso",note:"Apple TV+",seasons:"3 aired, S4 Aug 2026",status:"ongoing"},
+  {name:"Tires",note:"Netflix",seasons:"2 aired, S3 Aug 2026",status:"ongoing"},
+  {name:"The Boys",note:"Prime Video · final season airing",seasons:"5",status:"ongoing"},
+  {name:"Those About to Die",note:"Peacock · Roland Emmerich",seasons:"1 aired, S2 confirmed",status:"ongoing"},
+  {name:"Stranger Things: Tales from '85",note:"Netflix animated · S2 late 2026",seasons:"1 aired",status:"ongoing"},
+  {name:"Welcome to Wrexham",note:"FX/Disney+ · renewed through S8",seasons:"4 aired, S5 airing",status:"ongoing"},
+  {name:"Spider-Noir",note:"Prime Video · Nicolas Cage",seasons:"S1 airing May 2026",status:"ongoing"},
+  {name:"Your Friendly Neighbourhood Spider-Man",note:"Disney+ (MCU animated) · S2 Fall 2026",seasons:"1 aired",status:"ongoing"},
+  {name:"Daredevil: Born Again",note:"Disney+ (MCU)",seasons:"1 aired, S2 in dev",status:"ongoing"},
+  {name:"Ahsoka",note:"Disney+ (Star Wars)",seasons:"1 aired, S2 in dev",status:"ongoing"},
+  {name:"The Mandalorian",note:"Disney+ (Star Wars) · movie planned",seasons:"3 aired",status:"ongoing"},
+  {name:"The Sopranos",note:"HBO",seasons:"6",status:"finished"},
+  {name:"Breaking Bad",note:"AMC",seasons:"5",status:"finished"},
+  {name:"Stranger Things",note:"Netflix · ended Dec 2025",seasons:"5",status:"finished"},
+  {name:"Friends",note:"NBC",seasons:"10",status:"finished"},
+  {name:"The Flight Attendant",note:"Max",seasons:"2",status:"finished"},
+  {name:"Prison Break",note:"Fox",seasons:"5",status:"finished"},
+  {name:"The Walking Dead",note:"AMC · main series",seasons:"11",status:"finished"},
+  {name:"Better Call Saul",note:"AMC",seasons:"6",status:"finished"},
+  {name:"Dexter",note:"Showtime · original series",seasons:"8",status:"finished"},
+  {name:"Arcane",note:"Netflix · S2 was final season",seasons:"2",status:"finished"},
+  {name:"Succession",note:"HBO",seasons:"4",status:"finished"},
+  {name:"Peaky Blinders",note:"BBC/Netflix · movie planned",seasons:"6",status:"finished"},
+  {name:"Spartacus",note:"Starz",seasons:"4",status:"finished"},
+  {name:"Oz",note:"HBO",seasons:"6",status:"finished"},
+  {name:"Trailer Park Boys",note:"Netflix",seasons:"12",status:"finished"},
+  {name:"The Office (US)",note:"NBC",seasons:"9",status:"finished"},
+  {name:"The Office (UK)",note:"BBC",seasons:"2 + Christmas specials",status:"finished"},
+  {name:"Lost",note:"ABC",seasons:"6",status:"finished"},
+  {name:"Andor",note:"Disney+ (Star Wars) · S2 was final",seasons:"2",status:"finished"},
+  {name:"The Bad Batch",note:"Disney+ (Star Wars)",seasons:"3",status:"finished"},
+  {name:"Loki",note:"Disney+ (MCU)",seasons:"2",status:"finished"},
+  {name:"What If…?",note:"Disney+ (MCU) · animated",seasons:"3",status:"finished"},
+  {name:"The Book of Boba Fett",note:"Disney+ (Star Wars)",seasons:"1",status:"finished"},
+  {name:"Raised by Wolves",note:"Max · Ridley Scott",seasons:"2",status:"cancelled"},
+  {name:"Gen V",note:"Prime Video · Boys spin-off",seasons:"2",status:"cancelled"},
+  {name:"Westworld",note:"HBO",seasons:"4",status:"cancelled"},
+  {name:"The Acolyte",note:"Disney+ (Star Wars)",seasons:"1",status:"cancelled"},
+];
+
+const STORAGE_KEY = 'show-log-marks';
+const SECTION_ORDER = ['ongoing','finished','cancelled'];
+const SECTION_LABELS = { ongoing: 'Ongoing', finished: 'Finished', cancelled: 'Cancelled' };
+
+let marks = {};
+let currentFilter = 'all';
+
+function loadMarks() {
+  try { marks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { marks = {}; }
+}
+
+function saveMark(name, val) {
+  if (val === null) delete marks[name];
+  else marks[name] = val;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(marks));
+}
+
+function getMark(name) { return marks[name] || null; }
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function toggleMark(name, action) {
+  const current = getMark(name);
+  saveMark(name, current === action ? null : action);
+  render();
+}
+
+function clearAll() {
+  if (!confirm('Clear all watched / not watching marks?')) return;
+  marks = {};
+  localStorage.removeItem(STORAGE_KEY);
+  render();
+}
+
+function showsForFilter() {
+  if (currentFilter === 'watched') return SHOWS.filter(s => getMark(s.name) === 'watched');
+  if (currentFilter === 'skipped') return SHOWS.filter(s => getMark(s.name) === 'skipped');
+  if (currentFilter === 'all') return SHOWS;
+  return SHOWS.filter(s => s.status === currentFilter);
+}
+
+function render() {
+  const visible = showsForFilter();
+  const content = document.getElementById('content');
+
+  if (visible.length === 0) {
+    content.innerHTML = '<div class="empty">No shows in this category.</div>';
+    updateStats();
+    return;
+  }
+
+  // Group by status sections (or flat list for watched/skipped)
+  let html = '';
+  if (currentFilter === 'watched' || currentFilter === 'skipped') {
+    html += buildRows(visible);
+  } else {
+    const sections = currentFilter === 'all' ? SECTION_ORDER : [currentFilter];
+    sections.forEach(sec => {
+      const group = visible.filter(s => s.status === sec);
+      if (!group.length) return;
+      html += `<div class="section-head">${SECTION_LABELS[sec]} <span class="section-count">${group.length}</span></div>`;
+      html += buildRows(group);
+    });
+  }
+
+  content.innerHTML = html;
+  updateStats();
+  updateFooter();
+}
+
+function buildRows(shows) {
+  return shows.map(s => {
+    const mark = getMark(s.name);
+    const rowClass = mark ? mark : '';
+    const tickActive = mark === 'watched' ? 'active' : '';
+    const crossActive = mark === 'skipped' ? 'active' : '';
+    return `<div class="show-row ${rowClass}" id="row-${css(s.name)}">
+      <div class="show-info">
+        <div class="show-name">${s.name}</div>
+        <div class="show-meta">${s.note}</div>
+      </div>
+      <div class="show-seasons">${s.seasons}</div>
+      <span class="status-badge badge-${s.status}">${SECTION_LABELS[s.status]}</span>
+      <div class="actions">
+        <button class="act-btn tick ${tickActive}" title="Watched" onclick="toggleMark('${esc(s.name)}','watched')">✓</button>
+        <button class="act-btn cross ${crossActive}" title="Not watching" onclick="toggleMark('${esc(s.name)}','skipped')">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateStats() {
+  const watched = SHOWS.filter(s => getMark(s.name) === 'watched').length;
+  const skipped = SHOWS.filter(s => getMark(s.name) === 'skipped').length;
+  const ongoing  = SHOWS.filter(s => s.status === 'ongoing').length;
+  const finished = SHOWS.filter(s => s.status === 'finished').length;
+  const cancelled= SHOWS.filter(s => s.status === 'cancelled').length;
+
+  document.getElementById('header-stats').innerHTML = `
+    <div class="stat-pill"><span class="stat-dot dot-ongoing"></span>${ongoing} ongoing</div>
+    <div class="stat-pill"><span class="stat-dot dot-finished"></span>${finished} finished</div>
+    <div class="stat-pill"><span class="stat-dot dot-cancelled"></span>${cancelled} cancelled</div>
+    ${watched ? `<div class="stat-pill"><span class="stat-dot dot-watched"></span>${watched} watched</div>` : ''}
+    ${skipped ? `<div class="stat-pill"><span class="stat-dot dot-skipped"></span>${skipped} skipped</div>` : ''}
+  `;
+  document.getElementById('header-sub').textContent =
+    `${SHOWS.length} shows · ${SHOWS.length - watched - skipped} remaining`;
+}
+
+function updateFooter() {
+  const watched = SHOWS.filter(s => getMark(s.name) === 'watched').length;
+  const skipped = SHOWS.filter(s => getMark(s.name) === 'skipped').length;
+  document.getElementById('footer').textContent =
+    watched || skipped
+      ? `${watched} watched · ${skipped} skipped · ${SHOWS.length - watched - skipped} remaining`
+      : `${SHOWS.length} shows total`;
+}
+
+function css(name) { return name.replace(/[^a-z0-9]/gi, '-'); }
+function esc(name) { return name.replace(/'/g, "\\'"); }
+
+loadMarks();
+render();
+</script>
+</body>
+</html>
