@@ -264,6 +264,20 @@
       .filters { gap: 10px; }
       select, .search-input { min-width: 0; width: 100%; }
     }
+
+    /* ── MOBILE TABLE — hide non-essential columns so the table fits without horizontal scroll ── */
+    @media (max-width: 640px) {
+      td.td-title, th.th-title {
+        position: static; /* disable sticky — not needed when table fits viewport */
+        width: auto; min-width: 0;
+        font-size: 14px;
+      }
+      td.td-genre, th.th-genre,
+      td.td-runtime, th.th-runtime,
+      td.td-date, th.th-date { display: none; }
+      td.td-year { font-size: 12px; }
+      td.td-rating { font-size: 0.75rem; }
+    }
   /* ── WATCH CONFIRMATION MODAL ── */
   .watch-modal-overlay {
     display: none; position: fixed; inset: 0;
