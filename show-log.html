@@ -625,7 +625,6 @@ function setFilter(f, btn) {
 function showsForFilter() {
   if (currentFilter === 'watched')  return SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
   if (currentFilter === 'abandoned') return SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
-  if (currentFilter === 'ended')    return SHOWS.filter(s => s.status === 'finished' || s.status === 'cancelled');
   if (currentFilter === 'ongoing')  return SHOWS.filter(s => s.status === 'ongoing');
   return SHOWS;
 }
