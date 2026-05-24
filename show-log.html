@@ -725,34 +725,16 @@ function buildMainSection(shows) {
   let html = '';
 
   if (activeOngoing.length) {
-    html += `<div class="section-head">Watching <span class="section-count">${activeOngoing.length}</span></div>`;
+    html += `<div class="section-head">Out Now <span class="section-count">${activeOngoing.length}</span></div>`;
     html += `<div class="card-grid">${activeOngoing.map(buildCard).join('')}</div>`;
   }
   if (activeEnded.length) {
-    html += `<div class="section-head">Ended — To Watch <span class="section-count">${activeEnded.length}</span></div>`;
+    html += `<div class="section-head">Retro Shows <span class="section-count">${activeEnded.length}</span></div>`;
     html += `<div class="card-grid">${activeEnded.map(buildCard).join('')}</div>`;
   }
   if (awaiting.length) {
     html += `<div class="section-head awaiting">⌛ Awaiting Next Season <span class="section-count">${awaiting.length}</span></div>`;
     html += `<div class="card-grid">${awaiting.map(buildCard).join('')}</div>`;
-  }
-  if (watched.length) {
-    const openCls = showWatched ? 'open' : '';
-    const btnCls  = showWatched ? 'showing' : '';
-    const btnTxt  = showWatched ? `− Hide watched (${watched.length})` : `＋ Show watched (${watched.length})`;
-    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-watched" data-count="${watched.length}" onclick="toggleDrawer('watched')">${btnTxt}</button>`;
-    html += `<div class="watched-grid-wrap ${openCls}" id="watched-grid-wrap">
-      <div class="card-grid" style="margin-top:10px">${watched.map(buildCard).join('')}</div>
-    </div>`;
-  }
-  if (abandoned.length) {
-    const openCls = showAbandoned ? 'open' : '';
-    const btnCls  = showAbandoned ? 'showing' : '';
-    const btnTxt  = showAbandoned ? `− Hide abandoned (${abandoned.length})` : `＋ Show abandoned (${abandoned.length})`;
-    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-abandoned" data-count="${abandoned.length}" onclick="toggleDrawer('abandoned')" style="border-color:rgba(239,68,68,0.4);color:#f87171;">${btnTxt}</button>`;
-    html += `<div class="watched-grid-wrap ${openCls}" id="abandoned-grid-wrap">
-      <div class="card-grid" style="margin-top:10px">${abandoned.map(buildCard).join('')}</div>
-    </div>`;
   }
   return html;
 }
@@ -786,12 +768,8 @@ function render() {
   if (currentFilter === 'watched' || currentFilter === 'abandoned') {
     const sorted = [...visible].sort((a,b) => a.name.localeCompare(b.name));
     html += `<div class="card-grid">${sorted.map(buildCard).join('')}</div>`;
-  } else if (currentFilter === 'ongoing') {
-    html += buildMainSection(visible);
   } else {
-    // All view — apply search filter across whole SHOWS list, then build
-    const base = searchQuery ? SHOWS.filter(s => s.name.toLowerCase().includes(searchQuery)) : SHOWS;
-    html += buildMainSection(base);
+    html += buildMainSection(visible);
   }
 
   el.innerHTML = html;
@@ -803,7 +781,7 @@ function render() {
 function buildCard(s) {
   const state    = showState(s.name, s.aired);
   const isEnded  = s.status !== 'ongoing';
-  const cardCls  = (state === 'watched' && isEnded) ? 'all-watched' : state === 'abandoned' ? 'all-abandoned' : '';
+  const cardCls  = '';
   const badgeCls = s.status === 'ongoing' ? 'badge-ongoing' : s.status === 'cancelled' ? 'badge-cancelled' : 'badge-ended';
   const badgeTxt = s.status === 'ongoing' ? 'Ongoing' : s.status === 'cancelled' ? 'Cancelled' : 'Ended';
 
