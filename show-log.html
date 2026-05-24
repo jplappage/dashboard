@@ -157,11 +157,24 @@
       height: 7px;
       border-radius: 50%;
     }
-    .dot-ongoing  { background: #3b82f6; }
-    .dot-finished { background: #6b7280; }
-    .dot-cancelled{ background: #ef4444; }
-    .dot-watched  { background: #22c55e; }
-    .dot-skipped  { background: #f59e0b; }
+    .dot-ongoing   { background: #3b82f6; }
+    .dot-finished  { background: #6b7280; }
+    .dot-cancelled { background: #ef4444; }
+    .dot-watched   { background: #22c55e; }
+    .dot-abandoned { background: #f59e0b; }
+
+    /* ── Sync status ── */
+    .sync-status {
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid transparent;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .sync-loading { color: #888;   border-color: #333; }
+    .sync-ok      { color: #4ade80; border-color: rgba(74,222,128,0.3); }
+    .sync-error   { color: #f87171; border-color: rgba(248,113,113,0.3); }
 
     /* ── Filter bar ── */
     .filter-bar {
@@ -203,7 +216,7 @@
 
     /* ── Main content ── */
     .content {
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
       padding: 24px;
     }
@@ -233,29 +246,72 @@
       opacity: 0.7;
     }
 
-    /* ── Show row ── */
-    .show-row {
+    /* ── Show card ── */
+    .show-card {
+      display: flex;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 8px;
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.15s, background 0.15s, opacity 0.15s;
+    }
+    .show-card:hover { border-color: rgba(255,232,31,0.2); background: rgba(255,232,31,0.03); }
+    .show-card.all-watched { opacity: 0.45; }
+    .show-card.all-watched .show-name { text-decoration: line-through; color: #6b7280; }
+    .show-card.all-abandoned { opacity: 0.4; }
+    .show-card.all-abandoned .show-name { text-decoration: line-through; color: #6b7280; }
+
+    /* ── Thumbnail ── */
+    .thumb-wrap {
+      flex-shrink: 0;
+      width: 52px;
+      height: 74px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+    }
+
+    .thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thumb-placeholder {
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 11px 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.06);
-      margin-bottom: 6px;
-      background: rgba(255,255,255,0.02);
-      transition: border-color 0.15s, background 0.15s;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #444;
     }
-    .show-row:hover { border-color: rgba(255,232,31,0.2); background: rgba(255,232,31,0.03); }
-    .show-row.watched  { opacity: 0.5; }
-    .show-row.skipped  { opacity: 0.4; }
-    .show-row.watched .show-name  { text-decoration: line-through; color: #6b7280; }
-    .show-row.skipped .show-name  { text-decoration: line-through; color: #6b7280; }
+
+    /* ── Show body ── */
+    .show-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .show-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
 
     .show-info { flex: 1; min-width: 0; }
 
     .show-name {
       font-size: 0.92rem;
-      font-weight: 500;
+      font-weight: 600;
       color: #e8e8f0;
       white-space: nowrap;
       overflow: hidden;
@@ -263,7 +319,7 @@
     }
 
     .show-meta {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: #6b7280;
       margin-top: 2px;
       white-space: nowrap;
@@ -271,34 +327,34 @@
       text-overflow: ellipsis;
     }
 
-    .show-seasons {
-      font-size: 0.75rem;
-      color: #888;
-      white-space: nowrap;
-      text-align: right;
-      min-width: 100px;
+    .show-seasons-text {
+      font-size: 0.72rem;
+      color: #555;
+      margin-top: 1px;
     }
 
     /* Status badges */
     .status-badge {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       padding: 3px 9px;
       border-radius: 100px;
       white-space: nowrap;
+      flex-shrink: 0;
+      align-self: flex-start;
     }
     .badge-ongoing   { background: rgba(59,130,246,0.15);  color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
     .badge-finished  { background: rgba(107,114,128,0.15); color: #9ca3af; border: 1px solid rgba(107,114,128,0.3); }
     .badge-cancelled { background: rgba(239,68,68,0.15);   color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
-    /* Action buttons */
-    .actions { display: flex; gap: 6px; }
+    /* ── Show-level action buttons ── */
+    .actions { display: flex; gap: 5px; flex-shrink: 0; align-self: flex-start; }
 
     .act-btn {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       border: 1px solid #333;
       background: transparent;
@@ -306,10 +362,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       transition: all 0.15s;
       flex-shrink: 0;
     }
+    .act-btn:hover { transform: scale(1.1); }
 
     .act-btn.tick { color: #4ade80; border-color: #1a3a28; }
     .act-btn.tick:hover, .act-btn.tick.active { background: #166534; border-color: #22c55e; color: #4ade80; }
@@ -318,6 +375,45 @@
     .act-btn.cross { color: #f87171; border-color: #3a1a1a; }
     .act-btn.cross:hover, .act-btn.cross.active { background: #7f1d1d; border-color: #ef4444; color: #f87171; }
     .act-btn.cross.active { background: #7f1d1d; box-shadow: 0 0 8px rgba(239,68,68,0.3); }
+
+    /* ── Season pills row ── */
+    .season-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .season-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 9px;
+      border-radius: 100px;
+      border: 1px solid #2a2a2a;
+      background: rgba(255,255,255,0.04);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.12s;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .season-pill:hover { border-color: #444; color: #888; }
+
+    .season-pill.s-watched {
+      background: rgba(34,197,94,0.15);
+      border-color: rgba(34,197,94,0.4);
+      color: #4ade80;
+    }
+    .season-pill.s-abandoned {
+      background: rgba(239,68,68,0.15);
+      border-color: rgba(239,68,68,0.4);
+      color: #f87171;
+    }
+
+    .season-pill .pill-icon { font-size: 0.65rem; }
 
     /* Empty state */
     .empty { text-align: center; padding: 48px 24px; color: #6b7280; font-size: 0.9rem; }
@@ -336,9 +432,11 @@
     @media (max-width: 600px) {
       header { padding: 24px 16px 20px; }
       .header-left h1 { font-size: 1.4rem; }
-      .content { padding: 16px; }
-      .show-seasons { display: none; }
-      .filter-bar { padding: 10px 16px; }
+      .content { padding: 12px; }
+      .filter-bar { padding: 10px 12px; }
+      .thumb-wrap { width: 44px; height: 62px; }
+      .show-card { gap: 10px; padding: 10px 10px; }
+      .show-name { font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -359,8 +457,9 @@
   <button class="filter-btn" onclick="setFilter('finished', this)">Finished</button>
   <button class="filter-btn" onclick="setFilter('cancelled', this)">Cancelled</button>
   <button class="filter-btn" onclick="setFilter('watched', this)">Watched</button>
-  <button class="filter-btn" onclick="setFilter('skipped', this)">Not watching</button>
+  <button class="filter-btn" onclick="setFilter('abandoned', this)">Abandoned</button>
   <div class="filter-spacer"></div>
+  <span id="sync-status" class="sync-status"></span>
   <button class="clear-btn" onclick="clearAll()">Clear all marks</button>
 </div>
 
@@ -369,86 +468,218 @@
 <footer id="footer"></footer>
 
 <script>
+// ── Show data ─────────────────────────────────────────────────────────────────
+// aired: number of seasons available to watch (used for per-season pills)
 const SHOWS = [
-  {name:"The Last of Us",note:"HBO",seasons:"2 aired, S3 in dev",status:"ongoing"},
-  {name:"Monarch: Legacy of Monsters",note:"Apple TV+",seasons:"2 aired, S3 possible",status:"ongoing"},
-  {name:"Ted",note:"Peacock · renewal unconfirmed",seasons:"1",status:"ongoing"},
-  {name:"A Knight of the Seven Kingdoms",note:"HBO · S2 filming 2027",seasons:"1 aired",status:"ongoing"},
-  {name:"It: Welcome to Derry",note:"Max · 3 seasons planned",seasons:"1 aired",status:"ongoing"},
-  {name:"Splinter Cell: Deathwatch",note:"Netflix animated",seasons:"1 aired, S2 confirmed",status:"ongoing"},
-  {name:"Alien: Earth",note:"FX/Disney+",seasons:"1 aired, S2 confirmed",status:"ongoing"},
-  {name:"The Paper",note:"Renewal unconfirmed",seasons:"1",status:"ongoing"},
-  {name:"Peacemaker",note:"Max",seasons:"2 aired, future TBC",status:"ongoing"},
-  {name:"The Studio",note:"Apple TV+",seasons:"1 aired, S2 TBC",status:"ongoing"},
-  {name:"Dexter: Resurrection",note:"Paramount+",seasons:"1 aired, S2 Fall 2026",status:"ongoing"},
-  {name:"MobLand",note:"Paramount+",seasons:"1 aired, S2 confirmed",status:"ongoing"},
-  {name:"Dune: Prophecy",note:"Max",seasons:"1 aired, S2 late 2026",status:"ongoing"},
-  {name:"Twisted Metal",note:"Peacock",seasons:"2 aired, S3 confirmed",status:"ongoing"},
-  {name:"The Witcher",note:"Netflix · 5 seasons planned",seasons:"3 aired, S4–5 filming",status:"ongoing"},
-  {name:"Fallout",note:"Prime Video",seasons:"2 aired",status:"ongoing"},
-  {name:"The Gentlemen",note:"Netflix",seasons:"1 aired, S2 Fall 2026",status:"ongoing"},
-  {name:"Severance",note:"Apple TV+",seasons:"2 aired, S3–4 confirmed",status:"ongoing"},
-  {name:"Rings of Power",note:"Prime Video · 5 seasons planned",seasons:"2 aired, S3 Nov 2026",status:"ongoing"},
-  {name:"House of the Dragon",note:"HBO · 4 seasons total",seasons:"2 aired, S3 Jun 2026",status:"ongoing"},
-  {name:"Ted Lasso",note:"Apple TV+",seasons:"3 aired, S4 Aug 2026",status:"ongoing"},
-  {name:"Tires",note:"Netflix",seasons:"2 aired, S3 Aug 2026",status:"ongoing"},
-  {name:"The Boys",note:"Prime Video · final season airing",seasons:"5",status:"ongoing"},
-  {name:"Those About to Die",note:"Peacock · Roland Emmerich",seasons:"1 aired, S2 confirmed",status:"ongoing"},
-  {name:"Stranger Things: Tales from '85",note:"Netflix animated · S2 late 2026",seasons:"1 aired",status:"ongoing"},
-  {name:"Welcome to Wrexham",note:"FX/Disney+ · renewed through S8",seasons:"4 aired, S5 airing",status:"ongoing"},
-  {name:"Spider-Noir",note:"Prime Video · Nicolas Cage",seasons:"S1 airing May 2026",status:"ongoing"},
-  {name:"Your Friendly Neighbourhood Spider-Man",note:"Disney+ (MCU animated) · S2 Fall 2026",seasons:"1 aired",status:"ongoing"},
-  {name:"Daredevil: Born Again",note:"Disney+ (MCU)",seasons:"1 aired, S2 in dev",status:"ongoing"},
-  {name:"Ahsoka",note:"Disney+ (Star Wars)",seasons:"1 aired, S2 in dev",status:"ongoing"},
-  {name:"The Mandalorian",note:"Disney+ (Star Wars) · movie planned",seasons:"3 aired",status:"ongoing"},
-  {name:"The Sopranos",note:"HBO",seasons:"6",status:"finished"},
-  {name:"Breaking Bad",note:"AMC",seasons:"5",status:"finished"},
-  {name:"Stranger Things",note:"Netflix · ended Dec 2025",seasons:"5",status:"finished"},
-  {name:"Friends",note:"NBC",seasons:"10",status:"finished"},
-  {name:"The Flight Attendant",note:"Max",seasons:"2",status:"finished"},
-  {name:"Prison Break",note:"Fox",seasons:"5",status:"finished"},
-  {name:"The Walking Dead",note:"AMC · main series",seasons:"11",status:"finished"},
-  {name:"Better Call Saul",note:"AMC",seasons:"6",status:"finished"},
-  {name:"Dexter",note:"Showtime · original series",seasons:"8",status:"finished"},
-  {name:"Arcane",note:"Netflix · S2 was final season",seasons:"2",status:"finished"},
-  {name:"Succession",note:"HBO",seasons:"4",status:"finished"},
-  {name:"Peaky Blinders",note:"BBC/Netflix · movie planned",seasons:"6",status:"finished"},
-  {name:"Spartacus",note:"Starz",seasons:"4",status:"finished"},
-  {name:"Oz",note:"HBO",seasons:"6",status:"finished"},
-  {name:"Trailer Park Boys",note:"Netflix",seasons:"12",status:"finished"},
-  {name:"The Office (US)",note:"NBC",seasons:"9",status:"finished"},
-  {name:"The Office (UK)",note:"BBC",seasons:"2 + Christmas specials",status:"finished"},
-  {name:"Lost",note:"ABC",seasons:"6",status:"finished"},
-  {name:"Andor",note:"Disney+ (Star Wars) · S2 was final",seasons:"2",status:"finished"},
-  {name:"The Bad Batch",note:"Disney+ (Star Wars)",seasons:"3",status:"finished"},
-  {name:"Loki",note:"Disney+ (MCU)",seasons:"2",status:"finished"},
-  {name:"What If…?",note:"Disney+ (MCU) · animated",seasons:"3",status:"finished"},
-  {name:"The Book of Boba Fett",note:"Disney+ (Star Wars)",seasons:"1",status:"finished"},
-  {name:"Raised by Wolves",note:"Max · Ridley Scott",seasons:"2",status:"cancelled"},
-  {name:"Gen V",note:"Prime Video · Boys spin-off",seasons:"2",status:"cancelled"},
-  {name:"Westworld",note:"HBO",seasons:"4",status:"cancelled"},
-  {name:"The Acolyte",note:"Disney+ (Star Wars)",seasons:"1",status:"cancelled"},
+  // ONGOING
+  {name:"The Last of Us",            note:"HBO",                                   seasons:"2 aired, S3 in dev",      status:"ongoing",  aired:2},
+  {name:"Monarch: Legacy of Monsters",note:"Apple TV+",                            seasons:"2 aired, S3 possible",    status:"ongoing",  aired:2},
+  {name:"Ted",                        note:"Peacock · renewal unconfirmed",         seasons:"1",                       status:"ongoing",  aired:1},
+  {name:"A Knight of the Seven Kingdoms",note:"HBO · S2 filming 2027",             seasons:"1 aired",                 status:"ongoing",  aired:1},
+  {name:"It: Welcome to Derry",       note:"Max · 3 seasons planned",              seasons:"1 aired",                 status:"ongoing",  aired:1},
+  {name:"Splinter Cell: Deathwatch",  note:"Netflix animated",                     seasons:"1 aired, S2 confirmed",   status:"ongoing",  aired:1},
+  {name:"Alien: Earth",               note:"FX/Disney+",                           seasons:"1 aired, S2 confirmed",   status:"ongoing",  aired:1},
+  {name:"The Paper",                  note:"Renewal unconfirmed",                  seasons:"1",                       status:"ongoing",  aired:1},
+  {name:"Peacemaker",                 note:"Max",                                  seasons:"2 aired, future TBC",     status:"ongoing",  aired:2},
+  {name:"The Studio",                 note:"Apple TV+",                            seasons:"1 aired, S2 TBC",         status:"ongoing",  aired:1},
+  {name:"Dexter: Resurrection",       note:"Paramount+",                           seasons:"1 aired, S2 Fall 2026",   status:"ongoing",  aired:1},
+  {name:"MobLand",                    note:"Paramount+",                           seasons:"1 aired, S2 confirmed",   status:"ongoing",  aired:1},
+  {name:"Dune: Prophecy",             note:"Max",                                  seasons:"1 aired, S2 late 2026",   status:"ongoing",  aired:1},
+  {name:"Twisted Metal",              note:"Peacock",                              seasons:"2 aired, S3 confirmed",   status:"ongoing",  aired:2},
+  {name:"The Witcher",                note:"Netflix · 5 seasons planned",          seasons:"3 aired, S4–5 filming",   status:"ongoing",  aired:3},
+  {name:"Fallout",                    note:"Prime Video",                          seasons:"2 aired",                 status:"ongoing",  aired:2},
+  {name:"The Gentlemen",              note:"Netflix",                              seasons:"1 aired, S2 Fall 2026",   status:"ongoing",  aired:1},
+  {name:"Severance",                  note:"Apple TV+",                            seasons:"2 aired, S3–4 confirmed", status:"ongoing",  aired:2},
+  {name:"Rings of Power",             note:"Prime Video · 5 seasons planned",      seasons:"2 aired, S3 Nov 2026",    status:"ongoing",  aired:2},
+  {name:"House of the Dragon",        note:"HBO · 4 seasons total",               seasons:"2 aired, S3 Jun 2026",    status:"ongoing",  aired:2},
+  {name:"Ted Lasso",                  note:"Apple TV+",                            seasons:"3 aired, S4 Aug 2026",    status:"ongoing",  aired:3},
+  {name:"Tires",                      note:"Netflix",                              seasons:"2 aired, S3 Aug 2026",    status:"ongoing",  aired:2},
+  {name:"The Boys",                   note:"Prime Video · final season airing",    seasons:"5",                       status:"ongoing",  aired:5},
+  {name:"Those About to Die",         note:"Peacock · Roland Emmerich",            seasons:"1 aired, S2 confirmed",   status:"ongoing",  aired:1},
+  {name:"Stranger Things: Tales from '85",note:"Netflix animated · S2 late 2026", seasons:"1 aired",                 status:"ongoing",  aired:1},
+  {name:"Welcome to Wrexham",         note:"FX/Disney+ · renewed through S8",      seasons:"4 aired, S5 airing",      status:"ongoing",  aired:5},
+  {name:"Spider-Noir",                note:"Prime Video · Nicolas Cage",           seasons:"S1 airing May 2026",      status:"ongoing",  aired:1},
+  {name:"Your Friendly Neighbourhood Spider-Man",note:"Disney+ (MCU animated) · S2 Fall 2026",seasons:"1 aired",   status:"ongoing",  aired:1},
+  {name:"Daredevil: Born Again",      note:"Disney+ (MCU)",                        seasons:"1 aired, S2 in dev",      status:"ongoing",  aired:1},
+  {name:"Ahsoka",                     note:"Disney+ (Star Wars)",                  seasons:"1 aired, S2 in dev",      status:"ongoing",  aired:1},
+  {name:"The Mandalorian",            note:"Disney+ (Star Wars) · movie planned",  seasons:"3 aired",                 status:"ongoing",  aired:3},
+  // FINISHED
+  {name:"The Sopranos",               note:"HBO",                                  seasons:"6",                       status:"finished", aired:6},
+  {name:"Breaking Bad",               note:"AMC",                                  seasons:"5",                       status:"finished", aired:5},
+  {name:"Stranger Things",            note:"Netflix · ended Dec 2025",             seasons:"5",                       status:"finished", aired:5},
+  {name:"Friends",                    note:"NBC",                                  seasons:"10",                      status:"finished", aired:10},
+  {name:"The Flight Attendant",       note:"Max",                                  seasons:"2",                       status:"finished", aired:2},
+  {name:"Prison Break",               note:"Fox",                                  seasons:"5",                       status:"finished", aired:5},
+  {name:"The Walking Dead",           note:"AMC · main series",                    seasons:"11",                      status:"finished", aired:11},
+  {name:"Better Call Saul",           note:"AMC",                                  seasons:"6",                       status:"finished", aired:6},
+  {name:"Dexter",                     note:"Showtime · original series",           seasons:"8",                       status:"finished", aired:8},
+  {name:"Arcane",                     note:"Netflix · S2 was final season",        seasons:"2",                       status:"finished", aired:2},
+  {name:"Succession",                 note:"HBO",                                  seasons:"4",                       status:"finished", aired:4},
+  {name:"Peaky Blinders",             note:"BBC/Netflix · movie planned",          seasons:"6",                       status:"finished", aired:6},
+  {name:"Spartacus",                  note:"Starz",                                seasons:"4",                       status:"finished", aired:4},
+  {name:"Oz",                         note:"HBO",                                  seasons:"6",                       status:"finished", aired:6},
+  {name:"Trailer Park Boys",          note:"Netflix",                              seasons:"12",                      status:"finished", aired:12},
+  {name:"The Office (US)",            note:"NBC",                                  seasons:"9",                       status:"finished", aired:9},
+  {name:"The Office (UK)",            note:"BBC",                                  seasons:"2 + Christmas specials",  status:"finished", aired:2},
+  {name:"Lost",                       note:"ABC",                                  seasons:"6",                       status:"finished", aired:6},
+  {name:"Andor",                      note:"Disney+ (Star Wars) · S2 was final",   seasons:"2",                       status:"finished", aired:2},
+  {name:"The Bad Batch",              note:"Disney+ (Star Wars)",                  seasons:"3",                       status:"finished", aired:3},
+  {name:"Loki",                       note:"Disney+ (MCU)",                        seasons:"2",                       status:"finished", aired:2},
+  {name:"What If…?",                  note:"Disney+ (MCU) · animated",             seasons:"3",                       status:"finished", aired:3},
+  {name:"The Book of Boba Fett",      note:"Disney+ (Star Wars)",                  seasons:"1",                       status:"finished", aired:1},
+  // CANCELLED
+  {name:"Raised by Wolves",           note:"Max · Ridley Scott",                   seasons:"2",                       status:"cancelled",aired:2},
+  {name:"Gen V",                      note:"Prime Video · Boys spin-off",          seasons:"2",                       status:"cancelled",aired:2},
+  {name:"Westworld",                  note:"HBO",                                  seasons:"4",                       status:"cancelled",aired:4},
+  {name:"The Acolyte",                note:"Disney+ (Star Wars)",                  seasons:"1",                       status:"cancelled",aired:1},
 ];
 
-const STORAGE_KEY = 'show-log-marks';
-const SECTION_ORDER = ['ongoing','finished','cancelled'];
+const SECTION_ORDER  = ['ongoing','finished','cancelled'];
 const SECTION_LABELS = { ongoing: 'Ongoing', finished: 'Finished', cancelled: 'Cancelled' };
 
-let marks = {};
+// ── JSONBin sync (same bin as retro-watchlist, showLog key) ──────────────────
+const BIN_ID  = '6a0b8c4c6610dd3ae8686daa';
+const BIN_KEY = '$2a$10$SJVrSiNiFsJsoMmOpmqGJOQmdrFpT0rTGMjv4ADrfdu5QfYyzkqLS';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const LOCAL_KEY   = 'show-log-v2';
+const THUMB_KEY   = 'show-log-thumbs';
+
+let marks     = {};   // { showName: { s1:'w'|'a', s2:'w', ... } }
+let thumbCache = {};  // { showName: imageUrl }
+let binCache  = null; // full bin record
+let syncDirty = false;
+let syncTimer = null;
 let currentFilter = 'all';
 
-function loadMarks() {
-  try { marks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { marks = {}; }
+// ── Sync status indicator ────────────────────────────────────────────────────
+function setSyncStatus(state) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  const labels = { loading: '⟳ Syncing…', ok: '✓ Synced', error: '⚠ Offline' };
+  el.textContent   = labels[state] || '';
+  el.className     = 'sync-status sync-' + state;
 }
 
-function saveMark(name, val) {
-  if (val === null) delete marks[name];
-  else marks[name] = val;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(marks));
+// ── Cloud load ───────────────────────────────────────────────────────────────
+async function loadFromCloud() {
+  setSyncStatus('loading');
+  try {
+    const r = await fetch(BIN_URL + '/latest', {
+      headers: { 'X-Master-Key': BIN_KEY },
+      cache: 'no-store'
+    });
+    if (!r.ok) throw new Error('network');
+    const data = await r.json();
+    binCache = data.record || {};
+
+    const cloudMarks = binCache.showLog;
+    if (cloudMarks && typeof cloudMarks === 'object' && Object.keys(cloudMarks).length > 0) {
+      marks = cloudMarks;
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(marks));
+    } else {
+      // Nothing in cloud yet — try localStorage
+      const saved = localStorage.getItem(LOCAL_KEY);
+      if (saved) marks = JSON.parse(saved);
+    }
+    setSyncStatus('ok');
+  } catch(e) {
+    // Offline — use localStorage
+    const saved = localStorage.getItem(LOCAL_KEY);
+    if (saved) { try { marks = JSON.parse(saved); } catch(_){} }
+    setSyncStatus('error');
+  }
 }
 
-function getMark(name) { return marks[name] || null; }
+// ── Cloud save (debounced) ───────────────────────────────────────────────────
+function scheduleSave() {
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(marks));
+  syncDirty = true;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(saveToCloud, 1500);
+}
 
+async function saveToCloud() {
+  setSyncStatus('loading');
+  try {
+    // Fetch latest bin state to avoid clobbering film data
+    if (!binCache) {
+      const r = await fetch(BIN_URL + '/latest', {
+        headers: { 'X-Master-Key': BIN_KEY },
+        cache: 'no-store'
+      });
+      if (r.ok) { const d = await r.json(); binCache = d.record || {}; }
+    }
+    const updated = { ...binCache, showLog: marks };
+    const r = await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY },
+      body: JSON.stringify(updated)
+    });
+    if (r.ok) { binCache = updated; syncDirty = false; setSyncStatus('ok'); }
+    else setSyncStatus('error');
+  } catch(e) {
+    setSyncStatus('error');
+  }
+}
+
+// Force-save when tab is hidden (mobile home-button, app switch)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && syncDirty) {
+    clearTimeout(syncTimer);
+    saveToCloud();
+  }
+});
+
+// ── Per-season mark helpers ──────────────────────────────────────────────────
+function getSeasonMark(showName, season) {
+  const m = marks[showName];
+  if (!m || typeof m !== 'object') return null;
+  return m['s' + season] || null;
+}
+
+function setSeasonMark(showName, season, val) {
+  if (!marks[showName] || typeof marks[showName] !== 'object') marks[showName] = {};
+  if (val === null) {
+    delete marks[showName]['s' + season];
+    if (Object.keys(marks[showName]).length === 0) delete marks[showName];
+  } else {
+    marks[showName]['s' + season] = val;
+  }
+  scheduleSave();
+}
+
+function cycleSeasonMark(showName, season) {
+  const cur = getSeasonMark(showName, season);
+  const nxt = cur === null ? 'w' : cur === 'w' ? 'a' : null;
+  setSeasonMark(showName, season, nxt);
+  render();
+}
+
+// Show-level: mark ALL seasons as 'w' or 'a'; if already all that value, clear
+function markAll(showName, aired, val) {
+  const allSame = Array.from({length: aired}, (_, i) => i + 1)
+    .every(s => getSeasonMark(showName, s) === val);
+  if (allSame) {
+    delete marks[showName];
+  } else {
+    marks[showName] = {};
+    for (let s = 1; s <= aired; s++) marks[showName]['s' + s] = val;
+  }
+  scheduleSave();
+  render();
+}
+
+// Effective show state for filtering / card class
+function showEffectiveState(showName, aired) {
+  if (aired === 0) return null;
+  const vals = Array.from({length: aired}, (_, i) => getSeasonMark(showName, i + 1));
+  if (vals.every(v => v === 'w'))  return 'watched';
+  if (vals.some(v => v === 'a'))   return 'abandoned';
+  if (vals.some(v => v === 'w'))   return 'partial';
+  return null;
+}
+
+// ── Filter logic ─────────────────────────────────────────────────────────────
 function setFilter(f, btn) {
   currentFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -456,79 +687,152 @@ function setFilter(f, btn) {
   render();
 }
 
-function toggleMark(name, action) {
-  const current = getMark(name);
-  saveMark(name, current === action ? null : action);
-  render();
-}
-
-function clearAll() {
-  if (!confirm('Clear all watched / not watching marks?')) return;
-  marks = {};
-  localStorage.removeItem(STORAGE_KEY);
-  render();
-}
-
 function showsForFilter() {
-  if (currentFilter === 'watched') return SHOWS.filter(s => getMark(s.name) === 'watched');
-  if (currentFilter === 'skipped') return SHOWS.filter(s => getMark(s.name) === 'skipped');
+  if (currentFilter === 'watched')
+    return SHOWS.filter(s => showEffectiveState(s.name, s.aired) === 'watched');
+  if (currentFilter === 'abandoned')
+    return SHOWS.filter(s => showEffectiveState(s.name, s.aired) === 'abandoned');
   if (currentFilter === 'all') return SHOWS;
   return SHOWS.filter(s => s.status === currentFilter);
 }
 
+// ── Clear all ────────────────────────────────────────────────────────────────
+function clearAll() {
+  if (!confirm('Clear all watched / abandoned marks?')) return;
+  marks = {};
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(marks));
+  scheduleSave();
+  render();
+}
+
+// ── Thumbnail fetching (TVmaze, no API key) ──────────────────────────────────
+async function loadThumbs() {
+  // Load from localStorage cache first — update any visible imgs immediately
+  try {
+    const saved = localStorage.getItem(THUMB_KEY);
+    if (saved) { thumbCache = JSON.parse(saved); applyThumbs(); }
+  } catch(e) {}
+
+  // Fetch missing ones from TVmaze
+  const missing = SHOWS.filter(s => !thumbCache[s.name]);
+  if (!missing.length) return;
+
+  for (const show of missing) {
+    try {
+      const q = encodeURIComponent(show.name);
+      const r = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${q}`);
+      if (r.ok) {
+        const data = await r.json();
+        const url = data?.image?.medium || data?.image?.original || null;
+        if (url) {
+          thumbCache[show.name] = url;
+          // Update img if already in DOM
+          const img = document.getElementById('thumb-' + cssId(show.name));
+          const ph  = document.getElementById('thumbph-' + cssId(show.name));
+          if (img) { img.src = url; img.style.display = 'block'; }
+          if (ph)  ph.style.display = 'none';
+        }
+      }
+    } catch(e) {}
+    await new Promise(res => setTimeout(res, 60)); // polite delay
+  }
+  localStorage.setItem(THUMB_KEY, JSON.stringify(thumbCache));
+}
+
+function applyThumbs() {
+  for (const [name, url] of Object.entries(thumbCache)) {
+    const img = document.getElementById('thumb-' + cssId(name));
+    const ph  = document.getElementById('thumbph-' + cssId(name));
+    if (img) { img.src = url; img.style.display = 'block'; }
+    if (ph)  ph.style.display = 'none';
+  }
+}
+
+// ── Render ───────────────────────────────────────────────────────────────────
 function render() {
   const visible = showsForFilter();
   const content = document.getElementById('content');
 
-  if (visible.length === 0) {
+  if (!visible.length) {
     content.innerHTML = '<div class="empty">No shows in this category.</div>';
     updateStats();
     return;
   }
 
-  // Group by status sections (or flat list for watched/skipped)
   let html = '';
-  if (currentFilter === 'watched' || currentFilter === 'skipped') {
-    html += buildRows(visible);
+  if (currentFilter === 'watched' || currentFilter === 'abandoned') {
+    html += buildCards(visible);
   } else {
     const sections = currentFilter === 'all' ? SECTION_ORDER : [currentFilter];
     sections.forEach(sec => {
       const group = visible.filter(s => s.status === sec);
       if (!group.length) return;
       html += `<div class="section-head">${SECTION_LABELS[sec]} <span class="section-count">${group.length}</span></div>`;
-      html += buildRows(group);
+      html += buildCards(group);
     });
   }
 
   content.innerHTML = html;
+  applyThumbs();
   updateStats();
   updateFooter();
 }
 
-function buildRows(shows) {
+function buildCards(shows) {
   return shows.map(s => {
-    const mark = getMark(s.name);
-    const rowClass = mark ? mark : '';
-    const tickActive = mark === 'watched' ? 'active' : '';
-    const crossActive = mark === 'skipped' ? 'active' : '';
-    return `<div class="show-row ${rowClass}" id="row-${css(s.name)}">
-      <div class="show-info">
-        <div class="show-name">${s.name}</div>
-        <div class="show-meta">${s.note}</div>
+    const state   = showEffectiveState(s.name, s.aired);
+    const cardCls = state === 'watched' ? 'all-watched' : state === 'abandoned' ? 'all-abandoned' : '';
+
+    // Season pills
+    const pillsHtml = s.aired > 0
+      ? `<div class="season-row">${
+          Array.from({length: s.aired}, (_, i) => {
+            const n   = i + 1;
+            const mk  = getSeasonMark(s.name, n);
+            const cls = mk === 'w' ? 's-watched' : mk === 'a' ? 's-abandoned' : '';
+            const ico = mk === 'w' ? '<span class="pill-icon">✓</span>' : mk === 'a' ? '<span class="pill-icon">✗</span>' : '';
+            return `<button class="season-pill ${cls}" onclick="cycleSeasonMark('${esc(s.name)}',${n})" title="Cycle: unmarked → watched → abandoned">S${n}${ico}</button>`;
+          }).join('')
+        }</div>`
+      : '';
+
+    // All-watched / all-abandoned button states
+    const allWatched   = state === 'watched';
+    const allAbandoned = state === 'abandoned';
+
+    const thumbUrl = thumbCache[s.name];
+    const thumbHtml = thumbUrl
+      ? `<img id="thumb-${cssId(s.name)}" src="${thumbUrl}" alt="${s.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : `<img id="thumb-${cssId(s.name)}" src="" alt="" style="display:none" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`;
+
+    return `<div class="show-card ${cardCls}">
+      <div class="thumb-wrap">
+        ${thumbHtml}
+        <div class="thumb-placeholder" id="thumbph-${cssId(s.name)}">📺</div>
       </div>
-      <div class="show-seasons">${s.seasons}</div>
-      <span class="status-badge badge-${s.status}">${SECTION_LABELS[s.status]}</span>
-      <div class="actions">
-        <button class="act-btn tick ${tickActive}" title="Watched" onclick="toggleMark('${esc(s.name)}','watched')">✓</button>
-        <button class="act-btn cross ${crossActive}" title="Not watching" onclick="toggleMark('${esc(s.name)}','skipped')">✕</button>
+      <div class="show-body">
+        <div class="show-top">
+          <div class="show-info">
+            <div class="show-name">${s.name}</div>
+            <div class="show-meta">${s.note}</div>
+            <div class="show-seasons-text">${s.seasons}</div>
+          </div>
+          <span class="status-badge badge-${s.status}">${SECTION_LABELS[s.status]}</span>
+          <div class="actions">
+            <button class="act-btn tick ${allWatched ? 'active' : ''}" title="Mark all seasons watched" onclick="markAll('${esc(s.name)}',${s.aired},'w')">✓</button>
+            <button class="act-btn cross ${allAbandoned ? 'active' : ''}" title="Mark all seasons abandoned" onclick="markAll('${esc(s.name)}',${s.aired},'a')">✕</button>
+          </div>
+        </div>
+        ${pillsHtml}
       </div>
     </div>`;
   }).join('');
 }
 
 function updateStats() {
-  const watched = SHOWS.filter(s => getMark(s.name) === 'watched').length;
-  const skipped = SHOWS.filter(s => getMark(s.name) === 'skipped').length;
+  const watched  = SHOWS.filter(s => showEffectiveState(s.name, s.aired) === 'watched').length;
+  const abandoned= SHOWS.filter(s => showEffectiveState(s.name, s.aired) === 'abandoned').length;
+  const partial  = SHOWS.filter(s => showEffectiveState(s.name, s.aired) === 'partial').length;
   const ongoing  = SHOWS.filter(s => s.status === 'ongoing').length;
   const finished = SHOWS.filter(s => s.status === 'finished').length;
   const cancelled= SHOWS.filter(s => s.status === 'cancelled').length;
@@ -537,27 +841,41 @@ function updateStats() {
     <div class="stat-pill"><span class="stat-dot dot-ongoing"></span>${ongoing} ongoing</div>
     <div class="stat-pill"><span class="stat-dot dot-finished"></span>${finished} finished</div>
     <div class="stat-pill"><span class="stat-dot dot-cancelled"></span>${cancelled} cancelled</div>
-    ${watched ? `<div class="stat-pill"><span class="stat-dot dot-watched"></span>${watched} watched</div>` : ''}
-    ${skipped ? `<div class="stat-pill"><span class="stat-dot dot-skipped"></span>${skipped} skipped</div>` : ''}
+    ${watched   ? `<div class="stat-pill"><span class="stat-dot dot-watched"></span>${watched} watched</div>` : ''}
+    ${abandoned ? `<div class="stat-pill"><span class="stat-dot dot-abandoned"></span>${abandoned} abandoned</div>` : ''}
   `;
   document.getElementById('header-sub').textContent =
-    `${SHOWS.length} shows · ${SHOWS.length - watched - skipped} remaining`;
+    `${SHOWS.length} shows · ${partial} in progress · ${SHOWS.length - watched - abandoned - partial} untouched`;
 }
 
 function updateFooter() {
-  const watched = SHOWS.filter(s => getMark(s.name) === 'watched').length;
-  const skipped = SHOWS.filter(s => getMark(s.name) === 'skipped').length;
+  const watched  = SHOWS.filter(s => showEffectiveState(s.name, s.aired) === 'watched').length;
+  const abandoned= SHOWS.filter(s => showEffectiveState(s.name, s.aired) === 'abandoned').length;
   document.getElementById('footer').textContent =
-    watched || skipped
-      ? `${watched} watched · ${skipped} skipped · ${SHOWS.length - watched - skipped} remaining`
+    watched || abandoned
+      ? `${watched} fully watched · ${abandoned} abandoned · ${SHOWS.length - watched - abandoned} remaining`
       : `${SHOWS.length} shows total`;
 }
 
-function css(name) { return name.replace(/[^a-z0-9]/gi, '-'); }
-function esc(name) { return name.replace(/'/g, "\\'"); }
+function cssId(name) { return name.replace(/[^a-z0-9]/gi, '-'); }
+function esc(name)   { return name.replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
 
-loadMarks();
-render();
+// ── Boot ─────────────────────────────────────────────────────────────────────
+async function init() {
+  // Render immediately from localStorage so page feels instant
+  const saved = localStorage.getItem(LOCAL_KEY);
+  if (saved) { try { marks = JSON.parse(saved); } catch(_){} }
+  render();
+
+  // Then sync from cloud (may update marks)
+  await loadFromCloud();
+  render();
+
+  // Load thumbnails in the background
+  loadThumbs();
+}
+
+init();
 </script>
 </body>
 </html>
