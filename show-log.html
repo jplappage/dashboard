@@ -580,6 +580,10 @@ document.addEventListener('visibilitychange', () => {
     clearTimeout(syncTimer);
     saveToCloud();
   }
+  // Re-fetch from cloud when the tab becomes visible again (e.g. switching from desktop to mobile)
+  if (document.visibilityState === 'visible' && !syncDirty) {
+    loadFromCloud().then(() => render());
+  }
 });
 
 // ── Season marks ─────────────────────────────────────────────────────────────
