@@ -821,37 +821,6 @@ function renderFilms() {
 }
 
 
-function renderTVCard(show) {
-  const isOut = parseLocalDate(show.streamDate) <= TODAY;
-  const badgeText = isOut ? 'Out Now' : 'Coming';
-  const badgeClass = isOut ? 'badge-out' : 'badge-soon';
-  const dateClass = isOut ? 'date-out' : 'date-soon';
-  const dateText = isOut ? `Since ${formatDate(show.streamDate)}` : `From ${formatDate(show.streamDate)}`;
-  const newBadge = show.isNew ? `<span style="display:inline-block;background:#7c3aed;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px;vertical-align:middle;">🆕 NEW</span>` : '';
-  const imdbBadge = show.imdbRating ? `<span class="imdb-badge">⭐ ${show.imdbRating}</span>` : '';
-
-  return `
-    <a class="card" href="https://watch.plex.tv/en-GB/show/${show.slug}" target="_blank" rel="noopener">
-      <div class="poster-wrap">
-        <img src="${show.poster}" alt="${show.title}" loading="lazy"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-        <div class="poster-placeholder" style="display:none">📺</div>
-        <span class="badge ${badgeClass}">${badgeText}</span>
-        <span class="badge badge-tv" style="top:auto;bottom:8px;left:8px;">TV</span>
-        ${imdbBadge}
-      </div>
-      <div class="card-overlay">
-        <span class="card-overlay-text">▶ Watch on Plex</span>
-      </div>
-      <div class="card-body">
-        <div class="card-title">${show.title}${newBadge}</div>
-        <div class="card-year">${show.note}</div>
-        <div class="card-date ${dateClass}">${dateText}</div>
-      </div>
-    </a>
-  `;
-}
-
 function renderCard(film) {
   const status = getStatus(film);
   const badgeClass = { out: 'badge-out', soon: 'badge-soon', waiting: 'badge-waiting', notout: 'badge-notout' }[status];
@@ -926,9 +895,6 @@ const CAL_EVENTS = (() => {
     if (!f.vodDate) return;
     const past = parseLocalDate(f.vodDate) <= TODAY;
     add(f.vodDate, f.title, past ? 'cal-film-out' : 'cal-film-soon' + (f.estimated ? ' cal-est' : ''));
-  });
-  TV_SHOWS.forEach(s => {
-    add(s.streamDate, s.title + (s.season ? ' S' + s.season : ''), 'cal-tv');
   });
   return map;
 })();
