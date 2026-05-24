@@ -664,10 +664,12 @@ function setFilter(f, btn) {
 }
 
 function showsForFilter() {
-  if (currentFilter === 'watched')  return SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
-  if (currentFilter === 'abandoned') return SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
-  if (currentFilter === 'ongoing')  return SHOWS.filter(s => s.status === 'ongoing');
-  return SHOWS;
+  let base;
+  if (currentFilter === 'watched')   base = SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
+  else if (currentFilter === 'abandoned') base = SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
+  else if (currentFilter === 'ongoing')   base = SHOWS.filter(s => s.status === 'ongoing');
+  else base = SHOWS;
+  return searchQuery ? base.filter(s => s.name.toLowerCase().includes(searchQuery)) : base;
 }
 
 function clearAll() {
@@ -788,13 +790,14 @@ function render() {
   let html = '';
 
   if (currentFilter === 'watched' || currentFilter === 'abandoned') {
-    html += `<div class="card-grid">${visible.map(buildCard).join('')}</div>`;
+    const sorted = [...visible].sort((a,b) => a.name.localeCompare(b.name));
+    html += `<div class="card-grid">${sorted.map(buildCard).join('')}</div>`;
   } else if (currentFilter === 'ongoing') {
-    // "Ongoing" filter shows only still-airing shows, in the same unified layout
     html += buildMainSection(visible);
   } else {
-    // All — single unified section
-    html += buildMainSection(SHOWS);
+    // All view — apply search filter across whole SHOWS list, then build
+    const base = searchQuery ? SHOWS.filter(s => s.name.toLowerCase().includes(searchQuery)) : SHOWS;
+    html += buildMainSection(base);
   }
 
   el.innerHTML = html;
