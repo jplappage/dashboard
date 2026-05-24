@@ -325,6 +325,13 @@
     color: #000; font-size: 0.85rem; font-weight: 700; cursor: pointer;
   }
   .watch-modal .wm-confirm:hover { background: #fff176; }
+  .back-arrow {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 14px; border-radius: 100px; border: 1px solid #333;
+    color: #ffe81f; text-decoration: none; font-size: 0.8rem;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .back-arrow:hover { border-color: #ffe81f; background: rgba(255,232,31,0.08); }
   </style>
 </head>
 <body>
@@ -343,9 +350,7 @@
   </div>
 </div>
 
-<div style="background:#000;border-bottom:1px solid rgba(255,232,31,0.2);padding:8px 20px;">
-  <a href="/dashboard/" style="color:#ffe81f;font-size:1.5rem;text-decoration:none;line-height:1;display:inline-block;transition:transform 0.15s;" onmouseover="this.style.transform='translateX(-4px)'" onmouseout="this.style.transform='none'">←</a>
-</div>
+<a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
 
 <div class="header">
   <div class="header-inner">
