@@ -546,7 +546,7 @@ let thumbCache = {};
 let binCache   = null;
 let syncDirty  = false;
 let syncTimer  = null;
-let currentFilter  = 'all';
+let currentFilter  = 'ongoing';
 let showWatched    = false;
 let showAbandoned  = false;
 let searchQuery    = '';
@@ -658,10 +658,9 @@ function setFilter(f, btn) {
 
 function showsForFilter() {
   let base;
-  if (currentFilter === 'watched')   base = SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
+  if (currentFilter === 'watched')        base = SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
   else if (currentFilter === 'abandoned') base = SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
-  else if (currentFilter === 'ongoing')   base = SHOWS.filter(s => s.status === 'ongoing');
-  else base = SHOWS;
+  else                                    base = SHOWS.filter(s => !['watched','abandoned'].includes(showState(s.name, s.aired)));
   return searchQuery ? base.filter(s => s.name.toLowerCase().includes(searchQuery)) : base;
 }
 
