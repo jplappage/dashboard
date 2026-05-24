@@ -653,11 +653,10 @@ function setFilter(f, btn) {
 }
 
 function showsForFilter() {
-  let base;
-  if (currentFilter === 'watched')        base = SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
-  else if (currentFilter === 'abandoned') base = SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
-  else                                    base = SHOWS.filter(s => !['watched','abandoned'].includes(showState(s.name, s.aired)));
-  return searchQuery ? base.filter(s => s.name.toLowerCase().includes(searchQuery)) : base;
+  if (searchQuery) return SHOWS.filter(s => s.name.toLowerCase().includes(searchQuery));
+  if (currentFilter === 'watched')        return SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
+  if (currentFilter === 'abandoned')      return SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
+  return SHOWS.filter(s => !['watched','abandoned'].includes(showState(s.name, s.aired)));
 }
 
 function clearAll() {
