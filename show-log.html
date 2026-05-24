@@ -715,19 +715,26 @@ function applyThumbs() {
 }
 
 // ── Render ───────────────────────────────────────────────────────────────────
-// Single unified section — active shows regardless of broadcast status,
-// with an "Awaiting" sub-section for still-airing shows fully caught up,
-// and collapsible drawers for watched/abandoned.
+// Unified layout: still-airing active shows, then ended-but-unwatched shows,
+// then awaiting, then collapsible watched/abandoned drawers. All sorted A–Z.
 function buildMainSection(shows) {
-  const active    = shows.filter(s => { const st = showState(s.name, s.aired); return st !== 'watched' && st !== 'abandoned'; });
-  const awaiting  = shows.filter(s => s.status === 'ongoing' && showState(s.name, s.aired) === 'watched');
-  const watched   = shows.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
-  const abandoned = shows.filter(s => showState(s.name, s.aired) === 'abandoned');
+  const alpha = (a, b) => a.name.localeCompare(b.name);
+
+  const activeOngoing = shows.filter(s => s.status === 'ongoing'  && !['watched','abandoned'].includes(showState(s.name, s.aired))).sort(alpha);
+  const activeEnded   = shows.filter(s => s.status !== 'ongoing'  && !['watched','abandoned'].includes(showState(s.name, s.aired))).sort(alpha);
+  const awaiting      = shows.filter(s => s.status === 'ongoing'  && showState(s.name, s.aired) === 'watched').sort(alpha);
+  const watched       = shows.filter(s => s.status !== 'ongoing'  && showState(s.name, s.aired) === 'watched').sort(alpha);
+  const abandoned     = shows.filter(s => showState(s.name, s.aired) === 'abandoned').sort(alpha);
 
   let html = '';
-  if (active.length) {
-    html += `<div class="section-head">Watching <span class="section-count">${active.length}</span></div>`;
-    html += `<div class="card-grid">${active.map(buildCard).join('')}</div>`;
+
+  if (activeOngoing.length) {
+    html += `<div class="section-head">Watching <span class="section-count">${activeOngoing.length}</span></div>`;
+    html += `<div class="card-grid">${activeOngoing.map(buildCard).join('')}</div>`;
+  }
+  if (activeEnded.length) {
+    html += `<div class="section-head">Ended — To Watch <span class="section-count">${activeEnded.length}</span></div>`;
+    html += `<div class="card-grid">${activeEnded.map(buildCard).join('')}</div>`;
   }
   if (awaiting.length) {
     html += `<div class="section-head awaiting">⌛ Awaiting Next Season <span class="section-count">${awaiting.length}</span></div>`;
