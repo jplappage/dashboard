@@ -180,7 +180,7 @@ def build_ics(film_objs, tv_objs):
         'X-WR-TIMEZONE:Europe/London',
     ]
     footer = ['END:VCALENDAR']
-    return '\r\n'.join(header + events + footer)
+    return '\r\n'.join(header + events + footer) + '\r\n'
 
 
 def main():
