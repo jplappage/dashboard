@@ -429,8 +429,7 @@
 
 <div class="filter-bar">
   <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-  <button class="filter-btn" onclick="setFilter('ongoing', this)">Ongoing</button>
-  <button class="filter-btn" onclick="setFilter('ended', this)">Ended</button>
+  <button class="filter-btn" onclick="setFilter('ongoing', this)">Still Airing</button>
   <button class="filter-btn" onclick="setFilter('watched', this)">Watched</button>
   <button class="filter-btn" onclick="setFilter('abandoned', this)">Abandoned</button>
   <div class="filter-spacer"></div>
@@ -728,37 +727,6 @@ function toggleDrawer(type) {
   }
 }
 
-function buildEndedSection(ended) {
-  const active   = ended.filter(s => { const st = showState(s.name, s.aired); return st !== 'watched' && st !== 'abandoned'; });
-  const watched  = ended.filter(s => showState(s.name, s.aired) === 'watched');
-  const abandoned= ended.filter(s => showState(s.name, s.aired) === 'abandoned');
-
-  let html = `<div class="section-head">Ended <span class="section-count">${ended.length}</span></div>`;
-  html += `<div class="card-grid">${active.map(buildCard).join('')}</div>`;
-
-  if (watched.length) {
-    const openCls = showWatched ? 'open' : '';
-    const btnCls  = showWatched ? 'showing' : '';
-    const btnTxt  = showWatched ? `− Hide watched (${watched.length})` : `＋ Show watched (${watched.length})`;
-    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-watched" data-count="${watched.length}" onclick="toggleDrawer('watched')">${btnTxt}</button>`;
-    html += `<div class="watched-grid-wrap ${openCls}" id="watched-grid-wrap">
-      <div class="card-grid" style="margin-top:10px">${watched.map(buildCard).join('')}</div>
-    </div>`;
-  }
-
-  if (abandoned.length) {
-    const openCls = showAbandoned ? 'open' : '';
-    const btnCls  = showAbandoned ? 'showing' : '';
-    const btnTxt  = showAbandoned ? `− Hide abandoned (${abandoned.length})` : `＋ Show abandoned (${abandoned.length})`;
-    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-abandoned" data-count="${abandoned.length}" onclick="toggleDrawer('abandoned')" style="border-color:rgba(239,68,68,0.4);color:#f87171;">${btnTxt}</button>`;
-    html += `<div class="watched-grid-wrap ${openCls}" id="abandoned-grid-wrap">
-      <div class="card-grid" style="margin-top:10px">${abandoned.map(buildCard).join('')}</div>
-    </div>`;
-  }
-
-  return html;
-}
-
 function render() {
   const visible = showsForFilter();
   const el = document.getElementById('content');
@@ -773,15 +741,11 @@ function render() {
   if (currentFilter === 'watched' || currentFilter === 'abandoned') {
     html += `<div class="card-grid">${visible.map(buildCard).join('')}</div>`;
   } else if (currentFilter === 'ongoing') {
-    html += buildOngoingSection(visible);
-  } else if (currentFilter === 'ended') {
-    html += buildEndedSection(visible);
+    // "Ongoing" filter shows only still-airing shows, in the same unified layout
+    html += buildMainSection(visible);
   } else {
-    // All — three sections
-    const ongoing = SHOWS.filter(s => s.status === 'ongoing');
-    const ended   = SHOWS.filter(s => s.status === 'finished' || s.status === 'cancelled');
-    if (ongoing.length) html += buildOngoingSection(ongoing);
-    if (ended.length)   html += buildEndedSection(ended);
+    // All — single unified section
+    html += buildMainSection(SHOWS);
   }
 
   el.innerHTML = html;
