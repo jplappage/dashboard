@@ -760,7 +760,7 @@ function render() {
 
   let html = '';
 
-  if (currentFilter === 'watched' || currentFilter === 'abandoned') {
+  if (!searchQuery && (currentFilter === 'watched' || currentFilter === 'abandoned')) {
     const sorted = [...visible].sort((a,b) => a.name.localeCompare(b.name));
     html += `<div class="card-grid">${sorted.map(buildCard).join('')}</div>`;
   } else {
