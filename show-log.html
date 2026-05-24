@@ -818,19 +818,24 @@ function buildCard(s) {
     ? `<img id="img-${cid(s.name)}" src="${url}" alt="${s.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
     : `<img id="img-${cid(s.name)}" src="" alt="" style="display:none">`;
 
+  // Parse upcoming season info — pill shows just the season label, note goes under title
+  let upcomingPill = '';
+  let upcomingNote = '';
+  if (s.next) {
+    const sep   = s.next.indexOf(' · ');
+    const label = sep >= 0 ? s.next.slice(0, sep) : s.next;
+    const date  = sep >= 0 ? s.next.slice(sep + 3) : '';
+    upcomingPill = `<span class="season-pill s-upcoming">${label}</span>`;
+    upcomingNote = date;
+  }
+
   const pills = Array.from({length: s.aired}, (_, i) => {
     const n  = i + 1;
     const mk = getSeasonMark(s.name, n);
     const cls = mk === 'w' ? 's-watched' : mk === 'a' ? 's-abandoned' : '';
     const ico = mk === 'w' ? '✓' : mk === 'a' ? '✗' : '';
     return `<button class="season-pill ${cls}" onclick="cycleSeasonMark('${esc(s.name)}',${n})" title="S${n}: tap to cycle">S${n}${ico ? ' '+ico : ''}</button>`;
-  }).join('') + (() => {
-    if (!s.next) return '';
-    const sep   = s.next.indexOf(' · ');
-    const label = sep >= 0 ? s.next.slice(0, sep) : s.next;
-    const date  = sep >= 0 ? s.next.slice(sep + 3) : '';
-    return `<span class="upcoming-wrap"><span class="season-pill s-upcoming">${label}</span>${date ? `<span class="upcoming-label">${date}</span>` : ''}</span>`;
-  })();
+  }).join('') + upcomingPill;
 
   return `<div class="show-card ${cardCls}">
     <div class="poster-wrap">
@@ -841,6 +846,7 @@ function buildCard(s) {
     </div>
     <div class="card-body">
       <div class="card-title">${s.name}</div>
+      ${upcomingNote ? `<div class="upcoming-note">${upcomingNote}</div>` : ''}
       <div class="season-row">${pills}</div>
     </div>
   </div>`;
