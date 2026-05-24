@@ -741,10 +741,6 @@ function buildMainSection(shows) {
     html += `<div class="section-head">Retro Shows <span class="section-count">${activeEnded.length}</span></div>`;
     html += `<div class="card-grid">${activeEnded.map(buildCard).join('')}</div>`;
   }
-  if (awaiting.length) {
-    html += `<div class="section-head awaiting">⌛ Awaiting Next Season <span class="section-count">${awaiting.length}</span></div>`;
-    html += `<div class="card-grid">${awaiting.map(buildCard).join('')}</div>`;
-  }
   return html;
 }
 
