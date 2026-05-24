@@ -751,19 +751,21 @@ function buildMainSection(shows) {
   return html;
 }
 
-function toggleDrawer(type) {
-  if (type === 'watched')   showWatched   = !showWatched;
-  if (type === 'abandoned') showAbandoned = !showAbandoned;
-  const open = type === 'watched' ? showWatched : showAbandoned;
-  const wrap = document.getElementById(`${type}-grid-wrap`);
-  const btn  = document.getElementById(`btn-show-${type}`);
-  if (wrap) wrap.classList.toggle('open', open);
-  if (btn) {
-    const n   = parseInt(btn.dataset.count || 0);
-    const lbl = type === 'watched' ? 'watched' : 'abandoned';
-    btn.textContent = open ? `− Hide ${lbl} (${n})` : `＋ Show ${lbl} (${n})`;
-    btn.classList.toggle('showing', open);
+
+function buildComingSoonSection(shows) {
+  const alpha = (a, b) => a.name.localeCompare(b.name);
+  const announced = shows.filter(s => hasSpecificDate(s.next)).sort(alpha);
+  const awaiting  = shows.filter(s => !hasSpecificDate(s.next)).sort(alpha);
+  let html = '';
+  if (announced.length) {
+    html += `<div class="section-head">📅 Date Announced <span class="section-count">${announced.length}</span></div>`;
+    html += `<div class="card-grid">${announced.map(buildCard).join('')}</div>`;
   }
+  if (awaiting.length) {
+    html += `<div class="section-head awaiting">🕐 Awaiting Date <span class="section-count">${awaiting.length}</span></div>`;
+    html += `<div class="card-grid">${awaiting.map(buildCard).join('')}</div>`;
+  }
+  return html;
 }
 
 function render() {
@@ -777,7 +779,9 @@ function render() {
 
   let html = '';
 
-  if (!searchQuery && (currentFilter === 'watched' || currentFilter === 'abandoned')) {
+  if (!searchQuery && currentFilter === 'coming-soon') {
+    html += buildComingSoonSection(visible);
+  } else if (!searchQuery && currentFilter === 'archive') {
     const sorted = [...visible].sort((a,b) => a.name.localeCompare(b.name));
     html += `<div class="card-grid">${sorted.map(buildCard).join('')}</div>`;
   } else {
