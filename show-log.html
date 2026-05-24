@@ -656,6 +656,41 @@ function applyThumbs() {
 }
 
 // ── Render ───────────────────────────────────────────────────────────────────
+function toggleWatched() {
+  showWatched = !showWatched;
+  // Toggle the drawer and button without a full re-render
+  const wrap = document.getElementById('watched-grid-wrap');
+  const btn  = document.getElementById('btn-show-watched');
+  if (wrap) {
+    wrap.classList.toggle('open', showWatched);
+  }
+  if (btn) {
+    const n = parseInt(btn.dataset.count || 0);
+    btn.textContent = showWatched ? `− Hide watched (${n})` : `＋ Show watched (${n})`;
+    btn.classList.toggle('showing', showWatched);
+  }
+}
+
+function buildEndedSection(ended) {
+  const unwatched = ended.filter(s => showState(s.name, s.aired) !== 'watched');
+  const watched   = ended.filter(s => showState(s.name, s.aired) === 'watched');
+
+  let html = `<div class="section-head">Ended <span class="section-count">${ended.length}</span></div>`;
+  html += `<div class="card-grid">${unwatched.map(buildCard).join('')}</div>`;
+
+  if (watched.length) {
+    const openCls = showWatched ? 'open' : '';
+    const btnTxt  = showWatched ? `− Hide watched (${watched.length})` : `＋ Show watched (${watched.length})`;
+    const btnCls  = showWatched ? 'showing' : '';
+    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-watched" data-count="${watched.length}" onclick="toggleWatched()">${btnTxt}</button>`;
+    html += `<div class="watched-grid-wrap ${openCls}" id="watched-grid-wrap">
+      <div class="card-grid" style="margin-top:10px">${watched.map(buildCard).join('')}</div>
+    </div>`;
+  }
+
+  return html;
+}
+
 function render() {
   const visible = showsForFilter();
   const el = document.getElementById('content');
@@ -673,8 +708,7 @@ function render() {
     html += `<div class="section-head">Ongoing <span class="section-count">${visible.length}</span></div>`;
     html += `<div class="card-grid">${visible.map(buildCard).join('')}</div>`;
   } else if (currentFilter === 'ended') {
-    html += `<div class="section-head">Ended <span class="section-count">${visible.length}</span></div>`;
-    html += `<div class="card-grid">${visible.map(buildCard).join('')}</div>`;
+    html += buildEndedSection(visible);
   } else {
     // All — two sections
     const ongoing = SHOWS.filter(s => s.status === 'ongoing');
@@ -684,8 +718,7 @@ function render() {
       html += `<div class="card-grid">${ongoing.map(buildCard).join('')}</div>`;
     }
     if (ended.length) {
-      html += `<div class="section-head">Ended <span class="section-count">${ended.length}</span></div>`;
-      html += `<div class="card-grid">${ended.map(buildCard).join('')}</div>`;
+      html += buildEndedSection(ended);
     }
   }
 
