@@ -351,6 +351,34 @@
       color: #f87171;
     }
 
+    /* ── Show-watched toggle ── */
+    .btn-show-watched {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 14px 0 4px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,232,31,0.3);
+      background: transparent;
+      color: #ffe81f;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.3px;
+    }
+    .btn-show-watched:hover { background: rgba(255,232,31,0.1); border-color: #ffe81f; }
+    .btn-show-watched.showing { background: rgba(255,232,31,0.12); border-color: #ffe81f; }
+
+    .watched-grid-wrap {
+      overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+      max-height: 0;
+      opacity: 0;
+    }
+    .watched-grid-wrap.open { max-height: 9999px; opacity: 1; }
+
     /* Empty */
     .empty { text-align: center; padding: 48px 24px; color: #6b7280; font-size: 0.9rem; }
 
@@ -475,7 +503,8 @@ let thumbCache = {};
 let binCache   = null;
 let syncDirty  = false;
 let syncTimer  = null;
-let currentFilter = 'all';
+let currentFilter  = 'all';
+let showWatched    = false; // whether the hidden watched-ended section is expanded
 
 function setSyncStatus(state) {
   const el = document.getElementById('sync-status');
