@@ -638,7 +638,10 @@ async function loadThumbs() {
   const missing = SHOWS.filter(s => !thumbCache[s.name]);
   for (const show of missing) {
     try {
-      const r = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(show.name)}`);
+      const endpoint = show.tvmazeId
+        ? `https://api.tvmaze.com/shows/${show.tvmazeId}`
+        : `https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(show.name)}`;
+      const r = await fetch(endpoint);
       if (r.ok) {
         const d = await r.json();
         const url = d?.image?.medium || d?.image?.original || null;
