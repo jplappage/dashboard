@@ -670,35 +670,46 @@ function applyThumbs() {
 }
 
 // ── Render ───────────────────────────────────────────────────────────────────
-function toggleWatched() {
-  showWatched = !showWatched;
-  // Toggle the drawer and button without a full re-render
-  const wrap = document.getElementById('watched-grid-wrap');
-  const btn  = document.getElementById('btn-show-watched');
-  if (wrap) {
-    wrap.classList.toggle('open', showWatched);
-  }
+function toggleDrawer(type) {
+  if (type === 'watched')   showWatched   = !showWatched;
+  if (type === 'abandoned') showAbandoned = !showAbandoned;
+  const open = type === 'watched' ? showWatched : showAbandoned;
+  const wrap = document.getElementById(`${type}-grid-wrap`);
+  const btn  = document.getElementById(`btn-show-${type}`);
+  if (wrap) wrap.classList.toggle('open', open);
   if (btn) {
-    const n = parseInt(btn.dataset.count || 0);
-    btn.textContent = showWatched ? `− Hide watched (${n})` : `＋ Show watched (${n})`;
-    btn.classList.toggle('showing', showWatched);
+    const n   = parseInt(btn.dataset.count || 0);
+    const lbl = type === 'watched' ? 'watched' : 'abandoned';
+    btn.textContent = open ? `− Hide ${lbl} (${n})` : `＋ Show ${lbl} (${n})`;
+    btn.classList.toggle('showing', open);
   }
 }
 
 function buildEndedSection(ended) {
-  const unwatched = ended.filter(s => showState(s.name, s.aired) !== 'watched');
-  const watched   = ended.filter(s => showState(s.name, s.aired) === 'watched');
+  const active   = ended.filter(s => { const st = showState(s.name, s.aired); return st !== 'watched' && st !== 'abandoned'; });
+  const watched  = ended.filter(s => showState(s.name, s.aired) === 'watched');
+  const abandoned= ended.filter(s => showState(s.name, s.aired) === 'abandoned');
 
   let html = `<div class="section-head">Ended <span class="section-count">${ended.length}</span></div>`;
-  html += `<div class="card-grid">${unwatched.map(buildCard).join('')}</div>`;
+  html += `<div class="card-grid">${active.map(buildCard).join('')}</div>`;
 
   if (watched.length) {
     const openCls = showWatched ? 'open' : '';
-    const btnTxt  = showWatched ? `− Hide watched (${watched.length})` : `＋ Show watched (${watched.length})`;
     const btnCls  = showWatched ? 'showing' : '';
-    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-watched" data-count="${watched.length}" onclick="toggleWatched()">${btnTxt}</button>`;
+    const btnTxt  = showWatched ? `− Hide watched (${watched.length})` : `＋ Show watched (${watched.length})`;
+    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-watched" data-count="${watched.length}" onclick="toggleDrawer('watched')">${btnTxt}</button>`;
     html += `<div class="watched-grid-wrap ${openCls}" id="watched-grid-wrap">
       <div class="card-grid" style="margin-top:10px">${watched.map(buildCard).join('')}</div>
+    </div>`;
+  }
+
+  if (abandoned.length) {
+    const openCls = showAbandoned ? 'open' : '';
+    const btnCls  = showAbandoned ? 'showing' : '';
+    const btnTxt  = showAbandoned ? `− Hide abandoned (${abandoned.length})` : `＋ Show abandoned (${abandoned.length})`;
+    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-abandoned" data-count="${abandoned.length}" onclick="toggleDrawer('abandoned')" style="border-color:rgba(239,68,68,0.4);color:#f87171;">${btnTxt}</button>`;
+    html += `<div class="watched-grid-wrap ${openCls}" id="abandoned-grid-wrap">
+      <div class="card-grid" style="margin-top:10px">${abandoned.map(buildCard).join('')}</div>
     </div>`;
   }
 
