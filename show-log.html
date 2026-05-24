@@ -755,7 +755,7 @@ function buildCard(s) {
     const cls = mk === 'w' ? 's-watched' : mk === 'a' ? 's-abandoned' : '';
     const ico = mk === 'w' ? '✓' : mk === 'a' ? '✗' : '';
     return `<button class="season-pill ${cls}" onclick="cycleSeasonMark('${esc(s.name)}',${n})" title="S${n}: tap to cycle">S${n}${ico ? ' '+ico : ''}</button>`;
-  }).join('');
+  }).join('') + (s.next ? `<span class="season-pill s-upcoming" title="Upcoming">${s.next}</span>` : '');
 
   return `<div class="show-card ${cardCls}">
     <div class="poster-wrap">
