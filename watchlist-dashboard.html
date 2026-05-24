@@ -780,29 +780,16 @@ function renderFilms() {
 function renderFilms() {
   const container = document.getElementById('film-container');
 
-  // Normalise TV shows into the same shape as films for grouping
-  const tvAsFilms = TV_SHOWS.map(s => ({
-    ...s,
-    vodDate: s.streamDate,
-    isTV: true,
-  }));
-
-  const all = [...FILMS, ...tvAsFilms];
-
-  const visible = typeFilter === 'tv'    ? all.filter(f => f.isTV)
-               : typeFilter === 'films' ? all.filter(f => !f.isTV)
-               : all;
-
   const groups = {
-    out:     visible.filter(f => getStatus(f) === 'out').sort((a, b) => new Date(a.vodDate) - new Date(b.vodDate)),
-    soon:    visible.filter(f => getStatus(f) === 'soon').sort((a, b) => new Date(a.vodDate) - new Date(b.vodDate)),
-    waiting: visible.filter(f => getStatus(f) === 'waiting').sort((a, b) => {
+    out:     FILMS.filter(f => getStatus(f) === 'out').sort((a, b) => new Date(a.vodDate) - new Date(b.vodDate)),
+    soon:    FILMS.filter(f => getStatus(f) === 'soon').sort((a, b) => new Date(a.vodDate) - new Date(b.vodDate)),
+    waiting: FILMS.filter(f => getStatus(f) === 'waiting').sort((a, b) => {
       if (!a.vodDate && !b.vodDate) return 0;
       if (!a.vodDate) return 1;
       if (!b.vodDate) return -1;
       return new Date(a.vodDate) - new Date(b.vodDate);
     }),
-    notout:  visible.filter(f => getStatus(f) === 'notout').sort((a, b) => {
+    notout:  FILMS.filter(f => getStatus(f) === 'notout').sort((a, b) => {
       if (!a.vodDate && !b.vodDate) return 0;
       if (!a.vodDate) return 1;
       if (!b.vodDate) return -1;
@@ -815,23 +802,22 @@ function renderFilms() {
 
   let html = '';
 
-  const renderSection = (title, items, sectionId) => {
+  const renderSection = (title, items) => {
     if (items.length === 0) return '';
-    if (statusFilter !== 'all' && statusFilter !== sectionId) return '';
     return `
       <div class="section-title">${title}</div>
       <div class="grid" style="margin-bottom:32px">
-        ${items.map(item => item.isTV ? renderTVCard(item) : renderCard(item)).join('')}
+        ${items.map(item => renderCard(item)).join('')}
       </div>
     `;
   };
 
-  html += renderSection('✅ Available Now on VOD / Streaming', groups.out, 'out');
-  html += renderSection('<span style="color:#f59e0b">▶</span> Coming Soon', groups.soon, 'soon');
-  html += renderSection('⏳ Waiting for Streaming Date', groups.waiting, 'waiting');
-  html += renderSection('🚫 Not Out Yet', groups.notout, 'notout');
+  html += renderSection('✅ Available Now on VOD / Streaming', groups.out);
+  html += renderSection('<span style="color:#f59e0b">▶</span> Coming Soon', groups.soon);
+  html += renderSection('⏳ Waiting for Streaming Date', groups.waiting);
+  html += renderSection('🚫 Not Out Yet', groups.notout);
 
-  container.innerHTML = html || '<p style="color:#6b7280;padding:24px">No items match this filter.</p>';
+  container.innerHTML = html || '<p style="color:#6b7280;padding:24px">Nothing on the list.</p>';
 }
 
 
