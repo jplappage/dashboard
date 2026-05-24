@@ -613,7 +613,7 @@ function setFilter(f, btn) {
 }
 
 function showsForFilter() {
-  if (currentFilter === 'watched')  return SHOWS.filter(s => showState(s.name, s.aired) === 'watched');
+  if (currentFilter === 'watched')  return SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
   if (currentFilter === 'abandoned') return SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
   if (currentFilter === 'ended')    return SHOWS.filter(s => s.status === 'finished' || s.status === 'cancelled');
   if (currentFilter === 'ongoing')  return SHOWS.filter(s => s.status === 'ongoing');
@@ -743,7 +743,8 @@ function render() {
 
 function buildCard(s) {
   const state    = showState(s.name, s.aired);
-  const cardCls  = state === 'watched' ? 'all-watched' : state === 'abandoned' ? 'all-abandoned' : '';
+  const isEnded  = s.status !== 'ongoing';
+  const cardCls  = (state === 'watched' && isEnded) ? 'all-watched' : state === 'abandoned' ? 'all-abandoned' : '';
   const badgeCls = s.status === 'ongoing' ? 'badge-ongoing' : s.status === 'cancelled' ? 'badge-cancelled' : 'badge-ended';
   const badgeTxt = s.status === 'ongoing' ? 'Ongoing' : s.status === 'cancelled' ? 'Cancelled' : 'Ended';
 
