@@ -674,17 +674,41 @@ function applyThumbs() {
 }
 
 // ── Render ───────────────────────────────────────────────────────────────────
-function buildOngoingSection(ongoing) {
-  const active   = ongoing.filter(s => showState(s.name, s.aired) !== 'watched');
-  const awaiting = ongoing.filter(s => showState(s.name, s.aired) === 'watched');
+// Single unified section — active shows regardless of broadcast status,
+// with an "Awaiting" sub-section for still-airing shows fully caught up,
+// and collapsible drawers for watched/abandoned.
+function buildMainSection(shows) {
+  const active    = shows.filter(s => { const st = showState(s.name, s.aired); return st !== 'watched' && st !== 'abandoned'; });
+  const awaiting  = shows.filter(s => s.status === 'ongoing' && showState(s.name, s.aired) === 'watched');
+  const watched   = shows.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
+  const abandoned = shows.filter(s => showState(s.name, s.aired) === 'abandoned');
+
   let html = '';
   if (active.length) {
-    html += `<div class="section-head">Ongoing <span class="section-count">${active.length}</span></div>`;
+    html += `<div class="section-head">Watching <span class="section-count">${active.length}</span></div>`;
     html += `<div class="card-grid">${active.map(buildCard).join('')}</div>`;
   }
   if (awaiting.length) {
     html += `<div class="section-head awaiting">⌛ Awaiting Next Season <span class="section-count">${awaiting.length}</span></div>`;
     html += `<div class="card-grid">${awaiting.map(buildCard).join('')}</div>`;
+  }
+  if (watched.length) {
+    const openCls = showWatched ? 'open' : '';
+    const btnCls  = showWatched ? 'showing' : '';
+    const btnTxt  = showWatched ? `− Hide watched (${watched.length})` : `＋ Show watched (${watched.length})`;
+    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-watched" data-count="${watched.length}" onclick="toggleDrawer('watched')">${btnTxt}</button>`;
+    html += `<div class="watched-grid-wrap ${openCls}" id="watched-grid-wrap">
+      <div class="card-grid" style="margin-top:10px">${watched.map(buildCard).join('')}</div>
+    </div>`;
+  }
+  if (abandoned.length) {
+    const openCls = showAbandoned ? 'open' : '';
+    const btnCls  = showAbandoned ? 'showing' : '';
+    const btnTxt  = showAbandoned ? `− Hide abandoned (${abandoned.length})` : `＋ Show abandoned (${abandoned.length})`;
+    html += `<button class="btn-show-watched ${btnCls}" id="btn-show-abandoned" data-count="${abandoned.length}" onclick="toggleDrawer('abandoned')" style="border-color:rgba(239,68,68,0.4);color:#f87171;">${btnTxt}</button>`;
+    html += `<div class="watched-grid-wrap ${openCls}" id="abandoned-grid-wrap">
+      <div class="card-grid" style="margin-top:10px">${abandoned.map(buildCard).join('')}</div>
+    </div>`;
   }
   return html;
 }
