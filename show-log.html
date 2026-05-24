@@ -655,7 +655,14 @@ function showsForFilter() {
   if (searchQuery) return SHOWS.filter(s => s.name.toLowerCase().includes(searchQuery));
   if (currentFilter === 'watched')        return SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
   if (currentFilter === 'abandoned')      return SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
-  return SHOWS.filter(s => !['watched','abandoned'].includes(showState(s.name, s.aired)));
+  // Show Watchlist: include all ongoing shows (even fully-watched ones = awaiting next season)
+  // plus ended shows that haven't been watched or abandoned yet
+  return SHOWS.filter(s => {
+    const state = showState(s.name, s.aired);
+    if (state === 'abandoned') return false;
+    if (state === 'watched' && s.status !== 'ongoing') return false;
+    return true;
+  });
 }
 
 function clearAll() {
