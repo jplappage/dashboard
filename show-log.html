@@ -449,9 +449,9 @@
 </header>
 
 <div class="filter-bar">
-  <button class="filter-btn active" onclick="setFilter('ongoing', this)">Show Watchlist</button>
-  <button class="filter-btn" onclick="setFilter('watched', this)">Watched</button>
-  <button class="filter-btn" onclick="setFilter('abandoned', this)">Abandoned</button>
+  <button class="filter-btn active" onclick="setFilter('ongoing', this)">📺 SHOW WATCHLIST</button>
+  <button class="filter-btn" onclick="setFilter('watched', this)">✅ WATCHED</button>
+  <button class="filter-btn" onclick="setFilter('abandoned', this)">🚫 ABANDONED</button>
   <input type="search" id="search-input" class="search-input" placeholder="Search shows…" oninput="setSearch(this.value)">
   <div class="filter-spacer"></div>
   <span id="sync-status" class="sync-status" title="Tap to re-sync" onclick="loadFromCloud().then(()=>render())"></span>
