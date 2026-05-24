@@ -648,7 +648,8 @@ async function loadThumbs() {
       const r = await fetch(endpoint);
       if (r.ok) {
         const d = await r.json();
-        const url = d?.image?.medium || d?.image?.original || null;
+        const raw = d?.image?.medium || d?.image?.original || null;
+        const url = raw ? raw.replace('http://', 'https://') : null;
         if (url) {
           thumbCache[show.name] = url;
           const img = document.getElementById('img-' + cid(show.name));
