@@ -904,7 +904,6 @@ function toggleCalendar() {
   const btn = document.getElementById('cal-toggle-btn');
   document.getElementById('film-container').style.display = calendarOpen ? 'none' : '';
   document.getElementById('calendar-view').style.display  = calendarOpen ? 'block' : 'none';
-  document.querySelector('.filter-bar').style.display     = calendarOpen ? 'none' : '';
   btn.textContent = calendarOpen ? '🎬 Back to List' : '📅 Calendar';
   btn.style.background    = calendarOpen ? '#ffe81f' : 'rgba(255,255,255,0.07)';
   btn.style.borderColor   = calendarOpen ? '#ffe81f' : 'rgba(255,255,255,0.15)';
