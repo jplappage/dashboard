@@ -219,6 +219,9 @@
       color: #ffe81f;
       opacity: 0.7;
     }
+    .section-head.awaiting { color: #f59e0b; }
+    .section-head.awaiting::after { background: rgba(245,158,11,0.25); }
+    .section-head.awaiting .section-count { color: #f59e0b; }
 
     /* ── Card grid ── */
     .card-grid {
@@ -730,21 +733,15 @@ function render() {
   if (currentFilter === 'watched' || currentFilter === 'abandoned') {
     html += `<div class="card-grid">${visible.map(buildCard).join('')}</div>`;
   } else if (currentFilter === 'ongoing') {
-    html += `<div class="section-head">Ongoing <span class="section-count">${visible.length}</span></div>`;
-    html += `<div class="card-grid">${visible.map(buildCard).join('')}</div>`;
+    html += buildOngoingSection(visible);
   } else if (currentFilter === 'ended') {
     html += buildEndedSection(visible);
   } else {
-    // All — two sections
+    // All — three sections
     const ongoing = SHOWS.filter(s => s.status === 'ongoing');
     const ended   = SHOWS.filter(s => s.status === 'finished' || s.status === 'cancelled');
-    if (ongoing.length) {
-      html += `<div class="section-head">Ongoing <span class="section-count">${ongoing.length}</span></div>`;
-      html += `<div class="card-grid">${ongoing.map(buildCard).join('')}</div>`;
-    }
-    if (ended.length) {
-      html += buildEndedSection(ended);
-    }
+    if (ongoing.length) html += buildOngoingSection(ongoing);
+    if (ended.length)   html += buildEndedSection(ended);
   }
 
   el.innerHTML = html;
