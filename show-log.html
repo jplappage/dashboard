@@ -776,7 +776,7 @@ function buildCard(s) {
 }
 
 function updateStats() {
-  const watched  = SHOWS.filter(s => showState(s.name, s.aired) === 'watched').length;
+  const watched  = SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched').length;
   const abandoned= SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned').length;
   const partial  = SHOWS.filter(s => showState(s.name, s.aired) === 'partial').length;
   const ongoing  = SHOWS.filter(s => s.status === 'ongoing').length;
@@ -793,7 +793,7 @@ function updateStats() {
 }
 
 function updateFooter() {
-  const w = SHOWS.filter(s => showState(s.name, s.aired) === 'watched').length;
+  const w = SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched').length;
   const a = SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned').length;
   document.getElementById('footer').textContent =
     w || a ? `${w} fully watched · ${a} abandoned · ${SHOWS.length - w - a} remaining`
