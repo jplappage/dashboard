@@ -545,9 +545,7 @@ let thumbCache = {};
 let binCache   = null;
 let syncDirty  = false;
 let syncTimer  = null;
-let currentFilter  = 'ongoing';
-let showWatched    = false;
-let showAbandoned  = false;
+let currentFilter  = 'watchlist';
 let searchQuery    = '';
 
 function setSearch(val) {
@@ -655,17 +653,26 @@ function setFilter(f, btn) {
   render();
 }
 
+function hasSpecificDate(next) {
+  if (!next) return false;
+  return /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/i.test(next);
+}
+
 function showsForFilter() {
   if (searchQuery) return SHOWS.filter(s => s.name.toLowerCase().includes(searchQuery));
-  if (currentFilter === 'watched')        return SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched');
-  if (currentFilter === 'abandoned')      return SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned');
-  // Show Watchlist: include all ongoing shows (even fully-watched ones = awaiting next season)
-  // plus ended shows that haven't been watched or abandoned yet
+  if (currentFilter === 'archive') {
+    return SHOWS.filter(s => {
+      const state = showState(s.name, s.aired);
+      return state === 'abandoned' || (state === 'watched' && s.status !== 'ongoing');
+    });
+  }
+  if (currentFilter === 'coming-soon') {
+    return SHOWS.filter(s => s.status === 'ongoing' && showState(s.name, s.aired) === 'watched');
+  }
+  // Watchlist: not watched, not abandoned (excludes ongoing+fully-watched which go in coming-soon)
   return SHOWS.filter(s => {
     const state = showState(s.name, s.aired);
-    if (state === 'abandoned') return false;
-    if (state === 'watched' && s.status !== 'ongoing') return false;
-    return true;
+    return state !== 'abandoned' && state !== 'watched';
   });
 }
 
