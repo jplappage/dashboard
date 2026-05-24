@@ -156,6 +156,8 @@
     .sync-loading { color: #888;    border-color: #333; }
     .sync-ok      { color: #4ade80; border-color: rgba(74,222,128,0.3); }
     .sync-error   { color: #f87171; border-color: rgba(248,113,113,0.3); }
+    .sync-status  { cursor: pointer; }
+    .sync-status:hover { opacity: 0.8; }
 
     /* ── Filter bar ── */
     .filter-bar {
@@ -432,7 +434,7 @@
   <button class="filter-btn" onclick="setFilter('watched', this)">Watched</button>
   <button class="filter-btn" onclick="setFilter('abandoned', this)">Abandoned</button>
   <div class="filter-spacer"></div>
-  <span id="sync-status" class="sync-status"></span>
+  <span id="sync-status" class="sync-status" title="Tap to re-sync" onclick="loadFromCloud().then(()=>render())"></span>
   <button class="clear-btn" onclick="clearAll()">Clear all marks</button>
 </div>
 
@@ -805,6 +807,7 @@ function updateStats() {
   const awaiting = SHOWS.filter(s => s.status === 'ongoing' && showState(s.name, s.aired) === 'watched').length;
   const ongoing  = SHOWS.filter(s => s.status === 'ongoing').length - awaiting;
   const ended    = SHOWS.filter(s => s.status !== 'ongoing').length;
+  const partial  = SHOWS.filter(s => showState(s.name, s.aired) === 'partial').length;
 
   document.getElementById('header-stats').innerHTML = `
     <div class="stat-pill"><span class="stat-dot dot-ongoing"></span>${ongoing} ongoing</div>
