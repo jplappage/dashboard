@@ -730,9 +730,6 @@ function buildMainSection(shows) {
 
   const activeOngoing = shows.filter(s => s.status === 'ongoing'  && !['watched','abandoned'].includes(showState(s.name, s.aired))).sort(alpha);
   const activeEnded   = shows.filter(s => s.status !== 'ongoing'  && !['watched','abandoned'].includes(showState(s.name, s.aired))).sort(alpha);
-  const awaiting      = shows.filter(s => s.status === 'ongoing'  && showState(s.name, s.aired) === 'watched').sort(alpha);
-  const watched       = shows.filter(s => s.status !== 'ongoing'  && showState(s.name, s.aired) === 'watched').sort(alpha);
-  const abandoned     = shows.filter(s => showState(s.name, s.aired) === 'abandoned').sort(alpha);
 
   let html = '';
 
