@@ -546,7 +546,7 @@ const BIN_ID  = '6a0b8c4c6610dd3ae8686daa';
 const BIN_KEY = '$2a$10$SJVrSiNiFsJsoMmOpmqGJOQmdrFpT0rTGMjv4ADrfdu5QfYyzkqLS';
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const LOCAL_KEY = 'show-log-v2';
-const THUMB_KEY = 'show-log-thumbs';
+const THUMB_KEY = 'show-log-thumbs-v2';
 
 let marks      = {};
 let thumbCache = {};
@@ -556,6 +556,12 @@ let syncTimer  = null;
 let currentFilter  = 'all';
 let showWatched    = false;
 let showAbandoned  = false;
+let searchQuery    = '';
+
+function setSearch(val) {
+  searchQuery = val.trim().toLowerCase();
+  render();
+}
 
 function setSyncStatus(state) {
   const el = document.getElementById('sync-status');
@@ -679,7 +685,7 @@ async function loadThumbs() {
     try {
       const endpoint = show.tvmazeId
         ? `https://api.tvmaze.com/shows/${show.tvmazeId}`
-        : `https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(show.name)}`;
+        : `https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(show.tvmazeQuery || show.name)}`;
       const r = await fetch(endpoint);
       if (r.ok) {
         const d = await r.json();
