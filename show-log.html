@@ -350,6 +350,17 @@
       color: #f87171;
     }
 
+    /* Upcoming / announced season pill */
+    .season-pill.s-upcoming {
+      background: rgba(255,232,31,0.08);
+      border-color: rgba(255,232,31,0.35);
+      border-style: dashed;
+      color: #ffe81f;
+      opacity: 0.85;
+      cursor: default;
+    }
+    .season-pill.s-upcoming:hover { opacity: 1; border-color: rgba(255,232,31,0.6); }
+
     /* ── Show-watched toggle ── */
     .btn-show-watched {
       display: inline-flex;
@@ -402,13 +413,13 @@
 </head>
 <body>
 
+<a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
 <header>
   <div class="header-left">
     <h1>Show Log</h1>
     <p id="header-sub">Track your TV watching</p>
   </div>
   <div class="header-stats" id="header-stats"></div>
-  <a href="index.html" class="header-nav">← Dashboard</a>
 </header>
 
 <div class="filter-bar">
