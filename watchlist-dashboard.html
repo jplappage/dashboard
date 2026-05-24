@@ -787,6 +787,15 @@ function plexUrl(slug) {
   return `https://watch.plex.tv/en-GB/movie/${slug}`;
 }
 
+let statusFilter = 'all';
+
+function setStatusFilter(val, btn) {
+  statusFilter = val;
+  document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFilms();
+}
+
 function renderFilms() {
   const container = document.getElementById('film-container');
 
@@ -812,8 +821,9 @@ function renderFilms() {
 
   let html = '';
 
-  const renderSection = (title, items) => {
+  const renderSection = (title, items, sectionId) => {
     if (items.length === 0) return '';
+    if (statusFilter !== 'all' && statusFilter !== sectionId) return '';
     return `
       <div class="section-title">${title}</div>
       <div class="grid" style="margin-bottom:32px">
@@ -822,10 +832,10 @@ function renderFilms() {
     `;
   };
 
-  html += renderSection('✅ Available Now on VOD / Streaming', groups.out);
-  html += renderSection('<span style="color:#f59e0b">▶</span> Coming Soon', groups.soon);
-  html += renderSection('⏳ Waiting for Streaming Date', groups.waiting);
-  html += renderSection('🚫 Not Out Yet', groups.notout);
+  html += renderSection('✅ Available Now on VOD / Streaming', groups.out, 'out');
+  html += renderSection('<span style="color:#f59e0b">▶</span> Coming Soon', groups.soon, 'soon');
+  html += renderSection('⏳ Waiting for Streaming Date', groups.waiting, 'waiting');
+  html += renderSection('🚫 Not Out Yet', groups.notout, 'notout');
 
   container.innerHTML = html || '<p style="color:#6b7280;padding:24px">Nothing on the list.</p>';
 }
@@ -914,6 +924,7 @@ function toggleCalendar() {
   const btn = document.getElementById('cal-toggle-btn');
   document.getElementById('film-container').style.display = calendarOpen ? 'none' : '';
   document.getElementById('calendar-view').style.display  = calendarOpen ? 'block' : 'none';
+  document.querySelector('.filter-bar').style.display     = calendarOpen ? 'none' : '';
   btn.textContent = calendarOpen ? '🎬 Back to List' : '📅 Calendar';
   btn.style.background    = calendarOpen ? '#ffe81f' : 'rgba(255,255,255,0.07)';
   btn.style.borderColor   = calendarOpen ? '#ffe81f' : 'rgba(255,255,255,0.15)';
