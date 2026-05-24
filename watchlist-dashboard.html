@@ -597,32 +597,6 @@
 <script>
 const TODAY = (() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); })();
 
-const TV_SHOWS = [
-  {
-    title: 'Spider-Noir',
-    season: 1,
-    slug: 'spider-noir',
-    poster: 'https://images.thedirect.com/media/photos/spider-noir_poster.png',
-    streamDate: '2026-05-27',
-    finaleDate: null,
-    platform: 'Prime Video',
-    note: 'Season 1 · All episodes',
-    isNew: true,
-  },
-  {
-    title: 'Welcome to Wrexham',
-    season: 5,
-    slug: 'welcome-to-wrexham',
-    poster: 'https://www.showbizjunkies.com/wp-content/uploads/2025/04/welcome-to-wrexham-season-4-poster.jpg',
-    streamDate: '2026-05-14',
-    finaleDate: '2026-06-25',
-    platform: 'Disney+',
-    note: 'Season 5 · Weekly · Finale Jun 25',
-    isNew: false,
-    imdbRating: 8.3,
-  },
-];
-
 const FILMS = [
   // ── COMING SOON ───────────────────────────────────────────────────────────
   {
@@ -801,22 +775,7 @@ function plexUrl(slug) {
   return `https://watch.plex.tv/en-GB/movie/${slug}`;
 }
 
-let typeFilter   = 'all';
-let statusFilter = 'all';
-
-function setTypeFilter(val, btn) {
-  typeFilter = val;
-  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderFilms();
-}
-
-function setStatusFilter(val, btn) {
-  statusFilter = val;
-  document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderFilms();
-}
+function renderFilms() {
 
 function renderFilms() {
   const container = document.getElementById('film-container');
