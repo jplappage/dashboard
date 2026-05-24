@@ -839,12 +839,25 @@ function esc(n) { return n.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
 async function init() {
-  const saved = localStorage.getItem(LOCAL_KEY);
-  if (saved) { try { marks = JSON.parse(saved); } catch(_){} }
-  render();
-  await loadFromCloud();
-  render();
-  loadThumbs();
+  // Marks from localStorage
+  try { const s = localStorage.getItem(LOCAL_KEY); if (s) marks = JSON.parse(s); } catch(_){}
+
+  // Thumb cache from localStorage — must happen before first render so
+  // buildCard can inline URLs directly rather than patching the DOM later
+  try {
+    const s = localStorage.getItem(THUMB_KEY);
+    if (s) {
+      const raw = JSON.parse(s);
+      thumbCache = Object.fromEntries(
+        Object.entries(raw).map(([k, v]) => [k, String(v).replace('http://', 'https://')])
+      );
+    }
+  } catch(_){}
+
+  render();              // thumbCache already populated → images inline from the start
+  await loadFromCloud(); // sync marks from cloud
+  render();              // re-render with updated marks (thumbCache still populated)
+  loadThumbs();          // fetch any missing thumbnails in the background
 }
 
 init();
