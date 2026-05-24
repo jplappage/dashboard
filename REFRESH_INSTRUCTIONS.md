@@ -1,21 +1,13 @@
-# Watchlist VOD Dashboard — Refresh Instructions
+# Films Watchlist VOD Dashboard — Refresh Instructions
 
 ## Step 1 — Check Letterboxd for film changes
 → `https://letterboxd.com/zidanejp/watchlist/`
 
 Compare the watchlist against the FILMS array in `watchlist-dashboard.html`.
-- **Added** films: note them for Step 3
-- **Removed** films: note them for Step 4
+- **Added** films: note them for Step 2
+- **Removed** films: note them for Step 3
 
-## Step 2 — Check IMDB for TV show changes
-→ `https://www.imdb.com/user/p.ddabjmjar4tan4zozpsg3dpe7a/watchlist/`
-
-Compare against the TV_SHOWS array in `watchlist-dashboard.html`.
-- **Added** shows: note them for Step 3
-- **Removed** shows: note them for Step 4
-- For each existing show, check for upcoming season/premiere/finale dates and update `streamDate`, `finaleDate`, `note`, `isNew` as needed
-
-## Step 3 — Add new films and shows
+## Step 2 — Add new films
 For each new film from Step 1:
 ```js
 {
@@ -29,30 +21,15 @@ For each new film from Step 1:
   imdbRating: 7.5,    // only if the film has been released and is rated on imdb.com
 }
 ```
-For each new TV show from Step 2:
-```js
-{
-  title: '',
-  season: 1,
-  slug: '',
-  poster: '',
-  streamDate: 'YYYY-MM-DD',
-  finaleDate: null,
-  platform: '',
-  note: '',
-  isNew: true,
-  imdbRating: 8.0,
-}
-```
 
-## Step 4 — Archive removed films and shows
-For any film/show no longer on the Letterboxd or IMDB watchlist:
+## Step 3 — Archive removed films
+For any film no longer on the Letterboxd watchlist:
 - Check `https://letterboxd.com/zidanejp/films/diary/` to confirm it was watched
-- Remove it from the FILMS or TV_SHOWS array in the dashboard
+- Remove it from the FILMS array in the dashboard
 - Add it to the `WATCHED` list in `generate_ics.py` with the watched date if known
 
-## Step 5 — Look up streaming dates
-For every film/show with `vodDate: null` or `estimated: true`:
+## Step 4 — Look up streaming dates
+For every film with `vodDate: null` or `estimated: true`:
 
 **~90% of announcements will appear on whentostream first. This is the primary sweep.**
 
