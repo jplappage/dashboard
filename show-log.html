@@ -636,7 +636,15 @@ function clearAll() {
 async function loadThumbs() {
   try {
     const saved = localStorage.getItem(THUMB_KEY);
-    if (saved) { thumbCache = JSON.parse(saved); applyThumbs(); }
+    if (saved) {
+      const raw = JSON.parse(saved);
+      // Upgrade any http:// URLs to https:// (blocked by browsers on HTTPS sites)
+      thumbCache = Object.fromEntries(
+        Object.entries(raw).map(([k, v]) => [k, v.replace('http://', 'https://')])
+      );
+      localStorage.setItem(THUMB_KEY, JSON.stringify(thumbCache));
+      applyThumbs();
+    }
   } catch(e) {}
 
   const missing = SHOWS.filter(s => !thumbCache[s.name]);
