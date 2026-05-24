@@ -514,7 +514,8 @@ let binCache   = null;
 let syncDirty  = false;
 let syncTimer  = null;
 let currentFilter  = 'all';
-let showWatched    = false; // whether the hidden watched-ended section is expanded
+let showWatched    = false;
+let showAbandoned  = false;
 
 function setSyncStatus(state) {
   const el = document.getElementById('sync-status');
