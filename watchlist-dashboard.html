@@ -560,11 +560,18 @@
       transition: all 0.15s; white-space: nowrap;
     }
     .back-arrow:hover { border-color: #ffe81f; background: rgba(255,232,31,0.08); }
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 32px; background: #000;
+    }
   </style>
 </head>
 <body>
 
-<a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
+<div class="top-bar">
+  <a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
+  <span id="sync-status" class="sync-status"></span>
+</div>
 
 <div class="sticky-top">
 <header>
