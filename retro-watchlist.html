@@ -807,15 +807,15 @@ const BIN_KEY = '$2a$10$SJVrSiNiFsJsoMmOpmqGJOQmdrFpT0rTGMjv4ADrfdu5QfYyzkqLS';
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY };
 
-function setSyncStatus(state) {
+function setSyncStatus(state, detail) {
   const el = document.getElementById('sync-status');
   if (!el) return;
   const map = {
     loading: '⟳ Syncing…',
     ok:      '✓ Synced',
-    error:   '⚠ Offline — changes saved locally',
+    error:   '⚠ Sync error',
   };
-  el.textContent = map[state] || '';
+  el.textContent = (map[state] || '') + (detail ? ' (' + detail + ')' : '');
   el.className = 'sync-status sync-' + state;
 }
 
