@@ -565,10 +565,10 @@ function setSyncStatus(state) {
 async function loadFromCloud() {
   setSyncStatus('loading');
   try {
-    const r = await fetch(BIN_URL + '/latest', { headers:{'X-Master-Key':BIN_KEY}, cache:'no-store' });
+    const r = await fetch(GIST_URL, { headers: GIST_HEADERS, cache: 'no-store' });
     if (!r.ok) throw new Error();
     const data = await r.json();
-    binCache = data.record || {};
+    binCache = JSON.parse(data.files[GIST_FILE]?.content || '{}');
     const cloud = binCache.showLog;
     if (cloud && typeof cloud === 'object' && Object.keys(cloud).length > 0) {
       marks = cloud;
@@ -596,14 +596,14 @@ async function saveToCloud() {
   setSyncStatus('loading');
   try {
     if (!binCache) {
-      const r = await fetch(BIN_URL + '/latest', { headers:{'X-Master-Key':BIN_KEY}, cache:'no-store' });
-      if (r.ok) { const d = await r.json(); binCache = d.record || {}; }
+      const r = await fetch(GIST_URL, { headers: GIST_HEADERS, cache: 'no-store' });
+      if (r.ok) { const d = await r.json(); binCache = JSON.parse(d.files[GIST_FILE]?.content || '{}'); }
     }
     const updated = { ...binCache, showLog: marks };
-    const r = await fetch(BIN_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type':'application/json', 'X-Master-Key':BIN_KEY },
-      body: JSON.stringify(updated)
+    const r = await fetch(GIST_URL, {
+      method: 'PATCH',
+      headers: GIST_HEADERS,
+      body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(updated) } } })
     });
     if (r.ok) { binCache = updated; syncDirty = false; setSyncStatus('ok'); }
     else setSyncStatus('error');
