@@ -32,16 +32,67 @@ body {
   overflow: hidden;
 }
 
+/* ── TOP BAR ── */
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; background: #000; flex-shrink: 0;
+}
+
 /* ── HEADER ── */
 header {
-  background: linear-gradient(135deg, var(--header-g1), var(--header-g2));
+  background: #000;
   padding: 8px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
-  border-bottom: 3px solid var(--header-border);
+  border-bottom: 1px solid rgba(255,232,31,0.35);
   flex-shrink: 0;
   flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at  3%  8%, #fff 100%, transparent),
+    radial-gradient(2px   2px   at  7% 72%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 12% 35%, #fff 100%, transparent),
+    radial-gradient(2px   2px   at 18% 91%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 22%  5%, #fff 100%, transparent),
+    radial-gradient(2px   2px   at 28% 58%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 34% 22%, #fff 100%, transparent),
+    radial-gradient(2px   2px   at 41% 77%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 47% 14%, #fff 100%, transparent),
+    radial-gradient(2px   2px   at 53% 45%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 59% 88%, #fff 100%, transparent),
+    radial-gradient(2px   2px   at 66% 31%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 73% 67%, #fff 100%, transparent),
+    radial-gradient(2px   2px   at 79%  3%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 84% 52%, #fff 100%, transparent),
+    radial-gradient(2px   2px   at 91% 19%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 96% 83%, #fff 100%, transparent),
+    radial-gradient(1px 1px at  2% 47%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at  9% 25%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at 16% 70%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at 33% 85%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at 44% 15%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at 67% 30%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at 78% 75%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(1px 1px at 88% 10%, rgba(255,255,255,0.85) 100%, transparent),
+    radial-gradient(0.5px 0.5px at  5% 55%, rgba(255,255,255,0.45) 100%, transparent),
+    radial-gradient(0.5px 0.5px at 14% 20%, rgba(255,255,255,0.45) 100%, transparent),
+    radial-gradient(0.5px 0.5px at 23% 80%, rgba(255,255,255,0.45) 100%, transparent),
+    radial-gradient(0.5px 0.5px at 38% 45%, rgba(255,255,255,0.45) 100%, transparent),
+    radial-gradient(0.5px 0.5px at 50% 90%, rgba(255,255,255,0.45) 100%, transparent),
+    radial-gradient(0.5px 0.5px at 62% 12%, rgba(255,255,255,0.45) 100%, transparent),
+    radial-gradient(0.5px 0.5px at 75% 65%, rgba(255,255,255,0.45) 100%, transparent),
+    radial-gradient(0.5px 0.5px at 85% 38%, rgba(255,255,255,0.45) 100%, transparent),
+    radial-gradient(0.5px 0.5px at 95% 80%, rgba(255,255,255,0.45) 100%, transparent);
 }
 .flag { font-size: 26px; }
 .title h1 { font-size: 16px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
