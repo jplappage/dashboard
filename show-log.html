@@ -444,7 +444,10 @@
 </head>
 <body>
 
-<a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
+<div class="top-bar">
+  <a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
+  <span id="sync-status" class="sync-status" title="Tap to re-sync" onclick="loadFromCloud().then(()=>render())"></span>
+</div>
 <header>
   <div class="header-left">
     <h1>Show Log</h1>
@@ -459,7 +462,6 @@
   <button class="filter-btn" onclick="setFilter('archive', this)">📦 ARCHIVE</button>
   <input type="search" id="search-input" class="search-input" placeholder="Search shows…" oninput="setSearch(this.value)">
   <div class="filter-spacer"></div>
-  <span id="sync-status" class="sync-status" title="Tap to re-sync" onclick="loadFromCloud().then(()=>render())"></span>
   <button class="clear-btn" onclick="clearAll()">Clear all marks</button>
 </div>
 
