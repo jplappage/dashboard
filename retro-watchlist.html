@@ -854,13 +854,10 @@ async function loadFromCloud() {
   try {
     // cache: 'no-store' prevents the browser returning a stale cached response
     // after a PUT (which would undo recent unticks on refresh)
-    const r = await fetch(BIN_URL + '/latest', {
-      headers: { 'X-Master-Key': BIN_KEY },
-      cache: 'no-store'
-    });
+    const r = await fetch(GIST_URL, { headers: HEADERS, cache: 'no-store' });
     if (!r.ok) throw new Error(r.status);
     const j = await r.json();
-    binCache = j.record || {};
+    binCache = JSON.parse(j.files[GIST_FILE]?.content || '{}');
 
     const allKeys      = Object.keys(binCache);
     const cloudEntries = allKeys.filter(k => !isNaN(Number(k)) && typeof binCache[k] === 'string');
@@ -882,7 +879,7 @@ async function loadFromCloud() {
       watchedData = getLocalData();
       const merged = {};
       Object.assign(merged, watchedData);
-      await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(merged) });
+      await fetch(GIST_URL, { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(merged) } } }) });
       binCache = merged;
       setSyncStatus('ok');
     }
@@ -901,8 +898,8 @@ async function saveToCloud() {
   try {
     // If binCache is null (load failed), fetch before PUT to preserve lineup keys
     if (!binCache) {
-      const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY }, cache: 'no-store' });
-      binCache = gr.ok ? ((await gr.json()).record || {}) : {};
+      const gr = await fetch(GIST_URL, { headers: HEADERS, cache: 'no-store' });
+      binCache = gr.ok ? JSON.parse((await gr.json()).files[GIST_FILE]?.content || '{}') : {};
     }
     // Build merged bin: non-watchlist keys from binCache (lineup_* etc.) + watchedData
     // Cannot use Object.assign(binCache, watchedData) — it can't express deletions,
@@ -910,7 +907,7 @@ async function saveToCloud() {
     const merged = {};
     Object.keys(binCache).forEach(k => { if (isNaN(Number(k))) merged[k] = binCache[k]; });
     Object.assign(merged, watchedData);
-    const r = await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(merged) });
+    const r = await fetch(GIST_URL, { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(merged) } } }) });
     if (!r.ok) throw new Error(r.status);
     binCache = merged;
     syncDirty = false;
