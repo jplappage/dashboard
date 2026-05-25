@@ -366,8 +366,11 @@ header::before {
 </head>
 <body>
 
-<header>
+<div class="top-bar">
   <a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
+  <span id="sync-status" class="sync-status"></span>
+</div>
+<header>
   <span class="flag" id="teamFlag"><img src="https://a.espncdn.com/i/teamlogos/soccer/500/364.png" style="height:36px;width:auto;filter:brightness(0) invert(1);opacity:0.9"></span>
   <div class="title">
     <h1 id="teamName">Liverpool</h1>
@@ -399,7 +402,6 @@ header::before {
       <span class="xi-denom">/11</span>
       <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
     </div>
-    <span id="sync-status" class="sync-status"></span>
   </div>
 </header>
 
