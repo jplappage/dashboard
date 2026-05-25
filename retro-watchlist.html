@@ -888,7 +888,7 @@ async function loadFromCloud() {
   } catch(e) {
     // Offline — fall back to localStorage or Letterboxd defaults
     watchedData = getLocalData();
-    setSyncStatus('error');
+    setSyncStatus('error', e.message);
   }
 }
 
@@ -915,7 +915,7 @@ async function saveToCloud() {
     syncDirty = false;
     setSyncStatus('ok');
   } catch(e) {
-    setSyncStatus('error');
+    setSyncStatus('error', e.message);
   }
 }
 
