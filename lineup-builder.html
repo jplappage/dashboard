@@ -1095,14 +1095,4 @@ document.querySelectorAll('.ttab').forEach(t => t.addEventListener('click', () =
 try { localStorage.removeItem('liverpool_lineup_v1'); } catch(e) {}
 
 // Apply France CSS vars on load
-const root = document.documentElement;
-Object.entries(TEAM_CONFIG.liverpool.css).forEach(([k,v]) => root.style.setProperty(k,v));
-
-// Load from cloud then render — renderOnly so init doesn't trigger a save
-(async () => {
-  await loadStateFromCloud(activeTeam);
-  requestAnimationFrame(() => renderOnly());
-})();
-</script>
-</body>
-</html>
+const root = document

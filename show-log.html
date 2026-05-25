@@ -883,12 +883,4 @@ async function init() {
   } catch(_){}
 
   render();              // thumbCache already populated → images inline from the start
-  await loadFromCloud(); // sync marks from cloud
-  render();              // re-render with updated marks (thumbCache still populated)
-  loadThumbs();          // fetch any missing thumbnails in the background
-}
-
-init();
-</script>
-</body>
-</html>
+  await loadFromCloud(); /
