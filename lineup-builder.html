@@ -655,9 +655,9 @@ function applyStateData(s) {
 async function loadStateFromCloud(teamId) {
   setSyncStatus('loading');
   try {
-    const r = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+    const r = await fetch(GIST_URL, { headers: BIN_HEADERS, cache: 'no-store' });
     if (!r.ok) throw new Error();
-    binCache = (await r.json()).record || {};
+    binCache = JSON.parse((await r.json()).files[GIST_FILE]?.content || '{}');
     applyStateData(binCache[cloudKey(teamId)]);
     setSyncStatus('ok');
   } catch(e) {
@@ -681,11 +681,11 @@ function saveState() {
       // If binCache is null (cloud load failed at startup), fetch before PUT
       // to avoid overwriting other teams' data with an empty object
       if (!binCache) {
-        const gr = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
-        binCache = gr.ok ? ((await gr.json()).record || {}) : {};
+        const gr = await fetch(GIST_URL, { headers: BIN_HEADERS, cache: 'no-store' });
+        binCache = gr.ok ? JSON.parse((await gr.json()).files[GIST_FILE]?.content || '{}') : {};
       }
       binCache[cloudKey(activeTeam)] = currentStateObj();
-      const r = await fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(binCache) });
+      const r = await fetch(GIST_URL, { method: 'PATCH', headers: BIN_HEADERS, body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(binCache) } } }) });
       if (!r.ok) throw new Error();
       syncDirty = false;
       setSyncStatus('ok');
@@ -703,7 +703,7 @@ document.addEventListener('visibilitychange', () => {
     clearTimeout(saveTimer);
     const cache = binCache || {};
     cache[cloudKey(activeTeam)] = currentStateObj();
-    fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(cache), keepalive: true }).catch(() => {});
+    fetch(GIST_URL, { method: 'PATCH', headers: BIN_HEADERS, body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(cache) } } }), keepalive: true }).catch(() => {});
   }
 });
 
