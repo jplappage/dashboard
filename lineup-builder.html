@@ -765,7 +765,7 @@ function switchTeam(teamId) {
   // 4. Push the updated binCache (contains both teams' latest state) to cloud once
   if (binCache) {
     setSyncStatus('loading');
-    fetch(BIN_URL, { method: 'PUT', headers: BIN_HEADERS, body: JSON.stringify(binCache) })
+    fetch(GIST_URL, { method: 'PATCH', headers: BIN_HEADERS, body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(binCache) } } }) })
       .then(r => { if (r.ok) { syncDirty = false; setSyncStatus('ok'); } else throw new Error(); })
       .catch(() => setSyncStatus('error'));
   }
