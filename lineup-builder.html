@@ -616,10 +616,11 @@ let dragFrom   = null;
 // ════════════════════════════════════════════════════════
 //  JSONBIN SYNC
 // ════════════════════════════════════════════════════════
-const BIN_ID      = '6a0b8c4c6610dd3ae8686daa';
-const BIN_KEY     = '$2a$10$SJVrSiNiFsJsoMmOpmqGJOQmdrFpT0rTGMjv4ADrfdu5QfYyzkqLS';
-const BIN_URL     = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-const BIN_HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY };
+const GIST_ID      = '0a9d2e8430f52f59673caff8e55d7b1b';
+const GIST_KEY     = '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';
+const GIST_URL     = `https://api.github.com/gists/${GIST_ID}`;
+const GIST_FILE    = 'watchlist.json';
+const BIN_HEADERS  = { 'Content-Type': 'application/json', 'Authorization': `token ${GIST_KEY}`, 'Accept': 'application/vnd.github.v3+json' };
 
 let binCache  = null;  // full bin record cached in memory
 let saveTimer = null;

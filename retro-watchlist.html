@@ -925,7 +925,7 @@ document.addEventListener('visibilitychange', () => {
     const payload = {};
     if (binCache) Object.keys(binCache).forEach(k => { if (isNaN(Number(k))) payload[k] = binCache[k]; });
     Object.assign(payload, watchedData);
-    fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
+    fetch(GIST_URL, { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(payload) } } }), keepalive: true }).catch(() => {});
   }
 });
 
