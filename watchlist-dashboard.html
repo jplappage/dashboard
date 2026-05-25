@@ -975,16 +975,3 @@ function renderCalendar() {
     (CAL_EVENTS[ds] || []).forEach(ev => {
       const s = document.createElement('span');
       s.className = 'cal-event ' + ev.cls;
-      s.textContent = ev.title;
-      s.title = ev.title;
-      cell.appendChild(s);
-    });
-    grid.appendChild(cell);
-  }
-}
-
-renderFilms();
-</script>
-
-</body>
-</html>
