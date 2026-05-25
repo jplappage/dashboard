@@ -851,9 +851,21 @@ function buildMainSection(shows) {
 }
 
 
+function parseDateFromNext(next) {
+  if (!next) return Infinity;
+  const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+  const m = next.match(/(\d+)?\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*(\d{4})/i);
+  if (!m) return Infinity;
+  const day = m[1] ? parseInt(m[1]) : 1;
+  const month = months[m[2].toLowerCase().slice(0,3)];
+  const year = parseInt(m[3]);
+  return new Date(year, month, day).getTime();
+}
+
 function buildComingSoonSection(shows) {
   const alpha = (a, b) => a.name.localeCompare(b.name);
-  const announced = shows.filter(s => hasSpecificDate(s.next)).sort(alpha);
+  const byDate = (a, b) => parseDateFromNext(a.next) - parseDateFromNext(b.next);
+  const announced = shows.filter(s => hasSpecificDate(s.next)).sort(byDate);
   const awaiting  = shows.filter(s => !hasSpecificDate(s.next)).sort(alpha);
   let html = '';
   if (announced.length) {
