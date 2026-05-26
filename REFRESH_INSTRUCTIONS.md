@@ -1,77 +1,99 @@
 # Films Watchlist VOD Dashboard — Refresh Instructions
 
-## Step 1 — Check Letterboxd for film changes
-→ `https://letterboxd.com/zidanejp/watchlist/`
+## Step 1 — Sync with Letterboxd
 
-Compare the watchlist against the FILMS array in `watchlist-dashboard.html`.
-- **Added** films: note them for Step 2
-- **Removed** films: note them for Step 3
+Fetch `https://letterboxd.com/zidanejp/watchlist/` and compare against the FILMS array in `watchlist-dashboard.html`.
+
+- **New films** (on Letterboxd, not in FILMS array): add them — see Step 2
+- **Removed films** (in FILMS array, not on Letterboxd): they've been watched — archive them — see Step 3
+
+---
 
 ## Step 2 — Add new films
-For each new film from Step 1:
+
+For each new film, add an entry to the FILMS array:
+
 ```js
 {
   title: '',
   year: 2026,
-  slug: '',           // letterboxd slug (from the film's letterboxd URL)
+  slug: '',           // from the film's Letterboxd URL
   poster: '',         // https://a.ltrbxd.com/resized/film-poster/...
   vodDate: null,
   platform: null,
   estimated: false,
-  imdbRating: 7.5,    // only if the film has been released and is rated on imdb.com
+  imdbRating: null,   // add only if found in Step 4 below
 }
 ```
 
+Get the poster URL from the film's Letterboxd page (inspect the poster `<img>` src).
+
+---
+
 ## Step 3 — Archive removed films
-For any film no longer on the Letterboxd watchlist:
-- Check `https://letterboxd.com/zidanejp/films/diary/` to confirm it was watched
-- Remove it from the FILMS array in the dashboard
-- Add it to the `WATCHED` list in `generate_ics.py` with the watched date if known
 
-## Step 4 — Look up streaming dates
-For every film with `vodDate: null` or `estimated: true`:
+For any film no longer on Letterboxd:
+- Remove it from the FILMS array in `watchlist-dashboard.html`
+- Add it to the `WATCHED` list in `generate_ics.py` with the watched date (check `https://letterboxd.com/zidanejp/films/diary/` if needed)
 
-**~90% of announcements will appear on whentostream first. This is the primary sweep.**
+---
 
-1. Go to `https://whentostream.com/` — check the homepage for recent announcements
-2. Search for each film by name on the site
-3. If whentostream shows a confirmed date, update `vodDate`, `platform`, set `estimated: false`
-4. US digital release dates count — JP can access US digital platforms (Amazon, Apple TV, etc.)
+## Step 4 — IMDb ratings (determines released vs. not yet out)
 
-**For films with no whentostream result:**
-- If the theatrical release was **6+ weeks ago**, don't assume it's still cinema-only — search `"[film title]" rent buy UK` or check `amazon.co.uk`/`skystore.com` directly, as it may have quietly appeared on digital without a major announcement
-- Only mark `vodDate` if confirmed actually streaming now — not pre-order, not "coming soon"
+For **every film** with no `imdbRating`, search IMDb directly:
+`https://www.imdb.com/find/?q=[film+title]`
 
-**⚠️ JustWatch lag warning:** JustWatch data can be weeks out of date. Never use it as the sole source to conclude a film hasn't hit digital yet.
+- If the film has a rating on its IMDb page → add `imdbRating: X.X` to the entry. This means the film has had a theatrical release.
+- If the film has no rating yet → leave `imdbRating` as `null`. This means it hasn't been released.
+
+This step is important — the dashboard uses the presence of `imdbRating` to distinguish "Not Out Yet" from "Waiting" (released but not yet on VOD).
+
+---
+
+## Step 5 — Streaming dates
+
+For every film with `vodDate: null` or `estimated: true`, search for a confirmed digital release date.
+
+**Primary source — whentostream.com:**
+Search each film by name. `whentostream.com` is blocked in the sandbox, so use WebSearch with queries like:
+`site:whentostream.com "[film title]"`
+
+- If a confirmed date is found: set `vodDate: 'YYYY-MM-DD'`, `platform: '...'`, `estimated: false`
+- If only an estimated/expected date is found: set `estimated: true` and add a `note` field explaining (e.g. `'Digital expected Jun 2026'`)
+- US digital release dates are acceptable — JP can access US platforms (Amazon, Apple TV+, etc.)
+
+**If whentostream has no result:**
+Run a general web search: `"[film title]" digital release date rent buy`
+Check the film's IMDb page — sometimes the streaming date appears there.
+
+**Confirmed = streaming now or announced with a specific date. Estimated = expected window only.**
+
+⚠️ Never use JustWatch as the sole source — its data can be weeks out of date.
+⚠️ Pre-order ≠ available. Only mark `vodDate` if it is confirmed streaming now or on a specific announced date.
 
 ---
 
 ## Finally
-- Update the footer: `Last updated: DD Mon YYYY (refresh #N)`
-- The ICS calendar regenerates and deploys automatically on save
+
+- Update the footer in `watchlist-dashboard.html`: `Last updated: DD Mon YYYY (refresh #N)`
+- Run `push.bat` to deploy
 
 ---
 
-## Data Quality Rules
-
-**VOD dates:**
-- Pre-order ≠ available. Only mark `vodDate` if it is streaming right now.
-- Always verify on the platform's own site, not search results or aggregators.
-
-**IMDB ratings:**
-- Only add `imdbRating` if the film has been released and has a rating on its IMDB page.
-- Films releasing today or in future will not have a real rating yet.
+## Data Rules
 
 **Platform names — use consistent formatting:**
 `'Prime Video'` · `'Netflix'` · `'Disney+'` · `'Apple TV+'` · `'MUBI'` · `'Sky Cinema / NOW'` · `'Paramount+'`
-For multiple: `'Prime Video / Apple TV+'`
+For multiple platforms: `'Prime Video / Apple TV+'`
+
+**IMDb ratings:** Only populate `imdbRating` from the film's actual IMDb page. Never guess or use aggregator estimates.
 
 ---
 
 ## Reference
-- JP is based in **GB** — use UK streaming platforms and dates
-- Cinema release dates are irrelevant — VOD/streaming only
-- Live site: `https://jplappage.github.io/dashboard/`
-- Letterboxd: `https://letterboxd.com/zidanejp/watchlist/`
-- Plex links: `https://watch.plex.tv/en-GB/movie/{letterboxd-slug}`
-- `whentostream.com` is blocked in the sandbox — use WebSearch instead
+
+- Letterboxd watchlist: `https://letterboxd.com/zidanejp/watchlist/`
+- Letterboxd diary: `https://letterboxd.com/zidanejp/films/diary/`
+- Live dashboard: `https://jplappage.github.io/dashboard/`
+- Plex links use: `https://watch.plex.tv/en-GB/movie/{letterboxd-slug}`
+- JP is based in **GB** but US digital platforms are accessible and dates count
