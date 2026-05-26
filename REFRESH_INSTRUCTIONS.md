@@ -75,6 +75,35 @@ Check the film's IMDb page — sometimes the streaming date appears there.
 
 ---
 
+## Retro Watchlist refresh
+
+Open `retro-watchlist.html`. The `LETTERBOXD` object and `MY_RATINGS` object are the source of truth for watched films — they are fully up to date as of **19 May 2026**. Only the diary from that date onwards needs checking.
+
+### Check the diary for new watches
+
+Fetch `https://letterboxd.com/zidanejp/films/diary/` and look at entries **after 19 May 2026** only.
+
+For each diary entry after that date, check if the film title matches anything in the `FILMS` array in `retro-watchlist.html`. If it does:
+
+1. Add the film ID and watched date to the `LETTERBOXD` object:
+```js
+55: "2026-06-03", // Almost Famous
+```
+
+2. Add the personal rating (in half-star increments) to `MY_RATINGS`:
+```js
+55: 4.0, // Almost Famous
+```
+
+3. Update the comment at the top of the `LETTERBOXD` block to reflect the new cutoff date:
+```js
+// Pre-populated from zidanejp's Letterboxd diary (scraped [DD Mon YYYY])
+```
+
+The watched marks in the live page are seeded from `LETTERBOXD` on first load — so updating the file is all that's needed.
+
+---
+
 ## Show Log refresh
 
 Open `show-log.html` and work through every show with `status: "ongoing"`.
