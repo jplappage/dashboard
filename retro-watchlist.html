@@ -991,14 +991,10 @@ async function loadFromCloud() {
       cloudEntries.forEach(k => { watchedData[Number(k)] = binCache[k]; });
       localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
       setSyncStatus('ok');
-    } else if (allKeys.length > 0) {
-      // Bin has data (e.g. lineup keys) but zero watched films —
-      // user has unticked everything; treat as intentional empty state
-      watchedData = {};
-      localStorage.setItem('jpWatchlist_v2', JSON.stringify(watchedData));
-      setSyncStatus('ok');
     } else {
-      // Bin is genuinely empty (first-time setup) — seed from localStorage or Letterboxd defaults
+      // No watched films in cloud — fall back to localStorage.
+      // The Gist may contain non-numeric keys from other pages (lineup, showLog etc.)
+      // so we can't treat their presence as "user intentionally cleared everything".
       watchedData = getLocalData();
       const merged = {};
       Object.assign(merged, watchedData);
