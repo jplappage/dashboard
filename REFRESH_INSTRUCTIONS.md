@@ -73,6 +73,40 @@ Check the film's IMDb page — sometimes the streaming date appears there.
 
 ---
 
+---
+
+## Show Log refresh
+
+Open `show-log.html` and work through every show with `status: "ongoing"`.
+
+### A — Dates that have passed
+
+Check each show's `next` field. If it contains a specific date (e.g. `"S3 · 21 Jun 2026"`) and that date is today or in the past:
+
+1. Increment `aired` by 1 (the new season has started airing)
+2. Update `next` to whatever comes after — if unknown, set `next: null`
+3. The show will automatically reappear in the Watchlist section on next load (new unwatched season)
+
+Example — after 21 Jun 2026 passes:
+```js
+// Before
+{name:"House of the Dragon", status:"ongoing", aired:2, next:"S3 · 21 Jun 2026"},
+// After
+{name:"House of the Dragon", status:"ongoing", aired:3, next:null},
+```
+
+### B — Look up release dates for vague entries
+
+For any show where `next` is vague (e.g. `"S2 · Fall 2026"`, `"S3 · est. 2027"`, `"S2 · confirmed"`), search the web:
+`"[show name]" season [N] premiere date 2026`
+
+- If a specific date is now confirmed → update `next` to include it (e.g. `"S2 · 14 Sep 2026"`)
+- If still vague → leave as-is or update the estimate if a better window is known
+
+Only update `next` with a date if it is a confirmed premiere date, not a rumour.
+
+---
+
 ## Finally
 
 - Update the footer in `watchlist-dashboard.html`: `Last updated: DD Mon YYYY (refresh #N)`
