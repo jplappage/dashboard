@@ -30,6 +30,7 @@ WATCHED = [
     { 'title': 'The Punisher: One Last Kill', 'vodDate': '2026-05-12', 'imdbRating': 5.7 },
     { 'title': 'Faces of Death', 'vodDate': '2026-05-12', 'imdbRating': 6.8 },
     { 'title': 'Swapped', 'vodDate': '2026-05-01', 'imdbRating': 7.3 },
+    { 'title': 'Star Wars: The Mandalorian & Grogu', 'vodDate': '2026-07-21', 'imdbRating': 7.1 },
 ]
 
 
