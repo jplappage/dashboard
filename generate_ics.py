@@ -31,6 +31,7 @@ WATCHED = [
     { 'title': 'Faces of Death', 'vodDate': '2026-05-12', 'imdbRating': 6.8 },
     { 'title': 'Swapped', 'vodDate': '2026-05-01', 'imdbRating': 7.3 },
     { 'title': 'Star Wars: The Mandalorian & Grogu', 'vodDate': '2026-07-21', 'imdbRating': 7.1 },
+    { 'title': 'The Magic Faraway Tree', 'vodDate': '2026-05-18', 'imdbRating': 6.8 },
 ]
 
 
