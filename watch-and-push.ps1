@@ -30,7 +30,7 @@ try {
             if (($now - $lastPush).TotalMilliseconds -gt $debounceMs) {
                 $global:pendingChange = $false
                 $lastPush = $now
-                Write-Host "$($now.ToString('HH:mm:ss')) — Change detected, pushing..." -ForegroundColor Yellow
+                Write-Host "$($now.ToString('HH:mm:ss')) - Change detected, pushing..." -ForegroundColor Yellow
                 Push-Location $folder
                 & "$folder\push.bat"
                 Pop-Location

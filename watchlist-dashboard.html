@@ -337,26 +337,23 @@
       bottom: 8px;
       right: 8px;
       z-index: 10;
-      background: rgba(0,0,0,0.75);
+      background: rgba(30,30,30,0.85);
       border-radius: 6px;
-      padding: 4px 6px;
+      padding: 4px;
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #e5a00d;
       text-decoration: none;
       opacity: 0;
       transition: opacity 0.2s;
-      white-space: nowrap;
     }
     .card:hover .plex-btn {
       opacity: 1;
     }
     .plex-btn img {
-      height: 14px;
-      border-radius: 2px;
+      height: 18px;
+      width: 18px;
+      border-radius: 3px;
+      display: block;
     }
 
     .card-overlay {
@@ -669,6 +666,7 @@ const FILMS = [
     title: 'Deep Water',
     year: 2026,
     slug: 'deep-water-2026',
+    lbSlug: 'deep-water-1',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/1/5/7/6/5/1015765-deep-water-2026-0-230-0-345-crop.jpg?v=bd2c4b8363',
     vodDate: '2026-06-16',
     platform: 'Digital (Magenta Light)',
@@ -957,8 +955,8 @@ function renderCard(film) {
     ? `<img src="${film.poster}" alt="${film.title}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`
     : '';
 
-  const plexBtn = film.slug ? `<a href="${plexUrl(film.slug)}" target="_blank" rel="noopener" class="plex-btn" onclick="event.stopPropagation()"><img src="https://logo.clearbit.com/plex.tv" alt="Plex" onerror="this.style.display='none'">Plex</a>` : '';
-  const lbUrl = `https://letterboxd.com/film/${film.slug}/`;
+  const lbUrl = `https://letterboxd.com/film/${film.lbSlug || film.slug}/`;
+  const plexBtn = film.slug ? `<a href="${plexUrl(film.slug)}" target="_blank" rel="noopener" class="plex-btn" onclick="event.stopPropagation()"><img src="https://logo.clearbit.com/plex.tv" alt="Plex" onerror="this.style.display='none'"></a>` : '';
 
   return `
     <div class="card" onclick="window.open('${lbUrl}','_blank')" role="link" tabindex="0">
@@ -967,7 +965,6 @@ function renderCard(film) {
         <div class="poster-placeholder" style="${film.poster ? 'display:none' : ''}">🎬</div>
         <span class="badge ${badgeClass}">${badgeText}</span>
         ${imdbBadge}
-        ${plexBtn}
       </div>
       <div class="card-overlay">
         <span class="card-overlay-text">Letterboxd →</span>
@@ -978,6 +975,7 @@ function renderCard(film) {
         <div class="card-date ${dateClass}">${dateText}</div>
         ${estHtml}
       </div>
+      ${plexBtn}
     </div>
   `;
 }
