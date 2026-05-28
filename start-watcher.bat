@@ -1,2 +1,2 @@
 @echo off
-powershell -WindowStyle Hidden -ExecutionPolicy Bypass -File "C:\Users\jplap\Documents\Claude\Projects\Watchlist v4\auto-deploy.ps1"
+powershell -NoExit -ExecutionPolicy Bypass -File "%~dp0watch-and-push.ps1"

@@ -961,7 +961,7 @@ function renderCard(film) {
   const lbUrl = `https://letterboxd.com/film/${film.slug}/`;
 
   return `
-    <a href="${lbUrl}" target="_blank" rel="noopener" class="card">
+    <div class="card" onclick="window.open('${lbUrl}','_blank')" role="link" tabindex="0">
       <div class="poster-wrap">
         ${posterHtml}
         <div class="poster-placeholder" style="${film.poster ? 'display:none' : ''}">🎬</div>
@@ -978,7 +978,7 @@ function renderCard(film) {
         <div class="card-date ${dateClass}">${dateText}</div>
         ${estHtml}
       </div>
-    </a>
+    </div>
   `;
 }
 
