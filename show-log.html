@@ -572,18 +572,18 @@ const SHOWS = [
   {name:"The Last of Us",                        status:"ongoing",  aired:2, next:"S3 · filming · est. 2027"},
   {name:"Monarch: Legacy of Monsters",           status:"ongoing",  aired:2, next:"S3 · unannounced"},
   {name:"A Knight of the Seven Kingdoms",        status:"ongoing",  aired:1, next:"S2 · filming 2027"},
-  {name:"It: Welcome to Derry",                  status:"ongoing",  aired:1, next:"S2 · in dev"},
+  {name:"It: Welcome to Derry",                  status:"ongoing",  aired:1, next:"S2 · est. Oct 2027"},
   {name:"Splinter Cell: Deathwatch",             status:"ongoing",  aired:1, next:"S2 · est. late 2026"},
-  {name:"Alien: Earth",                          status:"ongoing",  aired:1, next:"S2 · est. 2027"},
+  {name:"Alien: Earth",                          status:"ongoing",  aired:1, next:"S2 · est. late 2027"},
   {name:"The Paper",                             status:"ongoing",  aired:1, next:"S2 · 4 Sep 2026"},
   {name:"Peacemaker",                            status:"ongoing",  aired:2, next:null},
   {name:"The Studio",                            status:"ongoing",  aired:1, next:"S2 · late 2026"},
   {name:"Dexter: Resurrection",                  status:"ongoing",  aired:1, next:"S2 · Oct 2026"},
   {name:"MobLand",                               status:"ongoing",  aired:1, next:"S2 · 1 Nov 2026"},
   {name:"Dune: Prophecy",                        status:"ongoing",  aired:1, next:"S2 · Nov 2026"},
-  {name:"Twisted Metal",                         status:"ongoing",  aired:2, next:"S3 · est. 2027"},
+  {name:"Twisted Metal",                         status:"ongoing",  aired:2, next:"S3 · 1 Jul 2027"},
   {name:"The Witcher",                           status:"ongoing",  aired:4, next:"S5 · 2026 · final season"},
-  {name:"Fallout",                               status:"ongoing",  aired:2, next:"S3 · filming · est. 2027"},
+  {name:"Fallout",                               status:"ongoing",  aired:2, next:"S3 · filming · est. late 2027"},
   {name:"The Gentlemen",                         status:"ongoing",  aired:1, next:"S2 · Fall 2026"},
   {name:"Severance",                             status:"ongoing",  aired:2, next:"S3 · est. Summer 2027"},
   {name:"Rings of Power",                        status:"ongoing",  aired:2, next:"S3 · 11 Nov 2026"},
@@ -760,6 +760,7 @@ function setFilter(f, btn) {
 
 function hasSpecificDate(next) {
   if (!next) return false;
+  if (/\best\.?\b/i.test(next)) return false; // estimated = not confirmed, goes to Awaiting
   return /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/i.test(next);
 }
 
@@ -1000,10 +1001,4 @@ async function init() {
   render();              // thumbCache already populated → images inline from the start
   await loadFromCloud(); // sync marks from cloud
   render();              // re-render with updated marks (thumbCache still populated)
-  loadThumbs();          // fetch any missing thumbnails in the background
-}
-
-init();
-</script>
-</body>
-</html>
+ 
