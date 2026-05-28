@@ -589,6 +589,7 @@ const SHOWS = [
   {name:"Rings of Power",                        status:"ongoing",  aired:2, next:"S3 · 11 Nov 2026"},
   {name:"House of the Dragon",                   status:"ongoing",  aired:2, next:"S3 · 21 Jun 2026"},
   {name:"Ted Lasso",                             status:"ongoing",  aired:3, next:"S4 · 5 Aug 2026"},
+  {name:"Ted",                                   status:"ongoing",  aired:2, next:null},
   {name:"Tires",                                 status:"ongoing",  aired:2, next:"S3 · 13 Aug 2026"},
   {name:"The Boys",                              status:"finished", aired:5, next:null},
   {name:"Stranger Things: Tales from '85",       status:"ongoing",  aired:1, next:"S2 · Fall 2026"},
@@ -890,9 +891,13 @@ function render() {
 
   let html = '';
 
-  if (!searchQuery && currentFilter === 'coming-soon') {
+  if (searchQuery) {
+    // Search: show all matching shows regardless of watch state, sorted A–Z
+    const sorted = [...visible].sort((a,b) => a.name.localeCompare(b.name));
+    html += `<div class="card-grid">${sorted.map(buildCard).join('')}</div>`;
+  } else if (currentFilter === 'coming-soon') {
     html += buildComingSoonSection(visible);
-  } else if (!searchQuery && currentFilter === 'archive') {
+  } else if (currentFilter === 'archive') {
     const sorted = [...visible].sort((a,b) => a.name.localeCompare(b.name));
     html += `<div class="card-grid">${sorted.map(buildCard).join('')}</div>`;
   } else {
@@ -1001,4 +1006,25 @@ async function init() {
   render();              // thumbCache already populated → images inline from the start
   await loadFromCloud(); // sync marks from cloud
   render();              // re-render with updated marks (thumbCache still populated)
- 
+  loadThumbs();          // fetch any missing thumbnails in the background
+}
+
+init();
+</script>
+</body>
+</html>
+p(([k, v]) => [k, String(v).replace('http://', 'https://')])
+      );
+    }
+  } catch(_){}
+
+  render();              // thumbCache already populated → images inline from the start
+  await loadFromCloud(); // sync marks from cloud
+  render();              // re-render with updated marks (thumbCache still populated)
+  loadThumbs();          // fetch any missing thumbnails in the background
+}
+
+init();
+</script>
+</body>
+</html>
