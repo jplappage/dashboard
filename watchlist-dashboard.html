@@ -332,6 +332,33 @@
       opacity: 1;
     }
 
+    .plex-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      z-index: 10;
+      background: rgba(0,0,0,0.75);
+      border-radius: 6px;
+      padding: 4px 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #e5a00d;
+      text-decoration: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .card:hover .plex-btn {
+      opacity: 1;
+    }
+    .plex-btn img {
+      height: 14px;
+      border-radius: 2px;
+    }
+
     .card-overlay {
       position: absolute;
       inset: 0;
@@ -930,16 +957,20 @@ function renderCard(film) {
     ? `<img src="${film.poster}" alt="${film.title}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`
     : '';
 
+  const plexBtn = film.slug ? `<a href="${plexUrl(film.slug)}" target="_blank" rel="noopener" class="plex-btn" onclick="event.stopPropagation()"><img src="https://logo.clearbit.com/plex.tv" alt="Plex" onerror="this.style.display='none'">Plex</a>` : '';
+  const lbUrl = `https://letterboxd.com/film/${film.slug}/`;
+
   return `
-    <a href="${plexUrl(film.slug)}" target="_blank" rel="noopener" class="card">
+    <a href="${lbUrl}" target="_blank" rel="noopener" class="card">
       <div class="poster-wrap">
         ${posterHtml}
         <div class="poster-placeholder" style="${film.poster ? 'display:none' : ''}">🎬</div>
         <span class="badge ${badgeClass}">${badgeText}</span>
         ${imdbBadge}
+        ${plexBtn}
       </div>
       <div class="card-overlay">
-        <span class="card-overlay-text">▶ Watch on Plex</span>
+        <span class="card-overlay-text">Letterboxd →</span>
       </div>
       <div class="card-body">
         <div class="card-title">${film.title}${newBadge}</div>
