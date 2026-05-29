@@ -876,7 +876,7 @@ function formatDate(dateStr) {
 }
 
 function plexUrl(film) {
-  return `https://watch.plex.tv/search?q=${encodeURIComponent(film.title)}`;
+  return `https://watch.plex.tv/en-GB/movie/${film.slug}`;
 }
 
 let statusFilter = 'all';
