@@ -48,15 +48,16 @@ try {
             Invoke-Push "Change detected"
         }
 
-        # Also check for unpushed commits every 10s
+        # Also check for uncommitted/unpushed changes every 10s
         $now = [datetime]::Now
         if (($now - $lastCheck).TotalMilliseconds -gt $checkIntervalMs) {
             $lastCheck = $now
             Push-Location $folder
+            $uncommitted = git status --porcelain 2>$null
             $unpushed = git log origin/main..HEAD --oneline 2>$null
             Pop-Location
-            if ($unpushed) {
-                Invoke-Push "Unpushed commits detected"
+            if ($uncommitted -or $unpushed) {
+                Invoke-Push "Pending changes detected"
             }
         }
     }
