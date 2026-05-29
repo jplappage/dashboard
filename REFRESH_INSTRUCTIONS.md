@@ -45,6 +45,9 @@ WebSearch `site:whentostream.com "[title]"` — confirmed date = set `vodDate` +
 
 **For each new film from Letterboxd:**
 Fetch the film's Letterboxd page to get the poster `<img>` src URL and the slug from the URL.
+Then verify both the Letterboxd and Plex slugs:
+- Fetch `https://letterboxd.com/film/{slug}/` — if it 404s, find the correct slug and set `lbSlug: 'correct-slug'`
+- Fetch `https://watch.plex.tv/en-GB/movie/{slug}/` — if it 404s or returns the wrong film, try `{slug}-{year}` and set `plexSlug: 'correct-slug'` if different
 
 **For each show with a vague `next` field:**
 WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = update `next`. Still vague = leave or refine the window.
@@ -59,7 +62,7 @@ The watched date comes from the diary (already loaded). Personal rating comes fr
 Apply everything found in Phases 2–3 in a single editing pass per file:
 
 **`watchlist-dashboard.html`**
-- Add new film entries (with poster, slug, imdbRating if known, vodDate if known)
+- Add new film entries (with poster, slug, imdbRating if known, vodDate if known, lbSlug if different from slug, plexSlug if different from slug)
 - Remove archived films
 - Update `vodDate`, `platform`, `estimated` for any films with new streaming dates
 - Add/update `imdbRating` for newly released films
@@ -87,7 +90,8 @@ Run `push.bat` to deploy.
 - Letterboxd watchlist: `https://letterboxd.com/zidanejp/watchlist/`
 - Letterboxd diary: `https://letterboxd.com/zidanejp/films/diary/`
 - Live dashboard: `https://jplappage.github.io/dashboard/`
-- Plex links: `https://watch.plex.tv/en-GB/movie/{letterboxd-slug}`
+- Plex links: `https://watch.plex.tv/en-GB/movie/{slug}` — use `plexSlug` field to override when Plex slug differs from Letterboxd slug (e.g. Plex adds a year suffix like `fuze-2026`)
+- Letterboxd links: `https://letterboxd.com/film/{slug}/` — use `lbSlug` field to override when needed (e.g. `deep-water-1`)
 - JP is in **GB** — UK platforms preferred, but US digital dates count
 - `whentostream.com` is sandbox-blocked — always use WebSearch instead
 - Retro watchlist scrape cutoff: check the comment above `const LETTERBOXD` in `retro-watchlist.html`

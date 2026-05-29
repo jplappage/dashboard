@@ -631,7 +631,7 @@
 </div>
 
 <div class="last-updated">
-  Last updated: 28 May 2026 (refresh #39) · Auto-deploy active ✓ · Sources: WhenToStream, JustWatch, Wikipedia · <a href="/dashboard/" style="color:#ffe81f;font-size:0.72rem;text-decoration:none;">←</a> · <a href="/dashboard/watchlist.ics" style="color:#ffe81f;font-size:0.72rem;text-decoration:none;" title="Subscribe in Google Calendar">📅 Calendar feed</a>
+  Last updated: 29 May 2026 (refresh #40) · Auto-deploy active ✓ · Sources: WhenToStream, JustWatch, Wikipedia · <a href="/dashboard/" style="color:#ffe81f;font-size:0.72rem;text-decoration:none;">←</a> · <a href="/dashboard/watchlist.ics" style="color:#ffe81f;font-size:0.72rem;text-decoration:none;" title="Subscribe in Google Calendar">📅 Calendar feed</a>
 </div>
 
 <script>
@@ -743,18 +743,6 @@ const FILMS = [
     imdbRating: 7.1,
   },
   {
-    title: 'Over Your Dead Body',
-    year: 2026,
-    slug: 'over-your-dead-body-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/7/4/4/9/0/1274490-over-your-dead-body-2026-0-230-0-345-crop.jpg?v=5078cbe906',
-    vodDate: '2026-05-26',
-    platform: 'IFC / Digital',
-    estimated: false,
-    isNew: false,
-    imdbRating: 7.6,
-  },
-
-  {
     title: "California Schemin'",
     year: 2025,
     slug: 'california-schemin',
@@ -768,6 +756,7 @@ const FILMS = [
     title: 'Fuze',
     year: 2025,
     slug: 'fuze',
+    plexSlug: 'fuze-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/2/5/0/3/2/1125032-fuze-0-230-0-345-crop.jpg?v=86b23e167b',
     vodDate: '2026-05-26',
     platform: 'Digital / Sky Cinema',
@@ -876,7 +865,7 @@ function formatDate(dateStr) {
 }
 
 function plexUrl(film) {
-  return `https://watch.plex.tv/en-GB/movie/${film.slug}`;
+  return `https://watch.plex.tv/en-GB/movie/${film.plexSlug || film.slug}`;
 }
 
 let statusFilter = 'all';
