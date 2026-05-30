@@ -1015,12 +1015,6 @@ init();
 </script>
 </body>
 </html>
-p(([k, v]) => [k, String(v).replace('http://', 'https://')])
-      );
-    }
-  } catch(_){}
-
-  render();              // thumbCache already populated → images inline from the start
   await loadFromCloud(); // sync marks from cloud
   render();              // re-render with updated marks (thumbCache still populated)
   loadThumbs();          // fetch any missing thumbnails in the background
