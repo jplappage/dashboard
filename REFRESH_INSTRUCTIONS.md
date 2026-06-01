@@ -31,11 +31,18 @@ Run these comparisons immediately from the data loaded in Phase 1:
 **Retro watchlist**
 - Any diary entry after the cutoff date that matches a FILMS title → queue as new watch (need to add to LETTERBOXD + MY_RATINGS)
 
+**Before moving to Phase 3, write out explicit lists:**
+- Films to search (streaming date): [list every title]
+- Films to search (IMDb): [list every title]
+- Shows to search (vague next): [list every show name + current next value]
+
+Do not proceed until all three lists are complete. The show list must account for every entry in the SHOWS array — go through it line by line.
+
 ---
 
 ## Phase 3 — Research (all searches at once)
 
-Fire all of these simultaneously:
+Fire all searches simultaneously. Use the lists from Phase 2 — do not rely on memory.
 
 **For each film needing an IMDb check:**
 Search `https://www.imdb.com/find/?q=[title]` — does it have a rating? Yes = released, add `imdbRating`. No = leave null.
@@ -54,6 +61,12 @@ WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = upd
 
 **For each retro film newly watched:**
 The watched date comes from the diary (already loaded). Personal rating comes from the diary entry.
+
+**Before moving to Phase 4, verify:**
+- [ ] Every film with `vodDate: null` or `estimated: true` was searched
+- [ ] Every film with no `imdbRating` was searched
+- [ ] Every show with a vague `next` field was searched (check count against Phase 2 list)
+- [ ] All results have been applied or explicitly noted as no-change
 
 ---
 
