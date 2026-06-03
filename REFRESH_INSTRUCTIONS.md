@@ -38,6 +38,16 @@ Run these comparisons immediately from the data loaded in Phase 1:
 
 Do not proceed until all three lists are complete. The show list must account for every entry in the SHOWS array — go through it line by line.
 
+**What counts as "vague" for shows (must search ALL of these):**
+- `next: null` — no info at all
+- any next containing "est.", "unannounced", "in prod", "filming", or just a year with no month
+- any next with only a month/season but no specific day (e.g. "Oct 2026", "Fall 2026", "early 2027")
+
+**What does NOT need a search:**
+- next with a specific confirmed day+month+year (e.g. "S3 · 21 Jun 2026")
+
+This means the show search list is typically long (10–15+ shows). If your list has fewer than ~8 shows, recheck — you've probably missed some.
+
 ---
 
 ## Phase 3 — Research (all searches at once)
