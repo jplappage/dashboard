@@ -631,7 +631,7 @@
 </div>
 
 <div class="last-updated">
-  Last updated: 03 Jun 2026 (refresh #42) · Auto-deploy active ✓  · Sources: WhenToStream, JustWatch, Wikipedia · <a href="/dashboard/" style="color:#ffe81f;font-size:0.72rem;text-decoration:none;">←</a> · <a href="/dashboard/watchlist.ics" style="color:#ffe81f;font-size:0.72rem;text-decoration:none;" title="Subscribe in Google Calendar">📅 Calendar feed</a>
+  Last updated: 04 Jun 2026 (refresh #43) · Auto-deploy active ✓  · Sources: WhenToStream, JustWatch, Wikipedia · <a href="/dashboard/" style="color:#ffe81f;font-size:0.72rem;text-decoration:none;">←</a> · <a href="/dashboard/watchlist.ics" style="color:#ffe81f;font-size:0.72rem;text-decoration:none;" title="Subscribe in Google Calendar">📅 Calendar feed</a>
 </div>
 
 <script>
@@ -815,6 +815,27 @@ const FILMS = [
     platform: null,
     estimated: true,
     note: 'In cinemas Jun 26',
+  },
+  {
+    title: 'The Death of Robin Hood',
+    year: 2026,
+    slug: 'the-death-of-robin-hood',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/8/5/8/1167858-the-death-of-robin-hood-0-230-0-345-crop.jpg?v=39347a2edd',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas Jun 19 · Digital TBC',
+  },
+  {
+    title: 'The Invite',
+    year: 2026,
+    slug: 'the-invite-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/8/5/4/8/3/1/854831-the-invite-2026-0-230-0-345-crop.jpg?v=ee72905e48',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas Jun 26 · Digital TBC',
+    imdbRating: 6.2,
   },
 ];
 
@@ -1017,24 +1038,4 @@ function renderCalendar() {
     const pad = n => String(n).padStart(2,'0');
     const ds  = `${calYear}-${pad(calMonth+1)}-${pad(d)}`;
     const cell = document.createElement('div');
-    cell.className = 'cal-cell' + (new Date(calYear,calMonth,d).getTime()===TODAY.getTime() ? ' cal-today' : '');
-    const num = document.createElement('div');
-    num.className = 'cal-day-num';
-    num.textContent = d;
-    cell.appendChild(num);
-    (CAL_EVENTS[ds] || []).forEach(ev => {
-      const s = document.createElement('span');
-      s.className = 'cal-event ' + ev.cls;
-      s.textContent = ev.title;
-      s.title = ev.title;
-      cell.appendChild(s);
-    });
-    grid.appendChild(cell);
-  }
-}
-
-renderFilms();
-</script>
-
-</body>
-</html>
+    cell.className = 'cal-cell' + (new Date(calYear,calMon
