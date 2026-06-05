@@ -1,0 +1,7 @@
+﻿TASK NOT FOUND - WatchlistAutoDeploy does not exist in Task Scheduler
+
+--- start-watcher.bat exists? ---
+True
+
+--- watch-and-push.ps1 running? ---
+Not running
