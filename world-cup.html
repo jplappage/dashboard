@@ -642,10 +642,10 @@ function buildCard(f) {
   // Score / vs
   const scoreBlock = document.createElement('div');
   scoreBlock.className = 'score-block';
-  if (f.homeScore !== null) {
+  if (f.homeScore != null) {
     scoreBlock.innerHTML = `<span class="score">${f.homeScore}</span><span class="score-sep">–</span><span class="score">${f.awayScore}</span>`;
   } else {
-    scoreBlock.innerHTML = `<span class="score-sep" style="font-size:0.75rem;letter-spacing:1px">vs</span>`;
+    scoreBlock.innerHTML = `<span class="score-sep" style="font-size:0.75rem;letter-spacing:1px">v</span>`;
   }
 
   // Away team
