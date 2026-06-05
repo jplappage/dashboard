@@ -1270,4 +1270,8 @@ Object.entries(TEAM_CONFIG.france.css).forEach(([k,v]) => root.style.setProperty
 // Load from cloud then render — renderOnly so init doesn't trigger a save
 (async () => {
   await loadStateFromCloud(activeTeam);
-  requestAni
+  requestAnimationFrame(() => renderOnly());
+})();
+</script>
+</body>
+</html>      
