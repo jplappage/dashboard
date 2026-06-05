@@ -95,22 +95,21 @@
       z-index: 1;
     }
 
-    .nav-link {
-      padding: 6px 14px;
+    .back-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 14px;
       border-radius: 100px;
       border: 1px solid #333;
       background: transparent;
       color: #888;
-      font-size: 0.78rem;
-      cursor: pointer;
       text-decoration: none;
-      transition: all 0.15s ease;
+      font-size: 0.8rem;
+      transition: all 0.15s;
+      white-space: nowrap;
     }
-
-    .nav-link:hover {
-      border-color: rgba(255,232,31,0.5);
-      color: #ffe81f;
-    }
+    .back-arrow:hover { border-color: #ffe81f; background: rgba(255,232,31,0.08); }
 
     .filter-bar {
       display: flex;
@@ -333,8 +332,7 @@
       <p>Canada · Mexico · USA &nbsp;·&nbsp; 11 Jun – 19 Jul &nbsp;·&nbsp; 48 teams · 104 matches</p>
     </div>
     <div class="header-nav">
-      <a href="watchlist-dashboard.html" class="nav-link">Films</a>
-      <a href="show-log.html" class="nav-link">Shows</a>
+      <a href="index.html" class="back-arrow">← Back</a>
     </div>
   </header>
 
