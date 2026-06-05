@@ -617,6 +617,12 @@ function buildCard(f) {
   const homeTbd  = !FLAGS[f.home];
   const awayTbd  = !FLAGS[f.away];
 
+  function flagHtml(flag) {
+    if (!flag) return '';
+    if (flag.startsWith('http')) return `<img src="${flag}" alt="" style="width:26px;height:auto;border-radius:2px;flex-shrink:0;">`;
+    return `<span class="team-flag">${flag}</span>`;
+  }
+
   const card = document.createElement('div');
   card.className = 'match-card' + (f.homeScore !== null ? ' played' : '');
 
@@ -637,7 +643,7 @@ function buildCard(f) {
   // Home team
   const home = document.createElement('div');
   home.className = 'team home';
-  home.innerHTML = `<span class="team-name${homeTbd ? ' tbd' : ''}">${f.home}</span>${homeFlag ? `<span class="team-flag">${homeFlag}</span>` : ''}`;
+  home.innerHTML = `<span class="team-name${homeTbd ? ' tbd' : ''}">${f.home}</span>${flagHtml(homeFlag)}`;
 
   // Score / vs
   const scoreBlock = document.createElement('div');
