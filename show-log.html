@@ -947,7 +947,6 @@ function buildCard(s) {
     <div class="poster-wrap">
       ${imgHtml}
       <div class="poster-placeholder" id="ph-${cid(s.name)}"${url ? ' style="display:none"' : ''}>📺</div>
-      ${s.status === 'ongoing' ? `<span class="poster-badge ${badgeCls}">${badgeTxt}</span>` : ''}
       <div class="watched-overlay">✓</div>
     </div>
     <div class="card-body">
