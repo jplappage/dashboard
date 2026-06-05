@@ -1,14 +1,11 @@
-$taskName = 'WatchlistAutoDeploy'
-$scriptPath = 'C:\Users\jplap\Documents\Claude\Projects\Watchlist v4\watch-and-push.ps1'
+$taskName  = 'WatchlistAutoDeploy'
+$vbsPath   = 'C:\Users\jplap\Documents\Claude\Projects\Watchlist v4\WatchlistAutoDeploy.vbs'
 
 Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
 
-# Run PowerShell hidden — no window appears
-$action = New-ScheduledTaskAction `
-    -Execute 'powershell.exe' `
-    -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -NonInteractive -File `"$scriptPath`""
+# Use wscript.exe to launch the VBS — this guarantees a hidden window
+$action = New-ScheduledTaskAction -Execute 'wscript.exe' -Argument "`"$vbsPath`""
 
-# Trigger: at logon, with 30s delay
 $trigger = New-ScheduledTaskTrigger -AtLogOn
 $trigger.Delay = 'PT30S'
 
@@ -17,6 +14,6 @@ $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoi
 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -RunLevel Limited -Force
 
 Write-Host ''
-Write-Host 'Done! WatchlistAutoDeploy task created (hidden window).' -ForegroundColor Green
-Write-Host 'The watcher will run silently 30 seconds after each login.' -ForegroundColor Cyan
+Write-Host 'Done! WatchlistAutoDeploy task created (truly hidden).' -ForegroundColor Green
+Write-Host 'No window will appear after next login.' -ForegroundColor Cyan
 Read-Host 'Press Enter to close'
