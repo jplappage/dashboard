@@ -815,7 +815,7 @@
   </div>
 
   <!-- Team filter -->
-  <div class="team-filter-bar">
+  <div class="team-filter-bar" id="team-filter-bar">
     <span class="filter-label">Team</span>
     <button class="team-quick-btn active" id="team-all-btn" data-team="all">All teams</button>
     <button class="team-quick-btn" id="team-england-btn" data-team="England">
@@ -836,6 +836,33 @@
 </div>
 
 <main id="fixtures-container"></main>
+
+<!-- Knockouts view -->
+<div id="ko-view" style="display:none">
+  <div class="pool-label">All 48 teams — drag chips onto slots, or click a slot to pick</div>
+  <div class="team-pool" id="team-pool"></div>
+  <div class="bracket-scroll">
+    <div id="bracket-container"></div>
+  </div>
+  <div class="bracket-3rd-section">
+    <div class="bracket-3rd-label">3rd Place Playoff</div>
+    <div class="bracket-3rd-match" id="bracket-3rd"></div>
+  </div>
+</div>
+
+<!-- Team picker modal -->
+<div class="picker-overlay" id="picker-overlay">
+  <div class="picker-inner" onclick="event.stopPropagation()">
+    <div class="picker-header">
+      <span class="picker-title">Pick a team</span>
+      <button class="picker-close" id="picker-close-btn">✕</button>
+    </div>
+    <div class="picker-search-wrap">
+      <input class="picker-search" id="picker-search" type="text" placeholder="Search teams…">
+    </div>
+    <div class="picker-list" id="picker-list"></div>
+  </div>
+</div>
 
 <footer>FIFA World Cup 2026™ &nbsp;·&nbsp; All times BST (British Summer Time)</footer>
 
