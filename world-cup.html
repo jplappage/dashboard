@@ -1953,10 +1953,14 @@ function loadBracketData(raw) {
 function handleBracketClick(e) {
   const slot = e.target.closest('[data-slot]');
   if (!slot) return;
-  const action = slot.dataset.action, key = slot.dataset.slot;
+  const action = slot.dataset.action;
+  const key    = slot.dataset.slot;
+  const mid    = parseInt(slot.dataset.mid);
   if (action === 'eliminate') eliminateTeam(key);
+  else if (action === 'undo')   undoEliminate(mid);
   else if (action === 'remove') removeFromSlot(key);
   else if (action === 'pick')   openPicker(key);
+  // 'noop' (winner slot) — do nothing
 }
 document.getElementById('bracket-container').addEventListener('click', handleBracketClick);
 document.getElementById('bracket-3rd').addEventListener('click', handleBracketClick);
@@ -1967,6 +1971,24 @@ document.getElementById('team-pool').addEventListener('dragstart', e => {
   if (!chip) return;
   dragTeam = chip.dataset.team;
   e.dataTransfer.setData('text/plain', dragTeam);
+});
+
+// Team pool click → auto-place in next empty R32 slot
+document.getElementById('team-pool').addEventListener('click', e => {
+  const chip = e.target.closest('[data-team]');
+  if (!chip) return;
+  const team = chip.dataset.team;
+  const r32Slots = BRACKET_ORDER.r32.flatMap(m => [`${m}_a`, `${m}_b`]);
+  const emptySlot = r32Slots.find(k => !bracketState[k]);
+  if (!emptySlot) return;
+  for (const k of Object.keys(bracketState)) {
+    if (bracketState[k] === team) delete bracketState[k];
+  }
+  bracketState[emptySlot] = team;
+  saveBracket();
+  renderTeamPool();
+  renderBracket();
+  renderEliminated();
 });
 
 // Picker events
