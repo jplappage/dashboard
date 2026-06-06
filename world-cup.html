@@ -769,6 +769,12 @@
     </div>
   </header>
 
+  <!-- Tab navigation -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="fixtures" onclick="setTab('fixtures')">Fixtures</button>
+    <button class="tab-btn" data-tab="knockouts" onclick="setTab('knockouts')">Knockouts</button>
+  </div>
+
   <!-- Round filter -->
   <div class="filter-bar" id="round-filter">
     <span class="filter-label">Round</span>
@@ -782,7 +788,7 @@
   </div>
 
   <!-- Date navigation -->
-  <div class="date-nav-bar">
+  <div class="date-nav-bar" id="date-nav-bar">
     <button class="date-nav-btn" id="prev-day" title="Previous match day">&#8592;</button>
     <button class="date-display-btn all-dates" id="cal-toggle">
       <span class="cal-icon">📅</span>
