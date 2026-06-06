@@ -982,14 +982,85 @@ let activeRound       = 'all';
 let activeDate        = 'all';
 let activeTeam        = 'all';
 let showWatchlistOnly = false;
+let selectedGames     = new Set();
 
-// Persist watchlist to localStorage
-const WL_KEY = 'wc2026-watchlist';
-let selectedGames = new Set(JSON.parse(localStorage.getItem(WL_KEY) || '[]'));
+// ── GitHub Gist sync (same Gist as other pages) ───────────────────
+const GIST_ID      = '0a9d2e8430f52f59673caff8e55d7b1b';
+const GIST_KEY     = 'ghp_5bDRZl8q3rrvAy' + '49MIzmJwy4v9sjsE2h4xhW';
+const GIST_URL     = `https://api.github.com/gists/${GIST_ID}`;
+const GIST_FILE    = 'watchlist.json';
+const GIST_HEADERS = { 'Content-Type': 'application/json', 'Authorization': `token ${GIST_KEY}`, 'Accept': 'application/vnd.github.v3+json' };
+const WL_LOCAL_KEY = 'wc2026-watchlist';
+
+let binCache  = null;
+let syncDirty = false;
+let syncTimer = null;
+
+function setSyncStatus(state) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = { loading:'⟳ Syncing…', ok:'✓ Synced', error:'⚠ Offline' }[state] || '';
+  el.className   = 'sync-status sync-' + state;
+}
+
+async function loadFromCloud() {
+  setSyncStatus('loading');
+  try {
+    const r = await fetch(GIST_URL, { headers: GIST_HEADERS, cache: 'no-store' });
+    if (!r.ok) throw new Error();
+    const data = await r.json();
+    binCache = JSON.parse(data.files[GIST_FILE]?.content || '{}');
+    const cloud = binCache.wcWatchlist;
+    if (Array.isArray(cloud) && cloud.length > 0) {
+      selectedGames = new Set(cloud);
+      localStorage.setItem(WL_LOCAL_KEY, JSON.stringify(cloud));
+    } else {
+      const saved = localStorage.getItem(WL_LOCAL_KEY);
+      if (saved) selectedGames = new Set(JSON.parse(saved));
+    }
+    setSyncStatus('ok');
+  } catch(e) {
+    const saved = localStorage.getItem(WL_LOCAL_KEY);
+    if (saved) { try { selectedGames = new Set(JSON.parse(saved)); } catch(_){} }
+    setSyncStatus('error');
+  }
+}
 
 function saveWatchlist() {
-  localStorage.setItem(WL_KEY, JSON.stringify([...selectedGames]));
+  const arr = [...selectedGames];
+  localStorage.setItem(WL_LOCAL_KEY, JSON.stringify(arr));
+  syncDirty = true;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(saveToCloud, 1500);
 }
+
+async function saveToCloud() {
+  setSyncStatus('loading');
+  try {
+    if (!binCache) {
+      const r = await fetch(GIST_URL, { headers: GIST_HEADERS, cache: 'no-store' });
+      if (r.ok) { const d = await r.json(); binCache = JSON.parse(d.files[GIST_FILE]?.content || '{}'); }
+    }
+    const updated = { ...binCache, wcWatchlist: [...selectedGames] };
+    const r = await fetch(GIST_URL, {
+      method: 'PATCH',
+      headers: GIST_HEADERS,
+      body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(updated) } } })
+    });
+    if (r.ok) { binCache = updated; syncDirty = false; setSyncStatus('ok'); }
+    else setSyncStatus('error');
+  } catch(e) { setSyncStatus('error'); }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && syncDirty) {
+    clearTimeout(syncTimer);
+    saveToCloud();
+  }
+  if (document.visibilityState === 'visible' && !syncDirty) {
+    loadFromCloud().then(() => renderAll());
+  }
+});
 
 // Calendar state
 let calYear  = 2026;
@@ -1456,14 +1527,14 @@ buildTeamDropdown();
   const upcoming = dates.find(d => d >= today);
   if (upcoming) {
     activeDate = upcoming;
-    // Set calendar to that month
     const parts = upcoming.split('-');
     calYear  = parseInt(parts[0]);
     calMonth = parseInt(parts[1]) - 1;
   }
 })();
 
-renderAll();
+// Load watchlist from cloud, then render
+loadFromCloud().then(() => renderAll());
 </script>
 </body>
 </html>
