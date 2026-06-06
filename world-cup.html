@@ -732,7 +732,7 @@
 
 <main id="fixtures-container"></main>
 
-<footer>FIFA World Cup 2026™ &nbsp;·&nbsp; All times GMT</footer>
+<footer>FIFA World Cup 2026™ &nbsp;·&nbsp; All times BST (British Summer Time)</footer>
 
 <script>
 // ── Flag image URLs (flagcdn.com) ─────────────────────────────────
@@ -1274,7 +1274,7 @@ function buildCard(f) {
 
   const time = document.createElement('div');
   time.className = 'match-time';
-  time.textContent = f.time + ' GMT';
+  time.textContent = toBST(f.time) + ' BST';
   meta.appendChild(time);
 
   // Home team
