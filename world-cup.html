@@ -760,6 +760,18 @@
     .bracket-slot.can-eliminate:hover .slot-x { color:#cc3333; }
     .bracket-slot.can-eliminate .slot-x { color:#552222; }
 
+    /* Eliminated team slot (loser stays visible) */
+    .bracket-slot.elim-slot { background:#0f0808; cursor:pointer; }
+    .bracket-slot.elim-slot .slot-team { text-decoration:line-through; color:#664444; }
+    .bracket-slot.elim-slot img { filter:grayscale(1) opacity(0.35); }
+    .bracket-slot.elim-slot .slot-x { color:#553333; font-size:0.75rem; }
+    .bracket-slot.elim-slot:hover { background:#1e0d0d; }
+    .bracket-slot.elim-slot:hover .slot-x { color:#bb4444; }
+
+    /* Winner slot (match decided) */
+    .bracket-slot.winner-slot { background:#081208; cursor:pointer; }
+    .bracket-slot.winner-slot .slot-team { color:#77cc77; }
+
     /* Eliminated section */
     #eliminated-section { margin-top:24px; padding-top:16px; border-top:1px solid #1a1a2e; }
     #eliminated-grid { display:flex; flex-wrap:wrap; }
