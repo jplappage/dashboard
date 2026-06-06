@@ -1786,36 +1786,59 @@ function buildBSlot(mid, pos) {
 }
 
 function eliminateTeam(slotKey) {
-  const [midStr, pos] = slotKey.split('_');
-  const mid      = parseInt(midStr);
-  const otherPos = pos === 'a' ? 'b' : 'a';
-  const otherKey = `${mid}_${otherPos}`;
-  const loser    = bracketState[slotKey];
-  const winner   = bracketState[otherKey];
+  const [midStr, losePos] = slotKey.split('_');
+  const mid    = parseInt(midStr);
+  const winPos = losePos === 'a' ? 'b' : 'a';
+  const loser  = bracketState[slotKey];
+  const winner = bracketState[`${mid}_${winPos}`];
   if (!loser || !winner) return;
 
-  // Remove loser from their slot
-  delete bracketState[slotKey];
-  eliminatedSet.add(loser);
+  // Record the decision (team stays in bracketState — just greyed)
+  matchWinners[mid] = winPos;
 
-  // SF losers go to 3rd place (not fully "eliminated")
+  // SF losers go to 3rd place
   const loserDest = LOSER_DEST[mid];
   if (loserDest) {
     bracketState[`${loserDest.match}_${loserDest.pos}`] = loser;
-    eliminatedSet.delete(loser); // they play again
   }
 
   // Auto-advance winner to next round
   const dest = WINNER_DEST[mid];
   if (dest) {
-    const destKey  = `${dest.match}_${dest.pos}`;
+    const destKey   = `${dest.match}_${dest.pos}`;
     const displaced = bracketState[destKey];
-    // If another team was manually placed there, send them back to pool
     if (displaced && displaced !== winner) delete bracketState[destKey];
     bracketState[destKey] = winner;
   }
 
-  checkAutoEliminate();
+  saveBracket();
+  renderTeamPool();
+  renderBracket();
+  renderEliminated();
+}
+
+function undoEliminate(mid) {
+  const winPos = matchWinners[mid];
+  if (winPos === undefined) return;
+  const losePos = winPos === 'a' ? 'b' : 'a';
+
+  // Remove winner from next round slot (if still the same team)
+  const dest = WINNER_DEST[mid];
+  if (dest) {
+    const winTeam = bracketState[`${mid}_${winPos}`];
+    const destKey = `${dest.match}_${dest.pos}`;
+    if (bracketState[destKey] === winTeam) delete bracketState[destKey];
+  }
+
+  // Remove loser from 3rd place slot (if applicable)
+  const loserDest = LOSER_DEST[mid];
+  if (loserDest) {
+    const loseTeam = bracketState[`${mid}_${losePos}`];
+    const destKey  = `${loserDest.match}_${loserDest.pos}`;
+    if (bracketState[destKey] === loseTeam) delete bracketState[destKey];
+  }
+
+  delete matchWinners[mid];
   saveBracket();
   renderTeamPool();
   renderBracket();
@@ -1823,52 +1846,11 @@ function eliminateTeam(slotKey) {
 }
 
 function removeFromSlot(slotKey) {
-  // Remove without eliminating (team returns to pool)
   delete bracketState[slotKey];
-  // If this slot is in R32, recalculate auto-eliminations (might undo them)
-  const mid = parseInt(slotKey.split('_')[0]);
-  if (BRACKET_ORDER.r32.includes(mid)) recalcAutoEliminate();
   saveBracket();
   renderTeamPool();
   renderBracket();
   renderEliminated();
-}
-
-function checkAutoEliminate() {
-  const r32Slots = BRACKET_ORDER.r32.flatMap(mid => [`${mid}_a`, `${mid}_b`]);
-  const r32Teams = new Set(r32Slots.map(k => bracketState[k]).filter(Boolean));
-  if (r32Teams.size < 32) return;
-  // R32 fully populated — auto-eliminate anyone not in R32
-  for (const team of ALL_TEAMS) {
-    if (!r32Teams.has(team)) eliminatedSet.add(team);
-  }
-}
-
-function recalcAutoEliminate() {
-  // Re-derive eliminatedSet from scratch (only keep manual eliminations,
-  // i.e. teams removed via eliminateTeam, not auto-eliminated from R32 gap)
-  // Approach: clear auto-eliminated entries; they'll be re-added by checkAutoEliminate if still applicable
-  const r32Slots = BRACKET_ORDER.r32.flatMap(mid => [`${mid}_a`, `${mid}_b`]);
-  const r32Teams = new Set(r32Slots.map(k => bracketState[k]).filter(Boolean));
-  // Remove teams from eliminatedSet that are no longer "actually eliminated" in a match
-  // (i.e. teams eliminated only because R32 was full — since we just freed a slot)
-  if (r32Teams.size < 32) {
-    // R32 no longer full — remove auto-eliminated teams that are available
-    for (const team of [...eliminatedSet]) {
-      if (!isManuallyEliminated(team)) eliminatedSet.delete(team);
-    }
-  }
-  checkAutoEliminate();
-}
-
-function isManuallyEliminated(team) {
-  // A team is manually eliminated if they lost a match (they're not in any bracket slot
-  // in R16 or later, and they WERE in R32). This is complex to track precisely,
-  // so we use a simpler heuristic: if a team appears nowhere in the bracket, they might
-  // be manually eliminated OR auto-eliminated. We can't easily distinguish without
-  // extra state, so we just trust eliminatedSet as-is for teams not in R32.
-  // The recalc only matters when freeing R32 slots.
-  return false; // conservative: don't clear any eliminated teams on R32 slot removal
 }
 
 function renderEliminated() {
