@@ -527,6 +527,18 @@
     .match-card:hover { border-color: #2a2a2a; }
     .match-card.played { opacity: 0.75; }
 
+    .match-card.france-game {
+      border-color: rgba(0, 99, 200, 0.55);
+      background: linear-gradient(135deg, rgba(0, 80, 180, 0.08) 0%, #0d0d0d 60%);
+    }
+    .match-card.france-game:hover { border-color: rgba(0, 120, 230, 0.8); }
+
+    .match-card.england-game {
+      border-color: rgba(204, 20, 36, 0.55);
+      background: linear-gradient(135deg, rgba(204, 20, 36, 0.08) 0%, #0d0d0d 60%);
+    }
+    .match-card.england-game:hover { border-color: rgba(220, 30, 50, 0.8); }
+
     .match-meta {
       display: flex;
       flex-direction: column;
@@ -950,6 +962,11 @@ function badgeClass(round) {
 
 function roundTitle(round) {
   return {group:'Group Stage', r32:'Round of 32', r16:'Round of 16', qf:'Quarter-final', sf:'Semi-final', '3rd':'Third Place Play-off', final:'FINAL'}[round];
+}
+
+function toBST(time) {
+  const [h, m] = time.split(':').map(Number);
+  return String((h + 1) % 24).padStart(2, '0') + ':' + String(m).padStart(2, '0');
 }
 
 // ── Filters ───────────────────────────────────────────────────────
