@@ -620,8 +620,14 @@
     .team.home { justify-content: flex-end; text-align: right; }
     .team.away { justify-content: flex-start; }
 
-    .team-flag {
-      width: 28px;
+    .team-flag-emoji {
+      font-size: 1.4rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .team-flag-img {
+      width: 26px;
       height: auto;
       border-radius: 3px;
       flex-shrink: 0;
@@ -780,63 +786,69 @@
 <footer>FIFA World Cup 2026™ &nbsp;·&nbsp; All times BST (British Summer Time)</footer>
 
 <script>
-// ── Flag image URLs (flagcdn.com) ─────────────────────────────────
-const FLAG_CODES = {
-  'Algeria':              'dz',
-  'Argentina':            'ar',
-  'Australia':            'au',
-  'Austria':              'at',
-  'Belgium':              'be',
-  'Bosnia & Herzegovina': 'ba',
-  'Brazil':               'br',
-  'Canada':               'ca',
-  'Cape Verde':           'cv',
-  'Colombia':             'co',
-  'Croatia':              'hr',
-  'Curaçao':              'cw',
-  'Czech Republic':       'cz',
-  'DR Congo':             'cd',
-  'DR Congo':             'cd',
-  'Ecuador':              'ec',
-  'Egypt':                'eg',
-  'England':              'gb-eng',
-  'France':               'fr',
-  'Germany':              'de',
-  'Ghana':                'gh',
-  'Haiti':                'ht',
-  'Iran':                 'ir',
-  'Iraq':                 'iq',
-  'Ivory Coast':          'ci',
-  'Japan':                'jp',
-  'Jordan':               'jo',
-  'Mexico':               'mx',
-  'Morocco':              'ma',
-  'Netherlands':          'nl',
-  'New Zealand':          'nz',
-  'Norway':               'no',
-  'Panama':               'pa',
-  'Paraguay':             'py',
-  'Portugal':             'pt',
-  'Qatar':                'qa',
-  'Saudi Arabia':         'sa',
-  'Scotland':             'gb-sct',
-  'Senegal':              'sn',
-  'South Africa':         'za',
-  'South Korea':          'kr',
-  'Spain':                'es',
-  'Sweden':               'se',
-  'Switzerland':          'ch',
-  'Tunisia':              'tn',
-  'Turkey':               'tr',
-  'Uruguay':              'uy',
-  'USA':                  'us',
-  'Uzbekistan':           'uz',
+// ── Flags: emoji for all standard countries, images only for England/Scotland ──
+const FLAG_EMOJI = {
+  'Algeria':              '🇩🇿',
+  'Argentina':            '🇦🇷',
+  'Australia':            '🇦🇺',
+  'Austria':              '🇦🇹',
+  'Belgium':              '🇧🇪',
+  'Bosnia & Herzegovina': '🇧🇦',
+  'Brazil':               '🇧🇷',
+  'Canada':               '🇨🇦',
+  'Cape Verde':           '🇨🇻',
+  'Colombia':             '🇨🇴',
+  'Croatia':              '🇭🇷',
+  'Curaçao':              '🇨🇼',
+  'Czech Republic':       '🇨🇿',
+  'DR Congo':             '🇨🇩',
+  'Ecuador':              '🇪🇨',
+  'Egypt':                '🇪🇬',
+  'France':               '🇫🇷',
+  'Germany':              '🇩🇪',
+  'Ghana':                '🇬🇭',
+  'Haiti':                '🇭🇹',
+  'Iran':                 '🇮🇷',
+  'Iraq':                 '🇮🇶',
+  'Ivory Coast':          '🇨🇮',
+  'Japan':                '🇯🇵',
+  'Jordan':               '🇯🇴',
+  'Mexico':               '🇲🇽',
+  'Morocco':              '🇲🇦',
+  'Netherlands':          '🇳🇱',
+  'New Zealand':          '🇳🇿',
+  'Norway':               '🇳🇴',
+  'Panama':               '🇵🇦',
+  'Paraguay':             '🇵🇾',
+  'Portugal':             '🇵🇹',
+  'Qatar':                '🇶🇦',
+  'Saudi Arabia':         '🇸🇦',
+  'Senegal':              '🇸🇳',
+  'South Africa':         '🇿🇦',
+  'South Korea':          '🇰🇷',
+  'Spain':                '🇪🇸',
+  'Sweden':               '🇸🇪',
+  'Switzerland':          '🇨🇭',
+  'Tunisia':              '🇹🇳',
+  'Turkey':               '🇹🇷',
+  'Uruguay':              '🇺🇾',
+  'USA':                  '🇺🇸',
+  'Uzbekistan':           '🇺🇿',
 };
 
-function flagUrl(team) {
-  const code = FLAG_CODES[team];
-  return code ? `https://flagcdn.com/w40/${code}.png` : null;
+// Regional flags with no standard emoji — use images
+const FLAG_IMG = {
+  'England': 'https://flagcdn.com/w40/gb-eng.png',
+  'Scotland': 'https://flagcdn.com/w40/gb-sct.png',
+};
+
+function flagHtml(team) {
+  if (FLAG_EMOJI[team]) return `<span class="team-flag-emoji">${FLAG_EMOJI[team]}</span>`;
+  if (FLAG_IMG[team])   return `<img class="team-flag-img" src="${FLAG_IMG[team]}" alt="${team}" loading="lazy">`;
+  return '';
 }
+
+function hasFlag(team) { return !!(FLAG_EMOJI[team] || FLAG_IMG[team]); }
 
 // ── All times GMT. Dates are GMT dates. ───────────────────────────
 const FIXTURES = [
