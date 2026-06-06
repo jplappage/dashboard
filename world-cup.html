@@ -1462,7 +1462,7 @@ function buildCard(f) {
   // Away team
   const away = document.createElement('div');
   away.className = 'team away';
-  away.innerHTML = `${flagHtml(awayUrl, f.away)}<span class="team-name${awayTbd ? ' tbd' : ''}">${f.away}</span>`;
+  away.innerHTML = `${flagHtml(f.away)}<span class="team-name${awayTbd ? ' tbd' : ''}">${f.away}</span>`;
 
   // Venue
   const venueCol = document.createElement('div');
