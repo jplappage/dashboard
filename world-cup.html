@@ -962,9 +962,18 @@ const FIXTURES = [
 ];
 
 // ── State ─────────────────────────────────────────────────────────
-let activeRound = 'all';
-let activeDate  = 'all';
-let activeTeam  = 'all';
+let activeRound       = 'all';
+let activeDate        = 'all';
+let activeTeam        = 'all';
+let showWatchlistOnly = false;
+
+// Persist watchlist to localStorage
+const WL_KEY = 'wc2026-watchlist';
+let selectedGames = new Set(JSON.parse(localStorage.getItem(WL_KEY) || '[]'));
+
+function saveWatchlist() {
+  localStorage.setItem(WL_KEY, JSON.stringify([...selectedGames]));
+}
 
 // Calendar state
 let calYear  = 2026;
