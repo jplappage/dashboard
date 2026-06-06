@@ -863,7 +863,10 @@
 
 <!-- Knockouts view -->
 <div id="ko-view" style="display:none">
-  <div class="pool-label">Available teams — drag onto a slot or click a slot to pick · when both slots in a match are filled, click a team to eliminate them and auto-advance their opponent</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div class="pool-label" style="margin-bottom:0">Available teams — drag onto a slot or click a slot to pick · when both slots in a match are filled, click a team to eliminate them and auto-advance their opponent</div>
+    <button onclick="resetBracket()" style="flex-shrink:0;margin-left:12px;padding:4px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:#888;font-size:0.75rem;cursor:pointer;" onmouseover="this.style.color='#ff8888';this.style.borderColor='#553333'" onmouseout="this.style.color='#888';this.style.borderColor='#2a2a4a'">↺ Reset bracket</button>
+  </div>
   <div class="team-pool" id="team-pool"></div>
   <div class="bracket-scroll">
     <div id="bracket-container"></div>
@@ -1847,6 +1850,16 @@ function undoEliminate(mid) {
 
 function removeFromSlot(slotKey) {
   delete bracketState[slotKey];
+  saveBracket();
+  renderTeamPool();
+  renderBracket();
+  renderEliminated();
+}
+
+function resetBracket() {
+  if (!confirm('Reset the entire bracket? All placements and results will be cleared.')) return;
+  bracketState = {};
+  matchWinners = {};
   saveBracket();
   renderTeamPool();
   renderBracket();
