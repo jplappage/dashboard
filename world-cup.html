@@ -520,11 +520,38 @@
       grid-template-columns: 90px 1fr auto 1fr 90px;
       align-items: center;
       gap: 8px;
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, background 0.15s;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
     }
 
     .match-card:hover { border-color: #2a2a2a; }
     .match-card.played { opacity: 0.75; }
+
+    /* Watchlist selection — yellow only for non-France/England cards */
+    .match-card.watch-selected:not(.france-game):not(.england-game) {
+      border-color: rgba(255, 232, 31, 0.55);
+      background: linear-gradient(135deg, rgba(255, 232, 31, 0.07) 0%, #0d0d0d 60%);
+    }
+    .match-card.watch-selected:not(.france-game):not(.england-game):hover {
+      border-color: rgba(255, 232, 31, 0.85);
+    }
+
+    /* Star badge — shown on all selected cards */
+    .watch-star {
+      position: absolute;
+      top: 7px;
+      right: 10px;
+      font-size: 0.7rem;
+      color: #ffe81f;
+      opacity: 0;
+      transition: opacity 0.15s;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .match-card.watch-selected .watch-star { opacity: 1; }
+    .match-card:not(.watch-selected):hover .watch-star { opacity: 0.18; }
 
     .match-card.france-game {
       border-color: rgba(0, 99, 200, 0.55);
