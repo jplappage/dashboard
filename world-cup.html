@@ -1755,21 +1755,33 @@ function renderBracket() {
 function buildBSlot(mid, pos) {
   const key      = `${mid}_${pos}`;
   const otherPos = pos === 'a' ? 'b' : 'a';
-  const otherKey = `${mid}_${otherPos}`;
   const team     = bracketState[key];
-  const opponent = bracketState[otherKey];
+  const opponent = bracketState[`${mid}_${otherPos}`];
+  const decided  = matchWinners[mid]; // 'a', 'b', or undefined
 
-  if (team) {
-    // Both slots filled → clicking this team eliminates them
-    const canElim = !!opponent;
-    const cls = canElim ? 'filled can-eliminate' : 'filled';
-    const action = canElim ? 'eliminate' : 'remove';
-    return `<div class="bracket-slot ${cls}" data-slot="${key}" data-action="${action}" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
-      ${flagHtml(team)}<span class="slot-team">${escHtml(team)}</span><span class="slot-x">✕</span>
+  if (!team) {
+    return `<div class="bracket-slot empty" data-slot="${key}" data-action="pick" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
+      <span class="slot-team" style="color:#444">Pick team…</span>
     </div>`;
   }
-  return `<div class="bracket-slot empty" data-slot="${key}" data-action="pick" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
-    <span class="slot-team" style="color:#444">Pick team…</span>
+
+  if (decided !== undefined) {
+    // Match is decided — show winner green, loser greyed out
+    const isWinner = decided === pos;
+    const cls    = isWinner ? 'filled winner-slot' : 'filled elim-slot';
+    const action = isWinner ? 'noop' : 'undo';
+    const xMark  = isWinner ? '' : '<span class="slot-x">↺</span>';
+    return `<div class="bracket-slot ${cls}" data-slot="${key}" data-mid="${mid}" data-action="${action}" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
+      ${flagHtml(team)}<span class="slot-team">${escHtml(team)}</span>${xMark}
+    </div>`;
+  }
+
+  // No decision yet
+  const canElim = !!opponent;
+  const cls    = canElim ? 'filled can-eliminate' : 'filled';
+  const action = canElim ? 'eliminate' : 'remove';
+  return `<div class="bracket-slot ${cls}" data-slot="${key}" data-action="${action}" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
+    ${flagHtml(team)}<span class="slot-team">${escHtml(team)}</span><span class="slot-x">✕</span>
   </div>`;
 }
 
