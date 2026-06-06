@@ -1124,8 +1124,8 @@ async function loadFromCloud() {
       if (saved) selectedGames = new Set(JSON.parse(saved));
     }
     const cloudBracket = binCache.wcBracket;
-    if (cloudBracket && typeof cloudBracket === 'object' && !Array.isArray(cloudBracket)) {
-      bracketState = cloudBracket;
+    if (cloudBracket && typeof cloudBracket === 'object') {
+      loadBracketData(cloudBracket);
       localStorage.setItem(BR_LOCAL_KEY, JSON.stringify(cloudBracket));
     }
     setSyncStatus('ok');
@@ -1976,7 +1976,7 @@ buildTeamDropdown();
 const _saved = localStorage.getItem(WL_LOCAL_KEY);
 if (_saved) { try { selectedGames = new Set(JSON.parse(_saved)); } catch(_){} }
 const _savedBracket = localStorage.getItem(BR_LOCAL_KEY);
-if (_savedBracket) { try { bracketState = JSON.parse(_savedBracket); } catch(_){} }
+if (_savedBracket) { try { loadBracketData(JSON.parse(_savedBracket)); } catch(_){} }
 renderAll();
 
 // Then sync from cloud and re-render with latest selections
