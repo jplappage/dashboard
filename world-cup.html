@@ -1857,9 +1857,10 @@ function renderEliminated() {
   const section = document.getElementById('eliminated-section');
   const grid    = document.getElementById('eliminated-grid');
   if (!section || !grid) return;
-  if (eliminatedSet.size === 0) { section.style.display = 'none'; return; }
+  const elim = allEliminated();
+  if (elim.size === 0) { section.style.display = 'none'; return; }
   section.style.display = '';
-  grid.innerHTML = [...eliminatedSet].sort().map(team =>
+  grid.innerHTML = [...elim].sort().map(team =>
     `<div class="elim-chip">${flagHtml(team)}<span>${escHtml(team)}</span></div>`
   ).join('');
 }
@@ -1873,7 +1874,6 @@ function onSlotDrop(e, slotKey) {
   }
   bracketState[slotKey] = team;
   dragTeam = null;
-  checkAutoEliminate();
   saveBracket();
   renderTeamPool();
   renderBracket();
