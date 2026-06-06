@@ -1524,16 +1524,23 @@ buildTeamDropdown();
 (function initDate() {
   const today = new Date().toISOString().slice(0, 10);
   const dates = availableDates();
-  const upcoming = dates.find(d => d >= today);
-  if (upcoming) {
-    activeDate = upcoming;
-    const parts = upcoming.split('-');
+  const todayMatch = dates.find(d => d === today);
+  const upcoming   = dates.find(d => d >= today);
+  const target = todayMatch || upcoming;
+  if (target) {
+    activeDate = target;
+    const parts = target.split('-');
     calYear  = parseInt(parts[0]);
     calMonth = parseInt(parts[1]) - 1;
   }
 })();
 
-// Load watchlist from cloud, then render
+// Seed from localStorage so the page renders immediately
+const _saved = localStorage.getItem(WL_LOCAL_KEY);
+if (_saved) { try { selectedGames = new Set(JSON.parse(_saved)); } catch(_){} }
+renderAll();
+
+// Then sync from cloud and re-render with latest selections
 loadFromCloud().then(() => renderAll());
 </script>
 </body>
