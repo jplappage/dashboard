@@ -1690,6 +1690,27 @@ function placedTeams() {
   return new Set(Object.values(bracketState).filter(Boolean));
 }
 
+// Derive the full set of eliminated teams without storing any state
+function allEliminated() {
+  const elim = new Set();
+  // Teams that lost a match (clicked-eliminate)
+  for (const [midStr, winPos] of Object.entries(matchWinners)) {
+    const mid     = parseInt(midStr);
+    const losePos = winPos === 'a' ? 'b' : 'a';
+    const loser   = bracketState[`${mid}_${losePos}`];
+    if (loser) elim.add(loser);
+  }
+  // Auto-eliminate: if R32 fully filled, anyone not in R32 is out
+  const r32Slots = BRACKET_ORDER.r32.flatMap(m => [`${m}_a`, `${m}_b`]);
+  const r32Teams = new Set(r32Slots.map(k => bracketState[k]).filter(Boolean));
+  if (r32Teams.size === 32) {
+    for (const team of ALL_TEAMS) {
+      if (!r32Teams.has(team)) elim.add(team);
+    }
+  }
+  return elim;
+}
+
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -1698,7 +1719,8 @@ function renderTeamPool() {
   const pool = document.getElementById('team-pool');
   if (!pool) return;
   const placed = placedTeams();
-  const available = ALL_TEAMS.filter(t => !placed.has(t) && !eliminatedSet.has(t));
+  const elim   = allEliminated();
+  const available = ALL_TEAMS.filter(t => !placed.has(t) && !elim.has(t));
   if (available.length === 0) {
     pool.innerHTML = '<span style="color:#555;font-size:0.8rem;font-style:italic">All teams placed or eliminated</span>';
     return;
