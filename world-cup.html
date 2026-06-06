@@ -786,69 +786,65 @@
 <footer>FIFA World Cup 2026™ &nbsp;·&nbsp; All times BST (British Summer Time)</footer>
 
 <script>
-// ── Flags: emoji for all standard countries, images only for England/Scotland ──
-const FLAG_EMOJI = {
-  'Algeria':              '🇩🇿',
-  'Argentina':            '🇦🇷',
-  'Australia':            '🇦🇺',
-  'Austria':              '🇦🇹',
-  'Belgium':              '🇧🇪',
-  'Bosnia & Herzegovina': '🇧🇦',
-  'Brazil':               '🇧🇷',
-  'Canada':               '🇨🇦',
-  'Cape Verde':           '🇨🇻',
-  'Colombia':             '🇨🇴',
-  'Croatia':              '🇭🇷',
-  'Curaçao':              '🇨🇼',
-  'Czech Republic':       '🇨🇿',
-  'DR Congo':             '🇨🇩',
-  'Ecuador':              '🇪🇨',
-  'Egypt':                '🇪🇬',
-  'France':               '🇫🇷',
-  'Germany':              '🇩🇪',
-  'Ghana':                '🇬🇭',
-  'Haiti':                '🇭🇹',
-  'Iran':                 '🇮🇷',
-  'Iraq':                 '🇮🇶',
-  'Ivory Coast':          '🇨🇮',
-  'Japan':                '🇯🇵',
-  'Jordan':               '🇯🇴',
-  'Mexico':               '🇲🇽',
-  'Morocco':              '🇲🇦',
-  'Netherlands':          '🇳🇱',
-  'New Zealand':          '🇳🇿',
-  'Norway':               '🇳🇴',
-  'Panama':               '🇵🇦',
-  'Paraguay':             '🇵🇾',
-  'Portugal':             '🇵🇹',
-  'Qatar':                '🇶🇦',
-  'Saudi Arabia':         '🇸🇦',
-  'Senegal':              '🇸🇳',
-  'South Africa':         '🇿🇦',
-  'South Korea':          '🇰🇷',
-  'Spain':                '🇪🇸',
-  'Sweden':               '🇸🇪',
-  'Switzerland':          '🇨🇭',
-  'Tunisia':              '🇹🇳',
-  'Turkey':               '🇹🇷',
-  'Uruguay':              '🇺🇾',
-  'USA':                  '🇺🇸',
-  'Uzbekistan':           '🇺🇿',
-};
-
-// Regional flags with no standard emoji — use images
-const FLAG_IMG = {
-  'England': 'https://flagcdn.com/w40/gb-eng.png',
-  'Scotland': 'https://flagcdn.com/w40/gb-sct.png',
+// ── Flag images (flagcdn.com) — works on all platforms ────────────
+const FLAG_CODES = {
+  'Algeria':              'dz',
+  'Argentina':            'ar',
+  'Australia':            'au',
+  'Austria':              'at',
+  'Belgium':              'be',
+  'Bosnia & Herzegovina': 'ba',
+  'Brazil':               'br',
+  'Canada':               'ca',
+  'Cape Verde':           'cv',
+  'Colombia':             'co',
+  'Croatia':              'hr',
+  'Curaçao':              'cw',
+  'Czech Republic':       'cz',
+  'DR Congo':             'cd',
+  'Ecuador':              'ec',
+  'Egypt':                'eg',
+  'England':              'gb-eng',
+  'France':               'fr',
+  'Germany':              'de',
+  'Ghana':                'gh',
+  'Haiti':                'ht',
+  'Iran':                 'ir',
+  'Iraq':                 'iq',
+  'Ivory Coast':          'ci',
+  'Japan':                'jp',
+  'Jordan':               'jo',
+  'Mexico':               'mx',
+  'Morocco':              'ma',
+  'Netherlands':          'nl',
+  'New Zealand':          'nz',
+  'Norway':               'no',
+  'Panama':               'pa',
+  'Paraguay':             'py',
+  'Portugal':             'pt',
+  'Qatar':                'qa',
+  'Saudi Arabia':         'sa',
+  'Scotland':             'gb-sct',
+  'Senegal':              'sn',
+  'South Africa':         'za',
+  'South Korea':          'kr',
+  'Spain':                'es',
+  'Sweden':               'se',
+  'Switzerland':          'ch',
+  'Tunisia':              'tn',
+  'Turkey':               'tr',
+  'Uruguay':              'uy',
+  'USA':                  'us',
+  'Uzbekistan':           'uz',
 };
 
 function flagHtml(team) {
-  if (FLAG_EMOJI[team]) return `<span class="team-flag-emoji">${FLAG_EMOJI[team]}</span>`;
-  if (FLAG_IMG[team])   return `<img class="team-flag-img" src="${FLAG_IMG[team]}" alt="${team}" loading="lazy">`;
-  return '';
+  const code = FLAG_CODES[team];
+  if (!code) return '';
+  return `<img class="team-flag-img" src="https://flagcdn.com/w40/${code}.png" alt="${team}">`;
 }
 
-function hasFlag(team) { return !!(FLAG_EMOJI[team] || FLAG_IMG[team]); }
+function hasFlag(team) { return !!FLAG_CODES[team]; }
 
 // ── All times GMT. Dates are GMT dates. ───────────────────────────
 const FIXTURES = [
