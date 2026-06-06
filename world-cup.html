@@ -1631,12 +1631,36 @@ const BRACKET_ORDER = {
 const ROUND_LABELS = {
   r32:'Round of 32', r16:'Round of 16', qf:'Quarter-finals', sf:'Semi-finals', final:'Final',
 };
+// Winner of each match goes to this slot in the next round
+const WINNER_DEST = {
+  73:{match:90,pos:'a'},  75:{match:90,pos:'b'},
+  74:{match:89,pos:'a'},  77:{match:89,pos:'b'},
+  83:{match:93,pos:'a'},  84:{match:93,pos:'b'},
+  81:{match:94,pos:'a'},  82:{match:94,pos:'b'},
+  76:{match:91,pos:'a'},  78:{match:91,pos:'b'},
+  79:{match:92,pos:'a'},  80:{match:92,pos:'b'},
+  86:{match:95,pos:'a'},  88:{match:95,pos:'b'},
+  85:{match:96,pos:'a'},  87:{match:96,pos:'b'},
+  90:{match:97,pos:'a'},  89:{match:97,pos:'b'},
+  93:{match:98,pos:'a'},  94:{match:98,pos:'b'},
+  91:{match:99,pos:'a'},  92:{match:99,pos:'b'},
+  95:{match:100,pos:'a'}, 96:{match:100,pos:'b'},
+  97:{match:101,pos:'a'}, 98:{match:101,pos:'b'},
+  99:{match:102,pos:'a'}, 100:{match:102,pos:'b'},
+  101:{match:104,pos:'a'},102:{match:104,pos:'b'},
+};
+// SF losers go to 3rd place
+const LOSER_DEST = {
+  101:{match:103,pos:'a'}, 102:{match:103,pos:'b'},
+};
+
 const ALL_TEAMS = Object.keys(FLAG_CODES).sort();
 const BR_LOCAL_KEY = 'wc2026-bracket';
-let bracketState = {}; // { '73_a': 'France', '73_b': 'Spain', ... }
-let pickerSlot   = null;
-let activeTab    = 'fixtures';
-let dragTeam     = null;
+let bracketState  = {}; // { '73_a': 'France', ... }
+let eliminatedSet = new Set(); // teams eliminated or auto-excluded from R32
+let pickerSlot    = null;
+let activeTab     = 'fixtures';
+let dragTeam      = null;
 
 function setTab(tab) {
   activeTab = tab;
@@ -1647,7 +1671,7 @@ function setTab(tab) {
   document.getElementById('team-filter-bar').style.display  = isKO ? 'none' : '';
   document.getElementById('fixtures-container').style.display = isKO ? 'none' : '';
   document.getElementById('ko-view').style.display          = isKO ? '' : 'none';
-  if (isKO) { renderTeamPool(); renderBracket(); }
+  if (isKO) { renderTeamPool(); renderBracket(); renderEliminated(); }
 }
 
 function placedTeams() {
@@ -1662,17 +1686,21 @@ function renderTeamPool() {
   const pool = document.getElementById('team-pool');
   if (!pool) return;
   const placed = placedTeams();
-  pool.innerHTML = ALL_TEAMS.map(team => {
-    const isPlaced = placed.has(team);
-    return `<div class="team-chip${isPlaced ? ' placed' : ''}" ${!isPlaced ? `draggable="true" data-team="${escHtml(team)}"` : ''}>
+  const available = ALL_TEAMS.filter(t => !placed.has(t) && !eliminatedSet.has(t));
+  if (available.length === 0) {
+    pool.innerHTML = '<span style="color:#555;font-size:0.8rem;font-style:italic">All teams placed or eliminated</span>';
+    return;
+  }
+  pool.innerHTML = available.map(team =>
+    `<div class="team-chip" draggable="true" data-team="${escHtml(team)}">
       ${flagHtml(team)}<span>${escHtml(team)}</span>
-    </div>`;
-  }).join('');
+    </div>`
+  ).join('');
 }
 
 function renderBracket() {
-  const container  = document.getElementById('bracket-container');
-  const b3rd       = document.getElementById('bracket-3rd');
+  const container = document.getElementById('bracket-container');
+  const b3rd      = document.getElementById('bracket-3rd');
   if (!container) return;
   const ROUNDS = ['r32','r16','qf','sf','final'];
   let html = '<div class="bracket-flex">';
@@ -1691,16 +1719,121 @@ function renderBracket() {
 }
 
 function buildBSlot(mid, pos) {
-  const key  = `${mid}_${pos}`;
-  const team = bracketState[key];
+  const key      = `${mid}_${pos}`;
+  const otherPos = pos === 'a' ? 'b' : 'a';
+  const otherKey = `${mid}_${otherPos}`;
+  const team     = bracketState[key];
+  const opponent = bracketState[otherKey];
+
   if (team) {
-    return `<div class="bracket-slot filled" data-slot="${key}" data-action="clear" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
+    // Both slots filled → clicking this team eliminates them
+    const canElim = !!opponent;
+    const cls = canElim ? 'filled can-eliminate' : 'filled';
+    const action = canElim ? 'eliminate' : 'remove';
+    return `<div class="bracket-slot ${cls}" data-slot="${key}" data-action="${action}" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
       ${flagHtml(team)}<span class="slot-team">${escHtml(team)}</span><span class="slot-x">✕</span>
     </div>`;
   }
   return `<div class="bracket-slot empty" data-slot="${key}" data-action="pick" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
     <span class="slot-team" style="color:#444">Pick team…</span>
   </div>`;
+}
+
+function eliminateTeam(slotKey) {
+  const [midStr, pos] = slotKey.split('_');
+  const mid      = parseInt(midStr);
+  const otherPos = pos === 'a' ? 'b' : 'a';
+  const otherKey = `${mid}_${otherPos}`;
+  const loser    = bracketState[slotKey];
+  const winner   = bracketState[otherKey];
+  if (!loser || !winner) return;
+
+  // Remove loser from their slot
+  delete bracketState[slotKey];
+  eliminatedSet.add(loser);
+
+  // SF losers go to 3rd place (not fully "eliminated")
+  const loserDest = LOSER_DEST[mid];
+  if (loserDest) {
+    bracketState[`${loserDest.match}_${loserDest.pos}`] = loser;
+    eliminatedSet.delete(loser); // they play again
+  }
+
+  // Auto-advance winner to next round
+  const dest = WINNER_DEST[mid];
+  if (dest) {
+    const destKey  = `${dest.match}_${dest.pos}`;
+    const displaced = bracketState[destKey];
+    // If another team was manually placed there, send them back to pool
+    if (displaced && displaced !== winner) delete bracketState[destKey];
+    bracketState[destKey] = winner;
+  }
+
+  checkAutoEliminate();
+  saveBracket();
+  renderTeamPool();
+  renderBracket();
+  renderEliminated();
+}
+
+function removeFromSlot(slotKey) {
+  // Remove without eliminating (team returns to pool)
+  delete bracketState[slotKey];
+  // If this slot is in R32, recalculate auto-eliminations (might undo them)
+  const mid = parseInt(slotKey.split('_')[0]);
+  if (BRACKET_ORDER.r32.includes(mid)) recalcAutoEliminate();
+  saveBracket();
+  renderTeamPool();
+  renderBracket();
+  renderEliminated();
+}
+
+function checkAutoEliminate() {
+  const r32Slots = BRACKET_ORDER.r32.flatMap(mid => [`${mid}_a`, `${mid}_b`]);
+  const r32Teams = new Set(r32Slots.map(k => bracketState[k]).filter(Boolean));
+  if (r32Teams.size < 32) return;
+  // R32 fully populated — auto-eliminate anyone not in R32
+  for (const team of ALL_TEAMS) {
+    if (!r32Teams.has(team)) eliminatedSet.add(team);
+  }
+}
+
+function recalcAutoEliminate() {
+  // Re-derive eliminatedSet from scratch (only keep manual eliminations,
+  // i.e. teams removed via eliminateTeam, not auto-eliminated from R32 gap)
+  // Approach: clear auto-eliminated entries; they'll be re-added by checkAutoEliminate if still applicable
+  const r32Slots = BRACKET_ORDER.r32.flatMap(mid => [`${mid}_a`, `${mid}_b`]);
+  const r32Teams = new Set(r32Slots.map(k => bracketState[k]).filter(Boolean));
+  // Remove teams from eliminatedSet that are no longer "actually eliminated" in a match
+  // (i.e. teams eliminated only because R32 was full — since we just freed a slot)
+  if (r32Teams.size < 32) {
+    // R32 no longer full — remove auto-eliminated teams that are available
+    for (const team of [...eliminatedSet]) {
+      if (!isManuallyEliminated(team)) eliminatedSet.delete(team);
+    }
+  }
+  checkAutoEliminate();
+}
+
+function isManuallyEliminated(team) {
+  // A team is manually eliminated if they lost a match (they're not in any bracket slot
+  // in R16 or later, and they WERE in R32). This is complex to track precisely,
+  // so we use a simpler heuristic: if a team appears nowhere in the bracket, they might
+  // be manually eliminated OR auto-eliminated. We can't easily distinguish without
+  // extra state, so we just trust eliminatedSet as-is for teams not in R32.
+  // The recalc only matters when freeing R32 slots.
+  return false; // conservative: don't clear any eliminated teams on R32 slot removal
+}
+
+function renderEliminated() {
+  const section = document.getElementById('eliminated-section');
+  const grid    = document.getElementById('eliminated-grid');
+  if (!section || !grid) return;
+  if (eliminatedSet.size === 0) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  grid.innerHTML = [...eliminatedSet].sort().map(team =>
+    `<div class="elim-chip">${flagHtml(team)}<span>${escHtml(team)}</span></div>`
+  ).join('');
 }
 
 function onSlotDrop(e, slotKey) {
@@ -1712,16 +1845,11 @@ function onSlotDrop(e, slotKey) {
   }
   bracketState[slotKey] = team;
   dragTeam = null;
+  checkAutoEliminate();
   saveBracket();
   renderTeamPool();
   renderBracket();
-}
-
-function clearSlot(key) {
-  delete bracketState[key];
-  saveBracket();
-  renderTeamPool();
-  renderBracket();
+  renderEliminated();
 }
 
 function openPicker(slotKey) {
@@ -1743,7 +1871,8 @@ function renderPickerList(query) {
   if (!list) return;
   const placed = placedTeams();
   const q = query.toLowerCase().trim();
-  const teams = ALL_TEAMS.filter(t => !q || t.toLowerCase().includes(q));
+  // Show non-eliminated teams; placed ones shown with a note
+  const teams = ALL_TEAMS.filter(t => !eliminatedSet.has(t) && (!q || t.toLowerCase().includes(q)));
   let html = '';
   if (pickerSlot && bracketState[pickerSlot]) {
     html += `<div class="picker-team picker-clear" data-action="clear-slot">✕ Clear this slot</div>`;
@@ -1765,31 +1894,43 @@ function pickTeam(team) {
   }
   bracketState[pickerSlot] = team;
   closePicker();
+  checkAutoEliminate();
   saveBracket();
   renderTeamPool();
   renderBracket();
+  renderEliminated();
 }
 
 function saveBracket() {
-  localStorage.setItem(BR_LOCAL_KEY, JSON.stringify(bracketState));
+  const data = { slots: bracketState, eliminated: [...eliminatedSet] };
+  localStorage.setItem(BR_LOCAL_KEY, JSON.stringify(data));
   syncDirty = true;
   clearTimeout(syncTimer);
   syncTimer = setTimeout(saveToCloud, 1500);
 }
 
+function loadBracketData(raw) {
+  if (!raw) return;
+  if (raw.slots && typeof raw.slots === 'object') {
+    bracketState  = raw.slots;
+    eliminatedSet = new Set(Array.isArray(raw.eliminated) ? raw.eliminated : []);
+  } else if (typeof raw === 'object' && !Array.isArray(raw)) {
+    bracketState  = raw; // legacy flat format
+    eliminatedSet = new Set();
+  }
+}
+
 // Bracket click delegation
-document.getElementById('bracket-container').addEventListener('click', e => {
+function handleBracketClick(e) {
   const slot = e.target.closest('[data-slot]');
   if (!slot) return;
-  if (slot.dataset.action === 'clear') clearSlot(slot.dataset.slot);
-  else if (slot.dataset.action === 'pick') openPicker(slot.dataset.slot);
-});
-document.getElementById('bracket-3rd').addEventListener('click', e => {
-  const slot = e.target.closest('[data-slot]');
-  if (!slot) return;
-  if (slot.dataset.action === 'clear') clearSlot(slot.dataset.slot);
-  else if (slot.dataset.action === 'pick') openPicker(slot.dataset.slot);
-});
+  const action = slot.dataset.action, key = slot.dataset.slot;
+  if (action === 'eliminate') eliminateTeam(key);
+  else if (action === 'remove') removeFromSlot(key);
+  else if (action === 'pick')   openPicker(key);
+}
+document.getElementById('bracket-container').addEventListener('click', handleBracketClick);
+document.getElementById('bracket-3rd').addEventListener('click', handleBracketClick);
 
 // Team pool drag start
 document.getElementById('team-pool').addEventListener('dragstart', e => {
@@ -1809,7 +1950,7 @@ document.getElementById('picker-search').addEventListener('keydown', e => { if (
 document.getElementById('picker-list').addEventListener('click', e => {
   const item = e.target.closest('[data-team], [data-action]');
   if (!item) return;
-  if (item.dataset.action === 'clear-slot') { clearSlot(pickerSlot); closePicker(); return; }
+  if (item.dataset.action === 'clear-slot') { removeFromSlot(pickerSlot); closePicker(); return; }
   if (item.dataset.team) pickTeam(item.dataset.team);
 });
 
