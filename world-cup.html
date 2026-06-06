@@ -1254,8 +1254,14 @@ function buildCard(f) {
     return `<img class="team-flag" src="${url}" alt="${name}" loading="lazy">`;
   }
 
+  const isFrance  = f.home === 'France'  || f.away === 'France';
+  const isEngland = f.home === 'England' || f.away === 'England';
   const card = document.createElement('div');
-  card.className = 'match-card' + (f.homeScore != null ? ' played' : '');
+  let cardClass = 'match-card';
+  if (f.homeScore != null) cardClass += ' played';
+  if (isFrance)  cardClass += ' france-game';
+  if (isEngland) cardClass += ' england-game';
+  card.className = cardClass;
 
   // Left meta column
   const meta = document.createElement('div');
