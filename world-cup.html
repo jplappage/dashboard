@@ -1930,7 +1930,7 @@ function pickTeam(team) {
 }
 
 function saveBracket() {
-  const data = { slots: bracketState, eliminated: [...eliminatedSet] };
+  const data = { slots: bracketState, winners: matchWinners };
   localStorage.setItem(BR_LOCAL_KEY, JSON.stringify(data));
   syncDirty = true;
   clearTimeout(syncTimer);
@@ -1940,11 +1940,12 @@ function saveBracket() {
 function loadBracketData(raw) {
   if (!raw) return;
   if (raw.slots && typeof raw.slots === 'object') {
-    bracketState  = raw.slots;
-    eliminatedSet = new Set(Array.isArray(raw.eliminated) ? raw.eliminated : []);
+    bracketState = raw.slots;
+    matchWinners = (raw.winners && typeof raw.winners === 'object' && !Array.isArray(raw.winners))
+      ? raw.winners : {};
   } else if (typeof raw === 'object' && !Array.isArray(raw)) {
-    bracketState  = raw; // legacy flat format
-    eliminatedSet = new Set();
+    bracketState = raw; // legacy flat format
+    matchWinners = {};
   }
 }
 
