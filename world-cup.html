@@ -1380,11 +1380,17 @@ function buildCard(f) {
   venueSpan.textContent = f.venue;
   venueCol.appendChild(venueSpan);
 
+  // Star badge (top-right corner)
+  const star = document.createElement('span');
+  star.className = 'watch-star';
+  star.textContent = '★';
+
   card.appendChild(meta);
   card.appendChild(home);
   card.appendChild(scoreBlock);
   card.appendChild(away);
   card.appendChild(venueCol);
+  card.appendChild(star);
 
   return card;
 }
@@ -1407,6 +1413,20 @@ document.querySelectorAll('#round-filter .filter-btn').forEach(btn => {
     activeDate  = 'all';
     renderAll();
   });
+});
+
+// ── Watchlist filter button ───────────────────────────────────────
+function updateWatchlistBtn() {
+  const btn = document.getElementById('watchlist-filter-btn');
+  const count = selectedGames.size;
+  btn.textContent = count > 0 ? `★ My Watchlist (${count})` : '★ My Watchlist';
+  btn.classList.toggle('active', showWatchlistOnly);
+}
+
+document.getElementById('watchlist-filter-btn').addEventListener('click', () => {
+  showWatchlistOnly = !showWatchlistOnly;
+  updateWatchlistBtn();
+  renderAll();
 });
 
 // ── Init ──────────────────────────────────────────────────────────
