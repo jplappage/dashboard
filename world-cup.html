@@ -1399,15 +1399,8 @@ function renderFixtures() {
 
 function buildCard(f) {
   const isGroup = f.round === 'group';
-  const homeUrl  = flagUrl(f.home);
-  const awayUrl  = flagUrl(f.away);
-  const homeTbd  = !homeUrl;
-  const awayTbd  = !awayUrl;
-
-  function flagHtml(url, name) {
-    if (!url) return '';
-    return `<img class="team-flag" src="${url}" alt="${name}" loading="lazy">`;
-  }
+  const homeTbd = !hasFlag(f.home);
+  const awayTbd = !hasFlag(f.away);
 
   const isFrance  = f.home === 'France'  || f.away === 'France';
   const isEngland = f.home === 'England' || f.away === 'England';
@@ -1455,7 +1448,7 @@ function buildCard(f) {
   // Home team
   const home = document.createElement('div');
   home.className = 'team home';
-  home.innerHTML = `<span class="team-name${homeTbd ? ' tbd' : ''}">${f.home}</span>${flagHtml(homeUrl, f.home)}`;
+  home.innerHTML = `<span class="team-name${homeTbd ? ' tbd' : ''}">${f.home}</span>${flagHtml(f.home)}`;
 
   // Score / vs
   const scoreBlock = document.createElement('div');
