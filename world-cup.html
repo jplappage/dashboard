@@ -1013,7 +1013,8 @@ function filteredFixtures() {
     const roundOk = activeRound === 'all' || f.round === activeRound;
     const dateOk  = activeDate  === 'all' || f.date  === activeDate;
     const teamOk  = activeTeam  === 'all' || f.home  === activeTeam || f.away === activeTeam;
-    return roundOk && dateOk && teamOk;
+    const watchOk = !showWatchlistOnly || selectedGames.has(f.id);
+    return roundOk && dateOk && teamOk && watchOk;
   });
 }
 
@@ -1311,12 +1312,32 @@ function buildCard(f) {
 
   const isFrance  = f.home === 'France'  || f.away === 'France';
   const isEngland = f.home === 'England' || f.away === 'England';
+  const isSelected = selectedGames.has(f.id);
+
   const card = document.createElement('div');
   let cardClass = 'match-card';
   if (f.homeScore != null) cardClass += ' played';
-  if (isFrance)  cardClass += ' france-game';
-  if (isEngland) cardClass += ' england-game';
+  if (isFrance)    cardClass += ' france-game';
+  if (isEngland)   cardClass += ' england-game';
+  if (isSelected)  cardClass += ' watch-selected';
   card.className = cardClass;
+
+  // Click to toggle watchlist
+  card.addEventListener('click', () => {
+    if (selectedGames.has(f.id)) {
+      selectedGames.delete(f.id);
+      card.classList.remove('watch-selected');
+      card.querySelector('.watch-star').style.opacity = '';
+    } else {
+      selectedGames.add(f.id);
+      card.classList.add('watch-selected');
+    }
+    saveWatchlist();
+    // Update watchlist button count
+    updateWatchlistBtn();
+    // If filtering by watchlist, re-render
+    if (showWatchlistOnly) renderFixtures();
+  });
 
   // Left meta column
   const meta = document.createElement('div');
