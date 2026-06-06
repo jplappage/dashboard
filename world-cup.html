@@ -1898,9 +1898,10 @@ function renderPickerList(query) {
   const list = document.getElementById('picker-list');
   if (!list) return;
   const placed = placedTeams();
+  const elim   = allEliminated();
   const q = query.toLowerCase().trim();
   // Show non-eliminated teams; placed ones shown with a note
-  const teams = ALL_TEAMS.filter(t => !eliminatedSet.has(t) && (!q || t.toLowerCase().includes(q)));
+  const teams = ALL_TEAMS.filter(t => !elim.has(t) && (!q || t.toLowerCase().includes(q)));
   let html = '';
   if (pickerSlot && bracketState[pickerSlot]) {
     html += `<div class="picker-team picker-clear" data-action="clear-slot">✕ Clear this slot</div>`;
@@ -1922,7 +1923,6 @@ function pickTeam(team) {
   }
   bracketState[pickerSlot] = team;
   closePicker();
-  checkAutoEliminate();
   saveBracket();
   renderTeamPool();
   renderBracket();
