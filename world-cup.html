@@ -1599,6 +1599,199 @@ document.getElementById('watchlist-filter-btn').addEventListener('click', () => 
   renderAll();
 });
 
+// ── Knockouts ─────────────────────────────────────────────────────
+const BRACKET_ORDER = {
+  r32:   [73,75,74,77,83,84,81,82,76,78,79,80,86,88,85,87],
+  r16:   [90,89,93,94,91,92,95,96],
+  qf:    [97,98,99,100],
+  sf:    [101,102],
+  final: [104],
+};
+const ROUND_LABELS = {
+  r32:'Round of 32', r16:'Round of 16', qf:'Quarter-finals', sf:'Semi-finals', final:'Final',
+};
+const ALL_TEAMS = Object.keys(FLAG_CODES).sort();
+const BR_LOCAL_KEY = 'wc2026-bracket';
+let bracketState = {}; // { '73_a': 'France', '73_b': 'Spain', ... }
+let pickerSlot   = null;
+let activeTab    = 'fixtures';
+let dragTeam     = null;
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  const isKO = tab === 'knockouts';
+  document.getElementById('round-filter').style.display     = isKO ? 'none' : '';
+  document.getElementById('date-nav-bar').style.display     = isKO ? 'none' : '';
+  document.getElementById('team-filter-bar').style.display  = isKO ? 'none' : '';
+  document.getElementById('fixtures-container').style.display = isKO ? 'none' : '';
+  document.getElementById('ko-view').style.display          = isKO ? '' : 'none';
+  if (isKO) { renderTeamPool(); renderBracket(); }
+}
+
+function placedTeams() {
+  return new Set(Object.values(bracketState).filter(Boolean));
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderTeamPool() {
+  const pool = document.getElementById('team-pool');
+  if (!pool) return;
+  const placed = placedTeams();
+  pool.innerHTML = ALL_TEAMS.map(team => {
+    const isPlaced = placed.has(team);
+    return `<div class="team-chip${isPlaced ? ' placed' : ''}" ${!isPlaced ? `draggable="true" data-team="${escHtml(team)}"` : ''}>
+      ${flagHtml(team)}<span>${escHtml(team)}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderBracket() {
+  const container  = document.getElementById('bracket-container');
+  const b3rd       = document.getElementById('bracket-3rd');
+  if (!container) return;
+  const ROUNDS = ['r32','r16','qf','sf','final'];
+  let html = '<div class="bracket-flex">';
+  for (const round of ROUNDS) {
+    html += `<div class="bracket-col" data-round="${round}">`;
+    html += `<div class="bracket-col-header">${ROUND_LABELS[round]}</div>`;
+    html += `<div class="bracket-matches">`;
+    for (const mid of BRACKET_ORDER[round]) {
+      html += `<div class="bracket-match">${buildBSlot(mid,'a')}${buildBSlot(mid,'b')}</div>`;
+    }
+    html += `</div></div>`;
+  }
+  html += '</div>';
+  container.innerHTML = html;
+  if (b3rd) b3rd.innerHTML = buildBSlot(103,'a') + buildBSlot(103,'b');
+}
+
+function buildBSlot(mid, pos) {
+  const key  = `${mid}_${pos}`;
+  const team = bracketState[key];
+  if (team) {
+    return `<div class="bracket-slot filled" data-slot="${key}" data-action="clear" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
+      ${flagHtml(team)}<span class="slot-team">${escHtml(team)}</span><span class="slot-x">✕</span>
+    </div>`;
+  }
+  return `<div class="bracket-slot empty" data-slot="${key}" data-action="pick" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
+    <span class="slot-team" style="color:#444">Pick team…</span>
+  </div>`;
+}
+
+function onSlotDrop(e, slotKey) {
+  e.preventDefault();
+  const team = dragTeam || e.dataTransfer.getData('text/plain');
+  if (!team) return;
+  for (const k of Object.keys(bracketState)) {
+    if (bracketState[k] === team) delete bracketState[k];
+  }
+  bracketState[slotKey] = team;
+  dragTeam = null;
+  saveBracket();
+  renderTeamPool();
+  renderBracket();
+}
+
+function clearSlot(key) {
+  delete bracketState[key];
+  saveBracket();
+  renderTeamPool();
+  renderBracket();
+}
+
+function openPicker(slotKey) {
+  pickerSlot = slotKey;
+  document.getElementById('picker-overlay').classList.add('open');
+  const inp = document.getElementById('picker-search');
+  inp.value = '';
+  renderPickerList('');
+  setTimeout(() => inp.focus(), 50);
+}
+
+function closePicker() {
+  document.getElementById('picker-overlay').classList.remove('open');
+  pickerSlot = null;
+}
+
+function renderPickerList(query) {
+  const list = document.getElementById('picker-list');
+  if (!list) return;
+  const placed = placedTeams();
+  const q = query.toLowerCase().trim();
+  const teams = ALL_TEAMS.filter(t => !q || t.toLowerCase().includes(q));
+  let html = '';
+  if (pickerSlot && bracketState[pickerSlot]) {
+    html += `<div class="picker-team picker-clear" data-action="clear-slot">✕ Clear this slot</div>`;
+  }
+  html += teams.map(team => {
+    const isPlaced = placed.has(team) && team !== bracketState[pickerSlot];
+    return `<div class="picker-team" data-team="${escHtml(team)}">
+      ${flagHtml(team)}<span>${escHtml(team)}</span>
+      ${isPlaced ? '<span class="picker-placed-note">placed</span>' : ''}
+    </div>`;
+  }).join('');
+  list.innerHTML = html;
+}
+
+function pickTeam(team) {
+  if (!pickerSlot) return;
+  for (const k of Object.keys(bracketState)) {
+    if (bracketState[k] === team) delete bracketState[k];
+  }
+  bracketState[pickerSlot] = team;
+  closePicker();
+  saveBracket();
+  renderTeamPool();
+  renderBracket();
+}
+
+function saveBracket() {
+  localStorage.setItem(BR_LOCAL_KEY, JSON.stringify(bracketState));
+  syncDirty = true;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(saveToCloud, 1500);
+}
+
+// Bracket click delegation
+document.getElementById('bracket-container').addEventListener('click', e => {
+  const slot = e.target.closest('[data-slot]');
+  if (!slot) return;
+  if (slot.dataset.action === 'clear') clearSlot(slot.dataset.slot);
+  else if (slot.dataset.action === 'pick') openPicker(slot.dataset.slot);
+});
+document.getElementById('bracket-3rd').addEventListener('click', e => {
+  const slot = e.target.closest('[data-slot]');
+  if (!slot) return;
+  if (slot.dataset.action === 'clear') clearSlot(slot.dataset.slot);
+  else if (slot.dataset.action === 'pick') openPicker(slot.dataset.slot);
+});
+
+// Team pool drag start
+document.getElementById('team-pool').addEventListener('dragstart', e => {
+  const chip = e.target.closest('[data-team]');
+  if (!chip) return;
+  dragTeam = chip.dataset.team;
+  e.dataTransfer.setData('text/plain', dragTeam);
+});
+
+// Picker events
+document.getElementById('picker-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closePicker();
+});
+document.getElementById('picker-close-btn').addEventListener('click', closePicker);
+document.getElementById('picker-search').addEventListener('input', e => renderPickerList(e.target.value));
+document.getElementById('picker-search').addEventListener('keydown', e => { if (e.key === 'Escape') closePicker(); });
+document.getElementById('picker-list').addEventListener('click', e => {
+  const item = e.target.closest('[data-team], [data-action]');
+  if (!item) return;
+  if (item.dataset.action === 'clear-slot') { clearSlot(pickerSlot); closePicker(); return; }
+  if (item.dataset.team) pickTeam(item.dataset.team);
+});
+
 // ── Init ──────────────────────────────────────────────────────────
 buildTeamDropdown();
 
@@ -1620,6 +1813,8 @@ buildTeamDropdown();
 // Seed from localStorage so the page renders immediately
 const _saved = localStorage.getItem(WL_LOCAL_KEY);
 if (_saved) { try { selectedGames = new Set(JSON.parse(_saved)); } catch(_){} }
+const _savedBracket = localStorage.getItem(BR_LOCAL_KEY);
+if (_savedBracket) { try { bracketState = JSON.parse(_savedBracket); } catch(_){} }
 renderAll();
 
 // Then sync from cloud and re-render with latest selections
