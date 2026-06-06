@@ -1156,20 +1156,37 @@ document.getElementById('next-day').addEventListener('click', () => {
 // ── Team filter ───────────────────────────────────────────────────
 function buildTeamDropdown() {
   const select = document.getElementById('team-dropdown');
-  // Get all unique teams from group stage
-  const teams = [...new Set(
+  const FAVOURITES = ['Argentina', 'Belgium', 'Brazil', 'Germany', 'Netherlands', 'Portugal', 'Spain'];
+
+  const allTeams = [...new Set(
     FIXTURES
       .filter(f => f.round === 'group')
       .flatMap(f => [f.home, f.away])
   )].sort();
 
   select.innerHTML = '<option value="all">All teams ▾</option>';
-  teams.forEach(team => {
+
+  // Favourites group
+  const favGroup = document.createElement('optgroup');
+  favGroup.label = '⭐ Top Teams';
+  FAVOURITES.forEach(team => {
     const opt = document.createElement('option');
     opt.value = team;
     opt.textContent = team;
-    select.appendChild(opt);
+    favGroup.appendChild(opt);
   });
+  select.appendChild(favGroup);
+
+  // All other teams
+  const otherGroup = document.createElement('optgroup');
+  otherGroup.label = 'All Teams';
+  allTeams.filter(t => !FAVOURITES.includes(t)).forEach(team => {
+    const opt = document.createElement('option');
+    opt.value = team;
+    opt.textContent = team;
+    otherGroup.appendChild(opt);
+  });
+  select.appendChild(otherGroup);
 }
 
 function setActiveTeam(team) {
