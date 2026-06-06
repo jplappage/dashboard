@@ -195,6 +195,21 @@
     }
     .back-arrow:hover { border-color: #ffe81f; background: rgba(255,232,31,0.08); }
 
+    /* ── Sync status ── */
+    .sync-status {
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid transparent;
+      transition: all 0.3s;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .sync-status:hover { opacity: 0.8; }
+    .sync-loading { color: #888;    border-color: #333; }
+    .sync-ok      { color: #4ade80; border-color: rgba(74,222,128,0.3); }
+    .sync-error   { color: #f87171; border-color: rgba(248,113,113,0.3); }
+
     /* ── Round filter ── */
     .filter-bar {
       display: flex;
