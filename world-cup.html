@@ -753,6 +753,18 @@
     .picker-clear { color:#c0392b; }
     .picker-clear:hover { background:#180808 !important; }
     .picker-placed-note { color:#555; font-size:0.7rem; margin-left:auto; }
+
+    /* Eliminate-ready slots */
+    .bracket-slot.can-eliminate:hover { background:#280d0d; }
+    .bracket-slot.can-eliminate:hover .slot-team { text-decoration:line-through; color:#ff6666; }
+    .bracket-slot.can-eliminate:hover .slot-x { color:#cc3333; }
+    .bracket-slot.can-eliminate .slot-x { color:#552222; }
+
+    /* Eliminated section */
+    #eliminated-section { margin-top:24px; padding-top:16px; border-top:1px solid #1a1a2e; }
+    #eliminated-grid { display:flex; flex-wrap:wrap; }
+    .elim-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px 2px 5px; background:#0d0d1f; border:1px solid #1a1a2e; border-radius:20px; font-size:0.73rem; color:#444; margin:2px; }
+    .elim-chip img { width:14px; height:auto; filter:grayscale(1) opacity(0.4); }
   </style>
 </head>
 <body>
@@ -839,7 +851,7 @@
 
 <!-- Knockouts view -->
 <div id="ko-view" style="display:none">
-  <div class="pool-label">All 48 teams — drag chips onto slots, or click a slot to pick</div>
+  <div class="pool-label">Available teams — drag onto a slot or click a slot to pick · when both slots in a match are filled, click a team to eliminate them and auto-advance their opponent</div>
   <div class="team-pool" id="team-pool"></div>
   <div class="bracket-scroll">
     <div id="bracket-container"></div>
