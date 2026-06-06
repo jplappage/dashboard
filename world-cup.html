@@ -1163,7 +1163,7 @@ async function saveToCloud() {
       const r = await fetch(GIST_URL, { headers: GIST_HEADERS, cache: 'no-store' });
       if (r.ok) { const d = await r.json(); binCache = JSON.parse(d.files[GIST_FILE]?.content || '{}'); }
     }
-    const updated = { ...binCache, wcWatchlist: [...selectedGames], wcBracket: { slots: bracketState, eliminated: [...eliminatedSet] } };
+    const updated = { ...binCache, wcWatchlist: [...selectedGames], wcBracket: { slots: bracketState, winners: matchWinners } };
     const r = await fetch(GIST_URL, {
       method: 'PATCH',
       headers: GIST_HEADERS,
