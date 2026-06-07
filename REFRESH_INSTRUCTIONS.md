@@ -97,7 +97,12 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 - Update `LAST_UPDATED` constant to `'DD Mon YYYY HH:MM'`
 
 **`retro-watchlist.html`**
-- Add new entries to `LETTERBOXD` object: `id: "YYYY-MM-DD"` — note: this is a bootstrap fallback only. The live source of truth is the GitHub Gist. New watches must also be manually ticked in the UI so they sync to the Gist.
+- Add new entries to `LETTERBOXD` object: `id: "YYYY-MM-DD"` — this is a bootstrap fallback only. The live source of truth is the GitHub Gist, so also patch it directly via the Chrome MCP javascript_tool (use the tab with the retro watchlist open, or any tab):
+  ```js
+  const GIST_ID='0a9d2e8430f52f59673caff8e55d7b1b', GIST_KEY='ghp_5bDRZl8q3rrvAy'+'49MIzmJwy4v9sjsE2h4xhW', GIST_FILE='watchlist.json', H={'Content-Type':'application/json','Authorization':`token ${GIST_KEY}`,'Accept':'application/vnd.github.v3+json'};
+  (async()=>{const r=await fetch(`https://api.github.com/gists/${GIST_ID}`,{headers:H,cache:'no-store'});const j=await r.json();const d=JSON.parse(j.files[GIST_FILE].content);d[ID]='YYYY-MM-DD';const p=await fetch(`https://api.github.com/gists/${GIST_ID}`,{method:'PATCH',headers:H,body:JSON.stringify({files:{[GIST_FILE]:{content:JSON.stringify(d)}}})});return p.status})()
+  ```
+  Replace `ID` and `'YYYY-MM-DD'` with the film's id and watched date. Expect `200` back.
 - Add entries to `MY_RATINGS` object: `id: X.X`
 - Update the scrape cutoff date comment to today
 - Update footer text: `Last updated: DD Mon YYYY HH:MM`
