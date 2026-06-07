@@ -337,19 +337,7 @@
     .my-stars-half { font-size: 0.7em; vertical-align: middle; color: #ffe81f; opacity: 0.85; }
     td.td-date, th.th-date   { width: 130px; }
 
-    input[type="checkbox"] {
-      width: 16px; height: 16px; cursor: pointer;
-      accent-color: var(--green); border-radius: 3px;
-    }
-    input[type="date"] {
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text); padding: 4px 8px; border-radius: 4px;
-      font-size: 12px; width: 130px; cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    input[type="date"]:not([disabled]):focus { outline: none; border-color: var(--gold); }
-    input[type="date"][disabled] { opacity: 0.3; cursor: default; }
-    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
+    td.td-date { color: var(--text-muted); font-size: 12px; }
 
     .watched-badge {
       display: inline-flex; align-items: center; gap: 4px;
@@ -408,19 +396,6 @@
 </head>
 <body>
 
-<!-- Watch confirmation modal -->
-<div class="watch-modal-overlay" id="watch-modal-overlay" onclick="handleOverlayClick(event)">
-  <div class="watch-modal">
-    <h3>Mark as Watched</h3>
-    <div class="wm-title" id="wm-title"></div>
-    <label for="wm-date">Date watched</label>
-    <input type="date" id="wm-date">
-    <div class="wm-buttons">
-      <button class="wm-cancel" onclick="cancelWatch()">Cancel</button>
-      <button class="wm-confirm" onclick="confirmWatch()">Confirm</button>
-    </div>
-  </div>
-</div>
 
 <div class="top-bar">
   <a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
