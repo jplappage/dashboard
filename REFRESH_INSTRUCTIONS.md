@@ -94,11 +94,13 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 **`show-log.html`**
 - Increment `aired` and update `next` for shows whose season has started
 - Update `next` for shows with newly confirmed premiere dates
+- Update `LAST_UPDATED` constant to `'DD Mon YYYY HH:MM'`
 
 **`retro-watchlist.html`**
 - Add new entries to `LETTERBOXD` object: `id: "YYYY-MM-DD"`
 - Add entries to `MY_RATINGS` object: `id: X.X`
 - Update the scrape cutoff date comment to today
+- Update footer text: `Last updated: DD Mon YYYY HH:MM`
 
 ---
 
