@@ -335,7 +335,6 @@
     td.td-rating .lb-val { color: var(--text-muted); }
     .my-stars { font-size: 0.85rem; letter-spacing: 1px; }
     .my-stars-half { font-size: 0.7em; vertical-align: middle; color: #ffe81f; opacity: 0.85; }
-    td.td-check, th.th-check { width: 44px; text-align: center; }
     td.td-date, th.th-date   { width: 130px; }
 
     input[type="checkbox"] {
@@ -393,53 +392,6 @@
       td.td-year { font-size: 12px; }
       td.td-rating { font-size: 0.75rem; }
     }
-  /* ── WATCH CONFIRMATION MODAL ── */
-  .watch-modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.75); z-index: 200;
-    align-items: center; justify-content: center;
-  }
-  .watch-modal-overlay.open { display: flex; }
-  .watch-modal {
-    background: #141414; border: 1px solid rgba(255,232,31,0.25);
-    border-radius: 14px; padding: 28px 24px 22px; width: 300px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.6); text-align: center;
-  }
-  .watch-modal h3 {
-    font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
-    color: #ffe81f; letter-spacing: 1.5px; text-transform: uppercase;
-    margin: 0 0 10px;
-  }
-  .watch-modal .wm-title {
-    color: #fff; font-size: 0.95rem; font-weight: 600;
-    margin-bottom: 18px; line-height: 1.4;
-  }
-  .watch-modal label {
-    display: block; font-size: 0.72rem; color: #888;
-    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
-  }
-  .watch-modal input[type="date"] {
-    width: 100%; padding: 9px 12px; background: #1f1f1f;
-    border: 1px solid #333; border-radius: 8px;
-    color: #fff; font-size: 0.9rem; box-sizing: border-box;
-    color-scheme: dark;
-  }
-  .watch-modal input[type="date"]:focus { outline: none; border-color: #ffe81f; }
-  .watch-modal .wm-buttons {
-    display: flex; gap: 10px; margin-top: 18px;
-  }
-  .watch-modal .wm-cancel {
-    flex: 1; padding: 9px; background: transparent;
-    border: 1px solid #333; border-radius: 8px;
-    color: #888; font-size: 0.85rem; cursor: pointer;
-  }
-  .watch-modal .wm-cancel:hover { border-color: #555; color: #ccc; }
-  .watch-modal .wm-confirm {
-    flex: 2; padding: 9px; background: #ffe81f;
-    border: none; border-radius: 8px;
-    color: #000; font-size: 0.85rem; font-weight: 700; cursor: pointer;
-  }
-  .watch-modal .wm-confirm:hover { background: #fff176; }
   .top-bar {
     display: flex; align-items: center; justify-content: space-between;
     padding: 10px 32px;
