@@ -97,7 +97,7 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 - Update `LAST_UPDATED` constant to `'DD Mon YYYY HH:MM'`
 
 **`retro-watchlist.html`**
-- Add new entries to `LETTERBOXD` object: `id: "YYYY-MM-DD"`
+- Add new entries to `LETTERBOXD` object: `id: "YYYY-MM-DD"` — note: this is a bootstrap fallback only. The live source of truth is the GitHub Gist. New watches must also be manually ticked in the UI so they sync to the Gist.
 - Add entries to `MY_RATINGS` object: `id: X.X`
 - Update the scrape cutoff date comment to today
 - Update footer text: `Last updated: DD Mon YYYY HH:MM`
