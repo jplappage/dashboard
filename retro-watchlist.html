@@ -483,7 +483,6 @@
         <th class="th-genre" onclick="sortBy('genre')">Genre <span class="sort-arrow" id="sort-genre">↕</span></th>
         <th class="th-runtime" onclick="sortBy('runtime')">Runtime <span class="sort-arrow" id="sort-runtime">↕</span></th>
         <th class="th-rating" onclick="sortBy('lbRating')">Rating <span class="sort-arrow" id="sort-lbRating">↕</span></th>
-        <th class="no-sort th-check">✓</th>
         <th class="th-date no-sort" id="th-date">Date Watched <span class="sort-arrow" id="sort-date">↕</span></th>
       </tr>
     </thead>
@@ -1211,14 +1210,7 @@ function renderTable() {
           : (f.lbRating != null ? `<span class="lb-star">★</span><span class="lb-val"> ${f.lbRating.toFixed(1)}</span>` : '—')
         }
       </td>
-      <td class="td-check">
-        <input type="checkbox" ${watched ? 'checked' : ''}
-          onchange="toggleWatched(${f.id}, this)">
-      </td>
-      <td class="td-date">
-        <input type="date" value="${date}" ${watched ? '' : 'disabled'}
-          onchange="updateDate(${f.id}, this.value)">
-      </td>
+      <td class="td-date">${date || '—'}</td>
     </tr>`;
   }).join('');
 }
