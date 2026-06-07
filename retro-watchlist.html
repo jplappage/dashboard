@@ -1219,58 +1219,6 @@ function esc(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── WATCHED TOGGLE ────────────────────────────────────────
-let _pendingWatchId = null;
-
-function toggleWatched(id, cb) {
-  if (cb.checked) {
-    // Revert checkbox — wait for modal confirmation before saving
-    cb.checked = false;
-    _pendingWatchId = id;
-    const film = FILMS.find(f => f.id === id);
-    document.getElementById('wm-title').textContent = film ? film.title : '';
-    document.getElementById('wm-date').value = new Date().toISOString().slice(0, 10);
-    document.getElementById('watch-modal-overlay').classList.add('open');
-    // Focus the date input so the user is prompted to confirm/adjust it
-    setTimeout(() => document.getElementById('wm-date').focus(), 50);
-  } else {
-    delete watchedData[id];
-    save();
-    updateFilterOptions(); renderTable(); updateStats();
-  }
-}
-
-function confirmWatch() {
-  const dateVal = document.getElementById('wm-date').value;
-  if (!dateVal) {
-    document.getElementById('wm-date').focus();
-    return;
-  }
-  if (_pendingWatchId !== null) {
-    watchedData[_pendingWatchId] = dateVal;
-    save();
-    updateFilterOptions(); renderTable(); updateStats();
-  }
-  closeWatchModal();
-}
-
-function cancelWatch() {
-  closeWatchModal();
-}
-
-function closeWatchModal() {
-  document.getElementById('watch-modal-overlay').classList.remove('open');
-  _pendingWatchId = null;
-}
-
-function handleOverlayClick(e) {
-  // Dismiss if clicking the backdrop (not the modal itself)
-  if (e.target === document.getElementById('watch-modal-overlay')) cancelWatch();
-}
-
-function updateDate(id, val) {
-  if (val) { watchedData[id] = val; save(); updateStats(); }
-}
 
 // ── STATS ─────────────────────────────────────────────────
 function updateStats() {
