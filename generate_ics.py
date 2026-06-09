@@ -33,6 +33,7 @@ WATCHED = [
     { 'title': 'Star Wars: The Mandalorian & Grogu', 'vodDate': '2026-07-21', 'imdbRating': 7.1 },
     { 'title': 'The Magic Faraway Tree', 'vodDate': '2026-05-18', 'imdbRating': 6.8 },
     { 'title': 'In the Grey', 'vodDate': '2026-06-02', 'imdbRating': 7.1 },
+    { 'title': 'Mortal Kombat II', 'vodDate': '2026-06-09', 'imdbRating': 7.0 },
 ]
 
 
