@@ -111,7 +111,8 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 
 **`show-log.html`**
 - Increment `aired` and update `next` for shows whose season has started
-- Update `next` for shows with newly confirmed premiere dates
+- Update `next` for shows with newly confirmed premiere dates (and remove their `recheck`)
+- Set/update `recheck:"YYYY-MM"` (next month) on shows confirmed still 12+ months out or unrenewed
 - Update `LAST_UPDATED` constant to `'DD Mon YYYY HH:MM'`
 
 **`retro-watchlist.html`**
@@ -129,7 +130,13 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 
 ## Finally
 
-Run `push.bat` to deploy.
+The auto-deploy watcher commits and pushes on every file save — do NOT run `push.bat` from the sandbox (it has no GitHub credentials, and the watcher races it with fragmented commits anyway). Instead, verify the deploy:
+
+```
+git status -sb   # expect "## main...origin/main" with no ahead/behind
+```
+
+If main is ahead of origin and the watcher hasn't pushed within a minute, tell JP to run `push.bat` manually.
 
 ---
 
