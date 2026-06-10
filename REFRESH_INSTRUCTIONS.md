@@ -57,7 +57,7 @@ Do not proceed until all five lists are complete. Every film and every vague-nex
 **What does NOT need a search:**
 - next with a specific confirmed day+month+year (e.g. "S3 · 21 Jun 2026")
 
-This means the show search list is typically long (10–15+ shows). If your list has fewer than ~8 shows, recheck — you've probably missed some.
+Sanity check: searched + skipped (recheck not due) together must equal the total count of vague-next shows — typically 15+ entries combined. If the combined count looks short, go back through the SHOWS array line by line.
 
 ---
 
