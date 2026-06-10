@@ -570,8 +570,9 @@
       text-overflow: ellipsis;
     }
 
-    .cal-film-out  { background: #166534; color: #4ade80; }
-    .cal-film-soon { background: #78350f; color: #fbbf24; }
+    .cal-film-out     { background: #166534; color: #4ade80; }
+    .cal-film-soon    { background: #78350f; color: #fbbf24; }
+    .cal-film-watched { background: #0c2616; color: #52a06e; opacity: 0.85; }
     .cal-tv        { background: #252525; color: #aaaaaa; }
     .cal-est       { opacity: 0.72; }
     .back-arrow {
@@ -985,6 +986,24 @@ let calendarOpen = false;
 let calYear  = TODAY.getFullYear();
 let calMonth = TODAY.getMonth();
 
+// ── WATCHED ARCHIVE ───────────────────────────────────────────────────────
+// Films removed from FILMS after watching, but kept on the calendar.
+// Keep in sync with the WATCHED list in generate_ics.py — add here whenever
+// a film is archived during a refresh. Permanent record: never re-check.
+const WATCHED = [
+  { title: 'Wuthering Heights',               vodDate: '2026-03-31' },
+  { title: 'Lord of the Flies',               vodDate: '2026-05-04' },
+  { title: 'Ready or Not 2: Here I Come',     vodDate: '2026-05-05' },
+  { title: 'Gary',                            vodDate: '2026-05-05' },
+  { title: 'The Punisher: One Last Kill',     vodDate: '2026-05-12' },
+  { title: 'Faces of Death',                  vodDate: '2026-05-12' },
+  { title: 'Swapped',                         vodDate: '2026-05-01' },
+  { title: 'Star Wars: The Mandalorian & Grogu', vodDate: '2026-07-21' },
+  { title: 'The Magic Faraway Tree',          vodDate: '2026-05-18' },
+  { title: 'In the Grey',                     vodDate: '2026-06-02' },
+  { title: 'Mortal Kombat II',                vodDate: '2026-06-09' },
+];
+
 const CAL_EVENTS = (() => {
   const map = {};
   const add = (date, title, cls) => {
@@ -997,6 +1016,7 @@ const CAL_EVENTS = (() => {
     const past = parseLocalDate(f.vodDate) <= TODAY;
     add(f.vodDate, f.title, past ? 'cal-film-out' : 'cal-film-soon' + (f.estimated ? ' cal-est' : ''));
   });
+  WATCHED.forEach(w => add(w.vodDate, '✓ ' + w.title, 'cal-film-watched'));
   return map;
 })();
 
