@@ -680,6 +680,7 @@
     .venue-col {
       display: flex;
       align-items: center;
+      justify-content: flex-end;
     }
 
     .venue {
@@ -1607,14 +1608,6 @@ function buildCard(f) {
   time.textContent = toBST(f.time) + ' BST';
   meta.appendChild(time);
 
-  const tv = TV_CHANNELS[f.id];
-  if (tv) {
-    const tvPill = document.createElement('span');
-    tvPill.className = 'tv-pill ' + (tv === 'BBC' ? 'tv-bbc' : 'tv-itv');
-    tvPill.textContent = tv;
-    meta.appendChild(tvPill);
-  }
-
   // Home team
   const home = document.createElement('div');
   home.className = 'team home';
@@ -1634,13 +1627,16 @@ function buildCard(f) {
   away.className = 'team away';
   away.innerHTML = `${flagHtml(f.away)}<span class="team-name${awayTbd ? ' tbd' : ''}">${f.away}</span>`;
 
-  // Venue
+  // TV channel (replaces venue — venue not shown)
   const venueCol = document.createElement('div');
   venueCol.className = 'venue-col';
-  const venueSpan = document.createElement('span');
-  venueSpan.className = 'venue';
-  venueSpan.textContent = f.venue;
-  venueCol.appendChild(venueSpan);
+  const tv = TV_CHANNELS[f.id];
+  if (tv) {
+    const tvPill = document.createElement('span');
+    tvPill.className = 'tv-pill ' + (tv === 'BBC' ? 'tv-bbc' : 'tv-itv');
+    tvPill.textContent = tv;
+    venueCol.appendChild(tvPill);
+  }
 
   // Star badge (top-right corner)
   const star = document.createElement('span');
