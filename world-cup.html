@@ -624,6 +624,7 @@
     }
     .tv-bbc { background: rgba(255,77,166,0.14); color: #ff4da6; border: 1px solid rgba(255,77,166,0.35); }
     .tv-itv { background: rgba(255,216,31,0.12); color: #ffd81f; border: 1px solid rgba(255,216,31,0.35); }
+    .tv-pill-mobile { display: none; }
 
     .team {
       display: flex;
@@ -708,9 +709,11 @@
 
     @media (max-width: 640px) {
       .match-card {
-        grid-template-columns: 70px 1fr auto 1fr auto;
+        grid-template-columns: 70px 1fr auto 1fr;
         grid-template-rows: auto auto;
       }
+      .venue-col { display: none; }
+      .tv-pill-mobile { display: inline-block; }
       .team-name { font-size: 0.8rem; }
     }
 
