@@ -26,12 +26,16 @@ Run these comparisons immediately from the data loaded in Phase 1:
 **Films watchlist**
 - New films on Letterboxd not in FILMS → queue for Phase 3 (need poster + IMDb check)
 - Films in FILMS not on Letterboxd → mark for archiving (remove from FILMS, add to `generate_ics.py`)
-- Films with `vodDate: null` or `estimated: true` → queue for Phase 3 (need streaming date)
-- Films with no `imdbRating` → queue for Phase 3 (need IMDb check)
+- Films with `vodDate: null` or `estimated: true` → queue for Phase 3 (need streaming date), **except pre-theatrical films (see skip rule below)**
+- Films with no `imdbRating` → queue for Phase 3 (need IMDb check), **except pre-theatrical films**
+
+**Pre-theatrical skip rule:** a film whose cinema release date (in its `note`) has NOT yet passed cannot have a VOD date or an IMDb rating. Skip both searches for it, but list it under "Skipped (pre-theatrical)" so the Phase 3 verification can account for every film.
 
 **Show log**
 - Any `next` field with a specific date that has now passed → increment `aired`, update `next` to null or next known info
-- Any `next` field that is vague → queue for Phase 3 (need premiere date search)
+- Any `next` field that is vague → queue for Phase 3 (need premiere date search), **unless its `recheck` field defers it (see below)**
+
+**Recheck rule (avoids re-searching far-out shows every week):** a show entry may carry `recheck:"YYYY-MM"`. If the current month is *before* that value, skip the search and list the show under "Skipped (recheck not due)". If the current month is ≥ the value (or there is no `recheck` field), search as normal. Shows whose confirmed window is 12+ months away, or which are unrenewed/indefinite, get a `recheck` set one month ahead in Phase 4.
 
 **Retro watchlist**
 - Any diary entry after the cutoff date that matches a FILMS title → queue as new watch (need to add to LETTERBOXD + MY_RATINGS)
@@ -40,8 +44,10 @@ Run these comparisons immediately from the data loaded in Phase 1:
 - Films to search (streaming date): [list every title]
 - Films to search (IMDb): [list every title]
 - Shows to search (vague next): [list every show name + current next value]
+- Skipped (pre-theatrical): [films with future cinema dates]
+- Skipped (recheck not due): [shows + their recheck month]
 
-Do not proceed until all three lists are complete. The show list must account for every entry in the SHOWS array — go through it line by line.
+Do not proceed until all five lists are complete. Every film and every vague-next show must appear in exactly one list — searched or skipped, nothing unaccounted for. Go through the SHOWS array line by line.
 
 **What counts as "vague" for shows (must search ALL of these):**
 - `next: null` — no info at all
