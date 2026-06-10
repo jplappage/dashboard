@@ -25,7 +25,7 @@ Run these comparisons immediately from the data loaded in Phase 1:
 
 **Films watchlist**
 - New films on Letterboxd not in FILMS → queue for Phase 3 (need poster + IMDb check)
-- Films in FILMS not on Letterboxd → mark for archiving (remove from FILMS, add to `generate_ics.py`)
+- Films in FILMS not on Letterboxd → mark for archiving (remove from FILMS, add to the WATCHED list in BOTH `generate_ics.py` AND `watchlist-dashboard.html` — the latter keeps it on the page calendar)
 - Films with `vodDate: null` or `estimated: true` → queue for Phase 3 (need streaming date), **except pre-theatrical films (see skip rule below)**
 - Films with no `imdbRating` → queue for Phase 3 (need IMDb check), **except pre-theatrical films**
 
@@ -104,7 +104,7 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 
 **`watchlist-dashboard.html`**
 - Add new film entries (with poster, slug, imdbRating if known, vodDate if known, lbSlug if different from slug, plexSlug if different from slug)
-- Remove archived films
+- Remove archived films from FILMS and append them to the `WATCHED` array (title + vodDate) so they stay on the calendar — mirror the same entry into `generate_ics.py`
 - Update `vodDate`, `platform`, `estimated` for any films with new streaming dates
 - Add/update `imdbRating` for newly released films
 - Bump footer: `Last updated: DD Mon YYYY (refresh #N)`
