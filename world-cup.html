@@ -1137,6 +1137,15 @@ const FIXTURES = [
   {id:104, round:'final', date:'2026-07-19', time:'19:00', home:'Winner M101', away:'Winner M102', venue:'New Jersey, USA'},
 ];
 
+// ── UK TV channel per match (source: live-footballontv.com, checked 10 Jun 2026) ──
+// Knockout assignments TBC — add ids here when announced.
+const TV_CHANNELS = (() => {
+  const map = {};
+  [1,2,5,8,9,10,12,13,15,19,22,23,26,27,30,31,32,34,38,40,43,44,45,48,49,50,59,60,61,62,63,64,67,68].forEach(id => map[id] = 'ITV');
+  [3,4,6,7,11,14,16,17,18,20,21,24,25,28,29,33,35,36,37,39,41,42,46,47,51,52,53,54,55,56,57,58,65,66,69,70,71,72].forEach(id => map[id] = 'BBC');
+  return map;
+})();
+
 // ── State ─────────────────────────────────────────────────────────
 let activeRound       = 'all';
 let activeDate        = 'all';
@@ -1597,6 +1606,14 @@ function buildCard(f) {
   time.className = 'match-time';
   time.textContent = toBST(f.time) + ' BST';
   meta.appendChild(time);
+
+  const tv = TV_CHANNELS[f.id];
+  if (tv) {
+    const tvPill = document.createElement('span');
+    tvPill.className = 'tv-pill ' + (tv === 'BBC' ? 'tv-bbc' : 'tv-itv');
+    tvPill.textContent = tv;
+    meta.appendChild(tvPill);
+  }
 
   // Home team
   const home = document.createElement('div');
