@@ -34,6 +34,7 @@ WATCHED = [
     { 'title': 'The Magic Faraway Tree', 'vodDate': '2026-05-18', 'imdbRating': 6.8 },
     { 'title': 'In the Grey', 'vodDate': '2026-06-02', 'imdbRating': 7.1 },
     { 'title': 'Mortal Kombat II', 'vodDate': '2026-06-09', 'imdbRating': 7.0 },
+    { 'title': 'Kevin Bridges: In Search of the Beautiful Game', 'vodDate': '2026-06-07', 'imdbRating': 7.4 },
 ]
 
 
