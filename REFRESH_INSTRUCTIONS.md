@@ -148,6 +148,7 @@ If main is ahead of origin and the watcher hasn't pushed within a minute, tell J
 - Plex links: `https://watch.plex.tv/en-GB/movie/{slug}` — use `plexSlug` field to override when Plex slug differs from Letterboxd slug (e.g. Plex adds a year suffix like `fuze-2026`)
 - Letterboxd links: `https://letterboxd.com/film/{slug}/` — use `lbSlug` field to override when needed (e.g. `deep-water-1`)
 - JP is in **GB** — UK platforms preferred, but US digital dates count
+- **All footer/LAST_UPDATED timestamps use UK time** — the sandbox clock is UTC, so always get the time with `TZ='Europe/London' date '+%d %b %Y %H:%M'`
 - `whentostream.com` is sandbox-blocked — always use WebSearch instead
 - Retro watchlist scrape cutoff: check the comment above `const LETTERBOXD` in `retro-watchlist.html`
 
