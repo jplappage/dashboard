@@ -6,11 +6,16 @@ Run all phases in order. Within each phase, do everything listed simultaneously.
 
 ## Phase 1 — Load (all at once)
 
-- Read `watchlist-dashboard.html` → note every film in FILMS array (title, vodDate, estimated, imdbRating)
-- Read `show-log.html` → note every ongoing show and its `next` field
+- Read `watchlist-dashboard.html` → note every film in FILMS array (title, vodDate, estimated, imdbRating, note with cinema date)
+- Read `show-log.html` → note every ongoing show, its `next` field, and its `recheck` field (if any)
 - Read `retro-watchlist.html` → note the scrape cutoff date in the LETTERBOXD comment
-- Fetch `https://letterboxd.com/zidanejp/watchlist/` → full current watchlist
-- Fetch `https://letterboxd.com/zidanejp/films/diary/` → diary entries after the retro cutoff date
+- **Letterboxd via Chrome MCP only — WebFetch returns empty for letterboxd.com, do not try it.**
+  Open a tab, then:
+  - Navigate to `https://letterboxd.com/zidanejp/watchlist/` and extract slugs with `javascript_tool`:
+    ```js
+    [...document.querySelectorAll('[data-item-slug]')].map(p=>({slug:p.dataset.itemSlug,name:p.dataset.itemName}))
+    ```
+  - Navigate to `https://letterboxd.com/zidanejp/films/diary/` and use `get_page_text` → diary entries after the retro cutoff date
 
 ---
 
