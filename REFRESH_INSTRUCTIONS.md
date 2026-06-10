@@ -65,10 +65,17 @@ This means the show search list is typically long (10–15+ shows). If your list
 
 Fire all searches simultaneously. Use the lists from Phase 2 — do not rely on memory.
 
-**For each film needing an IMDb check:**
-Search `https://www.imdb.com/find/?q=[title]` — does it have a rating? Yes = released, add `imdbRating`. No = leave null.
+**Step 0 — WhenToStream weekly tracking report (one read covers many films):**
+WebSearch `site:whentostream.com weekly tracking report` to find the latest report URL, then open it via Chrome MCP `navigate` + `get_page_text` (whentostream.com is blocked for direct fetch). Apply any dates/estimates it gives for queued films. Per-title searches below are then only needed for films the report did not cover.
 
-**For each film needing a streaming date:**
+**IMDb checks — one batched call, not per-title fetches (imdb.com is blocked for direct fetch):**
+Navigate a Chrome tab to `https://www.imdb.com/`, then run a single `javascript_tool` call that loops over all queued titles:
+```js
+(async()=>{const titles=[/* queued titles */];const out={};for(const t of titles){const h=await(await fetch('https://www.imdb.com/find/?q='+encodeURIComponent(t),{credentials:'same-origin'})).text();const m=h.match(/\/title\/(tt\d+)\//);if(!m){out[t]='no result';continue}const th=await(await fetch('https://www.imdb.com/title/'+m[1]+'/',{credentials:'same-origin'})).text();const r=th.match(/"aggregateRating"[^}]*"ratingValue":([\d.]+)/);out[t]={id:m[1],rating:r?r[1]:null}}return JSON.stringify(out)})()
+```
+Has a rating = released, add `imdbRating`. No rating = leave null.
+
+**For each film still needing a streaming date after Step 0:**
 WebSearch `site:whentostream.com "[title]"` — confirmed date = set `vodDate` + `platform` + `estimated: false`. Estimate only = set `estimated: true` + add `note`. Nothing = leave as-is.
 
 **For each new film from Letterboxd:**
@@ -77,16 +84,16 @@ Then verify both the Letterboxd and Plex slugs:
 - Fetch `https://letterboxd.com/film/{slug}/` — if it 404s, find the correct slug and set `lbSlug: 'correct-slug'`
 - Fetch `https://watch.plex.tv/en-GB/movie/{slug}/` — if it 404s or returns the wrong film, try `{slug}-{year}` and set `plexSlug: 'correct-slug'` if different
 
-**For each show with a vague `next` field:**
-WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = update `next`. Still vague = leave or refine the window.
+**For each show with a vague `next` field (and recheck due or absent):**
+WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = update `next` and remove any `recheck`. Still vague = leave or refine the window; if the window is 12+ months out or the season is unrenewed/indefinite, set `recheck` to next month (`"YYYY-MM"`).
 
 **For each retro film newly watched:**
 The watched date comes from the diary (already loaded). Personal rating comes from the diary entry.
 
 **Before moving to Phase 4, verify:**
-- [ ] Every film with `vodDate: null` or `estimated: true` was searched
-- [ ] Every film with no `imdbRating` was searched
-- [ ] Every show with a vague `next` field was searched (check count against Phase 2 list)
+- [ ] Every film with `vodDate: null` or `estimated: true` was searched OR listed as skipped (pre-theatrical)
+- [ ] Every film with no `imdbRating` was searched OR listed as skipped (pre-theatrical)
+- [ ] Every show with a vague `next` field was searched OR listed as skipped (recheck not due) — check counts against Phase 2 lists
 - [ ] All results have been applied or explicitly noted as no-change
 
 ---
