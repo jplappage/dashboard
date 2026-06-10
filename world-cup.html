@@ -1607,6 +1607,14 @@ function buildCard(f) {
   time.textContent = toBST(f.time) + ' BST';
   meta.appendChild(time);
 
+  const tvCh = TV_CHANNELS[f.id];
+  if (tvCh) {
+    const tvPillM = document.createElement('span');
+    tvPillM.className = 'tv-pill tv-pill-mobile ' + (tvCh === 'BBC' ? 'tv-bbc' : 'tv-itv');
+    tvPillM.textContent = tvCh;
+    meta.appendChild(tvPillM);
+  }
+
   // Home team
   const home = document.createElement('div');
   home.className = 'team home';
@@ -1632,7 +1640,7 @@ function buildCard(f) {
   const tv = TV_CHANNELS[f.id];
   if (tv) {
     const tvPill = document.createElement('span');
-    tvPill.className = 'tv-pill ' + (tv === 'BBC' ? 'tv-bbc' : 'tv-itv');
+    tvPill.className = 'tv-pill tv-pill-desktop ' + (tv === 'BBC' ? 'tv-bbc' : 'tv-itv');
     tvPill.textContent = tv;
     venueCol.appendChild(tvPill);
   }
