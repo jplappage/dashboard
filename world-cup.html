@@ -2259,6 +2259,61 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') loadResults();
 });
 
+// ── Live bracket sync ─────────────────────────────────────────────
+// Pushes real knockout teams + results into the bracket automatically.
+// Undecided matches can still be filled by hand as predictions; real
+// results overwrite predictions as they happen.
+function setLiveSlot(key, team) {
+  if (!team) return;
+  const mid = parseInt(key);
+  const round = Object.keys(BRACKET_ORDER).find(r => BRACKET_ORDER[r].includes(mid));
+  if (round) {
+    // Clear the team from any other slot in the same round (e.g. a wrong prediction)
+    for (const m of BRACKET_ORDER[round]) {
+      for (const p of ['a', 'b']) {
+        const k = `${m}_${p}`;
+        if (k !== key && bracketState[k] === team) delete bracketState[k];
+      }
+    }
+  }
+  bracketState[key] = team;
+}
+
+function syncBracketFromResults() {
+  const KO_MIDS = [...BRACKET_ORDER.r32, ...BRACKET_ORDER.r16, ...BRACKET_ORDER.qf, ...BRACKET_ORDER.sf, 103, 104];
+  let changed = false;
+  for (const mid of KO_MIDS) {
+    const f = FIXTURES.find(x => x.id === mid);
+    if (!f) continue;
+
+    // Real team names (filled from ESPN once known) → bracket slots
+    if (hasFlag(f.home) && bracketState[`${mid}_a`] !== f.home) { setLiveSlot(`${mid}_a`, f.home); changed = true; }
+    if (hasFlag(f.away) && bracketState[`${mid}_b`] !== f.away) { setLiveSlot(`${mid}_b`, f.away); changed = true; }
+
+    // Finished match → record winner, advance them, send SF losers to 3rd place
+    if (f.homeScore != null && !f.live) {
+      const hs = +f.homeScore, as = +f.awayScore;
+      let winPos = hs > as ? 'a' : hs < as ? 'b' : null;
+      if (winPos === null && f.homePens != null && f.awayPens != null) {
+        winPos = +f.homePens > +f.awayPens ? 'a' : 'b';
+      }
+      if (winPos && matchWinners[mid] !== winPos) {
+        matchWinners[mid] = winPos;
+        const losePos = winPos === 'a' ? 'b' : 'a';
+        const dest  = WINNER_DEST[mid];
+        if (dest)  setLiveSlot(`${dest.match}_${dest.pos}`, bracketState[`${mid}_${winPos}`]);
+        const ldest = LOSER_DEST[mid];
+        if (ldest) setLiveSlot(`${ldest.match}_${ldest.pos}`, bracketState[`${mid}_${losePos}`]);
+        changed = true;
+      }
+    }
+  }
+  if (changed) {
+    localStorage.setItem(BR_LOCAL_KEY, JSON.stringify({ slots: bracketState, winners: matchWinners }));
+    if (activeTab === 'knockouts') { renderTeamPool(); renderBracket(); renderEliminated(); }
+  }
+}
+
 // ── GROUP TABLES (ESPN standings API) ─────────────────────────────
 const ESPN_STANDINGS_URL = 'https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings';
 let standingsCache = null, standingsFetchedAt = 0;
