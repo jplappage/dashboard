@@ -209,6 +209,11 @@
     .sync-loading { color: #888;    border-color: #333; }
     .sync-ok      { color: #4ade80; border-color: rgba(74,222,128,0.3); }
     .sync-error   { color: #f87171; border-color: rgba(248,113,113,0.3); }
+    .sync-live    { color: #f87171; border-color: rgba(248,113,113,0.4); animation: livePulse 1.6s infinite; }
+    @keyframes livePulse { 50% { opacity: 0.5; } }
+
+    .match-status { font-size: 0.7rem; font-weight: 700; color: #4ade80; letter-spacing: 0.5px; }
+    .match-status.live { color: #f87171; animation: livePulse 1.6s infinite; }
 
     /* ── Round filter ── */
     .filter-bar {
@@ -811,6 +816,7 @@
   <div class="top-bar">
     <a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
     <span id="sync-status" class="sync-status" title="Tap to re-sync" onclick="loadFromCloud().then(()=>renderAll())"></span>
+    <span id="live-status" class="sync-status" title="Tap to refresh scores" onclick="loadResults()" style="margin-left:8px"></span>
   </div>
   <header>
     <div class="header-left">
@@ -1573,7 +1579,7 @@ function buildCard(f) {
 
   const card = document.createElement('div');
   let cardClass = 'match-card';
-  if (f.homeScore != null) cardClass += ' played';
+  if (f.homeScore != null && !f.live) cardClass += ' played';
   if (isFrance)    cardClass += ' france-game';
   if (isEngland)   cardClass += ' england-game';
   if (isSelected)  cardClass += ' watch-selected';
@@ -1609,6 +1615,13 @@ function buildCard(f) {
   time.className = 'match-time';
   time.textContent = toBST(f.time) + ' BST';
   meta.appendChild(time);
+
+  if (f.status) {
+    const st = document.createElement('div');
+    st.className = 'match-status' + (f.live ? ' live' : '');
+    st.textContent = f.live ? '● ' + f.status : f.status;
+    meta.appendChild(st);
+  }
 
   const tvCh = TV_CHANNELS[f.id];
   if (tvCh) {
