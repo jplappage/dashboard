@@ -2236,7 +2236,11 @@ async function loadResults() {
         : '⚽ Scores ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
       el.className = 'sync-status ' + (anyLive ? 'sync-live' : 'sync-ok');
     }
-    syncBracketFromResults(); // live-populate the knockout bracket
+    // Keep standings fresh and project current group positions into the bracket
+    try { await refreshStandingsCache(); } catch (_) {}
+    const projChanged = projectBracketFromStandings(standingsCache);
+    syncBracketFromResults(); // confirmed teams/results take precedence over projections
+    if (projChanged && activeTab === 'knockouts') { renderTeamPool(); renderBracket(); renderEliminated(); }
     renderAll();
     if (activeTab === 'groups') loadStandings(true); // keep tables fresh while viewing
     scheduleResultsRefresh(anyLive);
