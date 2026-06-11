@@ -215,6 +215,24 @@
     .match-status { font-size: 0.7rem; font-weight: 700; color: #4ade80; letter-spacing: 0.5px; }
     .match-status.live { color: #f87171; animation: livePulse 1.6s infinite; }
 
+    /* ── Group stage tables ── */
+    #groups-view { padding: 20px; max-width: 1100px; margin: 0 auto; }
+    .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+    .group-table-card { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 10px; padding: 12px 14px; }
+    .group-table-title { font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #ffe81f; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,232,31,0.2); }
+    .group-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .group-table th { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.8px; color: #555; text-align: center; padding: 3px 4px; font-weight: 600; }
+    .group-table th.t-team { text-align: left; }
+    .group-table td { padding: 5px 4px; text-align: center; color: #aaa; font-variant-numeric: tabular-nums; border-top: 1px solid #161616; }
+    .group-table td.t-team { text-align: left; }
+    .t-team-inner { display: flex; align-items: center; gap: 7px; color: #e0e0e8; font-weight: 500; white-space: nowrap; }
+    .t-team-inner img { width: 20px; height: auto; border-radius: 2px; }
+    .group-table td.t-pts { color: #ffe81f; font-weight: 700; }
+    .group-table tr.q-through td { background: rgba(255,232,31,0.05); }
+    .group-table tr.q-through td:first-child { border-left: 2px solid #ffe81f; }
+    .group-table tr.q-maybe td:first-child { border-left: 2px solid rgba(245,158,11,0.6); }
+    .groups-note { margin-top: 14px; font-size: 0.7rem; color: #555; }
+
     /* ── Round filter ── */
     .filter-bar {
       display: flex;
@@ -1762,13 +1780,15 @@ let dragTeam      = null;
 function setTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-  const isKO = tab === 'knockouts';
-  document.getElementById('round-filter').style.display     = isKO ? 'none' : '';
-  document.getElementById('date-nav-bar').style.display     = isKO ? 'none' : '';
-  document.getElementById('team-filter-bar').style.display  = isKO ? 'none' : '';
-  document.getElementById('fixtures-container').style.display = isKO ? 'none' : '';
-  document.getElementById('ko-view').style.display          = isKO ? '' : 'none';
+  const isKO = tab === 'knockouts', isGroups = tab === 'groups', isFix = tab === 'fixtures';
+  document.getElementById('round-filter').style.display       = isFix ? '' : 'none';
+  document.getElementById('date-nav-bar').style.display       = isFix ? '' : 'none';
+  document.getElementById('team-filter-bar').style.display    = isFix ? '' : 'none';
+  document.getElementById('fixtures-container').style.display = isFix ? '' : 'none';
+  document.getElementById('ko-view').style.display            = isKO ? '' : 'none';
+  document.getElementById('groups-view').style.display        = isGroups ? '' : 'none';
   if (isKO) { renderTeamPool(); renderBracket(); renderEliminated(); }
+  if (isGroups) loadStandings();
 }
 
 function placedTeams() {
