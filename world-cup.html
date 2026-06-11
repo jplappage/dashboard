@@ -2318,6 +2318,90 @@ function syncBracketFromResults() {
   }
 }
 
+// ── Bracket projection from live group tables ─────────────────────
+// Reads the current standings and places each group's 1st/2nd plus the
+// 8 best thirds into their Round of 32 slots. Re-runs on every score
+// refresh, so the bracket reshuffles as the tables change. Slots whose
+// real teams are confirmed by ESPN are skipped (handled by syncBracketFromResults).
+
+// Assign qualified third-place groups to slots respecting each slot's allowed list
+function matchThirds(slots, letters) {
+  const used = new Set();
+  const result = [];
+  function bt(i) {
+    if (i >= slots.length) return true;
+    for (const L of letters) {
+      if (used.has(L) || !slots[i].allowed.includes(L)) continue;
+      used.add(L);
+      result[i] = { key: slots[i].key, letter: L };
+      if (bt(i + 1)) return true;
+      used.delete(L);
+    }
+    result[i] = { key: slots[i].key, letter: null }; // no qualified third fits — leave empty
+    return bt(i + 1);
+  }
+  bt(0);
+  return result;
+}
+
+function projectBracketFromStandings(data) {
+  if (!data || !data.children) return false;
+
+  const byGroup = {};
+  for (const g of data.children) {
+    const letter = (g.name || '').replace('Group ', '').trim();
+    byGroup[letter] = ((g.standings && g.standings.entries) || []).slice()
+      .sort((a, b) => statVal(a, 'R') - statVal(b, 'R'));
+  }
+  const teamAt = (letter, rank) => {
+    const e = (byGroup[letter] || [])[rank - 1];
+    return e ? toPageTeam(e.team && e.team.displayName) : null;
+  };
+
+  // Rank the 12 third-placed teams; top 8 qualify
+  const thirds = Object.keys(byGroup).map(L => ({ L, e: byGroup[L][2] })).filter(t => t.e);
+  thirds.sort((a, b) =>
+    statVal(b.e, 'P') - statVal(a.e, 'P') ||
+    statVal(b.e, 'GD') - statVal(a.e, 'GD') ||
+    statVal(b.e, 'F') - statVal(a.e, 'F'));
+  const qualifiedLetters = thirds.slice(0, 8).map(t => t.L);
+
+  let changed = false;
+  const thirdSlots = [];
+
+  const setProjected = (mid, key, team) => {
+    if (team && bracketState[key] !== team) {
+      bracketState[key] = team;
+      delete matchWinners[mid]; // projection changed — clear any stale decision
+      changed = true;
+    }
+  };
+
+  for (const mid of BRACKET_ORDER.r32) {
+    const f = FIXTURES.find(x => x.id === mid);
+    if (!f) continue;
+    for (const [pos, label] of [['a', f.home], ['b', f.away]]) {
+      if (hasFlag(label)) continue; // real team confirmed — not a placeholder
+      const key = `${mid}_${pos}`;
+      let m;
+      if ((m = /^Group (\w) winners$/.exec(label)))         setProjected(mid, key, teamAt(m[1], 1));
+      else if ((m = /^Group (\w) runners-up$/.exec(label))) setProjected(mid, key, teamAt(m[1], 2));
+      else if ((m = /^Best 3rd \(([A-L/]+)\)$/.exec(label))) thirdSlots.push({ key, allowed: m[1].split('/') });
+    }
+  }
+
+  for (const a of matchThirds(thirdSlots, qualifiedLetters)) {
+    if (!a) continue;
+    const mid = parseInt(a.key);
+    setProjected(mid, a.key, a.letter ? teamAt(a.letter, 3) : null);
+  }
+
+  if (changed) {
+    localStorage.setItem(BR_LOCAL_KEY, JSON.stringify({ slots: bracketState, winners: matchWinners }));
+  }
+  return changed;
+}
+
 // ── GROUP TABLES (ESPN standings API) ─────────────────────────────
 const ESPN_STANDINGS_URL = 'https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings';
 let standingsCache = null, standingsFetchedAt = 0;
