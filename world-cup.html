@@ -2334,16 +2334,21 @@ function statDisp(entry, abbr) {
   return (s.displayValue != null) ? s.displayValue : String(s.value != null ? s.value : 0);
 }
 
+async function refreshStandingsCache(force) {
+  if (force || !standingsCache || Date.now() - standingsFetchedAt > 60000) {
+    const r = await fetch(ESPN_STANDINGS_URL);
+    if (!r.ok) throw new Error();
+    standingsCache = await r.json();
+    standingsFetchedAt = Date.now();
+  }
+  return standingsCache;
+}
+
 async function loadStandings(force) {
   const container = document.getElementById('groups-container');
   if (!container) return;
   try {
-    if (force || !standingsCache || Date.now() - standingsFetchedAt > 60000) {
-      const r = await fetch(ESPN_STANDINGS_URL);
-      if (!r.ok) throw new Error();
-      standingsCache = await r.json();
-      standingsFetchedAt = Date.now();
-    }
+    await refreshStandingsCache(force);
     renderGroups(standingsCache);
   } catch (e) {
     container.innerHTML = '<p class="no-matches" style="cursor:pointer" onclick="loadStandings(true)">Couldn\'t load group tables — tap to retry.</p>';
