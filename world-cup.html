@@ -828,6 +828,7 @@
   <!-- Tab navigation -->
   <div class="tab-nav">
     <button class="tab-btn active" data-tab="fixtures" onclick="setTab('fixtures')">Fixtures</button>
+    <button class="tab-btn" data-tab="groups" onclick="setTab('groups')">Group Stage</button>
     <button class="tab-btn" data-tab="knockouts" onclick="setTab('knockouts')">Knockouts</button>
   </div>
 
@@ -928,6 +929,11 @@
     <div class="bracket-3rd-label">Eliminated</div>
     <div id="eliminated-grid"></div>
   </div>
+</div>
+
+<!-- Group stage tables -->
+<div id="groups-view" style="display:none">
+  <div id="groups-container"><p class="no-matches">Loading group tables…</p></div>
 </div>
 
 <!-- Team picker modal -->
