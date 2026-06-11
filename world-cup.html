@@ -1701,7 +1701,18 @@ function buildCard(f) {
   // Score / vs
   const scoreBlock = document.createElement('div');
   scoreBlock.className = 'score-block';
-  if (f.homeScore != null) {
+  if (f.homeScore != null && isMasked) {
+    const btn = document.createElement('button');
+    btn.className = 'score-reveal';
+    btn.textContent = f.live ? 'LIVE 👀' : 'FT 👀';
+    btn.title = 'Tap to reveal score';
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      revealedScores.add(f.id);
+      renderFixtures();
+    });
+    scoreBlock.appendChild(btn);
+  } else if (f.homeScore != null) {
     scoreBlock.innerHTML = `<span class="score">${f.homeScore}</span><span class="score-sep">–</span><span class="score">${f.awayScore}</span>`;
   } else {
     scoreBlock.innerHTML = `<span class="score-sep" style="font-size:0.75rem;letter-spacing:1px">v</span>`;
@@ -1721,6 +1732,16 @@ function buildCard(f) {
     tvPill.className = 'tv-pill tv-pill-desktop ' + (tv === 'BBC' ? 'tv-bbc' : 'tv-itv');
     tvPill.textContent = tv;
     venueCol.appendChild(tvPill);
+  }
+  if (f.homeScore != null && !f.live) {
+    const hl = document.createElement('a');
+    hl.className = 'hl-btn';
+    hl.href = highlightsUrl(f);
+    hl.target = '_blank'; hl.rel = 'noopener';
+    hl.textContent = '▶ Highlights';
+    hl.title = 'Search YouTube for highlights (titles may occasionally show the score)';
+    hl.addEventListener('click', e => e.stopPropagation());
+    venueCol.appendChild(hl);
   }
 
   // Star badge (top-right corner)
