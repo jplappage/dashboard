@@ -924,7 +924,8 @@
         <option value="all">All teams ▾</option>
       </select>
     </div>
-    <div style="margin-left:auto">
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="team-quick-btn" id="spoiler-btn" title="Hide scores of finished matches until you tap them">🙈 Spoiler-free</button>
       <button class="team-quick-btn" id="watchlist-filter-btn">★ My Watchlist</button>
     </div>
   </div>
@@ -1664,11 +1665,24 @@ function buildCard(f) {
   time.textContent = toBST(f.time) + ' BST';
   meta.appendChild(time);
 
+  const isMasked = spoilerMode && f.homeScore != null && !revealedScores.has(f.id);
+
   if (f.status) {
     const st = document.createElement('div');
     st.className = 'match-status' + (f.live ? ' live' : '');
-    st.textContent = f.live ? '● ' + f.status : f.status;
+    // Masked: never leak pens score in the status string
+    st.textContent = isMasked ? (f.live ? '● LIVE' : 'FT') : (f.live ? '● ' + f.status : f.status);
     meta.appendChild(st);
+  }
+
+  if (f.homeScore != null && !f.live) {
+    const hlM = document.createElement('a');
+    hlM.className = 'hl-btn hl-btn-mobile';
+    hlM.href = highlightsUrl(f);
+    hlM.target = '_blank'; hlM.rel = 'noopener';
+    hlM.textContent = '▶ HL';
+    hlM.addEventListener('click', e => e.stopPropagation());
+    meta.appendChild(hlM);
   }
 
   const tvCh = TV_CHANNELS[f.id];
