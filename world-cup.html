@@ -2218,6 +2218,8 @@ async function loadResults() {
         f.awayScore = ev.awayScore;
         f.live = ev.state === 'in';
         if (ev.state === 'post') {
+          f.homePens = ev.homePens;
+          f.awayPens = ev.awayPens;
           f.status = (ev.homePens != null && ev.awayPens != null)
             ? `FT · ${ev.homePens}–${ev.awayPens} pens`
             : 'FT';
@@ -2234,6 +2236,7 @@ async function loadResults() {
         : '⚽ Scores ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
       el.className = 'sync-status ' + (anyLive ? 'sync-live' : 'sync-ok');
     }
+    syncBracketFromResults(); // live-populate the knockout bracket
     renderAll();
     if (activeTab === 'groups') loadStandings(true); // keep tables fresh while viewing
     scheduleResultsRefresh(anyLive);
