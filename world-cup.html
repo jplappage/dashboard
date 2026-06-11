@@ -1803,10 +1803,77 @@ const revealedScores = new Set(); // reveals last for this visit only
 
 const YT_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.5 15.5v-7l6.2 3.5z"/></svg>';
 
+// ── Direct ITV highlights links ───────────────────────────────────
+// ITV Sport's football channel posts highlights of every match with
+// spoiler-free titles/thumbnails. We read the channel's RSS upload feed
+// (via a CORS proxy), match video titles to fixtures, and link straight
+// to the video. Found links persist in localStorage so they survive the
+// feed rotating (it only holds the latest 15 uploads).
+const ITV_CHANNEL = 'UCBzDz6beXDfMtfxQdEutD_w'; // "ITV Sport" football channel
+const ITV_FEED = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + ITV_CHANNEL;
+const YTHL_KEY = 'wc2026-ythl';
+let ytVideoMap = {};
+try { ytVideoMap = JSON.parse(localStorage.getItem(YTHL_KEY) || '{}'); } catch (_) {}
+let ytFeedFetchedAt = 0;
+
+// Title-matching variants for teams ITV may name differently
+const TEAM_VARIANTS = {
+  'Czech Republic':       ['czechrepublic', 'czechia'],
+  'Bosnia & Herzegovina': ['bosnia'],
+  'USA':                  ['usa', 'unitedstates'],
+  'Turkey':               ['turkey', 'turkiye'],
+  'Ivory Coast':          ['ivorycoast', 'cotedivoire'],
+  'Cape Verde':           ['capeverde', 'caboverde'],
+  'DR Congo':             ['congo'],
+  'South Korea':          ['korea'],
+  'Curaçao':              ['curacao'],
+};
+function teamVariants(t) { return TEAM_VARIANTS[t] || [normTeam(t)]; }
+
+async function fetchViaProxy(url) {
+  try {
+    const r = await fetch('https://corsproxy.io/?url=' + encodeURIComponent(url));
+    if (r.ok) return await r.text();
+  } catch (_) {}
+  const r2 = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(url));
+  if (!r2.ok) throw new Error('proxy failed');
+  return (await r2.json()).contents;
+}
+
+async function loadHighlightsFeed() {
+  if (Date.now() - ytFeedFetchedAt < 600000) return; // 10 min cache
+  // Only fetch if a finished match is still missing a direct link
+  if (!FIXTURES.some(f => f.homeScore != null && !f.live && !ytVideoMap[f.id])) return;
+  try {
+    const txt = await fetchViaProxy(ITV_FEED);
+    ytFeedFetchedAt = Date.now();
+    const vids = [...txt.matchAll(/<entry>[\s\S]*?<\/entry>/g)].map(m => ({
+      id:    (m[0].match(/<yt:videoId>([^<]+)/) || [])[1],
+      title: (m[0].match(/<title>([^<]+)/) || [])[1] || '',
+    }));
+    let changed = false;
+    for (const f of FIXTURES) {
+      if (f.homeScore == null || f.live || ytVideoMap[f.id]) continue;
+      const hv = teamVariants(f.home), av = teamVariants(f.away);
+      const hit = vids.find(v => {
+        if (!v.id || !/highlight/i.test(v.title)) return false;
+        const nt = normTeam(v.title);
+        return hv.some(x => nt.includes(x)) && av.some(x => nt.includes(x));
+      });
+      if (hit) { ytVideoMap[f.id] = hit.id; changed = true; }
+    }
+    if (changed) {
+      localStorage.setItem(YTHL_KEY, JSON.stringify(ytVideoMap));
+      renderFixtures();
+    }
+  } catch (_) {}
+}
+
 function highlightsUrl(f) {
-  const ch = TV_CHANNELS[f.id] === 'BBC' ? 'BBC' : 'ITV';
-  const q = `${f.home} vs ${f.away} highlights FIFA World Cup 2026 ${ch}`;
-  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
+  if (ytVideoMap[f.id]) return 'https://www.youtube.com/watch?v=' + ytVideoMap[f.id];
+  // Fallback until the video is found: search within the ITV channel only
+  // (their titles/thumbnails are spoiler-free, unlike BBC's)
+  return `https://www.youtube.com/channel/${ITV_CHANNEL}/search?query=` + encodeURIComponent(`${f.home} ${f.away} highlights`);
 }
 
 function updateSpoilerBtn() {
@@ -2334,6 +2401,7 @@ async function loadResults() {
     if (projChanged && activeTab === 'knockouts') { renderTeamPool(); renderBracket(); renderEliminated(); }
     renderAll();
     if (activeTab === 'groups') loadStandings(true); // keep tables fresh while viewing
+    loadHighlightsFeed(); // resolve direct ITV highlight links for finished matches
     scheduleResultsRefresh(anyLive);
   } catch (e) {
     if (el) { el.textContent = '⚠ Scores offline'; el.className = 'sync-status sync-error'; }
