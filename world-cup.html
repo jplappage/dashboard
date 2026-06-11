@@ -1978,9 +1978,11 @@ function removeFromSlot(slotKey) {
 }
 
 function resetBracket() {
-  if (!confirm('Reset the entire bracket? All placements and results will be cleared.')) return;
+  if (!confirm('Reset the bracket? Manual placements are cleared and it re-fills from the live tables and results.')) return;
   bracketState = {};
   matchWinners = {};
+  if (standingsCache) projectBracketFromStandings(standingsCache);
+  syncBracketFromResults();
   saveBracket();
   renderTeamPool();
   renderBracket();
