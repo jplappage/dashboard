@@ -1224,6 +1224,10 @@ async function loadFromCloud() {
     if (cloudBracket && typeof cloudBracket === 'object') {
       loadBracketData(cloudBracket);
       localStorage.setItem(BR_LOCAL_KEY, JSON.stringify(cloudBracket));
+      // Cloud data replaces bracket state — re-apply live projection on top
+      if (standingsCache) projectBracketFromStandings(standingsCache);
+      syncBracketFromResults();
+      if (activeTab === 'knockouts') { renderTeamPool(); renderBracket(); renderEliminated(); }
     }
     setSyncStatus('ok');
   } catch(e) {
@@ -2512,11 +2516,9 @@ const _savedBracket = localStorage.getItem(BR_LOCAL_KEY);
 if (_savedBracket) { try { loadBracketData(JSON.parse(_savedBracket)); } catch(_){} }
 renderAll();
 
-// Then sync from cloud and re-render with latest selections
-loadFromCloud().then(() => renderAll());
-
-// Fetch live scores/results
-loadResults();
+// Sync from cloud first (cloud bracket replaces local state), then fetch live
+// scores — the bracket projection runs inside loadResults, after cloud data lands.
+loadFromCloud().then(() => { renderAll(); loadResults(); });
 </script>
 </body>
 </html>
