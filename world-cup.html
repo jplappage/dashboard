@@ -1739,8 +1739,8 @@ function buildCard(f) {
     hl.className = 'hl-btn';
     hl.href = highlightsUrl(f);
     hl.target = '_blank'; hl.rel = 'noopener';
-    hl.textContent = '▶ Highlights';
-    hl.title = 'Search YouTube for highlights (titles may occasionally show the score)';
+    hl.title = 'Watch highlights on YouTube';
+    hl.innerHTML = YT_ICON;
     hl.addEventListener('click', e => e.stopPropagation());
     venueCol.appendChild(hl);
   }
@@ -1800,6 +1800,8 @@ document.getElementById('watchlist-filter-btn').addEventListener('click', () => 
 // Highlights links stay visible. Persists per device.
 let spoilerMode = localStorage.getItem('wc2026-spoiler') === '1';
 const revealedScores = new Set(); // reveals last for this visit only
+
+const YT_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.5 15.5v-7l6.2 3.5z"/></svg>';
 
 function highlightsUrl(f) {
   const ch = TV_CHANNELS[f.id] === 'BBC' ? 'BBC' : 'ITV';
