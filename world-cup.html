@@ -1794,6 +1794,33 @@ document.getElementById('watchlist-filter-btn').addEventListener('click', () => 
   renderAll();
 });
 
+// ── Spoiler-free mode ─────────────────────────────────────────────
+// Masks scores of played/live matches behind a tap-to-reveal chip.
+// Highlights links stay visible. Persists per device.
+let spoilerMode = localStorage.getItem('wc2026-spoiler') === '1';
+const revealedScores = new Set(); // reveals last for this visit only
+
+function highlightsUrl(f) {
+  const ch = TV_CHANNELS[f.id] === 'BBC' ? 'BBC' : 'ITV';
+  const q = `${f.home} vs ${f.away} highlights FIFA World Cup 2026 ${ch}`;
+  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
+}
+
+function updateSpoilerBtn() {
+  const b = document.getElementById('spoiler-btn');
+  if (!b) return;
+  b.classList.toggle('active', spoilerMode);
+  b.textContent = spoilerMode ? '🙈 Spoiler-free ON' : '🙈 Spoiler-free';
+}
+
+document.getElementById('spoiler-btn').addEventListener('click', () => {
+  spoilerMode = !spoilerMode;
+  localStorage.setItem('wc2026-spoiler', spoilerMode ? '1' : '0');
+  updateSpoilerBtn();
+  renderFixtures();
+});
+updateSpoilerBtn();
+
 // ── Knockouts ─────────────────────────────────────────────────────
 const BRACKET_ORDER = {
   r32:   [73,75,74,77,83,84,81,82,76,78,79,80,86,88,85,87],
