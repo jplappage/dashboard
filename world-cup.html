@@ -2771,4 +2771,89 @@ renderAll();
 loadFromCloud().then(() => { pruneFinishedGames(); renderAll(); loadResults(); });
 </script>
 </body>
+</html>rce);
+    renderGroups(standingsCache);
+  } catch (e) {
+    container.innerHTML = '<p class="no-matches" style="cursor:pointer" onclick="loadStandings(true)">Couldn\'t load group tables — tap to retry.</p>';
+  }
+}
+
+function groupRowHtml(e, cls, posOverride, extraCell) {
+  const team = toPageTeam(e.team && e.team.displayName);
+  return `<tr class="${cls}">
+    <td>${posOverride != null ? posOverride : statDisp(e, 'R')}</td>
+    <td class="t-team"><span class="t-team-inner">${flagHtml(team)}${escHtml(team)}</span></td>
+    ${extraCell || ''}
+    <td>${statDisp(e, 'GP')}</td><td>${statDisp(e, 'W')}</td><td>${statDisp(e, 'D')}</td><td>${statDisp(e, 'L')}</td>
+    <td>${statDisp(e, 'GD')}</td><td class="t-pts">${statDisp(e, 'P')}</td>
+  </tr>`;
+}
+
+function renderGroups(data) {
+  const groups = (data.children || []).slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  if (!groups.length) {
+    document.getElementById('groups-container').innerHTML = '<p class="no-matches">No group tables yet.</p>';
+    return;
+  }
+  const thead = `<tr><th>#</th><th class="t-team">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>`;
+  const thirds = [];
+  let html = '<div class="groups-grid">';
+  for (const g of groups) {
+    const entries = ((g.standings && g.standings.entries) || []).slice().sort((a, b) => statVal(a, 'R') - statVal(b, 'R'));
+    html += `<div class="group-table-card"><div class="group-table-title">${escHtml(g.name)}</div><table class="group-table"><thead>${thead}</thead><tbody>`;
+    entries.forEach(e => {
+      const r = statVal(e, 'R');
+      const cls = r <= 2 ? 'q-through' : (r === 3 ? 'q-maybe' : '');
+      html += groupRowHtml(e, cls);
+      if (r === 3) thirds.push({ e, group: (g.name || '').replace('Group ', '') });
+    });
+    html += '</tbody></table></div>';
+  }
+  html += '</div>';
+
+  // Best third-placed teams — top 8 advance (points, GD, goals scored)
+  thirds.sort((a, b) =>
+    statVal(b.e, 'P') - statVal(a.e, 'P') ||
+    statVal(b.e, 'GD') - statVal(a.e, 'GD') ||
+    statVal(b.e, 'F') - statVal(a.e, 'F'));
+  html += `<div class="group-table-card" style="margin-top:18px"><div class="group-table-title">Best Third-Placed Teams — Top 8 Advance</div><table class="group-table"><thead><tr><th>#</th><th class="t-team">Team</th><th>Grp</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead><tbody>`;
+  thirds.forEach((t, i) => {
+    html += groupRowHtml(t.e, i < 8 ? 'q-through' : '', i + 1, `<td>${escHtml(t.group)}</td>`);
+  });
+  html += '</tbody></table></div>';
+  html += '<p class="groups-note">Top 2 in each group qualify for the Round of 32 · the 8 best third-placed teams also advance · Live from ESPN</p>';
+
+  document.getElementById('groups-container').innerHTML = html;
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+buildTeamDropdown();
+
+// Auto-jump to today or next upcoming match date
+(function initDate() {
+  const today = new Date().toISOString().slice(0, 10);
+  const dates = availableDates();
+  const todayMatch = dates.find(d => d === today);
+  const upcoming   = dates.find(d => d >= today);
+  const target = todayMatch || upcoming;
+  if (target) {
+    activeDate = target;
+    const parts = target.split('-');
+    calYear  = parseInt(parts[0]);
+    calMonth = parseInt(parts[1]) - 1;
+  }
+})();
+
+// Seed from localStorage so the page renders immediately
+const _saved = localStorage.getItem(WL_LOCAL_KEY);
+if (_saved) { try { selectedGames = new Set(JSON.parse(_saved)); } catch(_){} }
+const _savedBracket = localStorage.getItem(BR_LOCAL_KEY);
+if (_savedBracket) { try { loadBracketData(JSON.parse(_savedBracket)); } catch(_){} }
+renderAll();
+
+// Sync from cloud first (cloud bracket replaces local state), then fetch live
+// scores — the bracket projection runs inside loadResults, after cloud data lands.
+loadFromCloud().then(() => { pruneFinishedGames(); renderAll(); loadResults(); });
+</script>
+</body>
 </html>
