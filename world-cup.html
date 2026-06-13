@@ -1786,6 +1786,30 @@ function buildCard(f) {
   card.appendChild(venueCol);
   card.appendChild(star);
 
+  // Incidents row — goals + red cards for finished, non-masked matches
+  if (f.homeScore != null && !f.live && !isMasked && f.incidents && f.incidents.length) {
+    const homeIncs = f.incidents.filter(i => i.home);
+    const awayIncs = f.incidents.filter(i => !i.home);
+
+    function incHtml(incs) {
+      return incs.map(i => {
+        const icon = i.red ? '<span class="inc-red">🟥</span>' : '⚽';
+        const suffix = i.og ? '<span class="inc-og"> (og)</span>' : i.pk ? '<span class="inc-og"> (p)</span>' : '';
+        const name = i.player ? i.player : '';
+        return `${icon} ${name} ${i.min || ''}${suffix}`.trim();
+      }).join('<br>');
+    }
+
+    const row = document.createElement('div');
+    row.className = 'incidents-row';
+    row.innerHTML = `
+      <div class="incidents-home">${incHtml(homeIncs)}</div>
+      <div class="inc-sep">·</div>
+      <div class="incidents-away">${incHtml(awayIncs)}</div>
+    `;
+    card.appendChild(row);
+  }
+
   return card;
 }
 
