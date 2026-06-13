@@ -1871,9 +1871,9 @@ async function loadHighlightsFeed() {
 
 function highlightsUrl(f) {
   if (ytVideoMap[f.id]) return 'https://www.youtube.com/watch?v=' + ytVideoMap[f.id];
-  // Fallback until the video is found: search within the ITV channel only
-  // (their titles/thumbnails are spoiler-free, unlike BBC's)
-  return `https://www.youtube.com/channel/${ITV_CHANNEL}/search?query=` + encodeURIComponent(`${f.home} ${f.away} highlights`);
+  // Fallback until the video is found: use standard YouTube search (channel search
+  // URLs break on mobile — the app ignores the query and shows the channel page)
+  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(`ITV highlights ${f.home} ${f.away}`);
 }
 
 function updateSpoilerBtn() {
