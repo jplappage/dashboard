@@ -1697,7 +1697,7 @@ function buildCard(f) {
   }
 
   const tvCh = TV_CHANNELS[f.id];
-  if (tvCh) {
+  if (tvCh && !(f.homeScore != null && !f.live)) {
     const tvPillM = document.createElement('span');
     tvPillM.className = 'tv-pill tv-pill-mobile ' + (tvCh === 'BBC' ? 'tv-bbc' : 'tv-itv');
     tvPillM.textContent = tvCh;
@@ -1738,7 +1738,7 @@ function buildCard(f) {
   const venueCol = document.createElement('div');
   venueCol.className = 'venue-col';
   const tv = TV_CHANNELS[f.id];
-  if (tv) {
+  if (tv && !(f.homeScore != null && !f.live)) {
     const tvPill = document.createElement('span');
     tvPill.className = 'tv-pill tv-pill-desktop ' + (tv === 'BBC' ? 'tv-bbc' : 'tv-itv');
     tvPill.textContent = tv;
