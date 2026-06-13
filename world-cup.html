@@ -1741,7 +1741,7 @@ function buildCard(f) {
     hl.target = '_blank'; hl.rel = 'noopener';
     hl.title = 'Watch highlights on YouTube';
     hl.innerHTML = YT_ICON;
-    hl.addEventListener('click', e => e.stopPropagation());
+    hl.addEventListener('click', e => { e.stopPropagation(); markHighlightWatched(f.id); });
     venueCol.appendChild(hl);
   }
 
