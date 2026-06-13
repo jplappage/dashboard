@@ -235,6 +235,25 @@
     }
     .score-reveal:hover { background: rgba(255,232,31,0.08); }
 
+    /* ── Key incidents row (goals + red cards) ── */
+    .incidents-row {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+      padding-top: 7px;
+      border-top: 1px solid rgba(255,255,255,0.055);
+      font-size: 0.68rem;
+      line-height: 1.5;
+      color: #666;
+    }
+    .incidents-home { flex: 1; text-align: right; }
+    .incidents-away { flex: 1; text-align: left; }
+    .inc-sep { color: #333; flex-shrink: 0; align-self: flex-start; padding-top: 1px; }
+    .inc-red { color: #c0392b; }
+    .inc-og  { opacity: 0.75; }
+
     /* ── Group stage tables ── */
     #groups-view { padding: 20px; max-width: 1100px; margin: 0 auto; }
     .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
