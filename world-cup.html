@@ -2384,6 +2384,18 @@ async function loadResults() {
       const homeC = comp.competitors.find(c => c.homeAway === 'home');
       const awayC = comp.competitors.find(c => c.homeAway === 'away');
       if (!homeC || !awayC) return;
+      const homeId = homeC.team && homeC.team.id;
+      const awayId = awayC.team && awayC.team.id;
+      const incidents = (comp.details || [])
+        .filter(dt => dt.scoringPlay || dt.redCard)
+        .map(dt => ({
+          min:    dt.clock && dt.clock.displayValue,
+          player: dt.athletesInvolved && dt.athletesInvolved[0] && dt.athletesInvolved[0].shortName,
+          home:   dt.team && dt.team.id === homeId,
+          red:    !!dt.redCard,
+          og:     !!dt.ownGoal,
+          pk:     !!dt.penaltyKick,
+        }));
       const ev = {
         key:       (e.date || '').slice(0, 16),                 // '2026-06-11T19:00'
         state:     (e.status && e.status.type && e.status.type.state) || 'pre',  // pre | in | post
@@ -2394,6 +2406,7 @@ async function loadResults() {
         awayScore: awayC.score,
         homePens:  homeC.shootoutScore,
         awayPens:  awayC.shootoutScore,
+        incidents,
       };
       (byKey[ev.key] = byKey[ev.key] || []).push(ev);
     });
