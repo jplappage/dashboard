@@ -1801,6 +1801,20 @@ document.getElementById('watchlist-filter-btn').addEventListener('click', () => 
 let spoilerMode = localStorage.getItem('wc2026-spoiler') === '1';
 const revealedScores = new Set(); // reveals last for this visit only
 
+// Fixtures whose highlights have been watched — score revealed permanently.
+// Saved to localStorage so it persists across visits.
+const HL_WATCHED_KEY = 'wc2026-hl-watched';
+let watchedHighlights = new Set();
+try { watchedHighlights = new Set(JSON.parse(localStorage.getItem(HL_WATCHED_KEY) || '[]')); } catch (_) {}
+
+function markHighlightWatched(fixtureId) {
+  // Save immediately so it persists if the tab is closed, but delay the
+  // re-render so the score doesn't flash before the user has navigated away.
+  watchedHighlights.add(fixtureId);
+  localStorage.setItem(HL_WATCHED_KEY, JSON.stringify([...watchedHighlights]));
+  setTimeout(() => renderFixtures(), 3000);
+}
+
 const YT_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.5 15.5v-7l6.2 3.5z"/></svg>';
 
 // ── Direct ITV highlights links ───────────────────────────────────
