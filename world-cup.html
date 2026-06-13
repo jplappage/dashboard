@@ -2431,6 +2431,7 @@ async function loadResults() {
         f.homeScore = ev.homeScore;
         f.awayScore = ev.awayScore;
         f.live = ev.state === 'in';
+        f.incidents = ev.incidents;
         if (ev.state === 'post') {
           f.homePens = ev.homePens;
           f.awayPens = ev.awayPens;
