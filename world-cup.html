@@ -1266,6 +1266,16 @@ function saveWatchlist() {
   syncTimer = setTimeout(saveToCloud, 1500);
 }
 
+function pruneFinishedGames() {
+  // Remove finished matches from the watchlist automatically.
+  const finishedIds = new Set(FIXTURES.filter(f => f.homeScore != null && !f.live).map(f => f.id));
+  let changed = false;
+  for (const id of [...selectedGames]) {
+    if (finishedIds.has(id)) { selectedGames.delete(id); changed = true; }
+  }
+  if (changed) saveWatchlist();
+}
+
 async function saveToCloud() {
   setSyncStatus('loading');
   try {
