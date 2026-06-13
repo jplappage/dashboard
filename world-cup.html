@@ -1870,6 +1870,10 @@ function markHighlightWatched(fixtureId) {
   // re-render so the score doesn't flash before the user has navigated away.
   watchedHighlights.add(fixtureId);
   localStorage.setItem(HL_WATCHED_KEY, JSON.stringify([...watchedHighlights]));
+  // Sync to cloud so other devices pick it up
+  syncDirty = true;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(saveToCloud, 1500);
   setTimeout(() => renderFixtures(), 3000);
 }
 
