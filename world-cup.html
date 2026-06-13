@@ -1866,15 +1866,19 @@ const HL_WATCHED_KEY = 'wc2026-hl-watched';
 let watchedHighlights = new Set();
 try { watchedHighlights = new Set(JSON.parse(localStorage.getItem(HL_WATCHED_KEY) || '[]')); } catch (_) {}
 
-function markHighlightWatched(fixtureId) {
-  // Save immediately so it persists if the tab is closed, but delay the
-  // re-render so the score doesn't flash before the user has navigated away.
+function persistWatched(fixtureId) {
+  // Core save+sync — no render side-effects.
   watchedHighlights.add(fixtureId);
   localStorage.setItem(HL_WATCHED_KEY, JSON.stringify([...watchedHighlights]));
-  // Sync to cloud so other devices pick it up
   syncDirty = true;
   clearTimeout(syncTimer);
   syncTimer = setTimeout(saveToCloud, 1500);
+}
+
+function markHighlightWatched(fixtureId) {
+  // Called from the YouTube button — save immediately but delay re-render so
+  // the score doesn't flash before the user has navigated away to YouTube.
+  persistWatched(fixtureId);
   setTimeout(() => renderFixtures(), 3000);
 }
 
