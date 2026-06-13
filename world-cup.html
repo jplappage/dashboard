@@ -1665,7 +1665,7 @@ function buildCard(f) {
   time.textContent = toBST(f.time) + ' BST';
   meta.appendChild(time);
 
-  const isMasked = spoilerMode && f.homeScore != null && !revealedScores.has(f.id);
+  const isMasked = spoilerMode && f.homeScore != null && !revealedScores.has(f.id) && !watchedHighlights.has(f.id);
 
   if (f.status) {
     const st = document.createElement('div');
@@ -1682,7 +1682,7 @@ function buildCard(f) {
     hlM.target = '_blank'; hlM.rel = 'noopener';
     hlM.title = 'Watch highlights on YouTube';
     hlM.innerHTML = YT_ICON;
-    hlM.addEventListener('click', e => e.stopPropagation());
+    hlM.addEventListener('click', e => { e.stopPropagation(); markHighlightWatched(f.id); });
     meta.appendChild(hlM);
   }
 
