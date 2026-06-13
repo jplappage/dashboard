@@ -1744,7 +1744,7 @@ function buildCard(f) {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       revealedScores.add(f.id); // immediate local reveal this session
-      markHighlightWatched(f.id); // persist + sync so other devices see it too
+      persistWatched(f.id); // persist + sync so other devices see it too
       renderFixtures();
     });
     scoreBlock.appendChild(btn);
