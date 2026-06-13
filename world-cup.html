@@ -1300,7 +1300,7 @@ document.addEventListener('visibilitychange', () => {
     saveToCloud();
   }
   if (document.visibilityState === 'visible' && !syncDirty) {
-    loadFromCloud().then(() => renderAll());
+    loadFromCloud().then(() => { pruneFinishedGames(); renderAll(); });
   }
 });
 
@@ -2697,7 +2697,7 @@ renderAll();
 
 // Sync from cloud first (cloud bracket replaces local state), then fetch live
 // scores — the bracket projection runs inside loadResults, after cloud data lands.
-loadFromCloud().then(() => { renderAll(); loadResults(); });
+loadFromCloud().then(() => { pruneFinishedGames(); renderAll(); loadResults(); });
 </script>
 </body>
 </html>
