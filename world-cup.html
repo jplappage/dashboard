@@ -1260,6 +1260,11 @@ async function loadFromCloud() {
       const saved = localStorage.getItem(WL_LOCAL_KEY);
       if (saved) selectedGames = new Set(JSON.parse(saved));
     }
+    const cloudWatched = binCache.wcWatched;
+    if (Array.isArray(cloudWatched) && cloudWatched.length > 0) {
+      cloudWatched.forEach(id => watchedHighlights.add(id));
+      localStorage.setItem(HL_WATCHED_KEY, JSON.stringify([...watchedHighlights]));
+    }
     const cloudBracket = binCache.wcBracket;
     if (cloudBracket && typeof cloudBracket === 'object') {
       loadBracketData(cloudBracket);
@@ -1302,7 +1307,7 @@ async function saveToCloud() {
       const r = await fetch(GIST_URL, { headers: GIST_HEADERS, cache: 'no-store' });
       if (r.ok) { const d = await r.json(); binCache = JSON.parse(d.files[GIST_FILE]?.content || '{}'); }
     }
-    const updated = { ...binCache, wcWatchlist: [...selectedGames], wcBracket: { slots: bracketState, winners: matchWinners } };
+    const updated = { ...binCache, wcWatchlist: [...selectedGames], wcWatched: [...watchedHighlights], wcBracket: { slots: bracketState, winners: matchWinners } };
     const r = await fetch(GIST_URL, {
       method: 'PATCH',
       headers: GIST_HEADERS,
