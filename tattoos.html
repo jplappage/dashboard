@@ -928,7 +928,36 @@ function renderRecords() {
     return;
   }
 
-  const rows = entries.map(e => {
+  // Populate month dropdown
+  const monthSel = document.getElementById('rec-month');
+  const months = [...new Set(entries.map(e => e.date.slice(0,7)))].sort();
+  const curMonth = monthSel.value;
+  monthSel.innerHTML = '<option value="">All months</option>' +
+    months.map(m => `<option value="${m}" ${m===curMonth?'selected':''}>${fmtMonthShort(m)}</option>`).join('');
+
+  // Filter
+  const search    = (document.getElementById('rec-search').value || '').toLowerCase();
+  const filterMon = monthSel.value;
+  let filtered = entries.filter(e => {
+    if (filterMon && !e.date.startsWith(filterMon)) return false;
+    if (search && !(e.notes||'').toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  // Sort
+  const sort = document.getElementById('rec-sort').value;
+  filtered.sort((a, b) => {
+    if (sort === 'date-desc') return b.date.localeCompare(a.date);
+    if (sort === 'date-asc')  return a.date.localeCompare(b.date);
+    const netA = a.gross*0.70 - a.costs, netB = b.gross*0.70 - b.costs;
+    if (sort === 'gross-desc') return b.gross - a.gross;
+    if (sort === 'gross-asc')  return a.gross - b.gross;
+    if (sort === 'net-desc')   return netB - netA;
+    if (sort === 'net-asc')    return netA - netB;
+    return 0;
+  });
+
+  const rows = filtered.map(e => {
     const vat     = e.gross * 0.30;
     const trueInc = e.gross * 0.70;
     const net     = trueInc - e.costs;
