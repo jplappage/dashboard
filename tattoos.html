@@ -829,6 +829,27 @@ function renderRecords() {
     </tr>`;
   }).join('');
 
+  const cards = entries.map(e => {
+    const vat     = e.gross * 0.30;
+    const trueInc = e.gross * 0.70;
+    const net     = trueInc - e.costs;
+    const netStr  = (net < 0 ? '-£' : '£') + Math.abs(net).toFixed(2);
+    const netCol  = net < 0 ? '#ff6b6b' : 'var(--yellow)';
+    return `<div class="rec-card">
+      <div class="rec-card-top">
+        <div class="rec-date">${fmtDate(e.date)}</div>
+        <button class="btn-del" onclick="delEntry(${e.id})">✕</button>
+      </div>
+      <div class="rec-grid">
+        <div class="rec-cell"><div class="rc-lbl">Gross</div><div class="rc-val" style="color:var(--text)">£${e.gross.toFixed(2)}</div></div>
+        <div class="rec-cell"><div class="rc-lbl">Matt VAT 30%</div><div class="rc-val" style="color:#ff8ab8">£${vat.toFixed(2)}</div></div>
+        <div class="rec-cell"><div class="rc-lbl">True Income</div><div class="rc-val" style="color:var(--teal)">£${trueInc.toFixed(2)}</div></div>
+        <div class="rec-cell"><div class="rc-lbl">Net After Costs</div><div class="rc-val" style="color:${netCol}">${netStr}</div></div>
+      </div>
+      ${e.notes ? `<div class="rec-notes">${esc(e.notes)}</div>` : ''}
+    </div>`;
+  }).join('');
+
   root.innerHTML = `
     <div class="records-header">
       <div class="records-count"><span>${entries.length}</span> session${entries.length!==1?'s':''} recorded</div>
@@ -847,7 +868,8 @@ function renderRecords() {
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>
-    </div>`;
+    </div>
+    <div class="record-cards">${cards}</div>`;
 }
 
 function delEntry(id) {
