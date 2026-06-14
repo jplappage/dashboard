@@ -500,6 +500,45 @@
     .sync-error   { background: rgba(255,45,120,0.12); color: var(--pink); }
 
     /* ── Responsive ── */
+    /* ── Mobile record cards (replaces table on small screens) ── */
+    .record-cards { display: none; }
+
+    .rec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .rec-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .rec-date { font-weight: 600; font-size: 0.88rem; }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .rec-cell { background: var(--surface2); border-radius: 8px; padding: 8px 10px; }
+    .rec-cell .rc-lbl { font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+    .rec-cell .rc-val { font-size: 0.92rem; font-weight: 700; margin-top: 2px; }
+
+    .rec-notes {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+
     @media (max-width: 580px) {
       .header-inner { flex-direction: column; gap: 14px; text-align: center; }
       .title-block { text-align: center; }
@@ -507,6 +546,8 @@
       .form-row { grid-template-columns: 1fr; }
       .calc-section { grid-template-columns: 1fr; gap: 12px; }
       .month-stats { grid-template-columns: repeat(2, 1fr); }
+      .table-wrap { display: none; }
+      .record-cards { display: block; }
     }
   </style>
 </head>
