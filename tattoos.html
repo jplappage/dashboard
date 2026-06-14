@@ -974,7 +974,7 @@ function renderRecords() {
     </tr>`;
   }).join('');
 
-  const cards = entries.map(e => {
+  const cards = filtered.map(e => {
     const vat     = e.gross * 0.30;
     const trueInc = e.gross * 0.70;
     const net     = trueInc - e.costs;
@@ -995,9 +995,13 @@ function renderRecords() {
     </div>`;
   }).join('');
 
+  const countLabel = filtered.length === entries.length
+    ? `<span>${entries.length}</span> session${entries.length!==1?'s':''} recorded`
+    : `<span>${filtered.length}</span> of ${entries.length} sessions`;
+
   root.innerHTML = `
     <div class="records-header">
-      <div class="records-count"><span>${entries.length}</span> session${entries.length!==1?'s':''} recorded</div>
+      <div class="records-count">${countLabel}</div>
     </div>
     <div class="table-wrap">
       <table>
