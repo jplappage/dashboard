@@ -967,11 +967,21 @@ function saveEntry() {
   const costs = parseFloat(document.getElementById('inp-costs').value) || 0;
   const notes = document.getElementById('inp-notes').value.trim();
 
-  entries.push({ id: Date.now(), date, gross, costs, notes });
+  if (editingId !== null) {
+    const idx = entries.findIndex(e => e.id === editingId);
+    if (idx !== -1) entries[idx] = { id: editingId, date, gross, costs, notes };
+    editingId = null;
+    document.querySelector('.btn-save').textContent = '💾  Save Entry';
+    toast('Entry updated! 🖤', 'ok');
+  } else {
+    entries.push({ id: Date.now(), date, gross, costs, notes });
+    toast('Entry saved! 🖤', 'ok');
+  }
+
   entries.sort((a,b) => b.date.localeCompare(a.date));
   persist();
   triggerSync();
-  toast('Entry saved! 🖤', 'ok');
+  updateYTD();
 
   document.getElementById('inp-gross').value = '';
   document.getElementById('inp-costs').value = '';
