@@ -1052,7 +1052,10 @@ function renderRecords() {
     return `<div class="rec-card">
       <div class="rec-card-top">
         <div class="rec-date">${fmtDate(e.date)}</div>
-        <button class="btn-del" onclick="delEntry(${e.id})">✕</button>
+        <div style="display:flex;gap:6px">
+          <button class="btn-edit" onclick="editEntry(${e.id})">✎</button>
+          <button class="btn-del" onclick="delEntry(${e.id})">✕</button>
+        </div>
       </div>
       <div class="rec-grid">
         <div class="rec-cell"><div class="rc-lbl">Gross</div><div class="rc-val" style="color:var(--text)">£${e.gross.toFixed(2)}</div></div>
@@ -1163,12 +1166,26 @@ function renderSummary() {
     </tr>`;
   }).join('');
 
+  const allGross = entries.reduce((s,e) => s + e.gross, 0);
+  const allTrue  = allGross * 0.70;
+  const allCosts = entries.reduce((s,e) => s + e.costs, 0);
+  const allNet   = allTrue - allCosts;
+  const allSess  = entries.length;
+
   document.getElementById('summary-root').innerHTML += `
     <table class="month-list">
       <thead><tr>
         <th>Month</th><th>Sessions</th><th>Gross</th><th>True Income</th><th>Costs</th><th>Net</th>
       </tr></thead>
       <tbody>${rows}</tbody>
+      <tfoot><tr class="totals-row">
+        <td>Total</td>
+        <td>${allSess}</td>
+        <td>£${allGross.toFixed(2)}</td>
+        <td>£${allTrue.toFixed(2)}</td>
+        <td>£${allCosts.toFixed(2)}</td>
+        <td style="color:${allNet<0?'#ff6b6b':'var(--teal)'};font-weight:700">${allNet<0?'-£':'£'}${Math.abs(allNet).toFixed(2)}</td>
+      </tr></tfoot>
     </table>`;
 }
 
