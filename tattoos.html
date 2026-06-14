@@ -118,7 +118,27 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       text-shadow: none;
+      text-transform: lowercase;
     }
+
+    .social-links {
+      display: flex;
+      gap: 14px;
+      margin-top: 6px;
+      align-items: center;
+    }
+
+    .social-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: color 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+    }
+
+    .social-links a:hover { color: var(--pink); transform: scale(1.2); }
+    .social-links .tiktok-placeholder { color: var(--text-dim); font-size: 1.2rem; opacity: 0.4; cursor: default; }
 
     .title-block p {
       font-size: 0.72rem;
