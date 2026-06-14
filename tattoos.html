@@ -994,31 +994,33 @@ function renderSummary() {
     gross: byMonth[m].reduce((s,e) => s + e.gross, 0),
   })));
 
-  // Month cards — newest first
   document.getElementById('summary-root').innerHTML = renderTaxCard(entries);
 
-  const cards = [...months].reverse().map(m => {
-    const rows = byMonth[m];
-    const tGross = rows.reduce((s,e) => s + e.gross, 0);
-    const tVat   = tGross * 0.30;
+  // Monthly list — newest first
+  const rows = [...months].reverse().map(m => {
+    const es     = byMonth[m];
+    const tGross = es.reduce((s,e) => s + e.gross, 0);
     const tTrue  = tGross * 0.70;
-    const tCosts = rows.reduce((s,e) => s + e.costs, 0);
+    const tCosts = es.reduce((s,e) => s + e.costs, 0);
     const tNet   = tTrue - tCosts;
-    return `<div class="month-card">
-      <div class="month-head">
-        <div class="month-name">${fmtMonthFull(m)}</div>
-        <div class="month-sessions">${rows.length} session${rows.length!==1?'s':''}</div>
-      </div>
-      <div class="month-stats">
-        <div class="stat-box"><div class="s-val s-gross">£${tGross.toFixed(2)}</div><div class="s-lbl">Gross Income</div></div>
-        <div class="stat-box"><div class="s-val s-vat">£${tVat.toFixed(2)}</div><div class="s-lbl">Matt VAT 30%</div></div>
-        <div class="stat-box"><div class="s-val s-true">£${tTrue.toFixed(2)}</div><div class="s-lbl">True Income</div></div>
-        <div class="stat-box"><div class="s-val s-net" style="${tNet<0?'color:#ff6b6b':''}">${tNet<0?'-£':'£'}${Math.abs(tNet).toFixed(2)}</div><div class="s-lbl">Net After Costs</div></div>
-      </div>
-    </div>`;
+    const netCol = tNet < 0 ? '#ff6b6b' : 'var(--teal)';
+    return `<tr>
+      <td>${fmtMonthFull(m)}</td>
+      <td>${es.length}</td>
+      <td>£${tGross.toFixed(2)}</td>
+      <td>£${tTrue.toFixed(2)}</td>
+      <td>£${tCosts.toFixed(2)}</td>
+      <td style="color:${netCol};font-weight:700">${tNet<0?'-£':'£'}${Math.abs(tNet).toFixed(2)}</td>
+    </tr>`;
   }).join('');
 
-  document.getElementById('summary-root').innerHTML += cards;
+  document.getElementById('summary-root').innerHTML += `
+    <table class="month-list">
+      <thead><tr>
+        <th>Month</th><th>Sessions</th><th>Gross</th><th>True Income</th><th>Costs</th><th>Net</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
 }
 
 function buildChart(data) {
