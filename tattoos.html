@@ -1178,19 +1178,6 @@ function renderTaxCard(allEntries) {
       </div>
     </div>
 
-    <div class="tax-pot-row">
-      <div class="pot-item">
-        <div class="tc-lbl">Matt VAT pot</div>
-        <div class="tc-val" style="color:var(--purple)">£${mattPot.toFixed(2)}</div>
-        <div class="tc-sub">30% of all gross</div>
-      </div>
-      <div class="pot-divider">vs</div>
-      <div class="pot-item">
-        <div class="tc-lbl">${surplusLabel}</div>
-        <div class="tc-val" style="color:${surplusColour}">${surplusPrefix}${Math.abs(surplus).toFixed(2)}</div>
-        <div class="tc-sub">${surplus >= 0 ? 'You\'re covered ✓' : 'Top up needed !'}</div>
-      </div>
-    </div>
   </div>`;
 }
 
