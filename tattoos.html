@@ -1169,7 +1169,7 @@ function renderRecords() {
         </tr></thead>
         <tbody>${emptyRow || rows}</tbody>
         ${filtered.length > 1 ? `<tfoot><tr class="totals-row">
-          <td>Totals</td>
+          <td>★ Totals</td>
           <td class="num">£${tGross.toFixed(2)}</td>
           <td class="num">£${(tGross*0.30).toFixed(2)}</td>
           <td class="num">£${tTrue.toFixed(2)}</td>
@@ -1309,7 +1309,7 @@ function renderSummary() {
       </tr></thead>
       <tbody>${rows}</tbody>
       <tfoot><tr class="totals-row">
-        <td>Total</td>
+        <td>★ Total</td>
         <td>${allSess}</td>
         <td>£${allGross.toFixed(2)}</td>
         <td>£${allTrue.toFixed(2)}</td>
