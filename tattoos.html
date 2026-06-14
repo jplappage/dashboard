@@ -691,6 +691,11 @@ function triggerSync() {
 
 // ── Boot ─────────────────────────────────────────────
 load();
+loadFromCloud();
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') loadFromCloud();
+});
 
 // Default date = today
 (function setDefaultDate() {
@@ -741,6 +746,7 @@ function saveEntry() {
   entries.push({ id: Date.now(), date, gross, costs, notes });
   entries.sort((a,b) => b.date.localeCompare(a.date));
   persist();
+  triggerSync();
   toast('Entry saved! 🖤', 'ok');
 
   document.getElementById('inp-gross').value = '';
@@ -803,6 +809,7 @@ function delEntry(id) {
   if (!confirm('Delete this entry?')) return;
   entries = entries.filter(e => e.id !== id);
   persist();
+  triggerSync();
   renderRecords();
 }
 
