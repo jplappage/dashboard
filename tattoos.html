@@ -1113,12 +1113,73 @@ function renderRecords() {
     <div class="record-cards">${filtered.length ? cards : '<div class="empty-state"><div class="e-icon">🔍</div><p>No sessions match your filter</p></div>'}</div>`;
 }
 
+let editingId = null;
+
+function editEntry(id) {
+  const e = entries.find(e => e.id === id);
+  if (!e) return;
+  editingId = id;
+  document.getElementById('inp-date').value  = e.date;
+  document.getElementById('inp-gross').value = e.gross;
+  document.getElementById('inp-costs').value = e.costs;
+  document.getElementById('inp-notes').value = e.notes || '';
+  updateCalc();
+  // Switch to entry tab
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-tab="entry"]').classList.add('active');
+  document.getElementById('tab-entry').classList.add('active');
+  document.querySelector('.btn-save').textContent = '💾  Update Entry';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
 function delEntry(id) {
-  if (!confirm('Delete this entry?')) return;
+  const e = entries.find(x => x.id === id);
+  const label = e ? `session on ${fmtDate(e.date)} — £${e.gross.toFixed(2)}` : 'this entry';
+  if (!confirm(`Delete ${label}?`)) return;
   entries = entries.filter(e => e.id !== id);
   persist();
   triggerSync();
   renderRecords();
+  updateYTD();
+}
+
+function exportCSV() {
+  const header = ['Date','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes'];
+  const csvRows = [header.join(',')];
+  entries.forEach(e => {
+    const vat  = e.gross * 0.30;
+    const tInc = e.gross * 0.70;
+    const net  = tInc - e.costs;
+    csvRows.push([
+      e.date,
+      e.gross.toFixed(2),
+      vat.toFixed(2),
+      tInc.toFixed(2),
+      e.costs.toFixed(2),
+      net.toFixed(2),
+      `"${(e.notes||'').replace(/"/g,'""')}"`
+    ].join(','));
+  });
+  const blob = new Blob([csvRows.join('\n')], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `charlottedoestattoos-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+function updateYTD() {
+  const strip = document.getElementById('ytd-strip');
+  if (!entries.length) { strip.style.display = 'none'; return; }
+  const tGross = entries.reduce((s,e) => s + e.gross, 0);
+  const tTrue  = tGross * 0.70;
+  const tCosts = entries.reduce((s,e) => s + e.costs, 0);
+  const tNet   = tTrue - tCosts;
+  document.getElementById('ytd-gross').textContent = '£' + tGross.toFixed(2);
+  document.getElementById('ytd-true').textContent  = '£' + tTrue.toFixed(2);
+  document.getElementById('ytd-net').textContent   = (tNet < 0 ? '-£' : '£') + Math.abs(tNet).toFixed(2);
+  document.getElementById('ytd-net').style.color   = tNet < 0 ? '#ff6b6b' : 'var(--teal)';
+  strip.style.display = 'flex';
 }
 
 // ── Summary tab ───────────────────────────────────────
