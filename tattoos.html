@@ -937,6 +937,12 @@ function saveEntry() {
 }
 
 // ── Records tab ───────────────────────────────────────
+function setSort(col) {
+  if (sortCol === col) sortDir = sortDir === 'desc' ? 'asc' : 'desc';
+  else { sortCol = col; sortDir = 'desc'; }
+  renderRecords();
+}
+
 function renderRecords() {
   const root = document.getElementById('records-root');
 
@@ -1025,14 +1031,14 @@ function renderRecords() {
     <div class="table-wrap">
       <table>
         <thead><tr>
-          <th>Date</th>
-          <th style="text-align:right">Gross</th>
-          <th style="text-align:right">Matt VAT (30%)</th>
-          <th style="text-align:right">True Income (70%)</th>
-          <th style="text-align:right">Costs</th>
-          <th style="text-align:right">Net</th>
-          <th>Notes</th>
-          <th></th>
+          ${['date','gross','','','costs','net','',''].map((col,i) => {
+            const labels = ['Date','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes',''];
+            const lbl = labels[i];
+            if (!col) return `<th${i===2||i===3||i===5?' style="text-align:right"':''}>${lbl}</th>`;
+            const arrow = sortCol===col ? (sortDir==='asc'?'↑':'↓') : '<span class="sort-hint">↕</span>';
+            const align = i > 0 ? ' style="text-align:right"' : '';
+            return `<th class="sortable"${align} onclick="setSort('${col}')">${lbl} ${arrow}</th>`;
+          }).join('')}
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>
