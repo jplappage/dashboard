@@ -915,7 +915,8 @@ function triggerSync() {
 
 // ── Boot ─────────────────────────────────────────────
 load();
-loadFromCloud();
+updateYTD();
+loadFromCloud().then(() => updateYTD());
 
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') loadFromCloud();
