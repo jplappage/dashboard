@@ -482,6 +482,59 @@
 
     .month-list td:nth-child(2) { color: var(--text-dim); }
 
+    /* ── YTD strip ── */
+    .ytd-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      background: rgba(176,107,255,0.08);
+      border-bottom: 1px solid rgba(176,107,255,0.2);
+      padding: 10px 20px;
+    }
+
+    .ytd-item { text-align: center; padding: 0 24px; }
+    .ytd-lbl { display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); }
+    .ytd-val { display: block; font-size: 1rem; font-weight: 700; color: var(--text); margin-top: 2px; }
+    .ytd-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.1); }
+
+    /* ── Export + edit buttons ── */
+    .btn-export {
+      background: rgba(0,229,200,0.1);
+      border: 1px solid rgba(0,229,200,0.3);
+      color: var(--teal);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.2s;
+    }
+    .btn-export:hover { background: rgba(0,229,200,0.2); }
+
+    .btn-edit {
+      background: rgba(176,107,255,0.12);
+      border: none;
+      color: var(--purple);
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .btn-edit:hover { background: rgba(176,107,255,0.25); }
+
+    /* ── Totals row ── */
+    .totals-row td {
+      border-top: 1px solid var(--border);
+      font-weight: 700;
+      color: var(--text);
+      padding-top: 12px;
+    }
+
+    tfoot.month-list .totals-row td { border-top: 1px solid var(--border); }
+
     /* ── Records controls ── */
     .rec-controls {
       display: flex;
