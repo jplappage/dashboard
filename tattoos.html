@@ -425,67 +425,42 @@
       margin-bottom: 18px;
     }
 
-    .month-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px 24px;
-      margin-bottom: 14px;
-      transition: border-color 0.2s;
+    .month-list {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
     }
 
-    .month-card:hover { border-color: rgba(255,45,120,0.5); }
-
-    .month-head {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      margin-bottom: 16px;
+    .month-list thead th {
+      text-align: left;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      padding: 0 10px 10px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .month-name {
+    .month-list tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.15s;
+    }
+
+    .month-list tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+    .month-list td {
+      padding: 12px 10px;
+      color: var(--text);
+    }
+
+    .month-list td:first-child {
       font-family: 'Bangers', cursive;
-      font-size: 1.6rem;
-      letter-spacing: 2px;
+      font-size: 1rem;
+      letter-spacing: 1.5px;
       color: var(--pink);
     }
 
-    .month-sessions {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-    }
-
-    .month-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
-    .stat-box {
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 12px 10px;
-      text-align: center;
-    }
-
-    .stat-box .s-val {
-      font-size: 1.05rem;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .stat-box .s-lbl {
-      font-size: 0.64rem;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 5px;
-    }
-
-    .s-gross { color: var(--text); }
-    .s-vat { color: #ff8ab8; }
-    .s-true { color: var(--teal); }
-    .s-net { color: var(--yellow); }
+    .month-list td:nth-child(2) { color: var(--text-dim); }
 
     /* ── Sync status ── */
     .sync-status {
