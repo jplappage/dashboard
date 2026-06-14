@@ -1136,13 +1136,7 @@ function renderTaxCard(allEntries) {
   const totalCosts = inYear.reduce((s,e) => s + e.costs, 0);
   const totalTrue  = totalGross * 0.70;
   const totalNet   = totalTrue - totalCosts;   // taxable profit estimate
-  const mattPot    = totalGross * 0.30;         // what's been set aside
-
   const { it, ni, total } = calcUKTax(totalNet);
-  const surplus  = mattPot - total;
-  const surplusColour = surplus >= 0 ? 'var(--teal)' : '#ff6b6b';
-  const surplusLabel  = surplus >= 0 ? 'Surplus in pot' : 'Shortfall in pot';
-  const surplusPrefix = surplus >= 0 ? '+£' : '-£';
 
   // Tax year progress
   const now       = new Date();
