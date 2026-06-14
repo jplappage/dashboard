@@ -1038,6 +1038,7 @@ function renderRecords() {
       <td class="num col-costs">${e.costs > 0 ? '£'+e.costs.toFixed(2) : '—'}</td>
       <td class="num col-net" style="${net<0?'color:#ff6b6b':''}">${netStr}</td>
       <td class="col-notes" title="${esc(e.notes)}">${esc(e.notes) || '—'}</td>
+      <td><button class="btn-edit" onclick="editEntry(${e.id})">✎</button></td>
       <td><button class="btn-del" onclick="delEntry(${e.id})">✕</button></td>
     </tr>`;
   }).join('');
@@ -1067,15 +1068,26 @@ function renderRecords() {
     ? `<span>${entries.length}</span> session${entries.length!==1?'s':''} recorded`
     : `<span>${filtered.length}</span> of ${entries.length} sessions`;
 
+  // Totals for filtered set
+  const tGross = filtered.reduce((s,e) => s + e.gross, 0);
+  const tTrue  = tGross * 0.70;
+  const tCosts = filtered.reduce((s,e) => s + e.costs, 0);
+  const tNet   = tTrue - tCosts;
+
+  const emptyRow = filtered.length === 0
+    ? `<tr><td colspan="8" style="text-align:center;color:var(--text-dim);padding:24px">No sessions match your filter</td></tr>`
+    : '';
+
   root.innerHTML = `
     <div class="records-header">
       <div class="records-count">${countLabel}</div>
+      <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
     </div>
     <div class="table-wrap">
       <table>
         <thead><tr>
-          ${['date','gross','','','costs','net','',''].map((col,i) => {
-            const labels = ['Date','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes',''];
+          ${['date','gross','','','costs','net','','',''].map((col,i) => {
+            const labels = ['Date','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes','',''];
             const lbl = labels[i];
             if (!col) return `<th${i===2||i===3||i===5?' style="text-align:right"':''}>${lbl}</th>`;
             const arrow = sortCol===col ? (sortDir==='asc'?'↑':'↓') : '<span class="sort-hint">↕</span>';
@@ -1083,10 +1095,19 @@ function renderRecords() {
             return `<th class="sortable"${align} onclick="setSort('${col}')">${lbl} ${arrow}</th>`;
           }).join('')}
         </tr></thead>
-        <tbody>${rows}</tbody>
+        <tbody>${emptyRow || rows}</tbody>
+        ${filtered.length > 1 ? `<tfoot><tr class="totals-row">
+          <td>Totals</td>
+          <td class="num">£${tGross.toFixed(2)}</td>
+          <td class="num">£${(tGross*0.30).toFixed(2)}</td>
+          <td class="num">£${tTrue.toFixed(2)}</td>
+          <td class="num">£${tCosts.toFixed(2)}</td>
+          <td class="num" style="color:${tNet<0?'#ff6b6b':'var(--teal)'}">${tNet<0?'-£':'£'}${Math.abs(tNet).toFixed(2)}</td>
+          <td></td><td></td>
+        </tr></tfoot>` : ''}
       </table>
     </div>
-    <div class="record-cards">${cards}</div>`;
+    <div class="record-cards">${filtered.length ? cards : '<div class="empty-state"><div class="e-icon">🔍</div><p>No sessions match your filter</p></div>'}</div>`;
 }
 
 function delEntry(id) {
