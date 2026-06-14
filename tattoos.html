@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charlotte's Ink — Income Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg:          #09070f;
+      --surface:     #120f1e;
+      --surface2:    #1c1730;
+      --pink:        #ff2d78;
+      --pink-glow:   rgba(255,45,120,0.35);
+      --pink-dim:    rgba(255,45,120,0.18);
+      --teal:        #00e5c8;
+      --teal-glow:   rgba(0,229,200,0.25);
+      --teal-dim:    rgba(0,229,200,0.12);
+      --purple:      #b06bff;
+      --yellow:      #f7d000;
+      --text:        #f2eeff;
+      --text-dim:    #7e78a0;
+      --border:      rgba(255,45,120,0.22);
+      --border-teal: rgba(0,229,200,0.22);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(160deg, #1a0d28 0%, #0d0a1a 60%, #0a1020 100%);
+      border-bottom: 2px solid var(--pink);
+      padding: 28px 24px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 50%, rgba(176,107,255,0.15) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 50%, rgba(255,45,120,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 100%, rgba(0,229,200,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .avatar-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(var(--pink), var(--purple), var(--teal), var(--pink));
+      z-index: -1;
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: 3px solid var(--bg);
+      display: block;
+      object-fit: cover;
+      background: var(--surface2);
+    }
+
+    .avatar-fallback {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: 3px solid var(--bg);
+      background: linear-gradient(135deg, #2d1040, #140a30);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+    }
+
+    .title-block { text-align: left; }
+
+    .title-block h1 {
+      font-family: 'Bangers', cursive;
+      font-size: 3rem;
+      letter-spacing: 4px;
+      line-height: 1;
+      background: linear-gradient(120deg, #ff2d78 0%, #b06bff 50%, #00e5c8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+    }
+
+    .title-block p {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    /* ── Tab nav ── */
+    .tab-nav {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 15px 8px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--text-dim);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.02); }
+
+    .tab-btn.active {
+      color: var(--pink);
+      border-bottom-color: var(--pink);
+      background: var(--pink-dim);
+    }
+
+    /* ── Tab panels ── */
+    .tab-panel { display: none; padding: 28px 20px 60px; max-width: 860px; margin: 0 auto; }
+    .tab-panel.active { display: block; }
+
+    /* ── Form card ── */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+
+    label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    input[type="date"],
+    input[type="number"],
+    input[type="text"],
+    textarea {
+      background: var(--surface2);
+      border: 1px solid rgba(255,45,120,0.2);
+      border-radius: 9px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px var(--pink-dim);
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); }
+
+    textarea { resize: vertical; min-height: 88px; }
+
+    /* ── Auto-calc display ── */
+    .calc-section {
+      background: var(--teal-dim);
+      border: 1px solid var(--border-teal);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin: 18px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .calc-item { text-align: center; }
+
+    .calc-item .c-val {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .calc-item .c-val.pink { color: var(--pink); }
+    .calc-item .c-val.teal { color: var(--teal); }
+
+    .calc-item .c-lbl {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 4px;
+    }
+
+    .calc-item .c-sub {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .net-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 18px;
+    }
+
+    .net-row label { margin: 0; }
+
+    .net-val {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--yellow);
+    }
+
+    /* ── Save button ── */
+    .btn-save {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #ff2d78 0%, #c01a60 100%);
+      border: none;
+      border-radius: 11px;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 18px var(--pink-glow);
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(255,45,120,0.5);
+    }
+
+    .btn-save:active { transform: translateY(0); }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: transform 0.3s cubic-bezier(.175,.885,.32,1.275);
+      z-index: 999;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.ok { background: var(--teal); color: #000; }
+    .toast.err { background: #ff4f4f; color: #fff; }
+
+    /* ── Records table ── */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    .records-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .records-count {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .records-count span { color: var(--teal); font-weight: 700; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      min-width: 600px;
+    }
+
+    thead th {
+      background: var(--surface);
+      color: var(--pink);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+    }
+
+    tbody tr:hover td { background: rgba(255,45,120,0.04); }
+
+    td.num { font-weight: 600; text-align: right; }
+    td.col-gross { color: var(--text); }
+    td.col-vat { color: #ff8ab8; }
+    td.col-true { color: var(--teal); }
+    td.col-costs { color: var(--text-dim); }
+    td.col-net { color: var(--yellow); font-weight: 700; }
+    td.col-notes { color: var(--text-dim); font-size: 0.78rem; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .btn-del {
+      background: none;
+      border: 1px solid rgba(255,45,120,0.3);
+      border-radius: 6px;
+      color: var(--pink);
+      font-size: 0.78rem;
+      padding: 4px 9px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-del:hover { background: var(--pink-dim); }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--text-dim);
+    }
+    .empty-state .e-icon { font-size: 3.5rem; margin-bottom: 14px; opacity: 0.6; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── Summary ── */
+    .chart-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border-teal);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .chart-wrap h3 {
+      font-family: 'Bangers', cursive;
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--teal);
+      margin-bottom: 18px;
+    }
+
+    .month-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .month-card:hover { border-color: rgba(255,45,120,0.5); }
+
+    .month-head {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .month-name {
+      font-family: 'Bangers', cursive;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: var(--pink);
+    }
+
+    .month-sessions {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .month-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    .stat-box .s-val {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-box .s-lbl {
+      font-size: 0.64rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 5px;
+    }
+
+    .s-gross { color: var(--text); }
+    .s-vat { color: #ff8ab8; }
+    .s-true { color: var(--teal); }
+    .s-net { color: var(--yellow); }
+
+    /* ── Responsive ── */
+    @media (max-width: 580px) {
+      .header-inner { flex-direction: column; gap: 14px; text-align: center; }
+      .title-block { text-align: center; }
+      .title-block h1 { font-size: 2.4rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .calc-section { grid-template-columns: 1fr; gap: 12px; }
+      .month-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════ HEADER ════════ -->
+<header>
+  <div class="header-inner">
+    <div class="avatar-wrap">
+      <img src="charlotte.png" alt="Charlotte" class="avatar"
+           onerror="this.style.display='none';document.getElementById('av-fallback').style.display='flex'">
+      <div id="av-fallback" class="avatar-fallback" style="display:none">🎨</div>
+    </div>
+    <div class="title-block">
+      <h1>Charlotte's Ink</h1>
+      <p>Self-Employed Income Tracker</p>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ TAB NAV ════════ -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="entry" onclick="switchTab(this)">✏️ Add Entry</button>
+  <button class="tab-btn" data-tab="records" onclick="switchTab(this)">📋 Records</button>
+  <button class="tab-btn" data-tab="summary" onclick="switchTab(this)">📊 Summary</button>
+</nav>
+
+<!-- ════════════════════════════
+     TAB 1 — ADD ENTRY
+════════════════════════════ -->
+<div id="tab-entry" class="tab-panel active">
+  <div class="form-card">
+
+    <div class="section-label">Session Details</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="inp-date" min="2026-04-01">
+      </div>
+      <div class="form-group">
+        <label>Gross Income (£)</label>
+        <input type="number" id="inp-gross" placeholder="0.00" step="0.01" min="0" oninput="updateCalc()">
+      </div>
+    </div>
+
+    <!-- Auto-calculated VAT / True Income -->
+    <div class="section-label" style="margin-top:4px">Matt VAT Calculation</div>
+
+    <div class="calc-section">
+      <div class="calc-item">
+        <div class="c-val pink" id="disp-vat">£0.00</div>
+        <div class="c-lbl">Matt VAT — 30%</div>
+        <div class="c-sub">Set this aside</div>
+      </div>
+      <div class="calc-item">
+        <div class="c-val teal" id="disp-true">£0.00</div>
+        <div class="c-lbl">True Income — 70%</div>
+        <div class="c-sub">What you actually keep</div>
+      </div>
+    </div>
+
+    <div class="section-label">Costs & Notes</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Other Costs (£)</label>
+        <input type="number" id="inp-costs" placeholder="0.00" step="0.01" min="0" oninput="updateCalc()">
+      </div>
+      <div class="form-group">
+        <label>Net After Costs</label>
+        <div class="net-row" style="margin:0;padding:10px 14px">
+          <span id="disp-net" class="net-val">£0.00</span>
+          <span style="font-size:0.7rem;color:var(--text-dim)">True Inc − Costs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 22px">
+      <label>Notes</label>
+      <textarea id="inp-notes" placeholder="e.g. Sleeve session, walk-in flash, supplies run…"></textarea>
+    </div>
+
+    <button class="btn-save" onclick="saveEntry()">💾 &nbsp;Save Entry</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     TAB 2 — RECORDS
+════════════════════════════ -->
+<div id="tab-records" class="tab-panel">
+  <div id="records-root"></div>
+</div>
+
+<!-- ════════════════════════════
+     TAB 3 — SUMMARY
+════════════════════════════ -->
+<div id="tab-summary" class="tab-panel">
+  <div class="chart-wrap">
+    <h3>Monthly Net Income</h3>
+    <canvas id="chart-canvas"></canvas>
+  </div>
+  <div id="summary-root"></div>
+</div>
+
+<!-- ════════ TOAST ════════ -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Storage ─────────────────────────────────────────
+const KEY = 'charlotte-tattoos-v1';
+let entries = [];
+let myChart = null;
+
+function persist() { localStorage.setItem(KEY, JSON.stringify(entries)); }
+function load() {
+  try { entries = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(_) { entries = []; }
+}
+
+// ── Boot ─────────────────────────────────────────────
+load();
+
+// Default date = today
+(function setDefaultDate() {
+  const t = new Date();
+  document.getElementById('inp-date').value =
+    t.getFullYear() + '-' +
+    String(t.getMonth()+1).padStart(2,'0') + '-' +
+    String(t.getDate()).padStart(2,'0');
+})();
+
+// ── Tab switching ─────────────────────────────────────
+function switchTab(btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById('tab-' + btn.dataset.tab);
+  panel.classList.add('active');
+  if (btn.dataset.tab === 'records') renderRecords();
+  if (btn.dataset.tab === 'summary') renderSummary();
+}
+
+// ── Live calculations ─────────────────────────────────
+function updateCalc() {
+  const gross  = parseFloat(document.getElementById('inp-gross').value)  || 0;
+  const costs  = parseFloat(document.getElementById('inp-costs').value)  || 0;
+  const vat    = gross * 0.30;
+  const trueInc = gross * 0.70;
+  const net    = trueInc - costs;
+
+  document.getElementById('disp-vat').textContent  = '£' + vat.toFixed(2);
+  document.getElementById('disp-true').textContent = '£' + trueInc.toFixed(2);
+
+  const netEl = document.getElementById('disp-net');
+  netEl.textContent = (net < 0 ? '-£' : '£') + Math.abs(net).toFixed(2);
+  netEl.style.color = net < 0 ? '#ff6b6b' : 'var(--yellow)';
+}
+
+// ── Save entry ────────────────────────────────────────
+function saveEntry() {
+  const date  = document.getElementById('inp-date').value;
+  const gross = parseFloat(document.getElementById('inp-gross').value);
+  if (!date) { toast('Please pick a date', 'err'); return; }
+  if (!gross || gross <= 0) { toast('Please enter an income amount', 'err'); return; }
+
+  const costs = parseFloat(document.getElementById('inp-costs').value) || 0;
+  const notes = document.getElementById('inp-notes').value.trim();
+
+  entries.push({ id: Date.now(), date, gross, costs, notes });
+  entries.sort((a,b) => b.date.localeCompare(a.date));
+  persist();
+  toast('Entry saved! 🖤', 'ok');
+
+  document.getElementById('inp-gross').value = '';
+  document.getElementById('inp-costs').value = '';
+  document.getElementById('inp-notes').value = '';
+  updateCalc();
+}
+
+// ── Records tab ───────────────────────────────────────
+function renderRecords() {
+  const root = document.getElementById('records-root');
+
+  if (!entries.length) {
+    root.innerHTML = `<div class="empty-state">
+      <div class="e-icon">🖊️</div>
+      <p>No entries yet — add your first session!</p>
+    </div>`;
+    return;
+  }
+
+  const rows = entries.map(e => {
+    const vat     = e.gross * 0.30;
+    const trueInc = e.gross * 0.70;
+    const net     = trueInc - e.costs;
+    const netStr  = (net < 0 ? '-£' : '£') + Math.abs(net).toFixed(2);
+    return `<tr>
+      <td style="white-space:nowrap">${fmtDate(e.date)}</td>
+      <td class="num col-gross">£${e.gross.toFixed(2)}</td>
+      <td class="num col-vat">£${vat.toFixed(2)}</td>
+      <td class="num col-true">£${trueInc.toFixed(2)}</td>
+      <td class="num col-costs">${e.costs > 0 ? '£'+e.costs.toFixed(2) : '—'}</td>
+      <td class="num col-net" style="${net<0?'color:#ff6b6b':''}">${netStr}</td>
+      <td class="col-notes" title="${esc(e.notes)}">${esc(e.notes) || '—'}</td>
+      <td><button class="btn-del" onclick="delEntry(${e.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+
+  root.innerHTML = `
+    <div class="records-header">
+      <div class="records-count"><span>${entries.length}</span> session${entries.length!==1?'s':''} recorded</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Date</th>
+          <th style="text-align:right">Gross</th>
+          <th style="text-align:right">Matt VAT (30%)</th>
+          <th style="text-align:right">True Income (70%)</th>
+          <th style="text-align:right">Costs</th>
+          <th style="text-align:right">Net</th>
+          <th>Notes</th>
+          <th></th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function delEntry(id) {
+  if (!confirm('Delete this entry?')) return;
+  entries = entries.filter(e => e.id !== id);
+  persist();
+  renderRecords();
+}
+
+// ── Summary tab ───────────────────────────────────────
+function renderSummary() {
+  // Group by month key "YYYY-MM"
+  const byMonth = {};
+  entries.forEach(e => {
+    const mk = e.date.slice(0,7);
+    (byMonth[mk] = byMonth[mk] || []).push(e);
+  });
+
+  const months = Object.keys(byMonth).sort();
+
+  if (!months.length) {
+    document.getElementById('summary-root').innerHTML = `<div class="empty-state">
+      <div class="e-icon">📊</div><p>No data yet.</p></div>`;
+    buildChart([]);
+    return;
+  }
+
+  // Chart — chronological, net income per month
+  buildChart(months.map(m => ({
+    label: fmtMonthShort(m),
+    net:   Math.max(0, byMonth[m].reduce((s,e) => s + e.gross*0.70 - e.costs, 0)),
+    gross: byMonth[m].reduce((s,e) => s + e.gross, 0),
+  })));
+
+  // Month cards — newest first
+  const cards = [...months].reverse().map(m => {
+    const rows = byMonth[m];
+    const tGross = rows.reduce((s,e) => s + e.gross, 0);
+    const tVat   = tGross * 0.30;
+    const tTrue  = tGross * 0.70;
+    const tCosts = rows.reduce((s,e) => s + e.costs, 0);
+    const tNet   = tTrue - tCosts;
+    return `<div class="month-card">
+      <div class="month-head">
+        <div class="month-name">${fmtMonthFull(m)}</div>
+        <div class="month-sessions">${rows.length} session${rows.length!==1?'s':''}</div>
+      </div>
+      <div class="month-stats">
+        <div class="stat-box"><div class="s-val s-gross">£${tGross.toFixed(2)}</div><div class="s-lbl">Gross Income</div></div>
+        <div class="stat-box"><div class="s-val s-vat">£${tVat.toFixed(2)}</div><div class="s-lbl">Matt VAT 30%</div></div>
+        <div class="stat-box"><div class="s-val s-true">£${tTrue.toFixed(2)}</div><div class="s-lbl">True Income</div></div>
+        <div class="stat-box"><div class="s-val s-net" style="${tNet<0?'color:#ff6b6b':''}">${tNet<0?'-£':'£'}${Math.abs(tNet).toFixed(2)}</div><div class="s-lbl">Net After Costs</div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('summary-root').innerHTML = cards;
+}
+
+function buildChart(data) {
+  if (myChart) { myChart.destroy(); myChart = null; }
+  if (!data.length) return;
+  myChart = new Chart(document.getElementById('chart-canvas'), {
+    type: 'bar',
+    data: {
+      labels: data.map(d => d.label),
+      datasets: [
+        {
+          label: 'Gross Income',
+          data: data.map(d => d.gross),
+          backgroundColor: 'rgba(176,107,255,0.25)',
+          borderColor: '#b06bff',
+          borderWidth: 2,
+          borderRadius: 5,
+        },
+        {
+          label: 'Net Income',
+          data: data.map(d => d.net),
+          backgroundColor: 'rgba(0,229,200,0.35)',
+          borderColor: '#00e5c8',
+          borderWidth: 2,
+          borderRadius: 5,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: { color: '#a09ac0', font: { family: 'Poppins', size: 12 } }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.dataset.label + ': £' + ctx.parsed.y.toFixed(2)
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#7e78a0', font: { family: 'Poppins' } }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#7e78a0', font: { family: 'Poppins' }, callback: v => '£' + v }
+        }
+      }
+    }
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS_FULL  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function fmtDate(str) {
+  const [y,m,d] = str.split('-');
+  return `${+d} ${MONTHS_SHORT[+m-1]} ${y}`;
+}
+
+function fmtMonthShort(str) {
+  const [y,m] = str.split('-');
+  return `${MONTHS_SHORT[+m-1]} ${y}`;
+}
+
+function fmtMonthFull(str) {
+  const [y,m] = str.split('-');
+  return `${MONTHS_FULL[+m-1]} ${y}`;
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toast(msg, type='ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + type;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2600);
+}
+</script>
+
+</body>
+</html>
