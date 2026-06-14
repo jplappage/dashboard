@@ -500,6 +500,113 @@
     .sync-error   { background: rgba(255,45,120,0.12); color: var(--pink); }
 
     /* ── Responsive ── */
+    /* ── Tax estimate card ── */
+    .tax-card {
+      background: var(--surface);
+      border: 1px solid rgba(176,107,255,0.35);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .tax-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .tax-title {
+      font-family: 'Bangers', cursive;
+      font-size: 1.35rem;
+      letter-spacing: 2px;
+      color: var(--purple);
+    }
+
+    .tax-note {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+    }
+
+    .tax-progress-wrap {
+      background: var(--surface2);
+      border-radius: 20px;
+      height: 6px;
+      margin-bottom: 5px;
+      overflow: hidden;
+    }
+
+    .tax-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--purple), var(--pink));
+      border-radius: 20px;
+      transition: width 0.6s ease;
+    }
+
+    .tax-progress-label {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .tax-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .tax-cell {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .tc-lbl {
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .tc-val {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 4px 0 2px;
+      line-height: 1;
+    }
+
+    .tc-sub {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+    }
+
+    .tax-pot-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(176,107,255,0.07);
+      border: 1px solid rgba(176,107,255,0.2);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .pot-item { flex: 1; text-align: center; }
+    .pot-divider {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 580px) {
+      .tax-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     /* ── Mobile record cards (replaces table on small screens) ── */
     .record-cards { display: none; }
 
