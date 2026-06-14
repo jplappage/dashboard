@@ -483,6 +483,18 @@
     .s-true { color: var(--teal); }
     .s-net { color: var(--yellow); }
 
+    /* ── Sync status ── */
+    .sync-status {
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .sync-loading { background: rgba(255,215,0,0.12); color: #f7d000; }
+    .sync-ok      { background: rgba(0,229,200,0.12); color: var(--teal); }
+    .sync-error   { background: rgba(255,45,120,0.12); color: var(--pink); }
+
     /* ── Responsive ── */
     @media (max-width: 580px) {
       .header-inner { flex-direction: column; gap: 14px; text-align: center; }
