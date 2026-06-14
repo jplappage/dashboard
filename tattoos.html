@@ -982,6 +982,115 @@ function buildChart(data) {
   });
 }
 
+// ── UK Tax estimate ──────────────────────────────────
+// 2026/27 — thresholds frozen; Class 4 NI rates per HMRC
+const TAX = {
+  PA:      12570,   // Personal Allowance
+  BR_TOP:  50270,   // Basic rate band top
+  HR_TOP: 125140,   // Higher rate band top
+  NI_LOW:  12570,   // NI lower profits limit
+  NI_HIGH: 50270,   // NI upper profits limit
+};
+
+function calcUKTax(profit) {
+  // Income Tax
+  let it = 0;
+  if (profit > TAX.PA) {
+    it += (Math.min(profit, TAX.BR_TOP) - TAX.PA) * 0.20;
+  }
+  if (profit > TAX.BR_TOP) {
+    it += (Math.min(profit, TAX.HR_TOP) - TAX.BR_TOP) * 0.40;
+  }
+  if (profit > TAX.HR_TOP) {
+    it += (profit - TAX.HR_TOP) * 0.45;
+  }
+  // Class 4 NI
+  let ni = 0;
+  if (profit > TAX.NI_LOW) {
+    ni += (Math.min(profit, TAX.NI_HIGH) - TAX.NI_LOW) * 0.06;
+  }
+  if (profit > TAX.NI_HIGH) {
+    ni += (profit - TAX.NI_HIGH) * 0.02;
+  }
+  return { it, ni, total: it + ni };
+}
+
+function renderTaxCard(allEntries) {
+  // Only entries in current tax year (6 Apr 2026 – 5 Apr 2027)
+  const TY_START = '2026-04-06';
+  const TY_END   = '2027-04-05';
+  const inYear   = allEntries.filter(e => e.date >= TY_START && e.date <= TY_END);
+
+  if (!inYear.length) return '';
+
+  const totalGross = inYear.reduce((s,e) => s + e.gross, 0);
+  const totalCosts = inYear.reduce((s,e) => s + e.costs, 0);
+  const totalTrue  = totalGross * 0.70;
+  const totalNet   = totalTrue - totalCosts;   // taxable profit estimate
+  const mattPot    = totalGross * 0.30;         // what's been set aside
+
+  const { it, ni, total } = calcUKTax(totalNet);
+  const surplus  = mattPot - total;
+  const surplusColour = surplus >= 0 ? 'var(--teal)' : '#ff6b6b';
+  const surplusLabel  = surplus >= 0 ? 'Surplus in pot' : 'Shortfall in pot';
+  const surplusPrefix = surplus >= 0 ? '+£' : '-£';
+
+  // Tax year progress
+  const now       = new Date();
+  const tyEnd     = new Date('2027-04-06');
+  const tyStart   = new Date('2026-04-06');
+  const pct       = Math.min(100, Math.round((now - tyStart) / (tyEnd - tyStart) * 100));
+
+  return `<div class="tax-card">
+    <div class="tax-header">
+      <span class="tax-title">🇬🇧 Tax Estimate · 2026/27</span>
+      <span class="tax-note">Indicative — based on entries to date</span>
+    </div>
+
+    <div class="tax-progress-wrap">
+      <div class="tax-progress-bar" style="width:${pct}%"></div>
+    </div>
+    <div class="tax-progress-label">Tax year progress: ${pct}%</div>
+
+    <div class="tax-grid">
+      <div class="tax-cell">
+        <div class="tc-lbl">Taxable Profit</div>
+        <div class="tc-val" style="color:var(--text)">£${totalNet.toFixed(2)}</div>
+        <div class="tc-sub">True income − costs</div>
+      </div>
+      <div class="tax-cell">
+        <div class="tc-lbl">Income Tax</div>
+        <div class="tc-val" style="color:#ff8ab8">£${it.toFixed(2)}</div>
+        <div class="tc-sub">20% / 40% / 45%</div>
+      </div>
+      <div class="tax-cell">
+        <div class="tc-lbl">Class 4 NI</div>
+        <div class="tc-val" style="color:#ff8ab8">£${ni.toFixed(2)}</div>
+        <div class="tc-sub">6% / 2%</div>
+      </div>
+      <div class="tax-cell">
+        <div class="tc-lbl">Total Tax</div>
+        <div class="tc-val" style="color:var(--pink)">£${total.toFixed(2)}</div>
+        <div class="tc-sub">${totalNet > 0 ? Math.round(total/totalNet*100) : 0}% effective rate</div>
+      </div>
+    </div>
+
+    <div class="tax-pot-row">
+      <div class="pot-item">
+        <div class="tc-lbl">Matt VAT pot</div>
+        <div class="tc-val" style="color:var(--purple)">£${mattPot.toFixed(2)}</div>
+        <div class="tc-sub">30% of all gross</div>
+      </div>
+      <div class="pot-divider">vs</div>
+      <div class="pot-item">
+        <div class="tc-lbl">${surplusLabel}</div>
+        <div class="tc-val" style="color:${surplusColour}">${surplusPrefix}${Math.abs(surplus).toFixed(2)}</div>
+        <div class="tc-sub">${surplus >= 0 ? 'You\'re covered ✓' : 'Top up needed !'}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
 // ── Helpers ───────────────────────────────────────────
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const MONTHS_FULL  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
