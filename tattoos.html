@@ -906,6 +906,8 @@ function renderSummary() {
   })));
 
   // Month cards — newest first
+  document.getElementById('summary-root').innerHTML = renderTaxCard(entries);
+
   const cards = [...months].reverse().map(m => {
     const rows = byMonth[m];
     const tGross = rows.reduce((s,e) => s + e.gross, 0);
@@ -927,7 +929,7 @@ function renderSummary() {
     </div>`;
   }).join('');
 
-  document.getElementById('summary-root').innerHTML = cards;
+  document.getElementById('summary-root').innerHTML += cards;
 }
 
 function buildChart(data) {
