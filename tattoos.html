@@ -830,16 +830,9 @@
 
     <div class="form-row">
       <div class="form-group">
-        <label>Time <span style="color:var(--text-dim);font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></label>
-        <input type="time" id="inp-time">
-      </div>
-      <div class="form-group">
         <label>Client <span style="color:var(--text-dim);font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></label>
         <input type="text" id="inp-client" placeholder="e.g. Sarah, walk-in…">
       </div>
-    </div>
-
-    <div class="form-row">
       <div class="form-group">
         <label>Hours Worked <span style="color:var(--text-dim);font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></label>
         <input type="number" id="inp-hours" placeholder="e.g. 3" step="1" min="0" oninput="updateCalc()">
@@ -1064,18 +1057,17 @@ function saveEntry() {
 
   const costs  = parseFloat(document.getElementById('inp-costs').value) || 0;
   const notes  = document.getElementById('inp-notes').value.trim();
-  const time   = document.getElementById('inp-time').value.trim();
   const client = document.getElementById('inp-client').value.trim();
   const hours  = parseFloat(document.getElementById('inp-hours').value) || 0;
 
   if (editingId !== null) {
     const idx = entries.findIndex(e => e.id === editingId);
-    if (idx !== -1) entries[idx] = { id: editingId, date, gross, costs, notes, time, client, hours };
+    if (idx !== -1) entries[idx] = { id: editingId, date, gross, costs, notes, client, hours };
     editingId = null;
     document.querySelector('.btn-save').textContent = '💾  Save Entry';
     toast('Entry updated! 🖤', 'ok');
   } else {
-    entries.push({ id: Date.now(), date, gross, costs, notes, time, client, hours });
+    entries.push({ id: Date.now(), date, gross, costs, notes, client, hours });
     toast('Entry saved! 🖤', 'ok');
   }
 
@@ -1087,7 +1079,6 @@ function saveEntry() {
   document.getElementById('inp-gross').value  = '';
   document.getElementById('inp-costs').value  = '';
   document.getElementById('inp-notes').value  = '';
-  document.getElementById('inp-time').value   = '';
   document.getElementById('inp-client').value = '';
   document.getElementById('inp-hours').value  = '';
   updateCalc();
@@ -1145,7 +1136,7 @@ function renderRecords() {
     const net     = trueInc - e.costs;
     const netStr  = (net < 0 ? '-£' : '£') + Math.abs(net).toFixed(2);
     return `<tr>
-      <td style="white-space:nowrap">${fmtDate(e.date)}${e.time ? ' <span style="color:var(--text-dim);font-size:0.75rem">' + e.time + '</span>' : ''}</td>
+      <td style="white-space:nowrap">${fmtDate(e.date)}</td>
       <td style="color:var(--text-dim);font-size:0.82rem">${esc(e.client) || '—'}</td>
       <td class="num col-gross">£${e.gross.toFixed(2)}</td>
       <td class="num col-vat">£${vat.toFixed(2)}</td>
@@ -1167,7 +1158,7 @@ function renderRecords() {
     const netCol  = net < 0 ? '#ff6b6b' : 'var(--yellow)';
     return `<div class="rec-card">
       <div class="rec-card-top">
-        <div><div class="rec-date">${fmtDate(e.date)}${e.time ? ' <span style="color:var(--text-dim);font-size:0.78rem">' + e.time + '</span>' : ''}</div>${e.client ? '<div style="font-size:0.78rem;color:var(--purple);margin-top:2px">' + esc(e.client) + '</div>' : ''}</div>
+        <div><div class="rec-date">${fmtDate(e.date)}</div>${e.client ? '<div style="font-size:0.78rem;color:var(--purple);margin-top:2px">' + esc(e.client) + '</div>' : ''}</div>
         <div style="display:flex;gap:6px">
           <button class="btn-edit" onclick="editEntry(${e.id})">✎</button>
           <button class="btn-del" onclick="delEntry(${e.id})">✕</button>
@@ -1240,7 +1231,6 @@ function editEntry(id) {
   document.getElementById('inp-gross').value  = e.gross;
   document.getElementById('inp-costs').value  = e.costs;
   document.getElementById('inp-notes').value  = e.notes || '';
-  document.getElementById('inp-time').value   = e.time || '';
   document.getElementById('inp-client').value = e.client || '';
   document.getElementById('inp-hours').value  = e.hours || '';
   updateCalc();
@@ -1265,7 +1255,7 @@ function delEntry(id) {
 }
 
 function exportCSV() {
-  const header = ['Date','Time','Client','Hours','£/hr','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes'];
+  const header = ['Date','Client','Hours','£/hr','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes'];
   const csvRows = [header.join(',')];
   entries.forEach(e => {
     const vat  = e.gross * 0.30;
@@ -1273,7 +1263,6 @@ function exportCSV() {
     const net  = tInc - e.costs;
     csvRows.push([
       e.date,
-      e.time || '',
       `"${(e.client||'').replace(/"/g,'""')}"`,
       e.hours || '',
       e.hours > 0 ? ((tInc - e.costs) / e.hours).toFixed(2) : '',
