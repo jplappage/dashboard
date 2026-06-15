@@ -83,6 +83,9 @@
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
+    .field-error { border-color: #ff4f4f !important; box-shadow: 0 0 0 3px rgba(255,79,79,0.25) !important; animation: shake 0.4s ease; }
+    .yn-error .yn-btn { border-color: #ff4f4f !important; animation: shake 0.4s ease; }
 
     .avatar {
       width: 84px;
@@ -863,18 +866,18 @@
     <div class="form-row">
       <div class="form-group">
         <label>Client</label>
-        <input type="text" id="inp-client" placeholder="Client name">
+        <input type="text" id="inp-client" placeholder="Client name" oninput="this.classList.remove('field-error')">
       </div>
       <div class="form-group">
         <label>Hours Worked</label>
-        <input type="number" id="inp-hours" placeholder="e.g. 3" step="1" min="0" oninput="updateCalc()">
+        <input type="number" id="inp-hours" placeholder="e.g. 3" step="1" min="0" oninput="updateCalc();this.classList.remove('field-error')">
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group">
         <label>Originated</label>
-        <select id="inp-originated" onchange="toggleMobile()">
+        <select id="inp-originated" onchange="toggleMobile();this.classList.remove('field-error')">
           <option value="">Select source…</option>
           <option value="Instagram">Instagram</option>
           <option value="Facebook (mine)">Facebook (mine)</option>
@@ -908,7 +911,7 @@
     <div class="form-row" style="margin-top:4px">
       <div class="form-group">
         <label>Declared</label>
-        <div class="yn-group">
+        <div class="yn-group" id="yn-group-wrap">
           <button type="button" class="yn-btn yes" id="yn-yes" onclick="setDeclared(true)">✓ Yes</button>
           <button type="button" class="yn-btn no"  id="yn-no"  onclick="setDeclared(false)">✕ No</button>
         </div>
@@ -919,7 +922,7 @@
       </div>
     </div>
 
-    <button class="btn-save" onclick="saveEntry()">💾 &nbsp;Save Entry</button>
+    <button type="button" class="btn-save" onclick="saveEntry()">💾 &nbsp;Save Entry</button>
   </div>
 </div>
 
@@ -1075,6 +1078,7 @@ function setDeclared(val) {
   declaredVal = val;
   document.getElementById('yn-yes').classList.toggle('active', val === true);
   document.getElementById('yn-no').classList.toggle('active',  val === false);
+  document.getElementById('yn-group-wrap').classList.remove('yn-error');
 }
 
 function toggleMobile() {
@@ -1097,10 +1101,16 @@ function saveEntry() {
   const originated = document.getElementById('inp-originated').value;
   const mobile     = document.getElementById('inp-mobile').value.trim();
 
-  if (!client)     { toast('Please enter a client name', 'err'); return; }
-  if (!hours)      { toast('Please enter hours worked', 'err'); return; }
-  if (!originated) { toast('Please select how this client originated', 'err'); return; }
-  if (declaredVal === null) { toast('Please select Yes or No for Declared', 'err'); return; }
+  // Clear previous errors
+  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+  document.getElementById('yn-group-wrap')?.classList.remove('yn-error');
+
+  let hasError = false;
+  if (!client)     { document.getElementById('inp-client').classList.add('field-error'); toast('Please enter a client name', 'err'); hasError = true; }
+  if (!hours)      { document.getElementById('inp-hours').classList.add('field-error');  toast('Please enter hours worked', 'err'); hasError = true; }
+  if (!originated) { document.getElementById('inp-originated').classList.add('field-error'); toast('Please select how this booking originated', 'err'); hasError = true; }
+  if (declaredVal === null) { document.getElementById('yn-group-wrap').classList.add('yn-error'); toast('Please select Yes or No for Declared', 'err'); hasError = true; }
+  if (hasError) return;
 
   if (editingId !== null) {
     const idx = entries.findIndex(e => e.id === editingId);
@@ -1586,7 +1596,7 @@ function toast(msg, type='ok') {
   el.className = 'toast ' + type;
   el.classList.add('show');
   clearTimeout(el._t);
-  el._t = setTimeout(() => el.classList.remove('show'), 2600);
+  el._t = setTimeout(() => el.classList.remove('show'), 4000);
 }
 </script>
 
