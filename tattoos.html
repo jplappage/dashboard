@@ -581,6 +581,26 @@
     .rec-controls input:focus,
     .rec-controls select:focus { border-color: var(--pink); }
 
+    /* ── Declared toggle ── */
+    .yn-group { display: flex; gap: 8px; }
+    .yn-btn {
+      flex: 1;
+      padding: 11px 8px;
+      border-radius: 9px;
+      border: 1px solid rgba(255,45,120,0.2);
+      background: var(--surface2);
+      color: var(--text-dim);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .yn-btn.yes.active { background: rgba(0,229,200,0.18); border-color: var(--teal); color: var(--teal); }
+    .yn-btn.no.active  { background: rgba(255,45,120,0.18); border-color: var(--pink); color: var(--pink); }
+    .yn-btn:hover { border-color: rgba(255,45,120,0.5); }
+
     th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
     th.sortable:hover { color: var(--pink); }
     .sort-hint { opacity: 0.3; }
@@ -886,9 +906,16 @@
     </div>
 
     <div class="form-row" style="margin-top:4px">
-      <div class="form-group" style="grid-column:1/-1">
+      <div class="form-group">
+        <label>Declared</label>
+        <div class="yn-group">
+          <button type="button" class="yn-btn yes" id="yn-yes" onclick="setDeclared(true)">✓ Yes</button>
+          <button type="button" class="yn-btn no"  id="yn-no"  onclick="setDeclared(false)">✕ No</button>
+        </div>
+      </div>
+      <div class="form-group" style="grid-column:2">
         <label>Notes</label>
-        <textarea id="inp-notes" placeholder="e.g. Sleeve session, flash design…"></textarea>
+        <textarea id="inp-notes" placeholder="e.g. Sleeve session, flash design…" style="min-height:44px"></textarea>
       </div>
     </div>
 
@@ -901,9 +928,14 @@
 ════════════════════════════ -->
 <div id="tab-records" class="tab-panel">
   <div class="rec-controls">
-    <input type="text" id="rec-search" placeholder="Search notes…" oninput="renderRecords()">
+    <input type="text" id="rec-search" placeholder="Search notes, client…" oninput="renderRecords()">
     <select id="rec-month" onchange="renderRecords()">
       <option value="">All months</option>
+    </select>
+    <select id="rec-declared" onchange="renderRecords()">
+      <option value="">All (declared)</option>
+      <option value="yes">Declared: Yes</option>
+      <option value="no">Declared: No</option>
     </select>
   </div>
   <div id="records-root"></div>
@@ -1038,6 +1070,13 @@ function updateCalc() {
   document.getElementById('disp-true').textContent = '£' + trueInc.toFixed(2);
 }
 
+let declaredVal = null;
+function setDeclared(val) {
+  declaredVal = val;
+  document.getElementById('yn-yes').classList.toggle('active', val === true);
+  document.getElementById('yn-no').classList.toggle('active',  val === false);
+}
+
 function toggleMobile() {
   const val = document.getElementById('inp-originated').value;
   const wrap = document.getElementById('mobile-wrap');
@@ -1061,10 +1100,11 @@ function saveEntry() {
   if (!client)     { toast('Please enter a client name', 'err'); return; }
   if (!hours)      { toast('Please enter hours worked', 'err'); return; }
   if (!originated) { toast('Please select how this client originated', 'err'); return; }
+  if (declaredVal === null) { toast('Please select Yes or No for Declared', 'err'); return; }
 
   if (editingId !== null) {
     const idx = entries.findIndex(e => e.id === editingId);
-    if (idx !== -1) entries[idx] = { id: editingId, date, gross, notes, client, hours, originated, mobile };
+    if (idx !== -1) entries[idx] = { id: editingId, date, gross, notes, client, hours, originated, mobile, declared: declaredVal };
     editingId = null;
     document.querySelector('.btn-save').textContent = '💾  Save Entry';
     toast('Entry updated! 🖤', 'ok');
@@ -1085,6 +1125,9 @@ function saveEntry() {
   document.getElementById('inp-originated').value = '';
   document.getElementById('inp-mobile').value     = '';
   document.getElementById('mobile-wrap').style.display = 'none';
+  declaredVal = null;
+  document.getElementById('yn-yes').classList.remove('active');
+  document.getElementById('yn-no').classList.remove('active');
   updateCalc();
 }
 
@@ -1119,6 +1162,9 @@ function renderRecords() {
   let filtered = entries.filter(e => {
     if (filterMon && !e.date.startsWith(filterMon)) return false;
     if (search && !(e.notes||'').toLowerCase().includes(search) && !(e.client||'').toLowerCase().includes(search)) return false;
+    const filterDec = document.getElementById('rec-declared').value;
+    if (filterDec === 'yes' && e.declared !== true) return false;
+    if (filterDec === 'no'  && e.declared !== false) return false;
     return true;
   });
 
@@ -1148,6 +1194,7 @@ function renderRecords() {
       <td class="num col-net">${netStr}</td>
       <td class="num" style="color:var(--purple)">${e.hours > 0 ? '£' + (trueInc/e.hours).toFixed(2) : '—'}</td>
       <td class="col-notes" title="${esc(e.notes)}">${esc(e.notes) || '—'}</td>
+      <td style="text-align:center">${e.declared === true ? '<span style="color:var(--teal);font-weight:700">Yes</span>' : e.declared === false ? '<span style="color:var(--pink)">No</span>' : '—'}</td>
       <td><button class="btn-edit" onclick="editEntry(${e.id})">✎</button></td>
       <td><button class="btn-del" onclick="delEntry(${e.id})">✕</button></td>
     </tr>`;
@@ -1195,8 +1242,8 @@ function renderRecords() {
     <div class="table-wrap">
       <table>
         <thead><tr>
-          ${['date','client','gross','','','originated','net','phr','',''].map((col,i) => {
-            const labels = ['Date','Client','Gross','Matt VAT (30%)','True Income (70%)','Originated','Net (true inc)','£/hr','',''];
+          ${['date','client','gross','','','originated','net','phr','declared','',''].map((col,i) => {
+            const labels = ['Date','Client','Gross','Matt VAT (30%)','True Income (70%)','Originated','Net (true inc)','£/hr','Declared','',''];
             const lbl = labels[i];
             if (!col) return `<th${i===3||i===4||i===6?' style="text-align:right"':''}>${lbl}</th>`;
             const arrow = sortCol===col ? (sortDir==='asc'?'↑':'↓') : '<span class="sort-hint">↕</span>';
@@ -1213,7 +1260,7 @@ function renderRecords() {
           <td class="num">£${tTrue.toFixed(2)}</td>
           <td></td>
           <td class="num" style="color:var(--teal)">£${tTrue.toFixed(2)}</td>
-          <td></td><td></td><td></td><td></td>
+          <td></td><td></td><td></td><td></td><td></td>
         </tr></tfoot>` : ''}
       </table>
     </div>
@@ -1234,6 +1281,7 @@ function editEntry(id) {
   document.getElementById('inp-originated').value = e.originated || '';
   document.getElementById('inp-mobile').value     = e.mobile || '';
   toggleMobile();
+  setDeclared(e.declared != null ? e.declared : null);
   updateCalc();
   // Switch to entry tab
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1256,7 +1304,7 @@ function delEntry(id) {
 }
 
 function exportCSV() {
-  const header = ['Date','Client','Hours','£/hr','Gross','Matt VAT (30%)','True Income (70%)','Originated','Mobile','Notes'];
+  const header = ['Date','Client','Hours','£/hr','Gross','Matt VAT (30%)','True Income (70%)','Originated','Mobile','Declared','Notes'];
   const csvRows = [header.join(',')];
   entries.forEach(e => {
     const vat  = e.gross * 0.30;
@@ -1271,6 +1319,7 @@ function exportCSV() {
       tInc.toFixed(2),
       `"${(e.originated||'').replace(/"/g,'""')}"`,
       e.mobile || '',
+      e.declared === true ? 'Yes' : e.declared === false ? 'No' : '',
       `"${(e.notes||'').replace(/"/g,'""')}"`
     ].join(','));
   });
