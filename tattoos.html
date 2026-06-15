@@ -1180,7 +1180,7 @@ function renderRecords() {
           ${['date','client','gross','','','costs','net','','',''].map((col,i) => {
             const labels = ['Date','Client','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes','',''];
             const lbl = labels[i];
-            if (!col) return `<th${i===2||i===3||i===5?' style="text-align:right"':''}>${lbl}</th>`;
+            if (!col) return `<th${i===3||i===4||i===6?' style="text-align:right"':''}>${lbl}</th>`;
             const arrow = sortCol===col ? (sortDir==='asc'?'↑':'↓') : '<span class="sort-hint">↕</span>';
             const align = i > 0 ? ' style="text-align:right"' : '';
             return `<th class="sortable"${align} onclick="setSort('${col}')">${lbl} ${arrow}</th>`;
