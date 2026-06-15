@@ -1276,7 +1276,7 @@ function exportCSV() {
       e.time || '',
       `"${(e.client||'').replace(/"/g,'""')}"`,
       e.hours || '',
-      e.hours > 0 ? (tInc - e.costs - (e.hours > 0 ? 0 : 0)) && ((tInc - e.costs)/e.hours).toFixed(2) : '',
+      e.hours > 0 ? ((tInc - e.costs) / e.hours).toFixed(2) : '',
       e.gross.toFixed(2),
       vat.toFixed(2),
       tInc.toFixed(2),
