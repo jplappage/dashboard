@@ -1052,14 +1052,19 @@ function saveEntry() {
   if (!date) { toast('Please pick a date', 'err'); return; }
   if (!gross || gross <= 0) { toast('Please enter an income amount', 'err'); return; }
 
-  const costs  = parseFloat(document.getElementById('inp-costs').value) || 0;
-  const notes  = document.getElementById('inp-notes').value.trim();
-  const client = document.getElementById('inp-client').value.trim();
-  const hours  = parseFloat(document.getElementById('inp-hours').value) || 0;
+  const notes      = document.getElementById('inp-notes').value.trim();
+  const client     = document.getElementById('inp-client').value.trim();
+  const hours      = parseFloat(document.getElementById('inp-hours').value) || 0;
+  const originated = document.getElementById('inp-originated').value;
+  const mobile     = document.getElementById('inp-mobile').value.trim();
+
+  if (!client)     { toast('Please enter a client name', 'err'); return; }
+  if (!hours)      { toast('Please enter hours worked', 'err'); return; }
+  if (!originated) { toast('Please select how this client originated', 'err'); return; }
 
   if (editingId !== null) {
     const idx = entries.findIndex(e => e.id === editingId);
-    if (idx !== -1) entries[idx] = { id: editingId, date, gross, costs, notes, client, hours };
+    if (idx !== -1) entries[idx] = { id: editingId, date, gross, notes, client, hours, originated, mobile };
     editingId = null;
     document.querySelector('.btn-save').textContent = '💾  Save Entry';
     toast('Entry updated! 🖤', 'ok');
@@ -1151,9 +1156,7 @@ function renderRecords() {
   const cards = filtered.map(e => {
     const vat     = e.gross * 0.30;
     const trueInc = e.gross * 0.70;
-    const net     = trueInc - e.costs;
-    const netStr  = (net < 0 ? '-£' : '£') + Math.abs(net).toFixed(2);
-    const netCol  = net < 0 ? '#ff6b6b' : 'var(--yellow)';
+    const netStr  = '£' + trueInc.toFixed(2);
     return `<div class="rec-card">
       <div class="rec-card-top">
         <div><div class="rec-date">${fmtDate(e.date)}</div>${e.client ? '<div style="font-size:0.78rem;color:var(--purple);margin-top:2px">' + esc(e.client) + '</div>' : ''}</div>
