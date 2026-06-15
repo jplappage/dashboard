@@ -1226,7 +1226,7 @@ function renderRecords() {
         <div class="rec-cell"><div class="rc-lbl">Gross</div><div class="rc-val" style="color:var(--text)">£${e.gross.toFixed(2)}</div></div>
         <div class="rec-cell"><div class="rc-lbl">Matt VAT 30%</div><div class="rc-val" style="color:#ff8ab8">£${vat.toFixed(2)}</div></div>
         <div class="rec-cell"><div class="rc-lbl">True Income</div><div class="rc-val" style="color:var(--teal)">£${trueInc.toFixed(2)}</div></div>
-        <div class="rec-cell"><div class="rc-lbl">Net After Costs</div><div class="rc-val" style="color:${netCol}">${netStr}</div></div>
+        <div class="rec-cell"><div class="rc-lbl">True Income</div><div class="rc-val" style="color:var(--teal)">${netStr}</div></div>
       </div>
       ${e.notes ? `<div class="rec-notes">${esc(e.notes)}</div>` : ''}
     </div>`;
