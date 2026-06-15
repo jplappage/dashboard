@@ -760,8 +760,8 @@
       .form-row { grid-template-columns: 1fr; }
       .calc-section { grid-template-columns: 1fr; gap: 12px; }
       .month-stats { grid-template-columns: repeat(2, 1fr); }
-      .table-wrap { display: none; }
-      .record-cards { display: block; }
+      .table-wrap { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .record-cards { display: none; }
     }
   </style>
 </head>
@@ -836,6 +836,20 @@
       <div class="form-group">
         <label>Client <span style="color:var(--text-dim);font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></label>
         <input type="text" id="inp-client" placeholder="e.g. Sarah, walk-in…">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Hours Worked <span style="color:var(--text-dim);font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></label>
+        <input type="number" id="inp-hours" placeholder="e.g. 4.5" step="0.25" min="0" oninput="updateCalc()">
+      </div>
+      <div class="form-group">
+        <label>£ / hr</label>
+        <div class="net-row" style="margin:0;padding:10px 14px">
+          <span id="disp-phr" style="font-size:1.1rem;font-weight:700;color:var(--purple)">—</span>
+          <span style="font-size:0.7rem;color:var(--text-dim)">Net ÷ Hours</span>
+        </div>
       </div>
     </div>
 
@@ -1028,6 +1042,17 @@ function updateCalc() {
   const netEl = document.getElementById('disp-net');
   netEl.textContent = (net < 0 ? '-£' : '£') + Math.abs(net).toFixed(2);
   netEl.style.color = net < 0 ? '#ff6b6b' : 'var(--yellow)';
+
+  const hours = parseFloat(document.getElementById('inp-hours').value) || 0;
+  const phrEl = document.getElementById('disp-phr');
+  if (hours > 0) {
+    const phr = net / hours;
+    phrEl.textContent = (phr < 0 ? '-£' : '£') + Math.abs(phr).toFixed(2);
+    phrEl.style.color = phr < 0 ? '#ff6b6b' : 'var(--purple)';
+  } else {
+    phrEl.textContent = '—';
+    phrEl.style.color = 'var(--purple)';
+  }
 }
 
 // ── Save entry ────────────────────────────────────────
@@ -1041,15 +1066,16 @@ function saveEntry() {
   const notes  = document.getElementById('inp-notes').value.trim();
   const time   = document.getElementById('inp-time').value.trim();
   const client = document.getElementById('inp-client').value.trim();
+  const hours  = parseFloat(document.getElementById('inp-hours').value) || 0;
 
   if (editingId !== null) {
     const idx = entries.findIndex(e => e.id === editingId);
-    if (idx !== -1) entries[idx] = { id: editingId, date, gross, costs, notes, time, client };
+    if (idx !== -1) entries[idx] = { id: editingId, date, gross, costs, notes, time, client, hours };
     editingId = null;
     document.querySelector('.btn-save').textContent = '💾  Save Entry';
     toast('Entry updated! 🖤', 'ok');
   } else {
-    entries.push({ id: Date.now(), date, gross, costs, notes, time, client });
+    entries.push({ id: Date.now(), date, gross, costs, notes, time, client, hours });
     toast('Entry saved! 🖤', 'ok');
   }
 
@@ -1063,6 +1089,7 @@ function saveEntry() {
   document.getElementById('inp-notes').value  = '';
   document.getElementById('inp-time').value   = '';
   document.getElementById('inp-client').value = '';
+  document.getElementById('inp-hours').value  = '';
   updateCalc();
 }
 
@@ -1125,6 +1152,7 @@ function renderRecords() {
       <td class="num col-true">£${trueInc.toFixed(2)}</td>
       <td class="num col-costs">${e.costs > 0 ? '£'+e.costs.toFixed(2) : '—'}</td>
       <td class="num col-net" style="${net<0?'color:#ff6b6b':''}">${netStr}</td>
+      <td class="num" style="color:var(--purple)">${e.hours > 0 ? (net/e.hours < 0 ? '-£' : '£') + Math.abs(net/e.hours).toFixed(2) : '—'}</td>
       <td class="col-notes" title="${esc(e.notes)}">${esc(e.notes) || '—'}</td>
       <td><button class="btn-edit" onclick="editEntry(${e.id})">✎</button></td>
       <td><button class="btn-del" onclick="delEntry(${e.id})">✕</button></td>
@@ -1177,8 +1205,8 @@ function renderRecords() {
     <div class="table-wrap">
       <table>
         <thead><tr>
-          ${['date','client','gross','','','costs','net','','',''].map((col,i) => {
-            const labels = ['Date','Client','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes','',''];
+          ${['date','client','gross','','','costs','net','phr','',''].map((col,i) => {
+            const labels = ['Date','Client','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','£/hr','',''];
             const lbl = labels[i];
             if (!col) return `<th${i===3||i===4||i===6?' style="text-align:right"':''}>${lbl}</th>`;
             const arrow = sortCol===col ? (sortDir==='asc'?'↑':'↓') : '<span class="sort-hint">↕</span>';
@@ -1195,7 +1223,7 @@ function renderRecords() {
           <td class="num">£${tTrue.toFixed(2)}</td>
           <td class="num">£${tCosts.toFixed(2)}</td>
           <td class="num" style="color:${tNet<0?'#ff6b6b':'var(--teal)'}">${tNet<0?'-£':'£'}${Math.abs(tNet).toFixed(2)}</td>
-          <td></td><td></td><td></td>
+          <td></td><td></td><td></td><td></td>
         </tr></tfoot>` : ''}
       </table>
     </div>
@@ -1214,6 +1242,7 @@ function editEntry(id) {
   document.getElementById('inp-notes').value  = e.notes || '';
   document.getElementById('inp-time').value   = e.time || '';
   document.getElementById('inp-client').value = e.client || '';
+  document.getElementById('inp-hours').value  = e.hours || '';
   updateCalc();
   // Switch to entry tab
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1236,7 +1265,7 @@ function delEntry(id) {
 }
 
 function exportCSV() {
-  const header = ['Date','Time','Client','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes'];
+  const header = ['Date','Time','Client','Hours','£/hr','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes'];
   const csvRows = [header.join(',')];
   entries.forEach(e => {
     const vat  = e.gross * 0.30;
@@ -1246,6 +1275,8 @@ function exportCSV() {
       e.date,
       e.time || '',
       `"${(e.client||'').replace(/"/g,'""')}"`,
+      e.hours || '',
+      e.hours > 0 ? (tInc - e.costs - (e.hours > 0 ? 0 : 0)) && ((tInc - e.costs)/e.hours).toFixed(2) : '',
       e.gross.toFixed(2),
       vat.toFixed(2),
       tInc.toFixed(2),
