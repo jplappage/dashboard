@@ -76,7 +76,7 @@ Navigate a Chrome tab to `https://www.imdb.com/`, then run a single `javascript_
 Has a rating = released, add `imdbRating`. No rating = leave null.
 
 **For each film still needing a streaming date after Step 0:**
-WebSearch `site:whentostream.com "[title]"` — confirmed date = set `vodDate` + `platform` + `estimated: false`. Estimate only = set `estimated: true` + add `note`. Nothing = leave as-is.
+Navigate directly to `https://whentostream.com/[slug]-[year]/` via Chrome MCP and `get_page_text` — **do not rely solely on the weekly tracker**, which only shows estimates and often lags behind confirmed per-film announcements. The per-film page shows the actual confirmed `VOD Release Date` field. If the page 404s, fall back to WebSearch `site:whentostream.com "[title]"` to find the correct URL. Confirmed date = set `vodDate` + `platform` + `estimated: false` + remove any `note`. Estimate only = set `estimated: true` + update `note`. Nothing = leave as-is.
 
 **For each new film from Letterboxd:**
 Fetch the film's Letterboxd page to get the poster `<img>` src URL and the slug from the URL.
