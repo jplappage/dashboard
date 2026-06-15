@@ -950,11 +950,9 @@ async function loadFromCloud() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const gist = await res.json();
     const data = JSON.parse(gist.files[GIST_FILE].content);
-    if (Array.isArray(data.tattooEntries) && data.tattooEntries.length) {
-      // Merge cloud + local — deduplicate by id, cloud wins on conflict
-      const cloudMap = Object.fromEntries(data.tattooEntries.map(e => [e.id, e]));
-      entries.forEach(e => { if (!cloudMap[e.id]) cloudMap[e.id] = e; });
-      entries = Object.values(cloudMap).sort((a,b) => b.date.localeCompare(a.date));
+    if (Array.isArray(data.tattooEntries)) {
+      // Cloud is authoritative — always replace local (so deletes propagate)
+      entries = data.tattooEntries.sort((a,b) => b.date.localeCompare(a.date));
       persist();
     }
     setSyncStatus('ok');
