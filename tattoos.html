@@ -231,6 +231,8 @@
     input[type="date"],
     input[type="number"],
     input[type="text"],
+    input[type="tel"],
+    select,
     textarea {
       background: var(--surface2);
       border: 1px solid rgba(255,45,120,0.2);
@@ -250,6 +252,16 @@
     }
 
     input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); }
+
+    .form-card select {
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237e78a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      cursor: pointer;
+    }
+    .form-card select option { background: #1c1730; }
 
     textarea { resize: vertical; min-height: 88px; }
 
@@ -830,19 +842,30 @@
 
     <div class="form-row">
       <div class="form-group">
-        <label>Client <span style="color:var(--text-dim);font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></label>
-        <input type="text" id="inp-client" placeholder="e.g. Sarah, walk-in…">
+        <label>Client</label>
+        <input type="text" id="inp-client" placeholder="Client name">
       </div>
       <div class="form-group">
-        <label>Hours Worked <span style="color:var(--text-dim);font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></label>
+        <label>Hours Worked</label>
         <input type="number" id="inp-hours" placeholder="e.g. 3" step="1" min="0" oninput="updateCalc()">
       </div>
+    </div>
+
+    <div class="form-row">
       <div class="form-group">
-        <label>£ / hr</label>
-        <div class="net-row" style="margin:0;padding:10px 14px">
-          <span id="disp-phr" style="font-size:1.1rem;font-weight:700;color:var(--purple)">—</span>
-          <span style="font-size:0.7rem;color:var(--text-dim)">Net ÷ Hours</span>
-        </div>
+        <label>Originated</label>
+        <select id="inp-originated" onchange="toggleMobile()">
+          <option value="">Select source…</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Facebook (mine)">Facebook (mine)</option>
+          <option value="Facebook (work)">Facebook (work)</option>
+          <option value="Emails">Emails</option>
+          <option value="Walk in">Walk in</option>
+        </select>
+      </div>
+      <div class="form-group" id="mobile-wrap" style="display:none">
+        <label>Mobile Number</label>
+        <input type="tel" id="inp-mobile" placeholder="e.g. 07700 900123">
       </div>
     </div>
 
@@ -862,25 +885,11 @@
       </div>
     </div>
 
-    <div class="section-label">Costs & Notes</div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Other Costs (£)</label>
-        <input type="number" id="inp-costs" placeholder="0.00" step="0.01" min="0" oninput="updateCalc()">
+    <div class="form-row" style="margin-top:4px">
+      <div class="form-group" style="grid-column:1/-1">
+        <label>Notes</label>
+        <textarea id="inp-notes" placeholder="e.g. Sleeve session, flash design…"></textarea>
       </div>
-      <div class="form-group">
-        <label>Net After Costs</label>
-        <div class="net-row" style="margin:0;padding:10px 14px">
-          <span id="disp-net" class="net-val">£0.00</span>
-          <span style="font-size:0.7rem;color:var(--text-dim)">True Inc − Costs</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group" style="margin-bottom: 22px">
-      <label>Notes</label>
-      <textarea id="inp-notes" placeholder="e.g. Sleeve session, walk-in flash, supplies run…"></textarea>
     </div>
 
     <button class="btn-save" onclick="saveEntry()">💾 &nbsp;Save Entry</button>
@@ -1021,29 +1030,19 @@ function switchTab(btn) {
 
 // ── Live calculations ─────────────────────────────────
 function updateCalc() {
-  const gross  = parseFloat(document.getElementById('inp-gross').value)  || 0;
-  const costs  = parseFloat(document.getElementById('inp-costs').value)  || 0;
-  const vat    = gross * 0.30;
+  const gross   = parseFloat(document.getElementById('inp-gross').value) || 0;
+  const vat     = gross * 0.30;
   const trueInc = gross * 0.70;
-  const net    = trueInc - costs;
 
   document.getElementById('disp-vat').textContent  = '£' + vat.toFixed(2);
   document.getElementById('disp-true').textContent = '£' + trueInc.toFixed(2);
+}
 
-  const netEl = document.getElementById('disp-net');
-  netEl.textContent = (net < 0 ? '-£' : '£') + Math.abs(net).toFixed(2);
-  netEl.style.color = net < 0 ? '#ff6b6b' : 'var(--yellow)';
-
-  const hours = parseFloat(document.getElementById('inp-hours').value) || 0;
-  const phrEl = document.getElementById('disp-phr');
-  if (hours > 0) {
-    const phr = net / hours;
-    phrEl.textContent = (phr < 0 ? '-£' : '£') + Math.abs(phr).toFixed(2);
-    phrEl.style.color = phr < 0 ? '#ff6b6b' : 'var(--purple)';
-  } else {
-    phrEl.textContent = '—';
-    phrEl.style.color = 'var(--purple)';
-  }
+function toggleMobile() {
+  const val = document.getElementById('inp-originated').value;
+  const wrap = document.getElementById('mobile-wrap');
+  wrap.style.display = val === 'Walk in' ? '' : 'none';
+  if (val !== 'Walk in') document.getElementById('inp-mobile').value = '';
 }
 
 // ── Save entry ────────────────────────────────────────
@@ -1074,11 +1073,13 @@ function saveEntry() {
   triggerSync();
   updateYTD();
 
-  document.getElementById('inp-gross').value  = '';
-  document.getElementById('inp-costs').value  = '';
-  document.getElementById('inp-notes').value  = '';
-  document.getElementById('inp-client').value = '';
-  document.getElementById('inp-hours').value  = '';
+  document.getElementById('inp-gross').value      = '';
+  document.getElementById('inp-notes').value      = '';
+  document.getElementById('inp-client').value     = '';
+  document.getElementById('inp-hours').value      = '';
+  document.getElementById('inp-originated').value = '';
+  document.getElementById('inp-mobile').value     = '';
+  document.getElementById('mobile-wrap').style.display = 'none';
   updateCalc();
 }
 
@@ -1131,17 +1132,16 @@ function renderRecords() {
   const rows = filtered.map(e => {
     const vat     = e.gross * 0.30;
     const trueInc = e.gross * 0.70;
-    const net     = trueInc - e.costs;
-    const netStr  = (net < 0 ? '-£' : '£') + Math.abs(net).toFixed(2);
+    const netStr  = '£' + trueInc.toFixed(2);
     return `<tr>
       <td style="white-space:nowrap">${fmtDate(e.date)}</td>
       <td style="color:var(--text-dim);font-size:0.82rem">${esc(e.client) || '—'}</td>
       <td class="num col-gross">£${e.gross.toFixed(2)}</td>
       <td class="num col-vat">£${vat.toFixed(2)}</td>
       <td class="num col-true">£${trueInc.toFixed(2)}</td>
-      <td class="num col-costs">${e.costs > 0 ? '£'+e.costs.toFixed(2) : '—'}</td>
-      <td class="num col-net" style="${net<0?'color:#ff6b6b':''}">${netStr}</td>
-      <td class="num" style="color:var(--purple)">${e.hours > 0 ? (net/e.hours < 0 ? '-£' : '£') + Math.abs(net/e.hours).toFixed(2) : '—'}</td>
+      <td style="color:var(--text-dim);font-size:0.82rem">${esc(e.originated) || '—'}</td>
+      <td class="num col-net">${netStr}</td>
+      <td class="num" style="color:var(--purple)">${e.hours > 0 ? '£' + (trueInc/e.hours).toFixed(2) : '—'}</td>
       <td class="col-notes" title="${esc(e.notes)}">${esc(e.notes) || '—'}</td>
       <td><button class="btn-edit" onclick="editEntry(${e.id})">✎</button></td>
       <td><button class="btn-del" onclick="delEntry(${e.id})">✕</button></td>
@@ -1179,8 +1179,6 @@ function renderRecords() {
   // Totals for filtered set
   const tGross = filtered.reduce((s,e) => s + e.gross, 0);
   const tTrue  = tGross * 0.70;
-  const tCosts = filtered.reduce((s,e) => s + e.costs, 0);
-  const tNet   = tTrue - tCosts;
 
   const emptyRow = filtered.length === 0
     ? `<tr><td colspan="9" style="text-align:center;color:var(--text-dim);padding:24px">No sessions match your filter</td></tr>`
@@ -1194,8 +1192,8 @@ function renderRecords() {
     <div class="table-wrap">
       <table>
         <thead><tr>
-          ${['date','client','gross','','','costs','net','phr','',''].map((col,i) => {
-            const labels = ['Date','Client','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','£/hr','',''];
+          ${['date','client','gross','','','originated','net','phr','',''].map((col,i) => {
+            const labels = ['Date','Client','Gross','Matt VAT (30%)','True Income (70%)','Originated','Net (true inc)','£/hr','',''];
             const lbl = labels[i];
             if (!col) return `<th${i===3||i===4||i===6?' style="text-align:right"':''}>${lbl}</th>`;
             const arrow = sortCol===col ? (sortDir==='asc'?'↑':'↓') : '<span class="sort-hint">↕</span>';
@@ -1210,8 +1208,8 @@ function renderRecords() {
           <td class="num">£${tGross.toFixed(2)}</td>
           <td class="num">£${(tGross*0.30).toFixed(2)}</td>
           <td class="num">£${tTrue.toFixed(2)}</td>
-          <td class="num">£${tCosts.toFixed(2)}</td>
-          <td class="num" style="color:${tNet<0?'#ff6b6b':'var(--teal)'}">${tNet<0?'-£':'£'}${Math.abs(tNet).toFixed(2)}</td>
+          <td></td>
+          <td class="num" style="color:var(--teal)">£${tTrue.toFixed(2)}</td>
           <td></td><td></td><td></td><td></td>
         </tr></tfoot>` : ''}
       </table>
@@ -1225,12 +1223,14 @@ function editEntry(id) {
   const e = entries.find(e => e.id === id);
   if (!e) return;
   editingId = id;
-  document.getElementById('inp-date').value   = e.date;
-  document.getElementById('inp-gross').value  = e.gross;
-  document.getElementById('inp-costs').value  = e.costs;
-  document.getElementById('inp-notes').value  = e.notes || '';
-  document.getElementById('inp-client').value = e.client || '';
-  document.getElementById('inp-hours').value  = e.hours || '';
+  document.getElementById('inp-date').value       = e.date;
+  document.getElementById('inp-gross').value      = e.gross;
+  document.getElementById('inp-notes').value      = e.notes || '';
+  document.getElementById('inp-client').value     = e.client || '';
+  document.getElementById('inp-hours').value      = e.hours || '';
+  document.getElementById('inp-originated').value = e.originated || '';
+  document.getElementById('inp-mobile').value     = e.mobile || '';
+  toggleMobile();
   updateCalc();
   // Switch to entry tab
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1253,22 +1253,21 @@ function delEntry(id) {
 }
 
 function exportCSV() {
-  const header = ['Date','Client','Hours','£/hr','Gross','Matt VAT (30%)','True Income (70%)','Costs','Net','Notes'];
+  const header = ['Date','Client','Hours','£/hr','Gross','Matt VAT (30%)','True Income (70%)','Originated','Mobile','Notes'];
   const csvRows = [header.join(',')];
   entries.forEach(e => {
     const vat  = e.gross * 0.30;
     const tInc = e.gross * 0.70;
-    const net  = tInc - e.costs;
     csvRows.push([
       e.date,
       `"${(e.client||'').replace(/"/g,'""')}"`,
       e.hours || '',
-      e.hours > 0 ? ((tInc - e.costs) / e.hours).toFixed(2) : '',
+      e.hours > 0 ? (tInc / e.hours).toFixed(2) : '',
       e.gross.toFixed(2),
       vat.toFixed(2),
       tInc.toFixed(2),
-      e.costs.toFixed(2),
-      net.toFixed(2),
+      `"${(e.originated||'').replace(/"/g,'""')}"`,
+      e.mobile || '',
       `"${(e.notes||'').replace(/"/g,'""')}"`
     ].join(','));
   });
@@ -1284,12 +1283,10 @@ function updateYTD() {
   if (!entries.length) { strip.style.display = 'none'; return; }
   const tGross = entries.reduce((s,e) => s + e.gross, 0);
   const tTrue  = tGross * 0.70;
-  const tCosts = entries.reduce((s,e) => s + e.costs, 0);
-  const tNet   = tTrue - tCosts;
   document.getElementById('ytd-gross').textContent = '£' + tGross.toFixed(2);
   document.getElementById('ytd-true').textContent  = '£' + tTrue.toFixed(2);
-  document.getElementById('ytd-net').textContent   = (tNet < 0 ? '-£' : '£') + Math.abs(tNet).toFixed(2);
-  document.getElementById('ytd-net').style.color   = tNet < 0 ? '#ff6b6b' : 'var(--teal)';
+  document.getElementById('ytd-net').textContent   = '£' + tTrue.toFixed(2);
+  document.getElementById('ytd-net').style.color   = 'var(--teal)';
   strip.style.display = 'flex';
 }
 
@@ -1314,7 +1311,7 @@ function renderSummary() {
   // Chart — chronological, net income per month
   buildChart(months.map(m => ({
     label: fmtMonthShort(m),
-    net:   Math.max(0, byMonth[m].reduce((s,e) => s + e.gross*0.70 - e.costs, 0)),
+    net:   Math.max(0, byMonth[m].reduce((s,e) => s + e.gross*0.70, 0)),
     gross: byMonth[m].reduce((s,e) => s + e.gross, 0),
   })));
 
@@ -1325,38 +1322,29 @@ function renderSummary() {
     const es     = byMonth[m];
     const tGross = es.reduce((s,e) => s + e.gross, 0);
     const tTrue  = tGross * 0.70;
-    const tCosts = es.reduce((s,e) => s + e.costs, 0);
-    const tNet   = tTrue - tCosts;
-    const netCol = tNet < 0 ? '#ff6b6b' : 'var(--teal)';
     return `<tr>
       <td>${fmtMonthFull(m)}</td>
       <td>${es.length}</td>
       <td>£${tGross.toFixed(2)}</td>
-      <td>£${tTrue.toFixed(2)}</td>
-      <td>£${tCosts.toFixed(2)}</td>
-      <td style="color:${netCol};font-weight:700">${tNet<0?'-£':'£'}${Math.abs(tNet).toFixed(2)}</td>
+      <td style="color:var(--teal);font-weight:700">£${tTrue.toFixed(2)}</td>
     </tr>`;
   }).join('');
 
   const allGross = entries.reduce((s,e) => s + e.gross, 0);
   const allTrue  = allGross * 0.70;
-  const allCosts = entries.reduce((s,e) => s + e.costs, 0);
-  const allNet   = allTrue - allCosts;
   const allSess  = entries.length;
 
   document.getElementById('summary-root').innerHTML += `
     <table class="month-list">
       <thead><tr>
-        <th>Month</th><th>Sessions</th><th>Gross</th><th>True Income</th><th>Costs</th><th>Net</th>
+        <th>Month</th><th>Sessions</th><th>Gross</th><th>True Income</th>
       </tr></thead>
       <tbody>${rows}</tbody>
       <tfoot><tr class="totals-row">
         <td>★ Total</td>
         <td>${allSess}</td>
         <td>£${allGross.toFixed(2)}</td>
-        <td>£${allTrue.toFixed(2)}</td>
-        <td>£${allCosts.toFixed(2)}</td>
-        <td style="color:${allNet<0?'#ff6b6b':'var(--teal)'};font-weight:700">${allNet<0?'-£':'£'}${Math.abs(allNet).toFixed(2)}</td>
+        <td style="color:var(--teal);font-weight:700">£${allTrue.toFixed(2)}</td>
       </tr></tfoot>
     </table>`;
 }
@@ -1455,9 +1443,8 @@ function renderTaxCard(allEntries) {
   if (!inYear.length) return '';
 
   const totalGross = inYear.reduce((s,e) => s + e.gross, 0);
-  const totalCosts = inYear.reduce((s,e) => s + e.costs, 0);
   const totalTrue  = totalGross * 0.70;
-  const totalNet   = totalTrue - totalCosts;
+  const totalNet   = totalTrue;
   const { it, ni, total } = calcUKTax(totalNet);
 
   // Tax year progress
@@ -1470,8 +1457,7 @@ function renderTaxCard(allEntries) {
 
   // Extrapolated full-year projection
   const projGross = totalGross / daysGone * tyDays;
-  const projCosts = totalCosts / daysGone * tyDays;
-  const projNet   = projGross * 0.70 - projCosts;
+  const projNet   = projGross * 0.70;
   const proj      = calcUKTax(projNet);
 
   return `<div class="tax-card">
