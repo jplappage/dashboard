@@ -1109,7 +1109,7 @@ function saveEntry() {
     document.querySelector('.btn-save').textContent = '💾  Save Entry';
     toast('Entry updated! 🖤', 'ok');
   } else {
-    entries.push({ id: Date.now(), date, gross, costs, notes, client, hours });
+    entries.push({ id: Date.now(), date, gross, notes, client, hours, originated, mobile, declared: declaredVal });
     toast('Entry saved! 🖤', 'ok');
   }
 
