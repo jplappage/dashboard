@@ -895,8 +895,17 @@ function renderCard(film) {
   const badgeClass = { out: 'badge-out', soon: 'badge-soon', waiting: 'badge-waiting', notout: 'badge-notout' }[status];
   const badgeText = { out: 'Out Now', soon: 'Coming', waiting: '⏳ Waiting', notout: 'Not Out Yet' }[status];
   const dateClass = { out: 'date-out', soon: 'date-soon', waiting: 'date-unknown', notout: 'date-unknown' }[status];
+  function getEstText(f) {
+    if (f.vodDate) return `Est. ${formatDate(f.vodDate)}`;
+    if (f.note) {
+      const m = f.note.match(/est\.\s*([^·(]+)/i);
+      if (m) return 'Est. ' + m[1].trim();
+      return f.note;
+    }
+    return 'Stream date TBC';
+  }
   const dateText = film.estimated
-    ? (film.vodDate ? `Stream date ${formatDate(film.vodDate)} TBC` : 'Stream date TBC')
+    ? getEstText(film)
     : (status === 'out' || status === 'soon') ? formatDate(film.vodDate) : 'Stream date TBC';
 
   const estHtml = '';
