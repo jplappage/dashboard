@@ -35,6 +35,8 @@ WATCHED = [
     { 'title': 'In the Grey', 'vodDate': '2026-06-02', 'imdbRating': 7.1 },
     { 'title': 'Mortal Kombat II', 'vodDate': '2026-06-09', 'imdbRating': 7.0 },
     { 'title': 'Kevin Bridges: In Search of the Beautiful Game', 'vodDate': '2026-06-07', 'imdbRating': 7.4 },
+    { 'title': 'Is God Is', 'vodDate': '2026-06-02' },
+    { 'title': 'Deep Water', 'vodDate': '2026-06-16', 'imdbRating': 7.5 },
 ]
 
 
