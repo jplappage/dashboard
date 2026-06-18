@@ -173,6 +173,47 @@
       letter-spacing: 0.5px;
     }
 
+    .header-right {
+      position: relative;
+      z-index: 1;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .progress-pct {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ffe81f 0%, #fff7a0 50%, #ffe81f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .progress-bar-wrap {
+      width: 120px;
+      height: 4px;
+      background: rgba(255,232,31,0.15);
+      border-radius: 2px;
+      margin: 5px 0 4px auto;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #ffe81f;
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    .progress-label {
+      font-size: 0.72rem;
+      color: #666;
+      letter-spacing: 0.5px;
+    }
+
 .top-bar {
       display: flex;
       align-items: center;
