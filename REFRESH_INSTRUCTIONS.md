@@ -90,6 +90,16 @@ WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = upd
 **For each retro film newly watched:**
 The watched date comes from the diary (already loaded). Personal rating comes from the diary entry.
 
+To get the personal rating, navigate to `https://letterboxd.com/zidanejp/film/{slug}/` and extract the `rated-N` CSS class from the DOM:
+```js
+[...document.querySelectorAll('[class*="rated-"]')].map(el=>el.className.toString())
+```
+**Do NOT infer the rating from `rated-N` alone** — the class value does not reliably map to star count without visual confirmation. Instead, also extract the `aria-label` which contains the plain-English rating:
+```js
+[...document.querySelectorAll('[aria-label*="star"], [aria-label*="rating"], .rating[aria-label]')].map(el=>el.getAttribute('aria-label'))
+```
+If `aria-label` is unavailable, take a screenshot of the page and count the filled stars visually. The review page header shows stars like `★★` or `★★½` — use that as the source of truth. Previous errors have come from misreading `rated-5` as 2.5 stars when the actual rating was 2.0 stars.
+
 **Before moving to Phase 4, verify:**
 - [ ] Every film with `vodDate: null` or `estimated: true` was searched OR listed as skipped (pre-theatrical)
 - [ ] Every film with no `imdbRating` was searched OR listed as skipped (pre-theatrical)
