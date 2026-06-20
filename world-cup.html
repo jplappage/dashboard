@@ -2648,7 +2648,7 @@ function matchThirds(slots, letters) {
       used.delete(L);
     }
     result[i] = { key: slots[i].key, letter: null }; // no qualified third fits — leave empty
-    return bt(i + 1);
+    return false; // backtrack so earlier slots can try different assignments
   }
   bt(0);
   return result;
