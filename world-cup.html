@@ -2975,12 +2975,10 @@ function groupRowHtml(e, cls, posOverride, extraCell) {
 // 'third' = group complete and finished 3rd (best-thirds table decides in/out).
 // Uses points bounds only, so it never marks a team prematurely (it can lag
 // reality slightly when remaining fixtures would settle a tie, but is never wrong).
-function groupTeamStatus(entries, allComplete) {
+// Conservative points-only fallback (used only if a group's remaining fixtures
+// can't be matched to FIXTURES). Ignores who-plays-whom, so it under-marks.
+function groupTeamStatusByPoints(entries) {
   return entries.map((e, i) => {
-    if (allComplete) {
-      const r = statVal(e, 'R');
-      return r <= 2 ? 'in' : (r === 3 ? 'third' : 'out');
-    }
     const P = statVal(e, 'P'), max = P + 3 * (3 - statVal(e, 'GP'));
     let canReachMe = 0, alreadyAboveMyMax = 0;
     entries.forEach((o, j) => {
@@ -2989,10 +2987,49 @@ function groupTeamStatus(entries, allComplete) {
       if (oMax >= P) canReachMe++;
       if (oP > max)  alreadyAboveMyMax++;
     });
-    if (canReachMe <= 1)        return 'in';   // ≤1 rival can even reach my points → top 2 locked
-    if (alreadyAboveMyMax >= 3) return 'out';  // 3 rivals already beyond my ceiling → last place
+    if (canReachMe <= 1)        return 'in';
+    if (alreadyAboveMyMax >= 3) return 'out';
     return '';
   });
+}
+
+// Pairing-aware status: brute-forces every result of the group's remaining
+// fixtures (so it knows Australia & Paraguay play each other and can't both
+// catch USA). 'in' = top-2 in every scenario · 'out' = last in every scenario
+// (still in contention for a best-third place otherwise) · 'third' = group done
+// and finished 3rd (best-thirds table decides) · '' = still undecided.
+function groupTeamStatus(entries, group, allComplete) {
+  if (allComplete) {
+    return entries.map(e => { const r = statVal(e, 'R'); return r <= 2 ? 'in' : (r === 3 ? 'third' : 'out'); });
+  }
+  const n = entries.length;
+  const tIdx = {};
+  entries.forEach((e, i) => { tIdx[toPageTeam(e.team && e.team.displayName)] = i; });
+  const rem = FIXTURES
+    .filter(f => f.round === 'group' && f.group === group && f.homeScore == null && tIdx[f.home] != null && tIdx[f.away] != null)
+    .map(f => [tIdx[f.home], tIdx[f.away]]);
+  const expectedRem = (n * (n - 1) / 2) - entries.reduce((s, e) => s + statVal(e, 'GP'), 0) / 2;
+  if (rem.length !== expectedRem) return groupTeamStatusByPoints(entries); // fixtures not in sync → safe fallback
+
+  const base = entries.map(e => statVal(e, 'P'));
+  const R = rem.length, tot = Math.pow(3, R);
+  const clinch = Array(n).fill(true), notLast = Array(n).fill(false);
+  for (let s = 0; s < tot; s++) {
+    const pts = base.slice();
+    let x = s;
+    for (let k = 0; k < R; k++) {
+      const o = x % 3; x = (x / 3) | 0;
+      const h = rem[k][0], a = rem[k][1];
+      if (o === 0) pts[h] += 3; else if (o === 1) pts[a] += 3; else { pts[h]++; pts[a]++; }
+    }
+    for (let i = 0; i < n; i++) {
+      let above = 0, eq = 0;
+      for (let j = 0; j < n; j++) { if (j === i) continue; if (pts[j] > pts[i]) above++; else if (pts[j] === pts[i]) eq++; }
+      if (above + eq > 1) clinch[i] = false; // a tie could drop me to 3rd → not guaranteed top-2
+      if (above < 3)      notLast[i] = true; // some scenario keeps me off the bottom
+    }
+  }
+  return entries.map((e, i) => clinch[i] ? 'in' : (!notLast[i] ? 'out' : ''));
 }
 
 function renderGroups(data) {
