@@ -3059,7 +3059,7 @@ function renderGroups(data) {
   const thead = `<tr><th>#</th><th class="t-team">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>`;
   let html = '<div class="groups-grid">';
   for (const g of groupEntries) {
-    const status = groupTeamStatus(g.entries, allComplete);
+    const status = groupTeamStatus(g.entries, g.name.replace('Group ', '').trim(), allComplete);
     html += `<div class="group-table-card"><div class="group-table-title">${escHtml(g.name)}</div><table class="group-table"><thead>${thead}</thead><tbody>`;
     g.entries.forEach((e, i) => {
       const r = statVal(e, 'R');
