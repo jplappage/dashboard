@@ -2074,13 +2074,14 @@ let dragTeam      = null;
 function setTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-  const isKO = tab === 'knockouts', isGroups = tab === 'groups', isFix = tab === 'fixtures';
+  const isKO = tab === 'knockouts', isGroups = tab === 'groups', isFix = tab === 'fixtures', isFR = tab === 'frroute';
   document.getElementById('round-filter').style.display       = isFix ? '' : 'none';
   document.getElementById('date-nav-bar').style.display       = isFix ? '' : 'none';
   document.getElementById('team-filter-bar').style.display    = isFix ? '' : 'none';
   document.getElementById('fixtures-container').style.display = isFix ? '' : 'none';
   document.getElementById('ko-view').style.display            = isKO ? '' : 'none';
   document.getElementById('groups-view').style.display        = isGroups ? '' : 'none';
+  document.getElementById('frroute-view').style.display       = isFR ? '' : 'none';
   if (isKO) { renderTeamPool(); renderBracket(); renderEliminated(); }
   if (isGroups) loadStandings();
 }
