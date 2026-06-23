@@ -3007,16 +3007,64 @@ function clinchTop2(entries, group) {
   return clinch;
 }
 
-// Per-team status for the colour coding.
-// 'out' = ESPN's official "Eliminated" flag — authoritative, so it correctly
-//         handles goal difference AND head-to-head (e.g. Haiti, who can't pass
-//         Scotland for 3rd). 'in' = mathematically clinched a top-2 place.
-function groupTeamStatus(entries, group) {
+// Head-to-head winner map from already-played group games.
+function buildH2H() {
+  const H = {};
+  FIXTURES.filter(f => f.round === 'group' && f.homeScore != null).forEach(f => {
+    const r = f.homeScore > f.awayScore ? 'W' : f.homeScore < f.awayScore ? 'L' : 'D';
+    (H[f.home] = H[f.home] || {})[f.away] = r;
+    (H[f.away] = H[f.away] || {})[f.home] = r === 'W' ? 'L' : r === 'L' ? 'W' : 'D';
+  });
+  return H;
+}
+
+// Best (lowest) group rank team X can still reach: X wins its remaining games and
+// every other remaining game is arranged in X's favour. Ties are broken by
+// head-to-head — X only loses a level-on-points tie to a rival that beat it head
+// to head (this is what eliminates Haiti, who can't pass Scotland for 3rd). If
+// even this best case leaves X in last place, X can no longer qualify.
+function bestCaseRank(teams, P, rem, X, H2H) {
+  const others = rem.filter(p => p[0] !== X && p[1] !== X);
+  const xg     = rem.filter(p => p[0] === X || p[1] === X);
+  const tot = Math.pow(3, others.length);
+  let best = teams.length + 1;
+  for (let s = 0; s < tot; s++) {
+    const pts = P.slice();
+    xg.forEach(p => { pts[p[0] === X ? p[0] : p[1]] += 3; }); // X wins its games
+    let x = s;
+    for (let k = 0; k < others.length; k++) {
+      const o = x % 3; x = (x / 3) | 0;
+      const i = others[k][0], j = others[k][1];
+      if (o === 0) pts[i] += 3; else if (o === 1) pts[j] += 3; else { pts[i]++; pts[j]++; }
+    }
+    let above = 0;
+    for (let y = 0; y < teams.length; y++) {
+      if (y === X) continue;
+      if (pts[y] > pts[X]) above++;
+      else if (pts[y] === pts[X] && ((H2H[teams[X]] || {})[teams[y]]) === 'L') above++; // lost head-to-head
+    }
+    best = Math.min(best, 1 + above);
+  }
+  return best;
+}
+
+// Per-team colour status. 'in' = clinched a top-2 place. 'out' = even in its best
+// case the team finishes last in the group, so it can no longer qualify (top-2 or
+// best-third). Computed locally with head-to-head — ESPN's own "Eliminated" flag
+// is unreliable here (it wrongly flags South Africa, who can still finish 2nd).
+function groupTeamStatus(entries, group, H2H) {
+  const teams = entries.map(e => toPageTeam(e.team && e.team.displayName));
+  const idx = {}; teams.forEach((t, i) => idx[t] = i);
+  const P = entries.map(e => statVal(e, 'P'));
+  const rem = FIXTURES
+    .filter(f => f.round === 'group' && f.group === group && f.homeScore == null && idx[f.home] != null && idx[f.away] != null)
+    .map(f => [idx[f.home], idx[f.away]]);
+  const expectedRem = (teams.length * (teams.length - 1) / 2) - entries.reduce((s, e) => s + statVal(e, 'GP'), 0) / 2;
+  const synced = rem.length === expectedRem;
   const clinch = clinchTop2(entries, group);
   return entries.map((e, i) => {
-    const note = (e.note && e.note.description) || '';
-    if (/eliminat/i.test(note)) return 'out';
-    if (clinch[i])              return 'in';
+    if (clinch[i]) return 'in';
+    if (synced && bestCaseRank(teams, P, rem, i, H2H) >= teams.length) return 'out';
     return '';
   });
 }
