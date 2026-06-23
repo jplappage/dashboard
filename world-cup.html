@@ -3080,7 +3080,7 @@ function renderGroups(data) {
     html += groupRowHtml(t.e, cls, i + 1, `<td>${escHtml(t.group)}</td>`);
   });
   html += '</tbody></table></div>';
-  html += '<p class="groups-note"><span style="color:#86efac;font-weight:700">Green ✓</span> = qualified (mathematically guaranteed) · <span style="color:#cc7a7a;text-decoration:line-through">Red</span> = eliminated · Top 2 per group + 8 best thirds advance · Live from ESPN</p>';
+  html += '<p class="groups-note"><span style="color:#86efac;font-weight:700">Green ✓</span> = qualified (mathematically guaranteed top 2) · <span style="color:#cc7a7a;text-decoration:line-through">Red</span> = eliminated (can\'t reach top 2 or a best-third place) · 3rd-placed teams stay live until the best-thirds settle · Top 2 per group + 8 best thirds advance · Live from ESPN</p>';
 
   document.getElementById('groups-container').innerHTML = html;
 }
