@@ -3089,10 +3089,11 @@ function renderGroups(data) {
     statVal(b.e, 'P') - statVal(a.e, 'P') ||
     statVal(b.e, 'GD') - statVal(a.e, 'GD') ||
     statVal(b.e, 'F') - statVal(a.e, 'F'));
+  const H2H = buildH2H();
   const thead = `<tr><th>#</th><th class="t-team">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>`;
   let html = '<div class="groups-grid">';
   for (const g of groupEntries) {
-    const status = groupTeamStatus(g.entries, g.name.replace('Group ', '').trim());
+    const status = groupTeamStatus(g.entries, g.name.replace('Group ', '').trim(), H2H);
     html += `<div class="group-table-card"><div class="group-table-title">${escHtml(g.name)}</div><table class="group-table"><thead>${thead}</thead><tbody>`;
     g.entries.forEach((e, i) => {
       const r = statVal(e, 'R');
@@ -3108,8 +3109,7 @@ function renderGroups(data) {
 
   html += `<div class="group-table-card" style="margin-top:18px"><div class="group-table-title">Best Third-Placed Teams — Top 8 Advance</div><table class="group-table"><thead><tr><th>#</th><th class="t-team">Team</th><th>Grp</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead><tbody>`;
   thirds.forEach((t, i) => {
-    const elim = /eliminat/i.test((t.e.note && t.e.note.description) || '');
-    const cls = elim ? 'q-out' : (i < 8 ? 'q-through' : '');
+    const cls = i < 8 ? 'q-through' : '';
     html += groupRowHtml(t.e, cls, i + 1, `<td>${escHtml(t.group)}</td>`);
   });
   html += '</tbody></table></div>';
