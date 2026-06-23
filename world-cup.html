@@ -2967,41 +2967,11 @@ function groupRowHtml(e, cls, posOverride, extraCell) {
   </tr>`;
 }
 
-// Mathematical qualification status for the four teams in one group.
-// 'in'  = clinched a top-2 spot (guaranteed in every remaining result), or
-//         — once all 3 group games are played — finished in the top 2.
-// 'out' = cannot reach the top 3 (already guaranteed last), or — once the group
-//         is complete — finished outside the top 2.
-// 'third' = group complete and finished 3rd (best-thirds table decides in/out).
-// Uses points bounds only, so it never marks a team prematurely (it can lag
-// reality slightly when remaining fixtures would settle a tie, but is never wrong).
-// Conservative points-only fallback (used only if a group's remaining fixtures
-// can't be matched to FIXTURES). Ignores who-plays-whom, so it under-marks.
-function groupTeamStatusByPoints(entries) {
-  return entries.map((e, i) => {
-    const P = statVal(e, 'P'), max = P + 3 * (3 - statVal(e, 'GP'));
-    let canReachMe = 0, alreadyAboveMyMax = 0;
-    entries.forEach((o, j) => {
-      if (j === i) return;
-      const oP = statVal(o, 'P'), oMax = oP + 3 * (3 - statVal(o, 'GP'));
-      if (oMax >= P) canReachMe++;
-      if (oP > max)  alreadyAboveMyMax++;
-    });
-    if (canReachMe <= 1)        return 'in';
-    if (alreadyAboveMyMax >= 3) return 'out';
-    return '';
-  });
-}
-
-// Pairing-aware status: brute-forces every result of the group's remaining
-// fixtures (so it knows Australia & Paraguay play each other and can't both
-// catch USA). 'in' = top-2 in every scenario · 'out' = last in every scenario
-// (still in contention for a best-third place otherwise) · 'third' = group done
-// and finished 3rd (best-thirds table decides) · '' = still undecided.
-function groupTeamStatus(entries, group, allComplete) {
-  if (allComplete) {
-    return entries.map(e => { const r = statVal(e, 'R'); return r <= 2 ? 'in' : (r === 3 ? 'third' : 'out'); });
-  }
+// Pairing-aware clinch test: brute-forces every result of the group's remaining
+// fixtures (so it knows e.g. Australia & Paraguay play each other and can't both
+// catch USA). Returns a bool per team: true = guaranteed a top-2 finish in every
+// remaining scenario. Used for the GREEN highlight ("qualified").
+function clinchTop2(entries, group) {
   const n = entries.length;
   const tIdx = {};
   entries.forEach((e, i) => { tIdx[toPageTeam(e.team && e.team.displayName)] = i; });
@@ -3009,11 +2979,17 @@ function groupTeamStatus(entries, group, allComplete) {
     .filter(f => f.round === 'group' && f.group === group && f.homeScore == null && tIdx[f.home] != null && tIdx[f.away] != null)
     .map(f => [tIdx[f.home], tIdx[f.away]]);
   const expectedRem = (n * (n - 1) / 2) - entries.reduce((s, e) => s + statVal(e, 'GP'), 0) / 2;
-  if (rem.length !== expectedRem) return groupTeamStatusByPoints(entries); // fixtures not in sync → safe fallback
-
+  if (rem.length !== expectedRem) {
+    // Fallback (fixtures not in sync): points-only — ≤1 rival can reach my points.
+    return entries.map((e, i) => {
+      const P = statVal(e, 'P'); let ge = 0;
+      entries.forEach((o, j) => { if (j !== i && statVal(o, 'P') + 3 * (3 - statVal(o, 'GP')) >= P) ge++; });
+      return ge <= 1;
+    });
+  }
   const base = entries.map(e => statVal(e, 'P'));
   const R = rem.length, tot = Math.pow(3, R);
-  const clinch = Array(n).fill(true), notLast = Array(n).fill(false);
+  const clinch = Array(n).fill(true);
   for (let s = 0; s < tot; s++) {
     const pts = base.slice();
     let x = s;
@@ -3023,13 +2999,26 @@ function groupTeamStatus(entries, group, allComplete) {
       if (o === 0) pts[h] += 3; else if (o === 1) pts[a] += 3; else { pts[h]++; pts[a]++; }
     }
     for (let i = 0; i < n; i++) {
-      let above = 0, eq = 0;
-      for (let j = 0; j < n; j++) { if (j === i) continue; if (pts[j] > pts[i]) above++; else if (pts[j] === pts[i]) eq++; }
-      if (above + eq > 1) clinch[i] = false; // a tie could drop me to 3rd → not guaranteed top-2
-      if (above < 3)      notLast[i] = true; // some scenario keeps me off the bottom
+      let ge = 0; // rivals at or above me on points (a tie could drop me to 3rd)
+      for (let j = 0; j < n; j++) { if (j !== i && pts[j] >= pts[i]) ge++; }
+      if (ge > 1) clinch[i] = false;
     }
   }
-  return entries.map((e, i) => clinch[i] ? 'in' : (!notLast[i] ? 'out' : ''));
+  return clinch;
+}
+
+// Per-team status for the colour coding.
+// 'out' = ESPN's official "Eliminated" flag — authoritative, so it correctly
+//         handles goal difference AND head-to-head (e.g. Haiti, who can't pass
+//         Scotland for 3rd). 'in' = mathematically clinched a top-2 place.
+function groupTeamStatus(entries, group) {
+  const clinch = clinchTop2(entries, group);
+  return entries.map((e, i) => {
+    const note = (e.note && e.note.description) || '';
+    if (/eliminat/i.test(note)) return 'out';
+    if (clinch[i])              return 'in';
+    return '';
+  });
 }
 
 function renderGroups(data) {
