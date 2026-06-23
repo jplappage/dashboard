@@ -933,7 +933,7 @@
     <button class="tab-btn active" data-tab="fixtures" onclick="setTab('fixtures')">Fixtures</button>
     <button class="tab-btn" data-tab="groups" onclick="setTab('groups')">Group Stage</button>
     <button class="tab-btn" data-tab="knockouts" onclick="setTab('knockouts')">Knockouts</button>
-    <button class="tab-btn" data-tab="frroute" onclick="setTab('frroute')">🇫🇷 FR Route</button>
+    <button class="tab-btn" data-tab="frroute" onclick="setTab('frroute')">Routes</button>
   </div>
 
   <!-- Round filter -->
@@ -1070,6 +1070,13 @@
     .fr-opp-slot { font-size:0.66rem; color:#7a7a90; margin-top:2px; }
     .fr-final .fr-round { color:#fff0b0; }
     @media (max-width:560px){ .fr-opp{min-width:92px} .fr-rail{width:42px} }
+    .fr-team-head { display:flex; align-items:center; gap:9px; margin:22px 2px 10px; font-size:1.05rem; font-weight:800; color:#e8e8f0; }
+    .fr-team-head img { width:24px; border-radius:3px; }
+    .fr-decider-chip { margin-left:auto; font-size:0.7rem; font-weight:600; color:#9aa; background:#0c0c16; border:1px solid #2a2a4a; padding:3px 10px; border-radius:20px; }
+    .fr-cross { margin-top:20px; background:#12121f; border:1px solid #2a2a4a; border-left:3px solid #f0c040; border-radius:10px; padding:13px 16px; color:#aab; font-size:0.82rem; line-height:1.6; }
+    .fr-cross b { color:#f0c040; }
+    .fr-cross .fr-cx-line { margin-top:5px; }
+    @media (max-width:560px){ .fr-decider-chip{ margin-left:0; } .fr-team-head{ flex-wrap:wrap; } }
   </style>
 
   <div class="fr-intro">
