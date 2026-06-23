@@ -3031,8 +3031,6 @@ function renderGroups(data) {
     name: g.name || '',
     entries: ((g.standings && g.standings.entries) || []).slice().sort((a, b) => statVal(a, 'R') - statVal(b, 'R'))
   }));
-  const allComplete = groupEntries.every(g => g.entries.length > 0 && g.entries.every(e => statVal(e, 'GP') >= 3));
-
   // Rank the 12 third-placed teams up front (points, GD, goals) — top 8 advance.
   const thirds = [];
   groupEntries.forEach(g => {
