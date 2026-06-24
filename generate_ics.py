@@ -38,6 +38,7 @@ WATCHED = [
     { 'title': 'Is God Is', 'vodDate': '2026-06-02' },
     { 'title': 'Deep Water', 'vodDate': '2026-06-16', 'imdbRating': 7.5 },
     { 'title': 'I Love Boosters', 'vodDate': '2026-06-23', 'imdbRating': 7.2 },
+    { 'title': 'Tuner', 'vodDate': '2026-06-23', 'imdbRating': 7.3 },
 ]
 
 
