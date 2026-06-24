@@ -3125,8 +3125,18 @@ function groupTeamStatus(entries, group, H2H) {
     .map(f => [idx[f.home], idx[f.away]]);
   const expectedRem = (teams.length * (teams.length - 1) / 2) - entries.reduce((s, e) => s + statVal(e, 'GP'), 0) / 2;
   const synced = rem.length === expectedRem;
+  const complete = synced && rem.length === 0; // every game in this group has been played
   const clinch = clinchTop2(entries, group);
   return entries.map((e, i) => {
+    const R = statVal(e, 'R');
+    // Group finished: the ranking (with tie-breakers) is final, so decide exactly
+    // rather than relying on the predictive "can still be caught" logic, which is
+    // points-only and misses places settled on goal difference.
+    if (complete) {
+      if (R <= 2) return 'in';                // top 2 → through to the Round of 32
+      if (R >= teams.length) return 'out';    // last place can never be a best third
+      return 'third';                         // 3rd → resolved by the best-thirds pass
+    }
     if (clinch[i]) return 'in';
     if (synced && bestCaseRank(teams, P, rem, i, H2H) >= teams.length) return 'out';
     return '';
