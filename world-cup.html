@@ -2935,13 +2935,77 @@ function statDisp(entry, abbr) {
   return (s.displayValue != null) ? s.displayValue : String(s.value != null ? s.value : 0);
 }
 
+// ── Live group standings, computed from match results ─────────────────
+// The ESPN /standings feed is unreliable for this tournament (it returns a
+// stale 8-group table with 0 games played even after matches finish), so we
+// derive the group tables from the FIXTURES scores that DO update live. This is
+// the single source of truth for both the group tables and the knockout bracket
+// projection. The returned shape mirrors the ESPN standings JSON so that
+// renderGroups() and projectBracketFromStandings() work unchanged.
+function mkStat(abbr, v) {
+  return { abbreviation: abbr, value: v, displayValue: (abbr === 'GD' && v > 0 ? '+' + v : String(v)) };
+}
+
+// Mini head-to-head table among a set of tied teams (matches between them only).
+function h2hMini(letter, teams) {
+  const set = new Set(teams);
+  const mini = {}; teams.forEach(t => mini[t] = { P: 0, GD: 0, F: 0 });
+  FIXTURES.filter(f => f.round === 'group' && f.group === letter && f.homeScore != null && !f.live
+                    && set.has(f.home) && set.has(f.away)).forEach(f => {
+    const hs = +f.homeScore, as = +f.awayScore;
+    mini[f.home].F += hs; mini[f.home].GD += hs - as;
+    mini[f.away].F += as; mini[f.away].GD += as - hs;
+    if (hs > as) mini[f.home].P += 3; else if (hs < as) mini[f.away].P += 3; else { mini[f.home].P++; mini[f.away].P++; }
+  });
+  return mini;
+}
+
+function buildStandingsFromFixtures() {
+  const groups = {}; // letter -> { team -> totals }
+  FIXTURES.filter(f => f.round === 'group' && f.group).forEach(f => {
+    const g = groups[f.group] || (groups[f.group] = {});
+    for (const t of [f.home, f.away]) if (!g[t]) g[t] = { team: t, GP: 0, W: 0, D: 0, L: 0, F: 0, A: 0, P: 0 };
+    if (f.homeScore == null || f.awayScore == null || f.live) return; // only completed games count
+    const hs = +f.homeScore, as = +f.awayScore, H = g[f.home], Aw = g[f.away];
+    H.GP++; Aw.GP++; H.F += hs; H.A += as; Aw.F += as; Aw.A += hs;
+    if (hs > as)      { H.W++;  H.P += 3;  Aw.L++; }
+    else if (hs < as) { Aw.W++; Aw.P += 3; H.L++;  }
+    else              { H.D++;  Aw.D++;    H.P++; Aw.P++; }
+  });
+
+  const gd = s => s.F - s.A;
+  const children = Object.keys(groups).sort().map(L => {
+    let arr = Object.values(groups[L]);
+    // FIFA order: points → goal difference → goals scored → head-to-head → name
+    arr.sort((a, b) => b.P - a.P || gd(b) - gd(a) || b.F - a.F || a.team.localeCompare(b.team));
+    // Refine clusters still level on points, GD and goals scored using head-to-head
+    const out = []; let i = 0;
+    while (i < arr.length) {
+      let j = i + 1;
+      while (j < arr.length && arr[j].P === arr[i].P && gd(arr[j]) === gd(arr[i]) && arr[j].F === arr[i].F) j++;
+      const cluster = arr.slice(i, j);
+      if (cluster.length > 1) {
+        const m = h2hMini(L, cluster.map(s => s.team));
+        cluster.sort((a, b) => m[b.team].P - m[a.team].P || m[b.team].GD - m[a.team].GD
+                              || m[b.team].F - m[a.team].F || a.team.localeCompare(b.team));
+      }
+      out.push(...cluster); i = j;
+    }
+    const entries = out.map((s, k) => ({
+      team: { displayName: s.team },
+      stats: [ mkStat('R', k + 1), mkStat('GP', s.GP), mkStat('W', s.W), mkStat('D', s.D),
+               mkStat('L', s.L), mkStat('F', s.F), mkStat('A', s.A), mkStat('GD', s.F - s.A), mkStat('P', s.P) ],
+    }));
+    return { name: 'Group ' + L, standings: { entries } };
+  });
+  return { children };
+}
+
+// Standings are derived locally from live results (see buildStandingsFromFixtures).
+// `force` is accepted for call-site compatibility but no network fetch is made.
 async function refreshStandingsCache(force) {
-  if (force || !standingsCache || Date.now() - standingsFetchedAt > 60000) {
-    const r = await fetch(ESPN_STANDINGS_URL);
-    if (!r.ok) throw new Error();
-    standingsCache = await r.json();
-    standingsFetchedAt = Date.now();
-  }
+  standingsCache = buildStandingsFromFixtures();
+  standingsFetchedAt = Date.now();
   return standingsCache;
 }
 
