@@ -3177,7 +3177,7 @@ function renderGroups(data) {
     html += groupRowHtml(t.e, cls, i + 1, `<td>${escHtml(t.group)}</td>`);
   });
   html += '</tbody></table></div>';
-  html += '<p class="groups-note"><span style="color:#86efac;font-weight:700">Green ✓</span> = qualified (clinched a top-2 place) · <span style="color:#cc7a7a;text-decoration:line-through">Red</span> = eliminated (cannot finish above last in the group, head-to-head applied) · Top 2 per group + 8 best thirds advance · Live from ESPN</p>';
+  html += '<p class="groups-note"><span style="color:#86efac;font-weight:700">Green ✓</span> = qualified (clinched a top-2 place) · <span style="color:#cc7a7a;text-decoration:line-through">Red</span> = eliminated (cannot finish above last in the group, head-to-head applied) · Top 2 per group + 8 best thirds advance · Computed live from match results</p>';
 
   document.getElementById('groups-container').innerHTML = html;
 }
