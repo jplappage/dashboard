@@ -3163,6 +3163,17 @@ function renderGroups(data) {
     statVal(b.e, 'P') - statVal(a.e, 'P') ||
     statVal(b.e, 'GD') - statVal(a.e, 'GD') ||
     statVal(b.e, 'F') - statVal(a.e, 'F'));
+  // Best-third qualification needs every group's third decided, which only holds
+  // once all 12 groups are complete. Until then, 3rd-placed teams stay neutral.
+  // After that, the top 8 thirds are through and the bottom 4 are eliminated.
+  const groupDone = {};
+  [...new Set(FIXTURES.filter(f => f.round === 'group').map(f => f.group))].forEach(L => {
+    groupDone[L] = !FIXTURES.some(f => f.round === 'group' && f.group === L && f.homeScore == null);
+  });
+  const allComplete = Object.keys(groupDone).length > 0 && Object.values(groupDone).every(Boolean);
+  const thirdNm = t => toPageTeam(t.e.team && t.e.team.displayName);
+  const qualThirds = new Set(), elimThirds = new Set();
+  if (allComplete) thirds.forEach((t, i) => (i < 8 ? qualThirds : elimThirds).add(thirdNm(t)));
   const H2H = buildH2H();
   const thead = `<tr><th>#</th><th class="t-team">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>`;
   let html = '<div class="groups-grid">';
@@ -3172,7 +3183,11 @@ function renderGroups(data) {
     g.entries.forEach((e, i) => {
       const r = statVal(e, 'R');
       let cls = r <= 2 ? 'q-through' : (r === 3 ? 'q-maybe' : '');
-      const st = status[i];
+      let st = status[i];
+      if (st === 'third') { // completed-group 3rd place — resolve via best-thirds
+        const nm = toPageTeam(e.team && e.team.displayName);
+        st = qualThirds.has(nm) ? 'in' : elimThirds.has(nm) ? 'out' : '';
+      }
       if (st === 'in')  cls += ' q-in';
       else if (st === 'out') cls += ' q-out';
       html += groupRowHtml(e, cls.trim());
@@ -3187,7 +3202,7 @@ function renderGroups(data) {
     html += groupRowHtml(t.e, cls, i + 1, `<td>${escHtml(t.group)}</td>`);
   });
   html += '</tbody></table></div>';
-  html += '<p class="groups-note"><span style="color:#86efac;font-weight:700">Green ✓</span> = qualified (clinched a top-2 place) · <span style="color:#cc7a7a;text-decoration:line-through">Red</span> = eliminated (cannot finish above last in the group, head-to-head applied) · Top 2 per group + 8 best thirds advance · Computed live from match results</p>';
+  html += '<p class="groups-note"><span style="color:#86efac;font-weight:700">Green ✓</span> = qualified for the Round of 32 (top 2, or a confirmed best third) · <span style="color:#cc7a7a;text-decoration:line-through">Red</span> = eliminated (cannot reach the Round of 32) · Top 2 per group + 8 best thirds advance · Computed live from match results</p>';
 
   document.getElementById('groups-container').innerHTML = html;
 }
