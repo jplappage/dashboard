@@ -2806,6 +2806,43 @@ function setLiveSlot(key, team) {
   bracketState[key] = team;
 }
 
+// Which bracket slots are *confirmed* — i.e. locked by reality and not just a
+// projection from the current tables. A slot is confirmed when its team comes
+// from a completed group (1st/2nd locked, or a best third once all groups are
+// done), from the real knockout draw (ESPN gives a real team), or from an
+// actual played knockout result. Derived purely from live data so it can't drift.
+function computeConfirmed() {
+  const slots = new Set(), winners = {};
+  const groupDone = {};
+  [...new Set(FIXTURES.filter(f => f.round === 'group').map(f => f.group))].forEach(L => {
+    groupDone[L] = !FIXTURES.some(f => f.round === 'group' && f.group === L && f.homeScore == null);
+  });
+  const allComplete = Object.keys(groupDone).length > 0 && Object.values(groupDone).every(Boolean);
+  for (const mid of BRACKET_ORDER.r32) {
+    const f = FIXTURES.find(x => x.id === mid);
+    if (!f) continue;
+    const lab = R32_LABELS[mid] || { a: f.home, b: f.away };
+    [['a', f.home], ['b', f.away]].forEach(([pos, cur]) => {
+      if (hasFlag(cur)) { slots.add(`${mid}_${pos}`); return; } // real team from the draw / a result
+      const label = lab[pos]; let m;
+      if ((m = /^Group (\w) (?:winners|runners-up)$/.exec(label)) && groupDone[m[1]]) slots.add(`${mid}_${pos}`);
+      else if (/^Best 3rd/.test(label) && allComplete) slots.add(`${mid}_${pos}`);
+    });
+  }
+  const KO = [...BRACKET_ORDER.r32, ...BRACKET_ORDER.r16, ...BRACKET_ORDER.qf, ...BRACKET_ORDER.sf, 104];
+  for (const mid of KO) {
+    const f = FIXTURES.find(x => x.id === mid);
+    if (!f || f.homeScore == null || f.live) continue;
+    const hs = +f.homeScore, as = +f.awayScore;
+    let w = hs > as ? 'a' : hs < as ? 'b' : (f.homePens != null && f.awayPens != null ? (+f.homePens > +f.awayPens ? 'a' : 'b') : null);
+    if (!w) continue;
+    winners[mid] = w;
+    const d = WINNER_DEST[mid]; if (d) slots.add(`${d.match}_${d.pos}`);
+    const ld = LOSER_DEST[mid]; if (ld) slots.add(`${ld.match}_${ld.pos}`);
+  }
+  return { slots, winners };
+}
+
 function syncBracketFromResults() {
   const KO_MIDS = [...BRACKET_ORDER.r32, ...BRACKET_ORDER.r16, ...BRACKET_ORDER.qf, ...BRACKET_ORDER.sf, 103, 104];
   let changed = false;
