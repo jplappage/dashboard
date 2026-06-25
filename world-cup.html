@@ -2272,6 +2272,12 @@ const ALL_TEAMS = Object.keys(FLAG_CODES).sort();
 const BR_LOCAL_KEY = 'wc2026-bracket';
 let bracketState  = {}; // { '73_a': 'France', ... }
 let matchWinners  = {}; // { mid: 'a'|'b' } — which position won each match
+let confirmedSlots   = new Set(); // slot keys whose team is locked by reality (completed group / real result)
+let confirmedWinners = {};        // { mid: 'a'|'b' } decided by an actual played match
+// Snapshot the original Round-of-32 placeholder labels (e.g. "Group A winners")
+// before live results overwrite f.home/f.away with real team names.
+const R32_LABELS = {};
+BRACKET_ORDER.r32.forEach(mid => { const f = FIXTURES.find(x => x.id === mid); if (f) R32_LABELS[mid] = { a: f.home, b: f.away }; });
 let pickerSlot    = null;
 let activeTab     = 'fixtures';
 let dragTeam      = null;
