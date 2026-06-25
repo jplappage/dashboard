@@ -2347,6 +2347,7 @@ function renderBracket() {
   const container = document.getElementById('bracket-container');
   const b3rd      = document.getElementById('bracket-3rd');
   if (!container) return;
+  const _c = computeConfirmed(); confirmedSlots = _c.slots; confirmedWinners = _c.winners;
   const ROUNDS = ['r32','r16','qf','sf','final'];
   let html = '<div class="bracket-flex">';
   for (const round of ROUNDS) {
@@ -2394,7 +2395,7 @@ function buildBSlot(mid, pos) {
   if (decided !== undefined) {
     // Match is decided — show winner green, loser greyed out
     const isWinner = decided === pos;
-    const cls    = isWinner ? 'filled winner-slot' : 'filled elim-slot';
+    const cls    = (isWinner ? 'filled winner-slot' : 'filled elim-slot') + (confirmedSlots.has(key) ? ' confirmed' : '');
     const action = isWinner ? 'noop' : 'undo';
     const xMark  = isWinner ? '' : '<span class="slot-x">↺</span>';
     return `<div class="bracket-slot ${cls}" data-slot="${key}" data-mid="${mid}" data-action="${action}" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
@@ -2404,7 +2405,7 @@ function buildBSlot(mid, pos) {
 
   // No decision yet
   const canElim = !!opponent;
-  const cls    = canElim ? 'filled can-eliminate' : 'filled';
+  const cls    = (canElim ? 'filled can-eliminate' : 'filled') + (confirmedSlots.has(key) ? ' confirmed' : '');
   const action = canElim ? 'eliminate' : 'remove';
   return `<div class="bracket-slot ${cls}" data-slot="${key}" data-action="${action}" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
     ${flagHtml(team)}<span class="slot-team">${escHtml(team)}</span><span class="slot-x">✕</span>
@@ -2480,9 +2481,13 @@ function removeFromSlot(slotKey) {
 }
 
 function resetBracket() {
-  if (!confirm('Reset the bracket? Manual placements are cleared and it re-fills from the live tables and results.')) return;
-  bracketState = {};
-  matchWinners = {};
+  if (!confirm('Reset the bracket? Your manual picks are cleared and it re-fills from the live tables and results. Confirmed fixtures are kept.')) return;
+  // Keep everything that's actually confirmed; clear only projections + manual picks.
+  const { slots: conf, winners: confW } = computeConfirmed();
+  const kept = {};
+  conf.forEach(k => { if (bracketState[k] != null) kept[k] = bracketState[k]; });
+  bracketState = kept;
+  matchWinners = { ...confW };
   if (standingsCache) projectBracketFromStandings(standingsCache);
   syncBracketFromResults();
   saveBracket();
