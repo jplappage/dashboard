@@ -39,6 +39,7 @@ WATCHED = [
     { 'title': 'Deep Water', 'vodDate': '2026-06-16', 'imdbRating': 7.5 },
     { 'title': 'I Love Boosters', 'vodDate': '2026-06-23', 'imdbRating': 7.2 },
     { 'title': 'Tuner', 'vodDate': '2026-06-23', 'imdbRating': 7.3 },
+    { 'title': 'Power Ballad', 'vodDate': '2026-06-23', 'imdbRating': 7.4 },
 ]
 
 
