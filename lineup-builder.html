@@ -944,6 +944,15 @@ function switchTeam(teamId) {
   }
 }
 
+// France players who have featured (started or come on as a sub) in the
+// 3 group games so far — France 2-0 Senegal, France 3-1 Iraq, Norway 0-? France.
+// Source: ESPN match lineups (events 760432 / 760457 / 760475), 26 Jun 2026.
+const PLAYED_WC = new Set([
+  'maignan','saliba','upamecano','thernandez','kounde','konate','digne','gusto','lacroix',
+  'tchouameni','rabiot','kone','dembele','mbappe','doue','olise','barcola','thuram',
+  'cherki','mateta','akliouche'
+]);
+
 // ════════════════════════════════════════════════════════
 //  BUILD CARD
 // ════════════════════════════════════════════════════════
@@ -951,7 +960,8 @@ function buildPill(p, onPitch, isUnavail = false) {
   const cond = conditions[p.id] || null;
   const div = document.createElement('div');
   div.className = ['pcard', p.sec, onPitch?'on-pitch':'', isUnavail?'unavail-card':'',
-    cond==='injured'?'injured':'', cond==='suspended'?'suspended':''].filter(Boolean).join(' ');
+    cond==='injured'?'injured':'', cond==='suspended'?'suspended':'',
+    PLAYED_WC.has(p.id)?'played-wc':''].filter(Boolean).join(' ');
   div.dataset.pid = p.id;
 
   const av = document.createElement('div'); av.className = 'pcard-av';
