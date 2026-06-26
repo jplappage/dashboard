@@ -1012,7 +1012,7 @@
 <!-- Knockouts view -->
 <div id="ko-view" style="display:none">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-    <div class="pool-label" style="margin-bottom:0">Auto-updating bracket · Round of 32 reflects the live group tables (current 1st/2nd + 8 best thirds) and reshuffles as standings change · confirmed teams and results replace projections as matches are played · gold bar = confirmed (kept on Reset)</div>
+    <div class="pool-label" style="margin-bottom:0">Auto-updating bracket · Round of 32 reflects the live group tables (current 1st/2nd + 8 best thirds) and reshuffles as standings change · confirmed teams and results replace projections as matches are played · orange bar = projected (not yet confirmed; cleared on Reset)</div>
     <button onclick="resetBracket()" style="flex-shrink:0;margin-left:12px;padding:4px 12px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;color:#888;font-size:0.75rem;cursor:pointer;" onmouseover="this.style.color='#ff8888';this.style.borderColor='#553333'" onmouseout="this.style.color='#888';this.style.borderColor='#2a2a4a'">↺ Reset bracket</button>
   </div>
   <div class="team-pool" id="team-pool" style="display:none"></div>
@@ -2336,7 +2336,7 @@ function buildBSlot(mid, pos) {
 
   // No decision yet
   const canElim = !!opponent;
-  const cls    = (canElim ? 'filled can-eliminate' : 'filled') + (confirmedSlots.has(key) ? ' confirmed' : '');
+  const cls    = (canElim ? 'filled can-eliminate' : 'filled') + (confirmedSlots.has(key) ? '' : ' projected');
   const action = canElim ? 'eliminate' : 'remove';
   return `<div class="bracket-slot ${cls}" data-slot="${key}" data-action="${action}" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
     ${flagHtml(team)}<span class="slot-team">${escHtml(team)}</span><span class="slot-x">✕</span>
