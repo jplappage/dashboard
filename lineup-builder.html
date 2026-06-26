@@ -302,6 +302,9 @@ header::before {
 .pcard.fringe:not(.on-pitch):hover { background: rgba(70,70,70,0.45); border-color: rgba(255,255,255,0.2); }
 .pcard.injured   { border-color: #e74c3c !important; box-shadow: 0 0 0 1px rgba(231,76,60,0.5); }
 .pcard.suspended { border-color: #f1c40f !important; box-shadow: 0 0 0 1px rgba(241,196,15,0.5); }
+/* Gold outline = featured (started or subbed on) in the World Cup so far */
+.pcard.played-wc { outline: 2px solid #f0c040; outline-offset: -2px; }
+.pcard.played-wc:not(.injured):not(.suspended) { box-shadow: 0 0 8px rgba(240,192,64,0.5); }
 
 /* Card avatar */
 .pcard-av {
