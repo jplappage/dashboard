@@ -900,7 +900,7 @@
     .bracket-slot.winner-slot .slot-team { color:#77cc77; }
 
     /* Confirmed slot — real qualified team or actual result; locked, survives Reset */
-    .bracket-slot.confirmed { box-shadow: inset 0 0 0 2px #f0c040; }
+    .bracket-slot.projected { box-shadow: inset 0 0 0 2px #ff8a3d; }
 
     /* Champion box */
     #champion-box { display:none; margin:28px auto 0; max-width:320px; text-align:center; padding:28px 20px 24px; background:linear-gradient(150deg,#1c1500 0%,#2a2000 100%); border:2px solid #c8960c; border-radius:16px; box-shadow:0 0 40px rgba(200,150,12,0.25); }
@@ -2326,7 +2326,7 @@ function buildBSlot(mid, pos) {
   if (decided !== undefined) {
     // Match is decided — show winner green, loser greyed out
     const isWinner = decided === pos;
-    const cls    = (isWinner ? 'filled winner-slot' : 'filled elim-slot') + (confirmedSlots.has(key) ? ' confirmed' : '');
+    const cls    = (isWinner ? 'filled winner-slot' : 'filled elim-slot') + (confirmedSlots.has(key) ? '' : ' projected');
     const action = isWinner ? 'noop' : 'undo';
     const xMark  = isWinner ? '' : '<span class="slot-x">↺</span>';
     return `<div class="bracket-slot ${cls}" data-slot="${key}" data-mid="${mid}" data-action="${action}" ondragover="event.preventDefault()" ondrop="onSlotDrop(event,'${key}')">
