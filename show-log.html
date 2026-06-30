@@ -653,7 +653,7 @@ const GIST_URL     = `https://api.github.com/gists/${GIST_ID}`;
 const GIST_FILE    = 'watchlist.json';
 const GIST_HEADERS = { 'Content-Type': 'application/json', 'Authorization': `token ${GIST_KEY}`, 'Accept': 'application/vnd.github.v3+json' };
 const LOCAL_KEY = 'show-log-v2';
-const LAST_UPDATED = '30 Jun 2026 20:31';
+const LAST_UPDATED = '30 Jun 2026 20:36';
 const THUMB_KEY = 'show-log-thumbs-v3';
 
 let marks      = {};
@@ -784,12 +784,13 @@ function showsForFilter() {
     });
   }
   if (currentFilter === 'coming-soon') {
-    return SHOWS.filter(s => s.status === 'ongoing' && showState(s.name, s.aired) === 'watched');
+    return SHOWS.filter(s => s.status === 'ongoing' && (showState(s.name, s.aired) === 'watched' || s.aired === 0));
   }
-  // Watchlist: not watched, not abandoned (excludes ongoing+fully-watched which go in coming-soon)
+  // Watchlist: not watched, not abandoned, and already has something out
+  // (ongoing+fully-watched and not-yet-released shows both live in coming-soon)
   return SHOWS.filter(s => {
     const state = showState(s.name, s.aired);
-    return state !== 'abandoned' && state !== 'watched';
+    return state !== 'abandoned' && state !== 'watched' && s.aired > 0;
   });
 }
 
