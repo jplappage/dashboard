@@ -653,7 +653,7 @@ const GIST_URL     = `https://api.github.com/gists/${GIST_ID}`;
 const GIST_FILE    = 'watchlist.json';
 const GIST_HEADERS = { 'Content-Type': 'application/json', 'Authorization': `token ${GIST_KEY}`, 'Accept': 'application/vnd.github.v3+json' };
 const LOCAL_KEY = 'show-log-v2';
-const LAST_UPDATED = '30 Jun 2026 20:36';
+const LAST_UPDATED = '30 Jun 2026 20:49';
 const THUMB_KEY = 'show-log-thumbs-v3';
 
 let marks      = {};
@@ -804,7 +804,7 @@ function clearAll() {
 
 // ── Thumbnails ───────────────────────────────────────────────────────────────
 async function loadThumbs() {
-  const missing = SHOWS.filter(s => !thumbCache[s.name]);
+  const missing = SHOWS.filter(s => !s.poster && !thumbCache[s.name]);
   for (const show of missing) {
     try {
       const endpoint = show.tvmazeId
