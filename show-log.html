@@ -591,7 +591,7 @@ const SHOWS = [
   {name:"Ted Lasso",                             status:"ongoing",  aired:3, next:"S4 · 5 Aug 2026"},
   {name:"Ted",                                   status:"finished", aired:2},
   {name:"Tires",                                 status:"ongoing",  aired:2, next:"S3 · 13 Aug 2026"},
-  {name:"The Boys",                              status:"finished", aired:5, next:null},
+  {name:"The Boys",                              status:"finished", aired:5, next:null, recheck:"2026-07"},
   {name:"Stranger Things: Tales from '85",       status:"ongoing",  aired:1, next:"S2 · Fall 2026", recheck:"2026-07"},
   {name:"Welcome to Wrexham",                    status:"ongoing",  aired:5, next:"S6 · est. May 2027", recheck:"2026-07"},
   {name:"Spider-Noir",                           status:"ongoing",  aired:1, next:"S2 · unannounced", recheck:"2026-07"},
@@ -648,7 +648,7 @@ const GIST_URL     = `https://api.github.com/gists/${GIST_ID}`;
 const GIST_FILE    = 'watchlist.json';
 const GIST_HEADERS = { 'Content-Type': 'application/json', 'Authorization': `token ${GIST_KEY}`, 'Accept': 'application/vnd.github.v3+json' };
 const LOCAL_KEY = 'show-log-v2';
-const LAST_UPDATED = '28 Jun 2026 23:20';
+const LAST_UPDATED = '30 Jun 2026 20:22';
 const THUMB_KEY = 'show-log-thumbs-v3';
 
 let marks      = {};
