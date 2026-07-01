@@ -832,8 +832,6 @@ function renderFilms() {
 
 function renderCard(film) {
   const status = getStatus(film);
-  const badgeClass = { out: 'badge-out', soon: 'badge-soon', waiting: 'badge-waiting', notout: 'badge-notout' }[status];
-  const badgeText = { out: 'Out Now', soon: 'Coming', waiting: '⏳ Waiting', notout: 'Not Out Yet' }[status];
   const dateClass = { out: 'date-out', soon: 'date-soon', waiting: 'date-unknown', notout: 'date-unknown' }[status];
   function getEstText(f) {
     if (f.vodDate) return `Est. ${formatDate(f.vodDate)}`;
@@ -847,8 +845,6 @@ function renderCard(film) {
   const dateText = film.estimated
     ? getEstText(film)
     : (status === 'out' || status === 'soon') ? formatDate(film.vodDate) : 'Stream date TBC';
-
-  const estHtml = '';
 
   const newBadge = film.isNew ? `<span style="display:inline-block;background:#7c3aed;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px;vertical-align:middle;">🆕 NEW</span>` : '';
 
@@ -875,7 +871,6 @@ function renderCard(film) {
         <div class="card-title">${film.title}${newBadge}</div>
         <div class="card-year">${film.year}</div>
         <div class="card-date ${dateClass}">${dateText}</div>
-        ${estHtml}
       </div>
       ${plexBtn}
     </div>
