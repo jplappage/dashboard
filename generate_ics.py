@@ -131,28 +131,6 @@ def build_ics(film_objs, watched_objs):
         desc    = f'IMDB: {imdb}' if imdb else ''
         events += vevent(summary, vod_date, make_uid(title, vod_date), desc)
 
-    # TV shows — premiere + finale
-    for obj in tv_objs:
-        title       = get_field(obj, 'title') or 'Untitled'
-        season      = get_field(obj, 'season')
-        stream_date = get_field(obj, 'streamDate')
-        finale_date = get_field(obj, 'finaleDate')
-        note        = get_field(obj, 'note') or ''
-        imdb        = get_field(obj, 'imdbRating')
-
-        s = f'S{int(season)}' if season is not None else ''
-
-        if stream_date:
-            summary = f'{title} {s} - Premiere'
-            desc    = note
-            if imdb:
-                desc = (desc + f' | IMDB: {imdb}').strip(' |')
-            events += vevent(summary, stream_date, make_uid(f'{title}-premiere', stream_date), desc)
-
-        if finale_date:
-            summary = f'{title} {s} - Finale'
-            events += vevent(summary, finale_date, make_uid(f'{title}-finale', finale_date), note)
-
     header = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
@@ -168,13 +146,13 @@ def build_ics(film_objs, watched_objs):
 
 
 def main():
-    with open(HTML_FILE, 'r', encoding='utf-8') as f:
+    with open(DATA_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    film_objs = extract_objects(content, 'FILMS')
-    tv_objs   = extract_objects(content, 'TV_SHOWS')
+    film_objs    = extract_objects(content, 'FILMS')
+    watched_objs = extract_objects(content, 'WATCHED')
 
-    ics = build_ics(film_objs, tv_objs)
+    ics = build_ics(film_objs, watched_objs)
 
     with open(ICS_FILE, 'w', encoding='utf-8', newline='') as f:
         f.write(ics)
@@ -183,12 +161,10 @@ def main():
         1 for o in film_objs
         if get_field(o, 'vodDate') and not get_field(o, 'estimated', False)
     )
-    tv_count   = sum(1 for o in tv_objs if get_field(o, 'streamDate'))
 
     print(f'watchlist.ics generated')
-    print(f'  {len(WATCHED)} watched archive events')
+    print(f'  {len(watched_objs)} watched archive events')
     print(f'  {film_count} film events')
-    print(f'  {tv_count} TV show premieres + finales')
     print(f'  Subscribe: https://jplappage.github.io/dashboard/watchlist.ics')
 
 
