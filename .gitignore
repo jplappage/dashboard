@@ -5,3 +5,4 @@ __pycache__/
 .watcher.lock
 .wdc/
 nul
+diag-output.txt
