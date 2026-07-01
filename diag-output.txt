@@ -1,6 +1,0 @@
-﻿State: Running
---- Actions ---
-Execute: powershell.exe
-Arguments: -WindowStyle Hidden -ExecutionPolicy Bypass -NonInteractive -File "C:\Users\jplap\Documents\Claude\Projects\Watchlist v4\watch-and-push.ps1"
---- Triggers ---
-Type: MSFT_TaskLogonTrigger Delay: PT30S
