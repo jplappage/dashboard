@@ -41,6 +41,7 @@ WATCHED = [
     { 'title': 'Tuner', 'vodDate': '2026-06-23', 'imdbRating': 7.3 },
     { 'title': 'Power Ballad', 'vodDate': '2026-06-23', 'imdbRating': 7.4 },
     { 'title': 'The Sheep Detectives', 'vodDate': '2026-06-24', 'imdbRating': 7.7 },
+    { 'title': 'Obsession', 'vodDate': '2026-06-30', 'imdbRating': 7.4 },
 ]
 
 
