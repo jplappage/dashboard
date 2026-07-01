@@ -2,6 +2,7 @@
 // FILMS WATCHLIST DATA — the single source of truth
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
+// (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
