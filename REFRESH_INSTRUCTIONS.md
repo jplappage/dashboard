@@ -112,17 +112,23 @@ If `aria-label` is unavailable, take a screenshot of the page and count the fill
 
 Apply everything found in Phases 2–3 in a single editing pass per file:
 
-**`watchlist-dashboard.html`**
+**`films-data.js`** (single source of truth — do NOT edit film data in the HTML or python files)
 - Add new film entries (with poster, slug, imdbRating if known, vodDate if known, lbSlug if different from slug, plexSlug if different from slug)
-- Remove archived films from FILMS and append them to the `WATCHED` array (title + vodDate) so they stay on the calendar — mirror the same entry into `generate_ics.py`
+- Remove archived films from FILMS and append them to the `WATCHED` array (title + vodDate + imdbRating) so they stay on the calendar
 - Update `vodDate`, `platform`, `estimated` for any films with new streaming dates
 - Add/update `imdbRating` for newly released films
-- Bump footer: `Last updated: DD Mon YYYY (refresh #N)`
 
-**`show-log.html`**
+**`watchlist-dashboard.html`**
+- Bump footer only: `Last updated: DD Mon YYYY (refresh #N)`
+
+**`watchlist.ics`** — do NOT regenerate locally. GitHub rebuilds it automatically whenever `films-data.js` is pushed (see `.github/workflows/rebuild-calendar.yml`).
+
+**`shows-data.js`** (single source of truth for the SHOWS array)
 - Increment `aired` and update `next` for shows whose season has started
 - Update `next` for shows with newly confirmed premiere dates (and remove their `recheck`)
 - Set/update `recheck:"YYYY-MM"` (next month) on shows confirmed still 12+ months out or unrenewed
+
+**`show-log.html`**
 - Update `LAST_UPDATED` constant to `'DD Mon YYYY HH:MM'`
 
 **`retro-watchlist.html`**
