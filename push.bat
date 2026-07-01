@@ -6,5 +6,6 @@ del /f /q .git\index.lock 2>nul
 echo Committing and pushing...
 git add -A
 git commit -m "update %date% %time%"
+git pull --rebase origin main
 git push
 echo Done.
