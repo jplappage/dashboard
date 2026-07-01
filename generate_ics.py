@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Generate watchlist.ics from watchlist-dashboard.html.
-Run this after every dashboard refresh so Google Calendar stays in sync.
+Generate watchlist.ics from films-data.js (the single source of truth for
+FILMS and WATCHED). Runs automatically via GitHub Actions whenever
+films-data.js changes — no need to run it by hand.
 
 Usage:
     python generate_ics.py
@@ -12,37 +13,8 @@ import os
 from datetime import datetime, timedelta
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-HTML_FILE  = os.path.join(SCRIPT_DIR, 'watchlist-dashboard.html')
+DATA_FILE  = os.path.join(SCRIPT_DIR, 'films-data.js')
 ICS_FILE   = os.path.join(SCRIPT_DIR, 'watchlist.ics')
-
-# ── Watched archive ───────────────────────────────────────────────────────────
-# Films removed from the dashboard (watched) but kept on the calendar.
-# Add an entry here whenever a film is removed during a refresh.
-# Format: { 'title': '...', 'vodDate': 'YYYY-MM-DD', 'imdbRating': 0.0 }
-#
-# IMPORTANT: once an entry is in this list, never update or re-check it.
-# No IMDB rating lookups, no date refreshes. It is a permanent record as-is.
-WATCHED = [
-    { 'title': 'Wuthering Heights', 'vodDate': '2026-03-31', 'imdbRating': 6.2 },
-    { 'title': 'Lord of the Flies', 'vodDate': '2026-05-04', 'imdbRating': 6.7 },
-    { 'title': 'Ready or Not 2: Here I Come', 'vodDate': '2026-05-05', 'imdbRating': 7.8 },
-    { 'title': 'Gary', 'vodDate': '2026-05-05', 'imdbRating': 7.7 },
-    { 'title': 'The Punisher: One Last Kill', 'vodDate': '2026-05-12', 'imdbRating': 5.7 },
-    { 'title': 'Faces of Death', 'vodDate': '2026-05-12', 'imdbRating': 6.8 },
-    { 'title': 'Swapped', 'vodDate': '2026-05-01', 'imdbRating': 7.3 },
-    { 'title': 'Star Wars: The Mandalorian & Grogu', 'vodDate': '2026-07-21', 'imdbRating': 7.1 },
-    { 'title': 'The Magic Faraway Tree', 'vodDate': '2026-05-18', 'imdbRating': 6.8 },
-    { 'title': 'In the Grey', 'vodDate': '2026-06-02', 'imdbRating': 7.1 },
-    { 'title': 'Mortal Kombat II', 'vodDate': '2026-06-09', 'imdbRating': 7.0 },
-    { 'title': 'Kevin Bridges: In Search of the Beautiful Game', 'vodDate': '2026-06-07', 'imdbRating': 7.4 },
-    { 'title': 'Is God Is', 'vodDate': '2026-06-02' },
-    { 'title': 'Deep Water', 'vodDate': '2026-06-16', 'imdbRating': 7.5 },
-    { 'title': 'I Love Boosters', 'vodDate': '2026-06-23', 'imdbRating': 7.2 },
-    { 'title': 'Tuner', 'vodDate': '2026-06-23', 'imdbRating': 7.3 },
-    { 'title': 'Power Ballad', 'vodDate': '2026-06-23', 'imdbRating': 7.4 },
-    { 'title': 'The Sheep Detectives', 'vodDate': '2026-06-24', 'imdbRating': 7.7 },
-    { 'title': 'Obsession', 'vodDate': '2026-06-30', 'imdbRating': 7.4 },
-]
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -128,14 +100,14 @@ def vevent(summary, date_str, uid_str, description=''):
 
 # ── Main builder ──────────────────────────────────────────────────────────────
 
-def build_ics(film_objs, tv_objs):
+def build_ics(film_objs, watched_objs):
     events = []
 
     # Watched archive — kept on calendar even after removal from dashboard
-    for w in WATCHED:
-        title    = w.get('title', 'Untitled')
-        vod_date = w.get('vodDate')
-        imdb     = w.get('imdbRating')
+    for obj in watched_objs:
+        title    = get_field(obj, 'title') or 'Untitled'
+        vod_date = get_field(obj, 'vodDate')
+        imdb     = get_field(obj, 'imdbRating')
         if not vod_date:
             continue
         summary = f'Watched: {title}'
