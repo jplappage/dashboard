@@ -6,8 +6,8 @@ Run all phases in order. Within each phase, do everything listed simultaneously.
 
 ## Phase 1 — Load (all at once)
 
-- Read `watchlist-dashboard.html` → note every film in FILMS array (title, vodDate, estimated, imdbRating, note with cinema date)
-- Read `show-log.html` → note every ongoing show, its `next` field, and its `recheck` field (if any)
+- Read `films-data.js` → note every film in FILMS array (title, vodDate, estimated, imdbRating, note with cinema date)
+- Read `shows-data.js` → note every ongoing show, its `next` field, and its `recheck` field (if any)
 - Read `retro-watchlist.html` → note the scrape cutoff date in the LETTERBOXD comment
 - **Letterboxd via Chrome MCP only — WebFetch returns empty for letterboxd.com, do not try it.**
   Open a tab, then:
@@ -25,7 +25,7 @@ Run these comparisons immediately from the data loaded in Phase 1:
 
 **Films watchlist**
 - New films on Letterboxd not in FILMS → queue for Phase 3 (need poster + IMDb check)
-- Films in FILMS not on Letterboxd → mark for archiving (remove from FILMS, add to the WATCHED list in BOTH `generate_ics.py` AND `watchlist-dashboard.html` — the latter keeps it on the page calendar)
+- Films in FILMS not on Letterboxd → mark for archiving (move from FILMS to the WATCHED list, both in `films-data.js` — this keeps it on the page calendar and in watchlist.ics)
 - Films with `vodDate: null` or `estimated: true` → queue for Phase 3 (need streaming date), **except pre-theatrical films (see skip rule below)**
 - Films with no `imdbRating` → queue for Phase 3 (need IMDb check), **except pre-theatrical films**
 
