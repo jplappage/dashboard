@@ -1,0 +1,31 @@
+name: Rebuild calendar
+
+# Rebuilds watchlist.ics automatically whenever the film data changes,
+# so the calendar can never go stale.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'films-data.js'
+      - 'generate_ics.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate watchlist.ics
+        run: python3 generate_ics.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "calendar-bot"
+          git config user.email "actions@github.com"
+          git add watchlist.ics
+          git diff --cached --quiet || (git commit -m "auto: rebuild watchlist.ics" && git push)
