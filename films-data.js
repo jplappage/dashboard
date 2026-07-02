@@ -107,10 +107,9 @@ const FILMS = [
     year: 2026,
     slug: 'the-death-of-robin-hood',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/8/5/8/1167858-the-death-of-robin-hood-0-230-0-345-crop.jpg?v=39347a2edd',
-    vodDate: null,
-    platform: null,
-    estimated: true,
-    note: 'In cinemas Jun 19 · PVOD est. late Jul / early Aug 2026',
+    vodDate: '2026-07-21',
+    platform: 'Digital',
+    estimated: false,
     imdbRating: 7.6,
   },
   {
