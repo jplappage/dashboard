@@ -523,6 +523,22 @@
       color: #ffe81f;
     }
 
+    .card-sub {
+      margin-top: 10px;
+      font-size: 0.76rem;
+      line-height: 1.5;
+      color: #9a94b8;
+      min-height: 1em;
+    }
+    .card-sub .hot { color: #4ade80; font-weight: 600; }
+    .card-sub .soon { color: #ffe81f; font-weight: 600; }
+    .card-sub .dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: #4ade80; margin-right: 5px; vertical-align: 1px;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+
     footer {
       text-align: center;
       padding: 20px;
@@ -557,6 +573,7 @@
     <a class="card" href="watchlist-dashboard.html">
       <span class="card-icon">🎬</span>
       <div class="card-title">Films Watchlist</div>
+      <div class="card-sub" id="films-sub"></div>
     </a>
     <a class="card" href="show-log.html">
       <span class="card-icon">📺</span>
