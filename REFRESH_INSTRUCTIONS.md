@@ -38,7 +38,7 @@ Run these comparisons immediately from the data loaded in Phase 1:
 **Pre-theatrical skip rule:** a film whose cinema release date (in its `note`) has NOT yet passed cannot have a VOD date or an IMDb rating. Skip both searches for it, but list it under "Skipped (pre-theatrical)" so the Phase 3 verification can account for every film.
 
 **Show log**
-- Any `next` field with a specific date that has now passed → increment `aired`, update `next` to null or next known info, AND set `airing:"S<N> · <weekday>s"` + `airingUntil:"YYYY-MM-DD"` (search for the confirmed finale date; these power the hub-page teaser)
+- Any `next` field with a specific date that has now passed → increment `aired`, update `next` to null or next known info, AND set `airing:"S<N> · <weekday>s"` + `airingUntil:"YYYY-MM-DD"` (search for the confirmed finale date; these power the hub-page teaser). **Use the UK viewing day** — US Sunday-night shows land Monday in the UK, so label them Mondays and set `airingUntil` to the day after the US finale.
 - Any `airingUntil` date that has now passed → remove the `airing` and `airingUntil` fields from that show
 - Any `next` field that is vague → queue for Phase 3 (need premiere date search), **unless its `recheck` field defers it (see below)**
 
