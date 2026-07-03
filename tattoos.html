@@ -1756,62 +1756,6 @@ function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── PIN login ────────────────────────────────────────
-const PIN_CODE = '2949';
-let pinEntry = '';
-
-function pinPress(digit) {
-  if (pinEntry.length >= 4) return;
-  pinEntry += digit;
-  updateDots();
-  if (pinEntry.length === 4) {
-    setTimeout(() => checkPin(), 120);
-  }
-}
-
-function pinDel() {
-  pinEntry = pinEntry.slice(0, -1);
-  updateDots();
-}
-
-function updateDots() {
-  for (let i = 0; i < 4; i++) {
-    const dot = document.getElementById('dot-' + i);
-    dot.classList.toggle('filled', i < pinEntry.length);
-    dot.classList.remove('error');
-  }
-}
-
-function checkPin() {
-  if (pinEntry === PIN_CODE) {
-    sessionStorage.setItem('cdt-auth', '1');
-    const screen = document.getElementById('login-screen');
-    screen.style.transition = 'opacity 0.4s';
-    screen.style.opacity = '0';
-    setTimeout(() => screen.style.display = 'none', 400);
-  } else {
-    for (let i = 0; i < 4; i++) {
-      document.getElementById('dot-' + i).classList.add('error');
-      document.getElementById('dot-' + i).classList.remove('filled');
-    }
-    setTimeout(() => { pinEntry = ''; updateDots(); }, 700);
-  }
-}
-
-// Check if already authenticated this session
-(function checkAuth() {
-  if (sessionStorage.getItem('cdt-auth') === '1') {
-    document.getElementById('login-screen').style.display = 'none';
-  }
-})();
-
-// Keyboard support
-document.addEventListener('keydown', e => {
-  if (document.getElementById('login-screen').style.display === 'none') return;
-  if (e.key >= '0' && e.key <= '9') pinPress(e.key);
-  if (e.key === 'Backspace') pinDel();
-});
-
 function toast(msg, type='ok') {
   const el = document.getElementById('toast');
   el.textContent = msg;
