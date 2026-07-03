@@ -600,5 +600,48 @@
 
 <footer>jplappage.github.io/dashboard</footer>
 
+<script src="films-data.js"></script>
+<script>
+(function filmsTeaser() {
+  const el = document.getElementById('films-sub');
+  if (!el || typeof FILMS === 'undefined') return;
+  try {
+    const now = new Date();
+    const ymd = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    const today = ymd(now);
+
+    const dated    = FILMS.filter(f => f.vodDate);
+    const ready    = dated.filter(f => f.vodDate <= today);
+    const upcoming = dated.filter(f => f.vodDate > today).sort((a,b) => a.vodDate.localeCompare(b.vodDate));
+
+    const niceWhen = iso => {
+      const target = new Date(iso + 'T00:00:00');
+      const days = Math.round((target - new Date(today + 'T00:00:00')) / 86400000);
+      if (days === 0) return 'today';
+      if (days === 1) return 'tomorrow';
+      const label = target.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
+      return days <= 7 ? label + ' · ' + days + ' days' : label;
+    };
+
+    if (ready.length > 0) {
+      const droppedToday = ready.filter(f => f.vodDate === today);
+      const pick = ready.slice().sort((a,b) => (b.imdbRating||0) - (a.imdbRating||0))[0];
+      let line1 = '<span class="dot"></span><span class="hot">' + ready.length +
+                  (ready.length === 1 ? ' film ready' : ' films ready') + ' to watch</span>';
+      if (droppedToday.length) line1 = '<span class="dot"></span><span class="hot">NEW TODAY: ' + droppedToday[0].title + '</span>';
+      const line2 = pick && pick.imdbRating ? 'top pick: ' + pick.title + ' · ★' + pick.imdbRating.toFixed(1) : '';
+      el.innerHTML = line1 + (line2 ? '<br>' + line2 : '');
+    } else if (upcoming.length) {
+      const nxt = upcoming[0];
+      const also = upcoming.filter(f => f.vodDate === nxt.vodDate).length - 1;
+      el.innerHTML = 'next up: <span class="soon">' + nxt.title + '</span>' +
+                     (also > 0 ? ' +' + also : '') + '<br>' + niceWhen(nxt.vodDate);
+    } else {
+      el.textContent = FILMS.length + ' tracked · no dates confirmed yet';
+    }
+  } catch (_) { /* leave blank on any hiccup */ }
+})();
+</script>
+
 </body>
 </html>
