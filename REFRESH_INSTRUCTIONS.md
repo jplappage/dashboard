@@ -135,7 +135,7 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 - Add new entries to `LETTERBOXD` object: `id: "YYYY-MM-DD"` — this is a bootstrap fallback only. The live source of truth is the GitHub Gist, so also patch it directly via the Chrome MCP javascript_tool (use the tab with the retro watchlist open, or any tab):
   The token is NOT in this file (it's a secret — never commit it). Read it from `gist-token.txt` in the project root (gitignored) and substitute it for `TOKEN_FROM_FILE` below:
   ```js
-  const GIST_ID='0a9d2e8430f52f59673caff8e55d7b1b', GIST_KEY='TOKEN_FROM_FILE', GIST_FILE='watchlist.json', H={'Content-Type':'application/json','Authorization':`token ${GIST_KEY}`,'Accept':'application/vnd.github.v3+json'};
+  const GIST_ID='5411ac8d12fdc31aa3fa73e4d66f6377', GIST_KEY='TOKEN_FROM_FILE', GIST_FILE='watchlist.json', H={'Content-Type':'application/json','Authorization':`token ${GIST_KEY}`,'Accept':'application/vnd.github.v3+json'};
   (async()=>{const r=await fetch(`https://api.github.com/gists/${GIST_ID}`,{headers:H,cache:'no-store'});const j=await r.json();const d=JSON.parse(j.files[GIST_FILE].content);d[ID]='YYYY-MM-DD';const p=await fetch(`https://api.github.com/gists/${GIST_ID}`,{method:'PATCH',headers:H,body:JSON.stringify({files:{[GIST_FILE]:{content:JSON.stringify(d)}}})});return p.status})()
   ```
   Replace `ID` and `'YYYY-MM-DD'` with the film's id and watched date. Expect `200` back.
