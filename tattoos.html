@@ -1109,7 +1109,7 @@ function getCryptoKey() {
   return cryptoKeyP;
 }
 function askDataKey() {
-  const v = prompt('Enter the data passphrase (unlocks the income entries; stored only in this browser):', '');
+  const v = prompt('NO ENTRY', '');
   if (v !== null && v.trim()) { DATA_KEY = v.trim(); localStorage.setItem('tattooKey', DATA_KEY); cryptoKeyP = null; return true; }
   return false;
 }
