@@ -35,7 +35,7 @@ Run these comparisons immediately from the data loaded in Phase 1:
 - Any `next` field with a specific date that has now passed → increment `aired`, update `next` to null or next known info
 - Any `next` field that is vague → queue for Phase 3 (need premiere date search), **unless its `recheck` field defers it (see below)**
 
-**Recheck rule (avoids re-searching far-out shows every week):** a show entry may carry `recheck:"YYYY-MM"`. If the current month is *before* that value, skip the search and list the show under "Skipped (recheck not due)". If the current month is ≥ the value (or there is no `recheck` field), search as normal. Shows whose confirmed window is 12+ months away, or which are unrenewed/indefinite, get a `recheck` set one month ahead in Phase 4.
+**Recheck rule (avoids re-searching shows multiple times in the same week):** a show entry may carry `recheck:"YYYY-MM-DD"`. If today's date is *before* that value, skip the search and list the show under "Skipped (recheck not due)". If today is ≥ the value (or there is no `recheck` field), search as normal. Shows still without a confirmed date after a search get a `recheck` set one week ahead in Phase 4.
 
 **Retro watchlist**
 - Any diary entry after the cutoff date that matches a FILMS title → queue as new watch (need to add to LETTERBOXD + MY_RATINGS)
@@ -45,7 +45,7 @@ Run these comparisons immediately from the data loaded in Phase 1:
 - Films to search (IMDb): [list every title]
 - Shows to search (vague next): [list every show name + current next value]
 - Skipped (pre-theatrical): [films with future cinema dates]
-- Skipped (recheck not due): [shows + their recheck month]
+- Skipped (recheck not due): [shows + their recheck date]
 
 Do not proceed until all five lists are complete. Every film and every vague-next show must appear in exactly one list — searched or skipped, nothing unaccounted for. Go through the SHOWS array line by line.
 
