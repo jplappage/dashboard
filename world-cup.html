@@ -1416,6 +1416,7 @@ let selectedGames     = new Set();
 // ── GitHub Gist sync (same Gist as other pages) ───────────────────
 const GIST_ID      = '0a9d2e8430f52f59673caff8e55d7b1b';
 const GIST_KEY     = (()=>{let t=localStorage.getItem('gistToken')||'';if(location.hash==='#token'){const v=prompt('Paste GitHub gist token (stored only in this browser):',t);if(v!==null){t=v.trim();localStorage.setItem('gistToken',t);}history.replaceState(null,'',location.pathname+location.search);}return t;})();
+window.addEventListener('hashchange',()=>{if(location.hash==='#token'){const v=prompt('Paste GitHub gist token (stored only in this browser):',localStorage.getItem('gistToken')||'');history.replaceState(null,'',location.pathname+location.search);if(v!==null){localStorage.setItem('gistToken',v.trim());location.reload();}}});
 const GIST_URL     = `https://api.github.com/gists/${GIST_ID}`;
 const GIST_FILE    = 'watchlist.json';
 const GIST_HEADERS = { 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json', ...(GIST_KEY ? { 'Authorization': `token ${GIST_KEY}` } : {}) };
