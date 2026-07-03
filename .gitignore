@@ -6,3 +6,4 @@ __pycache__/
 .wdc/
 nul
 diag-output.txt
+gist-token.txt
