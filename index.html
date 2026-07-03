@@ -602,7 +602,45 @@
 <footer>jplappage.github.io/dashboard</footer>
 
 <script src="films-data.js"></script>
+<script src="shows-data.js"></script>
 <script>
+(function showsTeaser() {
+  const el = document.getElementById('shows-sub');
+  if (!el || typeof SHOWS === 'undefined') return;
+  try {
+    const now = new Date();
+    const ymd = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    const today = ymd(now);
+
+    const airing = SHOWS.filter(s => s.airing && s.airingUntil && s.airingUntil >= today);
+
+    const MONTHS = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+    const upcoming = SHOWS
+      .map(s => {
+        const m = s.next && s.next.match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/);
+        if (!m) return null;
+        const d = new Date(+m[3], MONTHS[m[2]], +m[1]);
+        return ymd(d) > today ? { s, d, iso: ymd(d) } : null;
+      })
+      .filter(Boolean)
+      .sort((a,b) => a.iso.localeCompare(b.iso))[0];
+
+    let line1 = '', line2 = '';
+    if (airing.length) {
+      line1 = '<span class="dot"></span><span class="hot">' +
+              (airing.length === 1 ? airing[0].name + ' · ' + airing[0].airing : airing.length + ' shows airing now') +
+              '</span>';
+    }
+    if (upcoming) {
+      const days = Math.round((upcoming.d - new Date(today + 'T00:00:00')) / 86400000);
+      const season = (upcoming.s.next.match(/^(S\d+)/) || [,''])[1];
+      line2 = 'next: <span class="soon">' + upcoming.s.name + (season ? ' ' + season : '') + '</span> · ' +
+              (days === 1 ? 'tomorrow' : days + ' days');
+    }
+    el.innerHTML = line1 && line2 ? line1 + '<br>' + line2 : (line1 || line2 || '');
+  } catch (_) {}
+})();
+
 (function filmsTeaser() {
   const el = document.getElementById('films-sub');
   if (!el || typeof FILMS === 'undefined') return;
