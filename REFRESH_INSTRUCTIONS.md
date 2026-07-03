@@ -85,7 +85,7 @@ Then verify both the Letterboxd and Plex slugs:
 - Fetch `https://watch.plex.tv/en-GB/movie/{slug}/` — if it 404s or returns the wrong film, try `{slug}-{year}` and set `plexSlug: 'correct-slug'` if different
 
 **For each show with a vague `next` field (and recheck due or absent):**
-WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = update `next` and remove any `recheck`. Still vague = leave or refine the window, and set `recheck` to one week ahead (`"YYYY-MM-DD"`).
+WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = update `next` and remove any `recheck`. Still vague = leave or refine the window, and set `recheck` to one week ahead (`"YYYY-MM-DD"`), aligned to a Friday — most release-date announcements cluster midweek and WhenToStream's tracker rounds them up on Fridays.
 
 **For each retro film newly watched:**
 The watched date comes from the diary (already loaded). Personal rating comes from the diary entry.
@@ -126,7 +126,7 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 **`shows-data.js`** (single source of truth for the SHOWS array)
 - Increment `aired` and update `next` for shows whose season has started
 - Update `next` for shows with newly confirmed premiere dates (and remove their `recheck`)
-- Set/update `recheck:"YYYY-MM-DD"` (one week ahead) on shows searched but still without a confirmed date
+- Set/update `recheck:"YYYY-MM-DD"` (one week ahead, aligned to a Friday) on shows searched but still without a confirmed date
 
 **`show-log.html`**
 - Update `LAST_UPDATED` constant to `'DD Mon YYYY HH:MM'`
