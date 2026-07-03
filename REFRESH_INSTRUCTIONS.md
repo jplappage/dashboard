@@ -6,6 +6,7 @@ Run all phases in order. Within each phase, do everything listed simultaneously.
 
 ## Phase 1 — Load (all at once)
 
+- **Gist backup:** fetch `https://api.github.com/gists/5411ac8d12fdc31aa3fa73e4d66f6377` via the Chrome tab (no auth needed) and save `files['watchlist.json'].content` verbatim to `backups/watchlist-YYYY-MM-DD.json` (folder is gitignored, stays local). Keep roughly the last 12 backups; delete older ones.
 - Read `films-data.js` → note every film in FILMS array (title, vodDate, estimated, imdbRating, note with cinema date)
 - Read `shows-data.js` → note every ongoing show, its `next` field, and its `recheck` field (if any)
 - Read `retro-watchlist.html` → note the scrape cutoff date in the LETTERBOXD comment
