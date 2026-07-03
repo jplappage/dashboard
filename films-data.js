@@ -55,7 +55,7 @@ const FILMS = [
     vodDate: null,
     platform: 'Prime Video',
     estimated: true,
-    note: 'In cinemas 5 Jun · Prime Video est. early/mid Jul 2026 (bypassing PVOD)',
+    note: 'In cinemas 5 Jun · Prime Video est. early Jul 2026 (bypassing PVOD, likely w/c 6 Jul)',
     imdbRating: 7.1,
   },
   {
@@ -99,7 +99,7 @@ const FILMS = [
     vodDate: null,
     platform: null,
     estimated: true,
-    note: 'In cinemas Jun 26 · PVOD est. early Aug 2026 (45-day window)',
+    note: 'In cinemas Jun 26 · PVOD est. late Jul 2026 (30-day window likely)',
     imdbRating: 6.1,
   },
   {
