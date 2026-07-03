@@ -1124,6 +1124,36 @@ const GIST_URL  = `https://api.github.com/gists/${GIST_ID}`;
 const GIST_FILE = 'watchlist.json';
 const HEADERS   = { 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json', ...(GIST_KEY ? { 'Authorization': `token ${GIST_KEY}` } : {}) };
 
+// ── Data encryption (entries stored encrypted in the gist; passphrase per device) ──
+let DATA_KEY = localStorage.getItem('tattooKey') || '';
+let cryptoKeyP = null;
+function getCryptoKey() {
+  if (!DATA_KEY) return null;
+  if (!cryptoKeyP) {
+    const enc = new TextEncoder();
+    cryptoKeyP = crypto.subtle.importKey('raw', enc.encode(DATA_KEY), 'PBKDF2', false, ['deriveKey'])
+      .then(km => crypto.subtle.deriveKey({ name:'PBKDF2', salt: enc.encode('charlotte-tattoos-salt-v1'), iterations: 250000, hash:'SHA-256' }, km, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']));
+  }
+  return cryptoKeyP;
+}
+function askDataKey() {
+  const v = prompt('Enter the data passphrase (unlocks the income entries; stored only in this browser):', '');
+  if (v !== null && v.trim()) { DATA_KEY = v.trim(); localStorage.setItem('tattooKey', DATA_KEY); cryptoKeyP = null; return true; }
+  return false;
+}
+async function encryptEntries(arr) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name:'AES-GCM', iv }, await getCryptoKey(), new TextEncoder().encode(JSON.stringify(arr))));
+  const buf = new Uint8Array(iv.length + ct.length); buf.set(iv); buf.set(ct, iv.length);
+  let s = ''; buf.forEach(b => s += String.fromCharCode(b)); return btoa(s);
+}
+async function decryptEntries(b64) {
+  const raw = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const pt = await crypto.subtle.decrypt({ name:'AES-GCM', iv: raw.slice(0,12) }, await getCryptoKey(), raw.slice(12));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+document.addEventListener('click', e => { if (e.target.closest('#sync-status') && localStorage.getItem('gistToken') && !localStorage.getItem('tattooKey')) { if (askDataKey()) location.reload(); } });
+
 let syncDirty = false;
 let syncTimer = null;
 
@@ -1141,9 +1171,25 @@ async function loadFromCloud() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const gist = await res.json();
     const data = JSON.parse(gist.files[GIST_FILE].content);
+    let cloudEntries = null;
     if (Array.isArray(data.tattooEntries)) {
+      // Legacy plaintext — load it, then re-save encrypted (one-time migration)
+      cloudEntries = data.tattooEntries;
+      if (DATA_KEY || askDataKey()) { syncDirty = true; setTimeout(saveToCloud, 800); }
+    } else if (data.tattooEntries && data.tattooEntries.enc) {
+      if (!DATA_KEY && !askDataKey()) throw new Error('locked — no passphrase');
+      try {
+        cloudEntries = await decryptEntries(data.tattooEntries.enc);
+      } catch(_) {
+        // stored passphrase is wrong — clear it and ask again once
+        localStorage.removeItem('tattooKey'); DATA_KEY = ''; cryptoKeyP = null;
+        if (askDataKey()) cloudEntries = await decryptEntries(data.tattooEntries.enc);
+        else throw new Error('locked — wrong passphrase');
+      }
+    }
+    if (cloudEntries) {
       // Cloud is authoritative — always replace local (so deletes propagate)
-      entries = data.tattooEntries.sort((a,b) => b.date.localeCompare(a.date));
+      entries = cloudEntries.sort((a,b) => b.date.localeCompare(a.date));
       persist();
     }
     setSyncStatus('ok');
@@ -1160,7 +1206,8 @@ async function saveToCloud() {
     const res = await fetch(GIST_URL, { headers: HEADERS });
     const gist = await res.json();
     const data = JSON.parse(gist.files[GIST_FILE].content);
-    data.tattooEntries = entries;
+    if (!DATA_KEY && !askDataKey()) throw new Error('no passphrase — refusing to save unencrypted');
+    data.tattooEntries = { enc: await encryptEntries(entries) };
     const patch = await fetch(GIST_URL, {
       method: 'PATCH',
       headers: HEADERS,
