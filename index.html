@@ -583,6 +583,7 @@
     <a class="card" href="retro-watchlist.html">
       <span class="card-icon">📼</span>
       <div class="card-title">Retro Watchlist</div>
+      <div class="card-sub" id="retro-sub"></div>
     </a>
     <a class="card" href="lineup-builder.html">
       <span class="card-icon">⚽</span>
@@ -603,6 +604,41 @@
 
 <script src="films-data.js"></script>
 <script src="shows-data.js"></script>
+<script>
+(async function retroTeaser() {
+  const el = document.getElementById('retro-sub');
+  if (!el) return;
+  try {
+    const html = await (await fetch('retro-watchlist.html')).text();
+    const films = [...html.matchAll(/\{id:(\d+),\s*title:"([^"]+)",\s*year:(\d{4})[^}]*?lbRating:([\d.]+)/g)]
+      .map(m => ({ id:+m[1], title:m[2], year:+m[3], lb:+m[4] }));
+    if (!films.length) return;
+
+    let watched = {};
+    try {
+      const j = await (await fetch('https://api.github.com/gists/5411ac8d12fdc31aa3fa73e4d66f6377', { cache:'no-store' })).json();
+      watched = JSON.parse(j.files['watchlist.json'].content);
+    } catch (_) {
+      [...html.matchAll(/^\s*(\d+):\s*"\d{4}-\d{2}-\d{2}"/gm)].forEach(m => watched[m[1]] = '1');
+    }
+
+    const isWatched = f => typeof watched[f.id] === 'string';
+    const done = films.filter(isWatched).length;
+    const left = films.filter(f => !isWatched(f));
+
+    const line1 = '<span class="soon">' + done + '/' + films.length + ' watched</span> · ' + left.length + ' to go';
+    let line2 = '';
+    if (left.length) {
+      const seed = +new Date().toISOString().slice(0,10).replace(/-/g,'');
+      const pick = left[seed % left.length];
+      line2 = "tonight's pick: <span class=\"hot\">" + pick.title + '</span> (' + pick.year + ') · ★' + pick.lb.toFixed(1);
+    } else {
+      line2 = 'all watched — legend 🏆';
+    }
+    el.innerHTML = line1 + '<br>' + line2;
+  } catch (_) {}
+})();
+</script>
 <script>
 (function showsTeaser() {
   const el = document.getElementById('shows-sub');
