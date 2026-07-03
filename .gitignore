@@ -4,7 +4,6 @@ __pycache__/
 *.py[cod]
 .watcher.lock
 .wdc/
-nul
 diag-output.txt
 gist-token.txt
 tattoo-key.txt
