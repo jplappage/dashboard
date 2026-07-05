@@ -52,10 +52,9 @@ const FILMS = [
     year: 2026,
     slug: 'masters-of-the-universe-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/3/8/6/6/1/3/386613-masters-of-the-universe-2026-0-230-0-345-crop.jpg?v=8340b3dfbe',
-    vodDate: null,
-    platform: 'Prime Video',
-    estimated: true,
-    note: 'In cinemas 5 Jun · Prime Video est. early Jul 2026 (bypassing PVOD, likely w/c 6 Jul)',
+    vodDate: '2026-07-21',
+    platform: 'Digital',
+    estimated: false,
     imdbRating: 7.1,
   },
   {
@@ -66,7 +65,7 @@ const FILMS = [
     vodDate: null,
     platform: 'Digital',
     estimated: true,
-    note: 'In cinemas Jun 12 · PVOD est. late Jul 2026',
+    note: 'In cinemas Jun 12 · PVOD est. 28 Jul 2026 (Universal); Peacock est. Oct 2026',
     imdbRating: 6.9,
   },
   {
@@ -99,7 +98,7 @@ const FILMS = [
     vodDate: null,
     platform: null,
     estimated: true,
-    note: 'In cinemas Jun 26 · PVOD est. late Jul 2026 (30-day window likely)',
+    note: 'In cinemas Jun 26 · PVOD est. 28 Jul 2026 (~32-day window); HBO Max est. Sep 2026',
     imdbRating: 6.1,
   },
   {
