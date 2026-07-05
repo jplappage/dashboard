@@ -662,19 +662,24 @@
       .filter(Boolean)
       .sort((a,b) => a.iso.localeCompare(b.iso))[0];
 
+    const fmtUp = u => {
+      const days = Math.round((u.d - new Date(today + 'T00:00:00')) / 86400000);
+      const season = (u.s.next.match(/^(S\d+)/) || [,''])[1];
+      return '<span class="soon">' + u.s.name + (season ? ' ' + season : '') + '</span> · ' +
+             (days === 1 ? 'tomorrow' : days + ' days');
+    };
+
     let line1 = '', line2 = '';
     if (airing.length) {
       line1 = '<span class="dot"></span><span class="hot">' +
               (airing.length === 1 ? airing[0].name + ' · ' + airing[0].airing : airing.length + ' shows airing now') +
               '</span>';
+      if (upcoming[0]) line2 = 'soon: ' + fmtUp(upcoming[0]);
+    } else {
+      if (upcoming[0]) line1 = 'next: ' + fmtUp(upcoming[0]);
+      if (upcoming[1]) line2 = 'then: ' + fmtUp(upcoming[1]);
     }
-    if (upcoming) {
-      const days = Math.round((upcoming.d - new Date(today + 'T00:00:00')) / 86400000);
-      const season = (upcoming.s.next.match(/^(S\d+)/) || [,''])[1];
-      line2 = 'next: <span class="soon">' + upcoming.s.name + (season ? ' ' + season : '') + '</span> · ' +
-              (days === 1 ? 'tomorrow' : days + ' days');
-    }
-    el.innerHTML = line1 && line2 ? line1 + '<br>' + line2 : (line1 || line2 || '');
+    el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
   } catch (_) {}
 })();
 
