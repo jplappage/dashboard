@@ -635,9 +635,9 @@
       <div class="card-title">World Cup 2026</div>
       <div class="card-sub" id="wc-sub"></div>
     </a>
-    <a class="card" href="tattoos.html" style="border-color:rgba(255,45,120,0.35);background:rgba(20,10,30,0.7)">
+    <a class="card" href="tattoos.html">
       <span class="card-icon">🖊️</span>
-      <div class="card-title" style="color:#ff2d78">Tattoos</div>
+      <div class="card-title">Tattoos</div>
     </a>
   </div>
 </main>
@@ -679,7 +679,7 @@
     } else {
       line2 = 'all watched — legend 🏆';
     }
-    el.innerHTML = line1 + '<br>' + line2;
+    el.innerHTML = line1;
   } catch (_) {}
 })();
 </script>
@@ -722,7 +722,7 @@
       if (upcoming[0]) line1 = 'next: ' + fmtUp(upcoming[0]);
       if (upcoming[1]) line2 = 'then: ' + fmtUp(upcoming[1]);
     }
-    el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
+    el.innerHTML = line1 || line2;
   } catch (_) {}
 })();
 
