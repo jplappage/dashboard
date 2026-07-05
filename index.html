@@ -734,7 +734,7 @@
 (async function lineupTeaser() {
   const el = document.getElementById('lineup-sub');
   if (!el) return;
-  let nextLine = '', availLine = '';
+  const LABEL = { france: 'FRA', liverpool: 'LIV' };
 
   // Squad availability — read from the lineup builder's synced gist state
   // (c = conditions keyed by player id, ps = section: 'squad' = main squad)
@@ -752,16 +752,8 @@
         });
         return { inj, sus };
       };
-      const fmt = (badge, c) => {
-        if (!c) return '';
-        const bits = [];
-        if (c.inj) bits.push('<span style="color:#f87171">' + c.inj + ' injured</span>');
-        if (c.sus) bits.push('<span style="color:#fbbf24">' + c.sus + ' susp.</span>');
-        return badge + ' ' + (bits.length ? bits.join(', ') : '<span class="hot">all fit</span>');
-      };
-      availLine = [fmt('🇫🇷', counts('lineup_france')), fmt('🔴', counts('lineup_liverpool'))]
-        .filter(Boolean).join(' · ');
-    } catch (_) {}
+      return { france: counts('lineup_france'), liverpool: counts('lineup_liverpool') };
+    } catch (_) { return null; }
   })();
 
   // Next scheduled game — France (World Cup) / Liverpool (Premier League) via ESPN
@@ -774,35 +766,46 @@
         return h.team.shortDisplayName + ' v ' + a.team.shortDisplayName;
       } catch (_) { return e.shortName || e.name || ''; }
     };
-    const pull = async (url, filter) => {
+    const pull = async (team, url, filter) => {
       try {
         const j = await (await fetch(url)).json();
         const evs = j.events || (j.team && j.team.nextEvent) || [];
         evs.forEach(e => {
           const d = new Date(e.date);
-          if (d > new Date() && (!filter || filter(e))) games.push({ d, label: compName(e) });
+          if (d > new Date() && (!filter || filter(e))) games.push({ d, team, label: compName(e) });
         });
       } catch (_) {}
     };
     await Promise.all([
-      pull('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200',
+      pull('france', 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200',
            e => /france/i.test(e.name || '')),
-      pull('https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/364'),
+      pull('liverpool', 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/364'),
     ]);
-    const nxt = games.sort((a,b) => a.d - b.d)[0];
-    if (nxt) {
-      const now = new Date();
-      const days = Math.round((new Date(nxt.d.getFullYear(), nxt.d.getMonth(), nxt.d.getDate()) -
-                               new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
-      const time = nxt.d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
-      const when = days === 0 ? 'today ' + time
-                 : days === 1 ? 'tomorrow ' + time
-                 : nxt.d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' }) + ' · ' + time;
-      nextLine = 'next: <span class="soon">' + nxt.label + '</span> · ' + when;
-    }
+    return games.sort((a,b) => a.d - b.d)[0] || null;
   })();
 
-  await Promise.all([availP, nextP]);
+  const [avail, nxt] = await Promise.all([availP, nextP]);
+
+  let nextLine = '', availLine = '';
+  if (nxt) {
+    const now = new Date();
+    const days = Math.round((new Date(nxt.d.getFullYear(), nxt.d.getMonth(), nxt.d.getDate()) -
+                             new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+    const time = nxt.d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+    const when = days === 0 ? 'today ' + time
+               : days === 1 ? 'tomorrow ' + time
+               : nxt.d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' }) + ' · ' + time;
+    nextLine = 'next: <span class="soon">' + nxt.label + '</span> · ' + when;
+
+    // Availability for the team playing next only
+    const c = avail && avail[nxt.team];
+    if (c) {
+      const bits = [];
+      if (c.inj) bits.push('<span style="color:#f87171">' + c.inj + ' injured</span>');
+      if (c.sus) bits.push('<span style="color:#fbbf24">' + c.sus + ' suspended</span>');
+      availLine = LABEL[nxt.team] + ': ' + (bits.length ? bits.join(', ') : '<span class="hot">all fit</span>');
+    }
+  }
   el.innerHTML = [nextLine, availLine].filter(Boolean).join('<br>');
 })();
 </script>
