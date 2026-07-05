@@ -524,23 +524,18 @@
       font-size: 2rem;
       line-height: 1;
     }
-    /* brand-logo card icons — uniform tiles for consistent sizing */
+    /* brand-logo card icons — uniform tiles, cropped to fill (no backing) */
     img.card-icon {
       width: 54px;
       height: 54px;
       box-sizing: border-box;
-      object-fit: contain;
-      background: #fff;
+      object-fit: cover;
       border-radius: 12px;
-      padding: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
     .ic-tattoo {
       padding: 3px;
       border-radius: 50%;
-      object-fit: cover;
       background: linear-gradient(120deg, #ff2d78, #b06bff, #00e5c8);
-      box-shadow: none;
     }
 
     .card-title {
