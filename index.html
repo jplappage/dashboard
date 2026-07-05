@@ -774,6 +774,40 @@
   } catch (_) { /* leave blank on any hiccup */ }
 })();
 
+(async function worldCupTeaser() {
+  const el = document.getElementById('wc-sub');
+  if (!el) return;
+  try {
+    const j = await (await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200')).json();
+    const now = new Date();
+    const games = (j.events || [])
+      .filter(e => new Date(e.date) > now && e.status && e.status.type && e.status.type.state === 'pre')
+      .map(e => {
+        let label = e.shortName || e.name || '';
+        try {
+          const c = e.competitions[0].competitors;
+          const h = c.find(x => x.homeAway === 'home'), a = c.find(x => x.homeAway === 'away');
+          label = h.team.shortDisplayName + ' v ' + a.team.shortDisplayName;
+        } catch (_) {}
+        return { d: new Date(e.date), label };
+      })
+      .sort((a,b) => a.d - b.d)
+      .slice(0, 2);
+    if (!games.length) return;
+
+    const fmt = g => {
+      const days = Math.round((new Date(g.d.getFullYear(), g.d.getMonth(), g.d.getDate()) -
+                               new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+      const time = g.d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+      const when = days === 0 ? 'today ' + time
+                 : days === 1 ? 'tomorrow ' + time
+                 : g.d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' }) + ' · ' + time;
+      return '<span class="soon">' + g.label + '</span> · ' + when;
+    };
+    el.innerHTML = games.map((g, i) => (i === 0 ? 'next: ' : 'then: ') + fmt(g)).join('<br>');
+  } catch (_) {}
+})();
+
 (async function lineupTeaser() {
   const el = document.getElementById('lineup-sub');
   if (!el) return;
