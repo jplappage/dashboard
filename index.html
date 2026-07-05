@@ -704,22 +704,30 @@
       return days <= 7 ? label + ' · ' + days + ' days' : label;
     };
 
+    const soonLine = (label, nxt) => {
+      const also = upcoming.filter(f => f.vodDate === nxt.vodDate).length - 1;
+      return label + ': <span class="soon">' + nxt.title + '</span>' +
+             (also > 0 ? ' +' + also : '') + ' · ' + niceWhen(nxt.vodDate);
+    };
+
+    let line1 = '', line2 = '';
     if (ready.length > 0) {
       const droppedToday = ready.filter(f => f.vodDate === today);
       const pick = ready.slice().sort((a,b) => (b.imdbRating||0) - (a.imdbRating||0))[0];
-      let line1 = '<span class="dot"></span><span class="hot">' + ready.length +
-                  (ready.length === 1 ? ' film ready' : ' films ready') + ' to watch</span>';
-      if (droppedToday.length) line1 = '<span class="dot"></span><span class="hot">NEW TODAY: ' + droppedToday[0].title + '</span>';
-      const line2 = pick && pick.imdbRating ? 'top pick: ' + pick.title + ' · ★' + pick.imdbRating.toFixed(1) : '';
-      el.innerHTML = line1 + (line2 ? '<br>' + line2 : '');
+      line1 = droppedToday.length
+        ? '<span class="dot"></span><span class="hot">NEW TODAY: ' + droppedToday[0].title + '</span>'
+        : '<span class="dot"></span><span class="hot">' + ready.length +
+          (ready.length === 1 ? ' film ready' : ' films ready') + '</span>' +
+          (pick && pick.imdbRating ? ' · top: ' + pick.title + ' ★' + pick.imdbRating.toFixed(1) : '');
+      if (upcoming.length) line2 = soonLine('soon', upcoming[0]);
     } else if (upcoming.length) {
-      const nxt = upcoming[0];
-      const also = upcoming.filter(f => f.vodDate === nxt.vodDate).length - 1;
-      el.innerHTML = 'next up: <span class="soon">' + nxt.title + '</span>' +
-                     (also > 0 ? ' +' + also : '') + '<br>' + niceWhen(nxt.vodDate);
+      line1 = soonLine('next', upcoming[0]);
+      const then = upcoming.find(f => f.vodDate > upcoming[0].vodDate);
+      if (then) line2 = 'then: <span class="soon">' + then.title + '</span> · ' + niceWhen(then.vodDate);
     } else {
-      el.textContent = FILMS.length + ' tracked · no dates confirmed yet';
+      line1 = FILMS.length + ' tracked · no dates confirmed yet';
     }
+    el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
   } catch (_) { /* leave blank on any hiccup */ }
 })();
 </script>
