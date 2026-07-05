@@ -722,7 +722,7 @@
       if (upcoming[0]) line1 = 'next: ' + fmtUp(upcoming[0]);
       if (upcoming[1]) line2 = 'then: ' + fmtUp(upcoming[1]);
     }
-    el.innerHTML = line1 || line2;
+    el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
   } catch (_) {}
 })();
 
@@ -770,7 +770,7 @@
     } else {
       line1 = FILMS.length + ' tracked · no dates confirmed yet';
     }
-    el.innerHTML = line1 || line2;
+    el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
   } catch (_) { /* leave blank on any hiccup */ }
 })();
 
@@ -886,7 +886,7 @@
       availLine = LABEL[nxt.team] + ': ' + (bits.length ? bits.join(', ') : '<span class="hot">all fit</span>');
     }
   }
-  el.innerHTML = nextLine || availLine;
+  el.innerHTML = [nextLine, availLine].filter(Boolean).join('<br>');
 })();
 </script>
 
