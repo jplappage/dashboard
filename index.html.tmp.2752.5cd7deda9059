@@ -636,7 +636,7 @@
       <div class="card-sub" id="films-sub"></div>
     </a>
     <a class="card" href="show-log.html">
-      <span class="card-icon">📺</span>
+      <img class="card-icon ic-shows" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/120px-IMDB_Logo_2016.svg.png" alt="IMDb">
       <div class="card-title">Show Log</div>
       <div class="card-sub" id="shows-sub"></div>
     </a>
