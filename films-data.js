@@ -69,17 +69,6 @@ const FILMS = [
     imdbRating: 6.9,
   },
   {
-    title: 'Toy Story 5',
-    year: 2026,
-    slug: 'toy-story-5',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/9/7/7/1/8/6/977186-toy-story-5-0-230-0-345-crop.jpg?v=d0ac6a7d01',
-    vodDate: null,
-    platform: null,
-    estimated: true,
-    note: 'In cinemas Jun 19 · PVOD est. mid/late Aug 2026',
-    imdbRating: 7.7,
-  },
-  {
     title: 'Jackass: Best and Last',
     year: 2026,
     slug: 'jackass-best-and-last',
