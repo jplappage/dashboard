@@ -675,7 +675,7 @@
     if (left.length) {
       const seed = +new Date().toISOString().slice(0,10).replace(/-/g,'');
       const pick = left[seed % left.length];
-      line2 = "tonight's pick: <span class=\"hot\">" + pick.title + '</span> (' + pick.year + ') · ★' + pick.lb.toFixed(1);
+      line2 = "Claude's pick: <span class=\"hot\">" + pick.title + '</span>';
     } else {
       line2 = 'all watched — legend 🏆';
     }
