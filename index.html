@@ -9,13 +9,14 @@
     :root { color-scheme: dark; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Full-page starfield ── */
+    /* ── Full-page starfield (dimmed) ── */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
+      opacity: 0.35;
       background-image:
         /* extra bright stars — scattered throughout */
         radial-gradient(2px 2px at  1% 12%, #fff 100%, transparent),
@@ -248,9 +249,9 @@
         radial-gradient(0.5px 0.5px at 98% 14%, rgba(255,255,255,0.2) 100%, transparent);
     }
 
-    /* ── Second starfield layer (quadruple density) ── */
+    /* ── Second starfield layer (disabled for a calmer look) ── */
     body::after {
-      content: '';
+      content: none;
       position: fixed;
       inset: 0;
       z-index: 0;
