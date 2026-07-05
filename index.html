@@ -660,7 +660,7 @@
         return ymd(d) > today ? { s, d, iso: ymd(d) } : null;
       })
       .filter(Boolean)
-      .sort((a,b) => a.iso.localeCompare(b.iso))[0];
+      .sort((a,b) => a.iso.localeCompare(b.iso));
 
     const fmtUp = u => {
       const days = Math.round((u.d - new Date(today + 'T00:00:00')) / 86400000);
