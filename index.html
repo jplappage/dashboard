@@ -633,6 +633,7 @@
     <a class="card" href="world-cup.html">
       <span class="card-icon">🏆</span>
       <div class="card-title">World Cup 2026</div>
+      <div class="card-sub" id="wc-sub"></div>
     </a>
     <a class="card" href="tattoos.html" style="border-color:rgba(255,45,120,0.35);background:rgba(20,10,30,0.7)">
       <span class="card-icon">🖊️</span>
@@ -847,7 +848,7 @@
     if (c) {
       const bits = [];
       if (c.inj) bits.push('<span style="color:#f87171">' + c.inj + ' injured</span>');
-      if (c.sus) bits.push('<span style="color:#fbbf24">' + c.sus + ' suspended</span>');
+      if (c.sus) bits.push('<span style="color:#fb923c">' + c.sus + ' suspended</span>');
       availLine = LABEL[nxt.team] + ': ' + (bits.length ? bits.join(', ') : '<span class="hot">all fit</span>');
     }
   }
