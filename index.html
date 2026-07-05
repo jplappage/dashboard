@@ -776,10 +776,13 @@
         });
       } catch (_) {}
     };
+    // Liverpool: ESPN team endpoints are per-competition, so check them all —
+    // Premier League, Champions League, FA Cup, League Cup, friendlies
+    const LFC_COMPS = ['eng.1', 'uefa.champions', 'eng.fa', 'eng.league_cup', 'club.friendly'];
     await Promise.all([
       pull('france', 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200',
            e => /france/i.test(e.name || '')),
-      pull('liverpool', 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/364'),
+      ...LFC_COMPS.map(c => pull('liverpool', 'https://site.api.espn.com/apis/site/v2/sports/soccer/' + c + '/teams/364')),
     ]);
     return games.sort((a,b) => a.d - b.d)[0] || null;
   })();
