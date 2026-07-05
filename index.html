@@ -873,7 +873,7 @@
     const time = nxt.d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
     const when = days === 0 ? 'today ' + time
                : days === 1 ? 'tomorrow ' + time
-               : nxt.d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' }) + ' · ' + time;
+               : days + ' days';
     nextLine = 'next: <span class="soon">' + nxt.label + '</span> · ' + when;
 
     // Availability for the team playing next only
