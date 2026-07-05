@@ -743,8 +743,7 @@
       const days = Math.round((target - new Date(today + 'T00:00:00')) / 86400000);
       if (days === 0) return 'today';
       if (days === 1) return 'tomorrow';
-      const label = target.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
-      return days <= 7 ? label + ' · ' + days + ' days' : label;
+      return days + ' days';
     };
 
     const soonLine = (label, nxt) => {
@@ -801,7 +800,7 @@
       const time = g.d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
       const when = days === 0 ? 'today ' + time
                  : days === 1 ? 'tomorrow ' + time
-                 : g.d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' }) + ' · ' + time;
+                 : days + ' days';
       return '<span class="soon">' + g.label + '</span> · ' + when;
     };
     el.innerHTML = games.map((g, i) => (i === 0 ? 'next: ' : 'then: ') + fmt(g)).join('<br>');
