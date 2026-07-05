@@ -524,7 +524,7 @@
       font-size: 2rem;
       line-height: 1;
     }
-    /* brand-logo card icons — uniform tiles, cropped to fill (no backing) */
+    /* brand-logo card icons — uniform 54px tiles */
     img.card-icon {
       width: 54px;
       height: 54px;
@@ -532,16 +532,22 @@
       object-fit: cover;
       border-radius: 12px;
     }
-    .ic-tattoo {
-      padding: 3px;
-      border-radius: 50%;
-      background: linear-gradient(120deg, #ff2d78, #b06bff, #00e5c8);
+    /* Letterboxd: dark app-icon tile — subtle outline so it reads full-size on the dark card */
+    .card-icon.ic-films {
+      border: 1px solid rgba(255,255,255,0.18);
     }
     /* World Cup emblem: full logo on white, not cropped */
-    .wc-logo {
+    .card-icon.wc-logo {
       object-fit: contain;
       background: #fff;
       padding: 6px;
+    }
+    /* Tattoo: circular avatar with gradient ring */
+    .card-icon.ic-tattoo {
+      padding: 3px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: linear-gradient(120deg, #ff2d78, #b06bff, #00e5c8);
     }
 
     .card-title {
