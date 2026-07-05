@@ -28,7 +28,7 @@ const SHOWS = [
   {name:"Ted",                                   status:"finished", aired:2},
   {name:"Tires",                                 status:"ongoing",  aired:2, next:"S3 · 13 Aug 2026"},
   {name:"The Boys",                              status:"finished", aired:5, next:null},
-  {name:"Vought Rising",                         status:"ongoing",  aired:0, next:"S1 · est. early 2027", recheck:"2026-07-10", poster:"vought-rising-poster.avif"},
+  {name:"Vought Rising",                         status:"ongoing",  aired:0, next:"S1 · est. early 2027", recheck:"2026-07-10", poster:"Images/vought-rising-poster.avif"},
   {name:"Alley Cats",                            status:"ongoing",  aired:0, next:"S1 · 7 Aug 2026"},
   {name:"Stranger Things: Tales from '85",       status:"ongoing",  aired:1, next:"S2 · Fall 2026", recheck:"2026-07-10"},
   {name:"Welcome to Wrexham",                    status:"ongoing",  aired:5, next:"S6 · 27 May 2027"},
