@@ -837,6 +837,10 @@
       .filter-bar { padding: 6px 12px; }
       .date-nav-bar { padding: 6px 12px; gap: 8px; }
       .team-filter-bar { padding: 6px 12px; row-gap: 6px; }
+      .filter-label { display: none; }
+      #fixture-controls { display: flex; flex-wrap: wrap; align-items: center; border-bottom: 1px solid rgba(255,232,31,0.15); }
+      #round-filter { flex: 1 1 auto; border-bottom: none; }
+      #date-nav-bar { flex: 0 0 auto; margin-left: auto; border-bottom: none; }
     }
 
     /* ── Tab navigation ─────────────────────────────────── */
@@ -957,6 +961,7 @@
     <button class="tab-btn" data-tab="frroute" onclick="setTab('frroute')">Routes</button>
   </div>
 
+  <div id="fixture-controls">
   <!-- Round filter -->
   <div class="filter-bar" id="round-filter">
     <span class="filter-label">Round</span>
@@ -990,6 +995,7 @@
       </div>
       <div class="cal-grid" id="cal-grid"></div>
     </div>
+  </div>
   </div>
 
   <!-- Team filter -->
