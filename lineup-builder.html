@@ -226,6 +226,9 @@ header::before {
 .ttab.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.5); color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.15); }
 .ttab-logo { height: 26px; width: auto; display: block; }
 .ttab-logo.invert { filter: brightness(0) invert(1); opacity: 0.9; }
+.pin-btn { margin-left: 6px; font-size: 12px; line-height: 1; opacity: 0.3; cursor: pointer; transition: transform .15s, opacity .15s, filter .15s; user-select: none; }
+.pin-btn:hover { opacity: 0.7; transform: scale(1.25); }
+.pin-btn.pinned { opacity: 1; filter: drop-shadow(0 0 3px rgba(255,232,31,0.9)); }
 
 /* ── FORMATION BAR ── */
 .fbar { margin-left: auto; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
@@ -499,10 +502,12 @@ header::before {
     <button class="ttab active" data-team="france">
       <img class="ttab-logo" src="https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg&w=80&output=png">
       France
+      <span class="pin-btn" data-pinteam="france" title="Pin as default">📌</span>
     </button>
     <button class="ttab" data-team="liverpool">
       <img class="ttab-logo invert" src="https://a.espncdn.com/i/teamlogos/soccer/500/364.png">
       Liverpool
+      <span class="pin-btn" data-pinteam="liverpool" title="Pin as default">📌</span>
     </button>
   </div>
   <div class="fbar">
@@ -1270,18 +1275,56 @@ function refresh() { renderOnly(); saveState(); }
 window.addEventListener('resize', () => drawLines());
 
 // ════════════════════════════════════════════════════════
+//  DEFAULT TEAM (pin)
+// ════════════════════════════════════════════════════════
+const DEFAULT_TEAM_KEY = 'lineup_default_team';
+function getDefaultTeam() {
+  const t = localStorage.getItem(DEFAULT_TEAM_KEY);
+  return (t === 'france' || t === 'liverpool') ? t : 'france';
+}
+function setDefaultTeam(team) {
+  if (team !== 'france' && team !== 'liverpool') return;
+  localStorage.setItem(DEFAULT_TEAM_KEY, team);
+  updatePinUI();
+}
+function updatePinUI() {
+  const d = getDefaultTeam();
+  document.querySelectorAll('.pin-btn').forEach(p => {
+    const on = p.dataset.pinteam === d;
+    p.classList.toggle('pinned', on);
+    p.title = on ? 'Opens by default' : 'Pin as default';
+  });
+}
+
+// ════════════════════════════════════════════════════════
 //  INIT
 // ════════════════════════════════════════════════════════
 document.querySelectorAll('.fbtn').forEach(b => b.addEventListener('click', () => setFormation(b.dataset.f)));
 document.getElementById('resetBtn').addEventListener('click', reset);
 document.querySelectorAll('.ttab').forEach(t => t.addEventListener('click', () => switchTeam(t.dataset.team)));
+document.querySelectorAll('.pin-btn').forEach(p => p.addEventListener('click', e => { e.stopPropagation(); setDefaultTeam(p.dataset.pinteam); }));
 
 // Clean up stale save keys from older versions
 try { localStorage.removeItem('liverpool_lineup_v1'); } catch(e) {}
 
-// Apply France CSS vars on load
+// Initialise to the user's pinned default team
 const root = document.documentElement;
-Object.entries(TEAM_CONFIG.france.css).forEach(([k,v]) => root.style.setProperty(k,v));
+const bootTeam = getDefaultTeam();
+activeTeam = bootTeam;
+{
+  const cfg = TEAM_CONFIG[bootTeam];
+  cfg.players.forEach(p => p.sec = p._origSec);
+  PLAYERS   = cfg.players;
+  PM        = Object.fromEntries(PLAYERS.map(p => [p.id, p]));
+  formation = cfg.defaultFormation;
+  document.getElementById('teamFlag').innerHTML = cfg.logoHtml;
+  document.getElementById('teamName').textContent = cfg.name;
+  document.getElementById('teamSub').textContent = cfg.sub;
+  document.querySelectorAll('.ttab').forEach(t => t.classList.toggle('active', t.dataset.team === bootTeam));
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
+  Object.entries(cfg.css).forEach(([k,v]) => root.style.setProperty(k,v));
+}
+updatePinUI();
 
 // Load from cloud then render — renderOnly so init doesn't trigger a save
 (async () => {
