@@ -575,6 +575,8 @@
       height: auto;
       border-radius: 2px;
     }
+    .team-quick-btn.icon-only { padding: 5px 9px; gap: 0; }
+    .team-quick-btn.icon-only img { width: 22px; }
 
     .team-quick-btn:hover { border-color: #666; color: #ccc; }
 
@@ -929,7 +931,6 @@
   <header>
     <div class="header-left">
       <h1>World Cup 2026</h1>
-      <p>Canada · Mexico · USA &nbsp;·&nbsp; 11 Jun – 19 Jul &nbsp;·&nbsp; 48 teams · 104 matches</p>
     </div>
     <div class="header-right" id="tournament-progress">
       <div class="progress-pct" id="progress-pct">0%</div>
@@ -951,11 +952,7 @@
     <span class="filter-label">Round</span>
     <button class="filter-btn active" data-round="all">All</button>
     <button class="filter-btn" data-round="group">Group Stage</button>
-    <button class="filter-btn" data-round="r32">Round of 32</button>
-    <button class="filter-btn" data-round="r16">Round of 16</button>
-    <button class="filter-btn" data-round="qf">Quarter-finals</button>
-    <button class="filter-btn" data-round="sf">Semi-finals</button>
-    <button class="filter-btn" data-round="final">Final</button>
+    <button class="filter-btn" data-round="ko">Knockouts</button>
   </div>
 
   <!-- Date navigation -->
@@ -988,12 +985,12 @@
   <!-- Team filter -->
   <div class="team-filter-bar" id="team-filter-bar">
     <span class="filter-label">Team</span>
-    <button class="team-quick-btn active" id="team-all-btn" data-team="all">All teams</button>
-    <button class="team-quick-btn" id="team-england-btn" data-team="England">
-      <img src="https://flagcdn.com/w40/gb-eng.png" alt="England"> England
+    <button class="team-quick-btn active" id="team-all-btn" data-team="all">All</button>
+    <button class="team-quick-btn icon-only" id="team-england-btn" data-team="England" title="England" aria-label="England">
+      <img src="https://flagcdn.com/w40/gb-eng.png" alt="England">
     </button>
-    <button class="team-quick-btn" id="team-france-btn" data-team="France">
-      <img src="https://flagcdn.com/w40/fr.png" alt="France"> France
+    <button class="team-quick-btn icon-only" id="team-france-btn" data-team="France" title="France" aria-label="France">
+      <img src="https://flagcdn.com/w40/fr.png" alt="France">
     </button>
     <div class="team-dropdown-wrap">
       <select class="team-select" id="team-dropdown">
@@ -1408,6 +1405,8 @@ const TV_CHANNELS = (() => {
 
 // ── State ─────────────────────────────────────────────────────────
 let activeRound       = 'all';
+const KO_ROUNDS = ['r32','r16','qf','sf','3rd','final'];
+function matchRound(r){ return activeRound === 'all' || (activeRound === 'ko' ? KO_ROUNDS.includes(r) : r === activeRound); }
 let activeDate        = 'all';
 let activeTeam        = 'all';
 let showWatchlistOnly = false;
@@ -1552,7 +1551,7 @@ function toBST(time) {
 // ── Filters ───────────────────────────────────────────────────────
 function filteredFixtures() {
   return FIXTURES.filter(f => {
-    const roundOk = activeRound === 'all' || f.round === activeRound;
+    const roundOk = matchRound(f.round);
     const dateOk  = activeDate  === 'all' || f.date  === activeDate;
     const teamOk  = activeTeam  === 'all' || f.home  === activeTeam || f.away === activeTeam;
     const watchOk = !showWatchlistOnly || selectedGames.has(f.id);
@@ -1564,7 +1563,7 @@ function filteredFixtures() {
 function availableDates() {
   return [...new Set(
     FIXTURES.filter(f => {
-      const roundOk = activeRound === 'all' || f.round === activeRound;
+      const roundOk = matchRound(f.round);
       const teamOk  = activeTeam  === 'all' || f.home  === activeTeam || f.away === activeTeam;
       return roundOk && teamOk;
     }).map(f => f.date)
