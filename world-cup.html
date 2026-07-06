@@ -363,6 +363,7 @@
     }
 
     /* ── Date navigation bar ── */
+    .filter-actions #date-nav-bar { padding: 0; border-bottom: none; background: transparent; }
     .date-nav-bar {
       display: flex;
       align-items: center;
@@ -838,9 +839,8 @@
       .date-nav-bar { padding: 6px 12px; gap: 8px; }
       .team-filter-bar { padding: 6px 12px; row-gap: 6px; }
       .filter-label { display: none; }
-      #fixture-controls { display: flex; flex-wrap: wrap; align-items: center; border-bottom: 1px solid rgba(255,232,31,0.15); }
-      #round-filter { flex: 1 1 auto; border-bottom: none; }
-      #date-nav-bar { flex: 0 0 auto; margin-left: auto; border-bottom: none; }
+      .date-nav-btn { width: 28px; height: 28px; font-size: 0.9rem; }
+      .date-display-btn { max-width: 150px; padding: 5px 10px; font-size: 0.8rem; }
     }
 
     /* ── Tab navigation ─────────────────────────────────── */
@@ -961,7 +961,6 @@
     <button class="tab-btn" data-tab="frroute" onclick="setTab('frroute')">Routes</button>
   </div>
 
-  <div id="fixture-controls">
   <!-- Round filter -->
   <div class="filter-bar" id="round-filter">
     <span class="filter-label">Round</span>
@@ -970,6 +969,22 @@
     <button class="filter-btn" data-round="ko">Knockouts</button>
   </div>
 
+  <!-- Team filter -->
+  <div class="team-filter-bar" id="team-filter-bar">
+    <span class="filter-label">Team</span>
+    <button class="team-quick-btn active" id="team-all-btn" data-team="all">All</button>
+    <button class="team-quick-btn icon-only" id="team-england-btn" data-team="England" title="England" aria-label="England">
+      <img src="https://flagcdn.com/w40/gb-eng.png" alt="England">
+    </button>
+    <button class="team-quick-btn icon-only" id="team-france-btn" data-team="France" title="France" aria-label="France">
+      <img src="https://flagcdn.com/w40/fr.png" alt="France">
+    </button>
+    <div class="team-dropdown-wrap">
+      <select class="team-select" id="team-dropdown">
+        <option value="all">All teams ▾</option>
+      </select>
+    </div>
+    <div class="filter-actions" style="margin-left:auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
   <!-- Date navigation -->
   <div class="date-nav-bar" id="date-nav-bar">
     <button class="date-nav-btn" id="prev-day" title="Previous match day">&#8592;</button>
@@ -996,26 +1011,8 @@
       <div class="cal-grid" id="cal-grid"></div>
     </div>
   </div>
-  </div>
-
-  <!-- Team filter -->
-  <div class="team-filter-bar" id="team-filter-bar">
-    <span class="filter-label">Team</span>
-    <button class="team-quick-btn active" id="team-all-btn" data-team="all">All</button>
-    <button class="team-quick-btn icon-only" id="team-england-btn" data-team="England" title="England" aria-label="England">
-      <img src="https://flagcdn.com/w40/gb-eng.png" alt="England">
-    </button>
-    <button class="team-quick-btn icon-only" id="team-france-btn" data-team="France" title="France" aria-label="France">
-      <img src="https://flagcdn.com/w40/fr.png" alt="France">
-    </button>
-    <div class="team-dropdown-wrap">
-      <select class="team-select" id="team-dropdown">
-        <option value="all">All teams ▾</option>
-      </select>
-    </div>
-    <div style="margin-left:auto;display:flex;gap:8px">
-      <button class="team-quick-btn" id="spoiler-btn" title="Hide scores of finished matches until you tap them">🙈 Spoiler-free</button>
-      <button class="team-quick-btn" id="watchlist-filter-btn">★ My Watchlist</button>
+      <button class="team-quick-btn" id="spoiler-btn" title="Hide scores of finished matches until you tap them">Spoilers</button>
+      <button class="team-quick-btn" id="watchlist-filter-btn">★ Watchlist</button>
     </div>
   </div>
 </div>
@@ -2058,7 +2055,7 @@ document.querySelectorAll('#round-filter .filter-btn').forEach(btn => {
 function updateWatchlistBtn() {
   const btn = document.getElementById('watchlist-filter-btn');
   const count = selectedGames.size;
-  btn.textContent = count > 0 ? `★ My Watchlist (${count})` : '★ My Watchlist';
+  btn.textContent = '★ Watchlist';
   btn.classList.toggle('active', showWatchlistOnly);
 }
 
@@ -2175,7 +2172,7 @@ function updateSpoilerBtn() {
   const b = document.getElementById('spoiler-btn');
   if (!b) return;
   b.classList.toggle('active', spoilerMode);
-  b.textContent = spoilerMode ? '🙈 Spoiler-free ON' : '🙈 Spoiler-free';
+  b.textContent = spoilerMode ? 'Spoilers ON' : 'Spoilers';
 }
 
 document.getElementById('spoiler-btn').addEventListener('click', () => {
