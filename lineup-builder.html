@@ -226,9 +226,15 @@ header::before {
 .ttab.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.5); color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.15); }
 .ttab-logo { height: 26px; width: auto; display: block; }
 .ttab-logo.invert { filter: brightness(0) invert(1); opacity: 0.9; }
-.pin-btn { margin-left: 6px; font-size: 12px; line-height: 1; opacity: 0.3; cursor: pointer; transition: transform .15s, opacity .15s, filter .15s; user-select: none; }
-.pin-btn:hover { opacity: 0.7; transform: scale(1.25); }
-.pin-btn.pinned { opacity: 1; filter: drop-shadow(0 0 3px rgba(255,232,31,0.9)); }
+.default-toggle { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; }
+.dt-cap { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.55); white-space: nowrap; }
+.dt-switch { position: relative; width: 60px; height: 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); padding: 0; cursor: pointer; overflow: hidden; background: linear-gradient(90deg, #0b3fd6 0 50%, #C8102E 50% 100%); box-shadow: inset 0 1px 3px rgba(0,0,0,0.45); transition: filter 0.15s; }
+.dt-switch:hover { filter: brightness(1.12); }
+.dt-switch::after { content: ''; position: absolute; top: 0; height: 100%; width: 50%; background: rgba(0,0,0,0.42); transition: left 0.18s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
+.dt-switch[data-default="france"]::after { left: 50%; }
+.dt-switch[data-default="liverpool"]::after { left: 0; }
+.dt-knob { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.55); transition: left 0.18s cubic-bezier(0.4,0,0.2,1); z-index: 2; }
+.dt-switch[data-default="liverpool"] .dt-knob { left: 40px; }
 
 /* ── FORMATION BAR ── */
 .fbar { margin-left: auto; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
@@ -502,13 +508,15 @@ header::before {
     <button class="ttab active" data-team="france">
       <img class="ttab-logo" src="https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg&w=80&output=png">
       France
-      <span class="pin-btn" data-pinteam="france" title="Pin as default">📌</span>
     </button>
     <button class="ttab" data-team="liverpool">
       <img class="ttab-logo invert" src="https://a.espncdn.com/i/teamlogos/soccer/500/364.png">
       Liverpool
-      <span class="pin-btn" data-pinteam="liverpool" title="Pin as default">📌</span>
     </button>
+    <div class="default-toggle" title="Which team the builder opens to by default">
+      <span class="dt-cap">Opens to</span>
+      <button class="dt-switch" id="dtSwitch" role="switch" aria-label="Default team" data-default="france"><span class="dt-knob"></span></button>
+    </div>
   </div>
   <div class="fbar">
     <span class="fbar-label">Formation</span>
@@ -1285,15 +1293,15 @@ function getDefaultTeam() {
 function setDefaultTeam(team) {
   if (team !== 'france' && team !== 'liverpool') return;
   localStorage.setItem(DEFAULT_TEAM_KEY, team);
-  updatePinUI();
+  updateToggleUI();
 }
-function updatePinUI() {
+function updateToggleUI() {
   const d = getDefaultTeam();
-  document.querySelectorAll('.pin-btn').forEach(p => {
-    const on = p.dataset.pinteam === d;
-    p.classList.toggle('pinned', on);
-    p.title = on ? 'Opens by default' : 'Pin as default';
-  });
+  const sw = document.getElementById('dtSwitch');
+  if (!sw) return;
+  sw.dataset.default = d;
+  sw.setAttribute('aria-checked', d === 'liverpool');
+  sw.title = 'Opens to ' + (d === 'france' ? 'France' : 'Liverpool');
 }
 
 // ════════════════════════════════════════════════════════
@@ -1302,7 +1310,7 @@ function updatePinUI() {
 document.querySelectorAll('.fbtn').forEach(b => b.addEventListener('click', () => setFormation(b.dataset.f)));
 document.getElementById('resetBtn').addEventListener('click', reset);
 document.querySelectorAll('.ttab').forEach(t => t.addEventListener('click', () => switchTeam(t.dataset.team)));
-document.querySelectorAll('.pin-btn').forEach(p => p.addEventListener('click', e => { e.stopPropagation(); setDefaultTeam(p.dataset.pinteam); }));
+document.getElementById('dtSwitch').addEventListener('click', () => setDefaultTeam(getDefaultTeam() === 'france' ? 'liverpool' : 'france'));
 
 // Clean up stale save keys from older versions
 try { localStorage.removeItem('liverpool_lineup_v1'); } catch(e) {}
@@ -1324,7 +1332,7 @@ activeTeam = bootTeam;
   document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b.dataset.f === formation));
   Object.entries(cfg.css).forEach(([k,v]) => root.style.setProperty(k,v));
 }
-updatePinUI();
+updateToggleUI();
 
 // Load from cloud then render — renderOnly so init doesn't trigger a save
 (async () => {
