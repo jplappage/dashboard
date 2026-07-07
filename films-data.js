@@ -12,9 +12,10 @@ const FILMS = [
     year: 2026,
     slug: 'backrooms-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/9/7/6/4/1/9/976419-backrooms-2026-0-230-0-345-crop.jpg?v=f7a99e3fc8',
-    vodDate: '2026-07-07',
-    platform: 'Digital',
-    estimated: false,
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas May 29 · PVOD delayed, new date TBA (A24)',
     imdbRating: 7.2,
   },
   {
