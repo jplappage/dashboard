@@ -548,6 +548,7 @@
 </head>
 <body>
 
+<div class="sticky-top">
 <div class="top-bar">
   <a href="index.html" class="back-arrow" title="Back to Dashboard">←</a>
   <span id="sync-status" class="sync-status" title="Tap to re-sync" onclick="loadFromCloud().then(()=>render())"></span>
@@ -567,6 +568,7 @@
   <input type="search" id="search-input" class="search-input" placeholder="Search shows…" oninput="setSearch(this.value)">
   <div class="filter-spacer"></div>
   <button class="clear-btn" onclick="clearAll()">Clear all marks</button>
+</div>
 </div>
 
 <div class="content" id="content"></div>
