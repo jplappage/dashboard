@@ -112,6 +112,16 @@ const FILMS = [
     note: 'In cinemas Jun 26 (wide 10 Jul) · PVOD est. early Aug 2026',
     imdbRating: 6.2,
   },
+  {
+    title: 'The Selfish Giant',
+    year: 2013,
+    slug: 'the-selfish-giant-2013',
+    poster: 'https://a.ltrbxd.com/resized/sm/upload/bh/f4/3b/oc/gPMtPK05pO16Ki0nu7ILZVm0FQZ-0-600-0-900-crop.jpg',
+    vodDate: '2026-07-07',
+    platform: 'Prime Video / Apple TV+',
+    estimated: false,
+    imdbRating: 7.3,
+  },
   // ── PRE-THEATRICAL (added refresh #65) ───────────────────────────────────
   {
     title: 'Evil Dead Burn',
