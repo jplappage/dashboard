@@ -19,16 +19,6 @@ const FILMS = [
     imdbRating: 7.2,
   },
   {
-    title: 'The Furious',
-    year: 2025,
-    slug: 'the-furious',
-    poster: 'https://www.flickeringmyth.com/wp-content/uploads/2026/03/The-Furious-1-600x900.jpg',
-    vodDate: '2026-07-07',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 7.7,
-  },
-  {
     title: "California Schemin'",
     year: 2025,
     slug: 'california-schemin',
@@ -193,4 +183,5 @@ const WATCHED = [
   { title: 'The Sheep Detectives', vodDate: '2026-06-24', imdbRating: 7.7 },
   { title: 'Obsession', vodDate: '2026-06-30', imdbRating: 7.4 },
   { title: 'Toy Story 5', vodDate: '2026-07-04', imdbRating: 7.7 },
+  { title: 'The Furious', vodDate: '2026-07-07', imdbRating: 7.7 },
 ];
