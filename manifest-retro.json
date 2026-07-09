@@ -1,7 +1,7 @@
 {
-  "name": "JP's Dashboards",
-  "short_name": "Dashboard",
-  "start_url": "./index.html",
+  "name": "Retro Watchlist",
+  "short_name": "Retro",
+  "start_url": "./retro-watchlist.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -9,13 +9,13 @@
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "Images/app-icon-192.png",
+      "src": "Images/icon-retro-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "Images/app-icon-512.png",
+      "src": "Images/icon-retro-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
