@@ -12,6 +12,7 @@
   <link rel="apple-touch-icon" href="Images/app-icon-180.png">
   <title>FILMS WATCHLIST</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <style>
     :root { color-scheme: dark; }
@@ -548,6 +549,25 @@
   </style>
 </head>
 <body>
+<div id="pwa-splash"><img src="Images/app-icon-192.png" alt=""></div>
+<style>
+  #pwa-splash{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:#000;transition:opacity .5s ease}
+  #pwa-splash img{width:96px;height:96px;filter:drop-shadow(0 0 18px rgba(245,208,32,.55));animation:pwaPulse 1.4s ease-in-out infinite}
+  @keyframes pwaPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.08);opacity:1}}
+</style>
+<script>
+(function(){
+  var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone;
+  var s = document.getElementById('pwa-splash');
+  if(!s) return;
+  if(!standalone){ s.remove(); return; }
+  s.style.display='flex';
+  function hide(){ s.style.opacity='0'; setTimeout(function(){ if(s) s.remove(); }, 550); }
+  window.addEventListener('load', function(){ setTimeout(hide, 350); });
+  setTimeout(hide, 4000);
+})();
+</script>
+
 
 <div class="sticky-top">
 <div class="top-bar">
