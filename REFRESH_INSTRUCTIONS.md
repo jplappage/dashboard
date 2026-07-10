@@ -182,4 +182,6 @@ If main is ahead of origin and the watcher hasn't pushed within a minute, tell J
 **IMDb ratings:** Only from the film's actual IMDb page. No guesses.
 **Estimated dates:** Set `estimated: true` and add a `note` string explaining the expected window.
 **Platform names:** `'Prime Video'` · `'Netflix'` · `'Disney+'` · `'Apple TV+'` · `'MUBI'` · `'Sky Cinema / NOW'` · `'Paramount+'` · multiple: `'Prime Video / Apple TV+'`
-**Show log `next` field:** Specific confirmed dates only — not rumours. Format: `"S3 · 14 Sep 2026"`.
+**Show log `next` field:** Only a full **day + month + year** counts as a confirmed date (e.g. `"S3 · 14 Sep 2026"`). A month+year alone (e.g. `"Oct 2026"`) is an estimate — the show-log page files it under *Awaiting Date*, not *Date Announced*. Format for confirmed: `"S3 · 14 Sep 2026"`.
+
+**3-month reliability rule:** A premiere/VOD date more than **3 months** in the future is not dependable yet — treat it as an estimate only, even if officially announced. For shows: still store the real date in `next` (e.g. `"S3 · 11 Nov 2026"`); the show-log page automatically keeps it in *Awaiting Date* until it falls within the 3-month window, then promotes it to *Date Announced*. For films: don't set a firm `vodDate` for a date >3 months out — keep `estimated: true` with a `note` describing the window.
