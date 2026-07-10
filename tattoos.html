@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="manifest-tattoos.json">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#17111a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,21 +19,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous"></script>
   <style>
     :root {
-      --bg:          #09070f;
-      --surface:     #120f1e;
-      --surface2:    #1c1730;
-      --pink:        #ff2d78;
-      --pink-glow:   rgba(255,45,120,0.35);
-      --pink-dim:    rgba(255,45,120,0.18);
-      --teal:        #00e5c8;
-      --teal-glow:   rgba(0,229,200,0.25);
-      --teal-dim:    rgba(0,229,200,0.12);
-      --purple:      #b06bff;
-      --yellow:      #f7d000;
-      --text:        #f2eeff;
-      --text-dim:    #7e78a0;
-      --border:      rgba(255,45,120,0.22);
-      --border-teal: rgba(0,229,200,0.22);
+      --bg:          #17111a;
+      --surface:     #241a28;
+      --surface2:    #33253a;
+      --pink:        #e0568c;
+      --pink-glow:   rgba(224,86,140,0.35);
+      --pink-dim:    rgba(224,86,140,0.18);
+      --teal:        #7fa66a;
+      --teal-glow:   rgba(127,166,106,0.25);
+      --teal-dim:    rgba(127,166,106,0.12);
+      --purple:      #d98a4a;
+      --yellow:      #e0a93a;
+      --text:        #f4ece6;
+      --text-dim:    #9b8a95;
+      --border:      rgba(224,86,140,0.22);
+      --border-teal: rgba(127,166,106,0.22);
     }
 
     /* ── Login screen ── */
@@ -41,7 +41,7 @@
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: #09070f;
+      background: #17111a;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -54,22 +54,22 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 20% 40%, rgba(176,107,255,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 60%, rgba(255,45,120,0.10) 0%, transparent 55%),
-        radial-gradient(ellipse at 50% 90%, rgba(0,229,200,0.07) 0%, transparent 50%);
+        radial-gradient(ellipse at 20% 40%, rgba(217,138,74,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 60%, rgba(224,86,140,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 90%, rgba(127,166,106,0.07) 0%, transparent 50%);
       pointer-events: none;
     }
 
     .login-box {
       position: relative;
-      background: #120f1e;
-      border: 1px solid rgba(255,45,120,0.25);
+      background: #241a28;
+      border: 1px solid rgba(224,86,140,0.25);
       border-radius: 24px;
       padding: 40px 36px 36px;
       width: 100%;
       max-width: 340px;
       text-align: center;
-      box-shadow: 0 0 60px rgba(255,45,120,0.08);
+      box-shadow: 0 0 60px rgba(224,86,140,0.08);
     }
 
     .login-logo {
@@ -80,7 +80,7 @@
     .login-title {
       font-size: 1.1rem;
       font-weight: 700;
-      background: linear-gradient(120deg, #ff2d78 0%, #b06bff 50%, #00e5c8 100%);
+      background: linear-gradient(120deg, #e0568c 0%, #d98a4a 50%, #7fa66a 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -89,7 +89,7 @@
 
     .login-sub {
       font-size: 0.72rem;
-      color: #7e78a0;
+      color: #9b8a95;
       letter-spacing: 2px;
       text-transform: uppercase;
       margin-bottom: 32px;
@@ -106,7 +106,7 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      border: 2px solid rgba(255,45,120,0.35);
+      border: 2px solid rgba(224,86,140,0.35);
       background: transparent;
       transition: all 0.15s;
     }
@@ -114,7 +114,7 @@
     .pin-dot.filled {
       background: var(--pink);
       border-color: var(--pink);
-      box-shadow: 0 0 8px rgba(255,45,120,0.5);
+      box-shadow: 0 0 8px rgba(224,86,140,0.5);
     }
 
     .pin-dot.error {
@@ -130,10 +130,10 @@
     }
 
     .pin-key {
-      background: #1c1730;
-      border: 1px solid rgba(255,45,120,0.15);
+      background: #33253a;
+      border: 1px solid rgba(224,86,140,0.15);
       border-radius: 12px;
-      color: #f2eeff;
+      color: #f4ece6;
       font-family: 'Poppins', sans-serif;
       font-size: 1.2rem;
       font-weight: 600;
@@ -144,13 +144,13 @@
     }
 
     .pin-key:hover, .pin-key:active {
-      background: rgba(255,45,120,0.15);
-      border-color: rgba(255,45,120,0.4);
+      background: rgba(224,86,140,0.15);
+      border-color: rgba(224,86,140,0.4);
       color: #fff;
     }
 
     .pin-key.zero { grid-column: 2; }
-    .pin-key.del  { grid-column: 3; background: none; border-color: transparent; font-size: 1rem; color: #7e78a0; }
+    .pin-key.del  { grid-column: 3; background: none; border-color: transparent; font-size: 1rem; color: #9b8a95; }
     .pin-key.del:hover { color: var(--pink); background: none; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -168,7 +168,7 @@
 
     /* ── Header ── */
     header {
-      background: linear-gradient(160deg, #1a0d28 0%, #0d0a1a 60%, #0a1020 100%);
+      background: linear-gradient(160deg, #2a1626 0%, #1d1420 60%, #1a1220 100%);
       border-bottom: 2px solid var(--pink);
       padding: 28px 24px 24px;
       position: relative;
@@ -180,9 +180,9 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 15% 50%, rgba(176,107,255,0.15) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 50%, rgba(255,45,120,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 50% 100%, rgba(0,229,200,0.06) 0%, transparent 50%);
+        radial-gradient(ellipse at 15% 50%, rgba(217,138,74,0.15) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 50%, rgba(224,86,140,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 100%, rgba(127,166,106,0.06) 0%, transparent 50%);
       pointer-events: none;
     }
 
@@ -230,7 +230,7 @@
       height: 84px;
       border-radius: 50%;
       border: 3px solid var(--bg);
-      background: linear-gradient(135deg, #2d1040, #140a30);
+      background: linear-gradient(135deg, #3a1f30, #241428);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -245,7 +245,7 @@
       font-weight: 700;
       letter-spacing: -0.5px;
       line-height: 1;
-      background: linear-gradient(120deg, #ff2d78 0%, #b06bff 50%, #00e5c8 100%);
+      background: linear-gradient(120deg, #e0568c 0%, #d98a4a 50%, #7fa66a 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -366,7 +366,7 @@
     select,
     textarea {
       background: var(--surface2);
-      border: 1px solid rgba(255,45,120,0.2);
+      border: 1px solid rgba(224,86,140,0.2);
       border-radius: 9px;
       padding: 11px 14px;
       color: var(--text);
@@ -387,12 +387,12 @@
     .form-card select {
       -webkit-appearance: none;
       appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237e78a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239b8a95' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 14px center;
       cursor: pointer;
     }
-    .form-card select option { background: #1c1730; }
+    .form-card select option { background: #33253a; }
 
     textarea { resize: vertical; min-height: 88px; }
 
@@ -438,7 +438,7 @@
       align-items: center;
       justify-content: space-between;
       background: var(--surface2);
-      border: 1px solid rgba(255,215,0,0.2);
+      border: 1px solid rgba(224,169,58,0.2);
       border-radius: 10px;
       padding: 12px 18px;
       margin-bottom: 18px;
@@ -456,7 +456,7 @@
     .btn-save {
       width: 100%;
       padding: 15px;
-      background: linear-gradient(135deg, #ff2d78 0%, #c01a60 100%);
+      background: linear-gradient(135deg, #e0568c 0%, #b83b6d 100%);
       border: none;
       border-radius: 11px;
       color: #fff;
@@ -472,7 +472,7 @@
 
     .btn-save:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(255,45,120,0.5);
+      box-shadow: 0 8px 28px rgba(224,86,140,0.5);
     }
 
     .btn-save:active { transform: translateY(0); }
@@ -539,11 +539,11 @@
       vertical-align: middle;
     }
 
-    tbody tr:hover td { background: rgba(255,45,120,0.04); }
+    tbody tr:hover td { background: rgba(224,86,140,0.04); }
 
     td.num { font-weight: 600; text-align: right; }
     td.col-gross { color: var(--text); }
-    td.col-vat { color: #ff8ab8; }
+    td.col-vat { color: #e79ab5; }
     td.col-true { color: var(--teal); }
     td.col-costs { color: var(--text-dim); }
     td.col-net { color: var(--yellow); font-weight: 700; }
@@ -551,7 +551,7 @@
 
     .btn-del {
       background: none;
-      border: 1px solid rgba(255,45,120,0.3);
+      border: 1px solid rgba(224,86,140,0.3);
       border-radius: 6px;
       color: var(--pink);
       font-size: 0.78rem;
@@ -632,8 +632,8 @@
       align-items: center;
       justify-content: center;
       gap: 0;
-      background: rgba(176,107,255,0.08);
-      border-bottom: 1px solid rgba(176,107,255,0.2);
+      background: rgba(217,138,74,0.08);
+      border-bottom: 1px solid rgba(217,138,74,0.2);
       padding: 10px 20px;
     }
 
@@ -644,8 +644,8 @@
 
     /* ── Export + edit buttons ── */
     .btn-export {
-      background: rgba(0,229,200,0.1);
-      border: 1px solid rgba(0,229,200,0.3);
+      background: rgba(127,166,106,0.1);
+      border: 1px solid rgba(127,166,106,0.3);
       color: var(--teal);
       border-radius: 8px;
       padding: 6px 14px;
@@ -654,10 +654,10 @@
       font-family: 'Poppins', sans-serif;
       transition: background 0.2s;
     }
-    .btn-export:hover { background: rgba(0,229,200,0.2); }
+    .btn-export:hover { background: rgba(127,166,106,0.2); }
 
     .btn-edit {
-      background: rgba(176,107,255,0.12);
+      background: rgba(217,138,74,0.12);
       border: none;
       color: var(--purple);
       border-radius: 6px;
@@ -667,15 +667,15 @@
       font-size: 0.9rem;
       transition: background 0.2s;
     }
-    .btn-edit:hover { background: rgba(176,107,255,0.25); }
+    .btn-edit:hover { background: rgba(217,138,74,0.25); }
 
     /* ── Totals row ── */
     .totals-row td {
-      border-top: 2px solid rgba(255,45,120,0.4);
+      border-top: 2px solid rgba(224,86,140,0.4);
       font-weight: 700;
       color: var(--text);
       padding-top: 12px;
-      background: rgba(255,45,120,0.05);
+      background: rgba(224,86,140,0.05);
     }
 
     .totals-row td:first-child {
@@ -718,7 +718,7 @@
       flex: 1;
       padding: 11px 8px;
       border-radius: 9px;
-      border: 1px solid rgba(255,45,120,0.2);
+      border: 1px solid rgba(224,86,140,0.2);
       background: var(--surface2);
       color: var(--text-dim);
       font-family: 'Poppins', sans-serif;
@@ -728,9 +728,9 @@
       transition: all 0.2s;
       text-align: center;
     }
-    .yn-btn.yes.active { background: rgba(0,229,200,0.18); border-color: var(--teal); color: var(--teal); }
-    .yn-btn.no.active  { background: rgba(255,45,120,0.18); border-color: var(--pink); color: var(--pink); }
-    .yn-btn:hover { border-color: rgba(255,45,120,0.5); }
+    .yn-btn.yes.active { background: rgba(127,166,106,0.18); border-color: var(--teal); color: var(--teal); }
+    .yn-btn.no.active  { background: rgba(224,86,140,0.18); border-color: var(--pink); color: var(--pink); }
+    .yn-btn:hover { border-color: rgba(224,86,140,0.5); }
 
     th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
     th.sortable:hover { color: var(--pink); }
@@ -744,15 +744,15 @@
       border-radius: 20px;
       font-weight: 600;
     }
-    .sync-loading { background: rgba(255,215,0,0.12); color: #f7d000; }
-    .sync-ok      { background: rgba(0,229,200,0.12); color: var(--teal); }
-    .sync-error   { background: rgba(255,45,120,0.12); color: var(--pink); }
+    .sync-loading { background: rgba(224,169,58,0.12); color: #e0a93a; }
+    .sync-ok      { background: rgba(127,166,106,0.12); color: var(--teal); }
+    .sync-error   { background: rgba(224,86,140,0.12); color: var(--pink); }
 
     /* ── Responsive ── */
     /* ── Tax estimate card ── */
     .tax-card {
       background: var(--surface);
-      border: 1px solid rgba(176,107,255,0.35);
+      border: 1px solid rgba(217,138,74,0.35);
       border-radius: 16px;
       padding: 22px;
       margin-bottom: 20px;
@@ -1401,7 +1401,7 @@ function renderRecords() {
       </div>
       <div class="rec-grid">
         <div class="rec-cell"><div class="rc-lbl">Gross</div><div class="rc-val" style="color:var(--text)">£${e.gross.toFixed(2)}</div></div>
-        <div class="rec-cell"><div class="rc-lbl">Matt VAT 30%</div><div class="rc-val" style="color:#ff8ab8">£${vat.toFixed(2)}</div></div>
+        <div class="rec-cell"><div class="rc-lbl">Matt VAT 30%</div><div class="rc-val" style="color:#e79ab5">£${vat.toFixed(2)}</div></div>
         <div class="rec-cell"><div class="rc-lbl">True Income</div><div class="rc-val" style="color:var(--teal)">£${trueInc.toFixed(2)}</div></div>
         <div class="rec-cell"><div class="rc-lbl">True Income</div><div class="rc-val" style="color:var(--teal)">${netStr}</div></div>
       </div>
@@ -1599,16 +1599,16 @@ function buildChart(data) {
         {
           label: 'Gross Income',
           data: data.map(d => d.gross),
-          backgroundColor: 'rgba(176,107,255,0.25)',
-          borderColor: '#b06bff',
+          backgroundColor: 'rgba(217,138,74,0.25)',
+          borderColor: '#d98a4a',
           borderWidth: 2,
           borderRadius: 5,
         },
         {
           label: 'Net Income',
           data: data.map(d => d.net),
-          backgroundColor: 'rgba(0,229,200,0.35)',
-          borderColor: '#00e5c8',
+          backgroundColor: 'rgba(127,166,106,0.35)',
+          borderColor: '#7fa66a',
           borderWidth: 2,
           borderRadius: 5,
         }
@@ -1618,7 +1618,7 @@ function buildChart(data) {
       responsive: true,
       plugins: {
         legend: {
-          labels: { color: '#a09ac0', font: { family: 'Poppins', size: 12 } }
+          labels: { color: '#b3a4ad', font: { family: 'Poppins', size: 12 } }
         },
         tooltip: {
           callbacks: {
@@ -1629,11 +1629,11 @@ function buildChart(data) {
       scales: {
         x: {
           grid: { color: 'rgba(255,255,255,0.04)' },
-          ticks: { color: '#7e78a0', font: { family: 'Poppins' } }
+          ticks: { color: '#9b8a95', font: { family: 'Poppins' } }
         },
         y: {
           grid: { color: 'rgba(255,255,255,0.04)' },
-          ticks: { color: '#7e78a0', font: { family: 'Poppins' }, callback: v => '£' + v }
+          ticks: { color: '#9b8a95', font: { family: 'Poppins' }, callback: v => '£' + v }
         }
       }
     }
@@ -1778,11 +1778,4 @@ function toast(msg, type='ok') {
 </script>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('sw.js').catch(function () {});
-      });
-    }
-  </script>
-</body>
-</html>
+    if ('serviceWorker' in navigator)
