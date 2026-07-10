@@ -203,11 +203,21 @@
     .avatar-wrap::before {
       content: '';
       position: absolute;
-      inset: -4px;
+      inset: -8px;
+      border-radius: 50%;
+      border: 2px dotted var(--yellow);
+      opacity: 0.85;
+      z-index: -1;
+    }
+    .avatar-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
       border-radius: 50%;
       background: conic-gradient(var(--pink), var(--purple), var(--teal), var(--pink));
-      z-index: -1;
-      animation: spin 4s linear infinite;
+      z-index: -2;
+      opacity: 0.5;
+      filter: blur(3px);
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
