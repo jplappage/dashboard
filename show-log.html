@@ -712,7 +712,19 @@ function setFilter(f, btn) {
 function hasSpecificDate(next) {
   if (!next) return false;
   if (/\best\.?\b/i.test(next)) return false; // estimated = not confirmed, goes to Awaiting
-  return /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/i.test(next);
+  // Require a specific day + month + year (e.g. "14 Sep 2026"). A month+year
+  // alone (e.g. "Oct 2026") is NOT a real date — it goes to Awaiting.
+  const m = next.match(/\b(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})\b/i);
+  if (!m) return false;
+  // Reliability rule: a date more than 3 months out isn't dependable yet, so
+  // treat it as an estimate (Awaiting). It auto-promotes to Date Announced
+  // once it falls within the 3-month window.
+  const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+  const d = new Date(parseInt(m[3]), months[m[2].toLowerCase().slice(0,3)], parseInt(m[1]));
+  const cutoff = new Date();
+  cutoff.setHours(0,0,0,0);
+  cutoff.setMonth(cutoff.getMonth() + 3);
+  return d <= cutoff;
 }
 
 function showsForFilter() {
