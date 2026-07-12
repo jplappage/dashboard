@@ -85,7 +85,7 @@ const FILMS = [
     year: 2026,
     slug: 'the-death-of-robin-hood',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/8/5/8/1167858-the-death-of-robin-hood-0-230-0-345-crop.jpg?v=39347a2edd',
-    vodDate: '2026-07-21',
+    vodDate: '2026-08-04',
     platform: 'Digital',
     estimated: false,
     imdbRating: 7.6,
