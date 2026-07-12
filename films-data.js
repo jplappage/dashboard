@@ -120,7 +120,8 @@ const FILMS = [
     vodDate: null,
     platform: null,
     estimated: true,
-    note: 'In cinemas 10 Jul 2026',
+    note: 'In cinemas 10 Jul · PVOD est. late Aug 2026 (WB 45-day window)',
+    imdbRating: 6.8,
   },
   {
     title: 'Moana',
