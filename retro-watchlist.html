@@ -294,7 +294,11 @@
     .legend-dot.unwatched { background: #333; }
 
     /* ── TABLE ── */
-    .table-wrap { padding: 0 24px 48px; overflow-x: auto; }
+    /* NOTE: overflow-x:auto here silently promotes overflow-y to auto, which turns
+       this wrapper into a scroll container and breaks the sticky <thead> (it anchors
+       to the wrapper instead of the viewport, settling ~11px too high and clipping
+       the first row). overflow:visible keeps the header sticky against the viewport. */
+    .table-wrap { padding: 0 24px 48px; overflow-x: clip; overflow-y: visible; }
     table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
     thead th {
       background: #000; color: var(--text-muted);
