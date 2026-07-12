@@ -163,4 +163,6 @@ const WATCHED = [
   { title: 'Obsession', vodDate: '2026-06-30', imdbRating: 7.4 },
   { title: 'Toy Story 5', vodDate: '2026-07-04', imdbRating: 7.7 },
   { title: 'The Furious', vodDate: '2026-07-07', imdbRating: 7.7 },
+  { title: 'The Selfish Giant', vodDate: '2026-07-07', imdbRating: 7.3 },
+  { title: 'Moana', vodDate: '2026-07-12', imdbRating: 5.8 },
 ];
