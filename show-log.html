@@ -450,6 +450,27 @@
     .imdb-link { cursor: pointer; }
     .card-title.imdb-link:hover { color: #ffe81f; text-decoration: underline; }
     .poster-wrap.imdb-link:hover img { transform: scale(1.03); }
+    .imdb-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,232,31,0.08);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .poster-wrap.imdb-link:hover .imdb-overlay { opacity: 1; }
+    .imdb-overlay-text {
+      background: #ffe81f;
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.5px;
+    }
 
     /* ── Season pills ── */
     .season-row {
@@ -940,6 +961,7 @@ function buildCard(s) {
       ${imgHtml}
       <div class="poster-placeholder" id="ph-${cid(s.name)}"${url ? ' style="display:none"' : ''}>📺</div>
       <div class="watched-overlay">✓</div>
+      <div class="imdb-overlay"><span class="imdb-overlay-text">IMDb →</span></div>
     </div>
     <div class="card-body">
       <div class="card-title imdb-link" onclick="${imdbOpen}" title="View “${esc(s.name)}” on IMDb">${s.name}</div>
