@@ -87,6 +87,9 @@ Has a rating = released, add `imdbRating`. No rating = leave null.
 **For each film still needing a streaming date after Step 0:**
 Navigate directly to `https://whentostream.com/[slug]-[year]/` via Chrome MCP and `get_page_text` — **do not rely solely on the weekly tracker**, which only shows estimates and often lags behind confirmed per-film announcements. The per-film page shows the actual confirmed `VOD Release Date` field. If the page 404s, fall back to WebSearch `site:whentostream.com "[title]"` to find the correct URL. Confirmed date = set `vodDate` + `platform` + `estimated: false` + remove any `note`. Estimate only = set `estimated: true` + update `note`. Nothing = leave as-is.
 
+**For each film with a confirmed future `vodDate` (re-verification — catches delays):**
+Navigate to `https://whentostream.com/[slug]-[year]/` via Chrome MCP and read the `VOD Release Date` field (fall back to WebSearch `"[title]" digital streaming release date` if the page 404s or the scrape returns nothing). If the confirmed date has **moved**, update `vodDate` to the new date. If it still matches, leave as-is. Note WhenToStream per-film pages sometimes show only the later free-SVOD date and read as "nodate" for the PVOD/digital window — when in doubt, confirm the buy/rent digital date with a quick WebSearch before changing anything.
+
 **For each new film from Letterboxd:**
 Fetch the film's Letterboxd page to get the poster `<img>` src URL and the slug from the URL.
 Then verify both the Letterboxd and Plex slugs:
@@ -112,6 +115,7 @@ If `aria-label` is unavailable, take a screenshot of the page and count the fill
 **Before moving to Phase 4, verify:**
 - [ ] Every film with `vodDate: null` or `estimated: true` was searched OR listed as skipped (pre-theatrical)
 - [ ] Every film with no `imdbRating` was searched OR listed as skipped (pre-theatrical)
+- [ ] Every film with a confirmed future `vodDate` was re-verified against WhenToStream (date unchanged or updated)
 - [ ] Every show with a vague `next` field was searched OR listed as skipped (recheck not due) — check counts against Phase 2 lists
 - [ ] All results have been applied or explicitly noted as no-change
 
