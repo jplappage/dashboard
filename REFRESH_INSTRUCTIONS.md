@@ -51,6 +51,7 @@ Run these comparisons immediately from the data loaded in Phase 1:
 **Before moving to Phase 3, write out explicit lists:**
 - Films to search (streaming date): [list every title]
 - Films to search (IMDb): [list every title]
+- Films to re-verify (confirmed future vodDate): [every film with `estimated: false` and a future `vodDate`]
 - Shows to search (vague next): [list every show name + current next value]
 - Skipped (pre-theatrical): [films with future cinema dates]
 - Skipped (recheck not due): [shows + their recheck date]
