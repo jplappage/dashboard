@@ -34,6 +34,7 @@ Run these comparisons immediately from the data loaded in Phase 1:
 - Films in FILMS not on Letterboxd → mark for archiving (move from FILMS to the WATCHED list, both in `films-data.js` — this keeps it on the page calendar and in watchlist.ics)
 - Films with `vodDate: null` or `estimated: true` → queue for Phase 3 (need streaming date), **except pre-theatrical films (see skip rule below)**
 - Films with no `imdbRating` → queue for Phase 3 (need IMDb check), **except pre-theatrical films**
+- Films with a **confirmed** `vodDate` (`estimated: false`) that is still in the future → queue for Phase 3 **re-verification**. A confirmed date is NOT locked: studios push already-announced dates, and once a film has a date it drops off WhenToStream's weekly report, so a per-film re-check is the only way to catch a slip. (Past miss: *The Death of Robin Hood* moved 21 Jul → 4 Aug and was skipped because it already had a firm date.)
 
 **Pre-theatrical skip rule:** a film whose cinema release date (in its `note`) has NOT yet passed cannot have a VOD date or an IMDb rating. Skip both searches for it, but list it under "Skipped (pre-theatrical)" so the Phase 3 verification can account for every film.
 
