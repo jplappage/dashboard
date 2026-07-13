@@ -18,16 +18,6 @@ const FILMS = [
     imdbRating: 7.2,
   },
   {
-    title: "California Schemin'",
-    year: 2025,
-    slug: 'california-schemin',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/7/9/2/7/9/1079279-california-schemin-0-230-0-345-crop.jpg?v=44e81b5cc0',
-    vodDate: '2026-07-06',
-    platform: 'Blu-ray',
-    estimated: false,
-    imdbRating: 7.2,
-  },
-  {
     title: 'Scary Movie',
     year: 2026,
     slug: 'scary-movie-2026',
@@ -165,4 +155,5 @@ const WATCHED = [
   { title: 'The Furious', vodDate: '2026-07-07', imdbRating: 7.7 },
   { title: 'The Selfish Giant', vodDate: '2026-07-07', imdbRating: 7.3 },
   { title: 'Moana', vodDate: '2026-07-12', imdbRating: 5.8 },
+  { title: "California Schemin'", vodDate: '2026-07-06', imdbRating: 7.2 },
 ];
