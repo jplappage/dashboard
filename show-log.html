@@ -927,14 +927,19 @@ function buildCard(s) {
     return `<button class="season-pill ${cls}" onclick="cycleSeasonMark('${esc(s.name)}',${n})" title="S${n}: tap to cycle">S${n}${ico ? ' '+ico : ''}</button>`;
   }).join('') + upcomingPill;
 
+  const imdbUrl = s.imdbId
+    ? `https://www.imdb.com/title/${s.imdbId}/`
+    : `https://www.imdb.com/find/?q=${encodeURIComponent(s.name)}&s=tt`;
+  const imdbOpen = `window.open('${imdbUrl}','_blank','noopener')`;
+
   return `<div class="show-card ${cardCls}">
-    <div class="poster-wrap">
+    <div class="poster-wrap imdb-link" onclick="${imdbOpen}" title="View “${esc(s.name)}” on IMDb">
       ${imgHtml}
       <div class="poster-placeholder" id="ph-${cid(s.name)}"${url ? ' style="display:none"' : ''}>📺</div>
       <div class="watched-overlay">✓</div>
     </div>
     <div class="card-body">
-      <div class="card-title">${s.name}</div>
+      <div class="card-title imdb-link" onclick="${imdbOpen}" title="View “${esc(s.name)}” on IMDb">${s.name}</div>
       ${upcomingNote ? `<div class="upcoming-note">${upcomingNote}</div>` : ''}
       <div class="season-row">${pills}</div>
     </div>
