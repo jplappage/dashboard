@@ -45,6 +45,13 @@ UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
 
 def fetch(url):
     """GET a URL, returning HTML text or None on any failure."""
+    if FIXTURE_DIR:  # test mode: read canned HTML from a local file named after the slug
+        slug = re.sub(r'https?://whentostream\.com/|/$', '', url)
+        path = os.path.join(FIXTURE_DIR, slug + '.html')
+        if os.path.exists(path):
+            with open(path) as fh:
+                return fh.read()
+        return None
     try:
         req = urllib.request.Request(url, headers={'User-Agent': UA})
         with urllib.request.urlopen(req, timeout=25) as r:
