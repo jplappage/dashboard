@@ -44,9 +44,11 @@ jobs:
         run: python3 generate_ics.py
 
       - name: Commit if changed
+        id: commit
         run: |
           if git diff --quiet films-data.js watchlist.ics; then
             echo "No date changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "vod-bot"
@@ -58,3 +60,23 @@ jobs:
           git add films-data.js watchlist.ics
           git commit -m "$summary"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Push phone notification
+        # Fires only when something actually changed, and only if you've added
+        # the NTFY_TOPIC secret. Subscribe to that topic in the ntfy app.
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          if [ -z "$NTFY_TOPIC" ]; then
+            echo "NTFY_TOPIC secret not set — skipping notification."
+            exit 0
+          fi
+          body="$(cat .vod-update-summary.txt 2>/dev/null || echo 'A film release date changed.')"
+          curl -fsS \
+            -H "Title: 🎬 Watchlist date update" \
+            -H "Tags: clapper" \
+            -H "Click: https://jplappage.github.io/dashboard/" \
+            -d "$body" \
+            "https://ntfy.sh/$NTFY_TOPIC"
