@@ -42,10 +42,9 @@ const FILMS = [
     year: 2026,
     slug: 'disclosure-day',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/5/9/2/5/1/1159251-disclosure-day-0-230-0-345-crop.jpg?v=d5668e0229',
-    vodDate: null,
+    vodDate: '2026-07-21',
     platform: 'Digital',
-    estimated: true,
-    note: 'In cinemas Jun 12 · PVOD est. 28 Jul 2026 (Universal); Peacock est. Oct 2026',
+    estimated: false,
     imdbRating: 6.9,
   },
   {
