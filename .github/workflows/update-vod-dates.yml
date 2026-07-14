@@ -1,0 +1,58 @@
+name: Update VOD dates
+
+# Auto-refreshes streaming/VOD dates in films-data.js from WhenToStream, so
+# release dates stay current even when the laptop is off. Runs on GitHub's
+# servers every 6 hours. Only touches VOD dates for films already on the
+# watchlist — it never adds new films or archives watched ones (those need a
+# logged-in Letterboxd session). See update_vod_dates.py for the logic.
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:         # allow manual runs from the Actions tab
+
+permissions:
+  contents: write
+
+# Don't let overlapping scheduled runs collide.
+concurrency:
+  group: update-vod-dates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Update VOD dates from WhenToStream
+        run: python3 update_vod_dates.py
+
+      - name: Validate films-data.js
+        run: node --check films-data.js
+
+      - name: Rebuild watchlist.ics
+        # GITHUB_TOKEN pushes don't trigger the separate rebuild workflow, so
+        # regenerate the calendar here and commit it in the same push.
+        run: python3 generate_ics.py
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet films-data.js watchlist.ics; then
+            echo "No date changes."
+            exit 0
+          fi
+          git config user.name "vod-bot"
+          git config user.email "actions@github.com"
+          summary="auto: update VOD dates from WhenToStream"
+          if [ -f .vod-update-summary.txt ]; then
+            summary="$summary — $(cat .vod-update-summary.txt)"
+          fi
+          git add films-data.js watchlist.ics
+          git commit -m "$summary"
+          git push
