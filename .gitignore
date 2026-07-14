@@ -7,3 +7,6 @@ __pycache__/
 diag-output.txt
 gist-token.txt
 tattoo-key.txt
+
+# transient summary written by update_vod_dates.py
+.vod-update-summary.txt
