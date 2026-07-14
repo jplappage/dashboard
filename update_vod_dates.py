@@ -73,12 +73,13 @@ def find_confirmed_date(html):
     """
     text = re.sub(r'<[^>]+>', ' ', html)
     text = re.sub(r'\s+', ' ', text)
+    # Remove the SVOD (free-streaming, later-window) field entirely first, so its
+    # date can never be picked up and its "...VOD Release Date" tail can't match.
+    text = re.sub(r'SVOD Release Date\s*:?\s*[A-Za-z0-9,]+(?:\s+[A-Za-z0-9,]+){0,2}', ' ', text)
     # e.g. "PVOD Release Date : July 21, 2026"  /  "VOD Release Date : August 4, 2026"
     for label in ('PVOD Release Date', 'VOD/Digital Release Date',
                   'VOD Release Date', 'Digital Release Date'):
-        # (?<![A-Za-z]) stops "VOD Release Date" matching inside "SVOD Release Date"
-        # (the SVOD/free-streaming date, which is a later window we must ignore).
-        m = re.search(r'(?<![A-Za-z])' + re.escape(label) + r'\s*:?\s*([A-Z][a-z]+ \d{1,2},\s*\d{4})', text)
+        m = re.search(re.escape(label) + r'\s*:?\s*([A-Z][a-z]+ \d{1,2},\s*\d{4})', text)
         if m:
             raw = re.sub(r'\s+', ' ', m.group(1)).strip()
             try:
