@@ -34,7 +34,9 @@ jobs:
         run: python3 update_vod_dates.py
 
       - name: Validate films-data.js
-        run: node --check films-data.js
+        # Strip trailing NUL padding first — it's harmless in the browser but
+        # trips up `node --check`.
+        run: tr -d '\000' < films-data.js > /tmp/check.js && node --check /tmp/check.js
 
       - name: Rebuild watchlist.ics
         # GITHUB_TOKEN pushes don't trigger the separate rebuild workflow, so
