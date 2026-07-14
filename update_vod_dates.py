@@ -32,7 +32,9 @@ import urllib.request
 from datetime import datetime, timedelta
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_FILE = os.path.join(SCRIPT_DIR, 'films-data.js')
+# FILMS_DATA_FILE / WTS_FIXTURES env vars exist only for testing; the Action uses defaults.
+DATA_FILE = os.environ.get('FILMS_DATA_FILE', os.path.join(SCRIPT_DIR, 'films-data.js'))
+FIXTURE_DIR = os.environ.get('WTS_FIXTURES')
 
 THREE_MONTHS = timedelta(days=92)
 UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
