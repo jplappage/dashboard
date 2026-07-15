@@ -73,21 +73,15 @@ jobs:
           git commit -m "auto: update VOD dates from WhenToStream" -m "$(cat "$VOD_SUMMARY_FILE" 2>/dev/null)"
           git push
 
-      - name: Push phone notification
-        # Only when a film date really changed, and only if the NTFY_TOPIC secret
-        # is set. Body is the fresh per-run summary, one film per line, UK dates.
+      - name: Send push notification
+        # Web Push to the installed dashboard PWA, so tapping opens your Home
+        # Screen app. Only fires on a real change, and only if VAPID_PRIVATE_KEY
+        # is set. Fails safe — a send error never reds the workflow.
         if: steps.diff.outputs.changed == 'true'
         env:
-          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
           VOD_SUMMARY_FILE: ${{ runner.temp }}/vod-summary.txt
         run: |
-          if [ -z "$NTFY_TOPIC" ]; then
-            echo "NTFY_TOPIC secret not set — skipping notification."
-            exit 0
-          fi
-          body="$(cat "$VOD_SUMMARY_FILE" 2>/dev/null || echo 'A film release date changed.')"
-          curl -fsS \
-            -H "Title: Dashboard" \
-            -H "Click: x-safari-https://jplappage.github.io/dashboard/" \
-            -d "$body" \
-            "https://ntfy.sh/$NTFY_TOPIC"
+          pip install --quiet pywebpush
+          python3 send_push.py
