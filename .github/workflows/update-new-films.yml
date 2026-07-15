@@ -1,0 +1,80 @@
+name: Add new Letterboxd films
+
+# Adds films you've added to your public Letterboxd watchlist into films-data.js,
+# enriched via TMDB. New entries have no date/rating yet — the WhenToStream and
+# OMDb jobs fill those on their next runs. Only adds; archiving stays manual.
+# Experimental: depends on GitHub being able to read letterboxd.com.
+
+on:
+  schedule:
+    - cron: '15 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      test_push:
+        description: 'Send a test notification'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-new-films
+  cancel-in-progress: false
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Add new watchlist films
+        env:
+          NEWFILM_SUMMARY_FILE: ${{ runner.temp }}/newfilm-summary.txt
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: python3 update_new_films.py
+
+      - name: Detect change
+        id: diff
+        run: |
+          if git diff --quiet films-data.js; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate films-data.js
+        if: steps.diff.outputs.changed == 'true'
+        run: tr -d '\000' < films-data.js > /tmp/check.js && node --check /tmp/check.js
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "film-add-bot"
+          git config user.email "actions@github.com"
+          git add films-data.js
+          git commit -m "auto: add new films from Letterboxd"
+          git push
+
+      - name: Send push notification
+        if: steps.diff.outputs.changed == 'true' || github.event.inputs.test_push == 'true'
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          VOD_SUMMARY_FILE: ${{ runner.temp }}/newfilm-summary.txt
+          TEST_PUSH: ${{ github.event.inputs.test_push }}
+        run: |
+          if [ "$TEST_PUSH" = "true" ] && [ ! -s "$VOD_SUMMARY_FILE" ]; then
+            echo "Test notification — new-film alerts are working." > "$VOD_SUMMARY_FILE"
+          fi
+          if [ ! -s "$VOD_SUMMARY_FILE" ]; then
+            echo "Nothing to notify."
+            exit 0
+          fi
+          pip install --quiet pywebpush
+          python3 send_push.py
