@@ -88,10 +88,14 @@ def main():
             )
             sent += 1
         except WebPushException as e:
-            code = getattr(getattr(e, 'response', None), 'status_code', None)
-            print('push failed (%s): %s' % (code, e))
             # 404/410 = the subscription is dead; it'll be replaced next time the
             # app re-subscribes. Nothing else to do here.
+            code = getattr(getattr(e, 'response', None), 'status_code', None)
+            print('push failed (%s): %s' % (code, e))
+        except Exception as e:
+            # Any other error (network, etc.) — log and keep going; never crash
+            # the workflow over a notification.
+            print('push error: %r' % (e,))
     print('sent %d/%d' % (sent, len(subs)))
     return 0
 
