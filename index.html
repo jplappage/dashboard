@@ -938,5 +938,83 @@
       });
     }
   </script>
+
+  <!-- Web Push opt-in: subscribes this installed app and stores the push
+       subscription in the (public) gist so the GitHub Action can send to it.
+       Must be done from the Home Screen app, not a Safari tab. -->
+  <script>
+  (function () {
+    var VAPID_PUBLIC = 'BOXxcVQCiYh5lc0vydERBmY4EOJRWiIdOyPopYAArut3QRFuDDTUazA3nbRTrcaylYX_fBTZfWAdEXiNRDlKIOo';
+    var GIST_ID = '5411ac8d12fdc31aa3fa73e4d66f6377';
+    var SUB_FILE = 'push-subscription.json';
+    var row = document.getElementById('push-row');
+    if (!row) return;
+    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) return;
+
+    function b64ToU8(base64) {
+      var pad = '='.repeat((4 - base64.length % 4) % 4);
+      var b64 = (base64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+      var raw = atob(b64), arr = new Uint8Array(raw.length);
+      for (var i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+      return arr;
+    }
+    function status(txt) {
+      row.innerHTML = '<span style="color:#8a8899;font-size:0.72rem">' + txt + '</span>';
+    }
+    function button(label, fn) {
+      row.innerHTML = '<button style="background:rgba(255,232,31,0.12);border:1px solid rgba(255,232,31,0.4);' +
+        'color:#ffe81f;padding:7px 16px;border-radius:100px;font-size:0.75rem;cursor:pointer">' + label + '</button>';
+      row.firstChild.onclick = fn;
+    }
+    function getToken() {
+      var t = localStorage.getItem('gistToken');
+      if (!t) { t = prompt('Paste GitHub gist token (stored only in this browser):', '') || ''; if (t) localStorage.setItem('gistToken', t); }
+      return t;
+    }
+    async function saveSubscription(sub) {
+      var t = getToken();
+      if (!t) throw new Error('token needed');
+      var H = { 'Authorization': 'token ' + t, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+      var list = [];
+      try {
+        var j = await (await fetch('https://api.github.com/gists/' + GIST_ID, { cache: 'no-store' })).json();
+        if (j.files && j.files[SUB_FILE]) { list = JSON.parse(j.files[SUB_FILE].content) || []; if (!Array.isArray(list)) list = [list]; }
+      } catch (_) {}
+      var s = sub.toJSON();
+      list = list.filter(function (x) { return x.endpoint !== s.endpoint; });
+      list.push(s);
+      var body = {}; body.files = {}; body.files[SUB_FILE] = { content: JSON.stringify(list) };
+      var res = await fetch('https://api.github.com/gists/' + GIST_ID, { method: 'PATCH', headers: H, body: JSON.stringify(body) });
+      if (res.status !== 200) throw new Error('gist save failed (' + res.status + ')');
+    }
+    async function enable() {
+      try {
+        status('Enabling…');
+        var reg = await navigator.serviceWorker.ready;
+        var perm = await Notification.requestPermission();
+        if (perm !== 'granted') { status('Notifications not allowed — enable them for this app in Settings'); return; }
+        var sub = await reg.pushManager.getSubscription();
+        if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(VAPID_PUBLIC) });
+        await saveSubscription(sub);
+        status('✓ Date alerts on for this device');
+      } catch (e) {
+        button('Try again', enable);
+        var note = document.createElement('div');
+        note.style.cssText = 'color:#8a8899;font-size:0.68rem;margin-top:6px';
+        note.textContent = String(e && e.message || e).indexOf('token') > -1
+          ? 'Needs your gist token.' : "Couldn't enable (open from your Home Screen icon, not Safari).";
+        row.appendChild(note);
+      }
+    }
+    (async function init() {
+      try {
+        var reg = await navigator.serviceWorker.ready;
+        var sub = reg.pushManager && await reg.pushManager.getSubscription();
+        if (sub && Notification.permission === 'granted') { status('✓ Date alerts on'); return; }
+      } catch (_) {}
+      button('Enable date alerts', enable);
+    })();
+  })();
+  </script>
 </body>
 </html>
