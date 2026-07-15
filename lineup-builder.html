@@ -1356,6 +1356,15 @@ updateToggleUI();
 // Load from cloud then render — renderOnly so init doesn't trigger a save
 (async () => {
   await loadStateFromCloud(activeTeam);
+  // Cross-device: adopt the default team saved in the gist if it differs from
+  // this device's local choice (that's what makes the toggle sync).
+  try {
+    const cloudDefault = binCache && binCache[DEFAULT_TEAM_KEY];
+    if (cloudDefault === 'france' || cloudDefault === 'liverpool') {
+      if (cloudDefault !== getDefaultTeam()) { localStorage.setItem(DEFAULT_TEAM_KEY, cloudDefault); updateToggleUI(); }
+      if (cloudDefault !== activeTeam) { switchTeam(cloudDefault); }
+    }
+  } catch (_) {}
   requestAnimationFrame(() => renderOnly());
 })();
 </script>
