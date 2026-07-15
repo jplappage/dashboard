@@ -1,0 +1,80 @@
+name: Update show dates
+
+# Auto-refreshes ONGOING show season-premiere dates in shows-data.js from TVmaze,
+# so a newly-announced premiere lands on the show log and pings your phone even
+# when the laptop is off. Sibling to update-vod-dates.yml (films); reuses the same
+# Web Push setup. See update_show_dates.py for the (deliberately narrow) logic.
+
+on:
+  schedule:
+    - cron: '30 */6 * * *'   # every 6 hours, offset 30 min from the films job
+  workflow_dispatch:
+    inputs:
+      test_push:
+        description: 'Send a test notification (no change needed)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-show-dates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Update show dates from TVmaze
+        env:
+          SHOW_SUMMARY_FILE: ${{ runner.temp }}/show-summary.txt
+        run: python3 update_show_dates.py
+
+      - name: Detect real change
+        id: diff
+        run: |
+          if git diff --quiet shows-data.js; then
+            echo "No premiere date changed."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate shows-data.js
+        if: steps.diff.outputs.changed == 'true'
+        run: tr -d '\000' < shows-data.js > /tmp/check.js && node --check /tmp/check.js
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          SHOW_SUMMARY_FILE: ${{ runner.temp }}/show-summary.txt
+        run: |
+          git config user.name "show-bot"
+          git config user.email "actions@github.com"
+          git add shows-data.js
+          git commit -m "auto: update show premiere dates from TVmaze" -m "$(cat "$SHOW_SUMMARY_FILE" 2>/dev/null)"
+          git push
+
+      - name: Send push notification
+        # Reuses send_push.py; it reads VOD_SUMMARY_FILE, so point that at the
+        # show summary. Fires on a real change or a manual test run.
+        if: steps.diff.outputs.changed == 'true' || github.event.inputs.test_push == 'true'
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          VOD_SUMMARY_FILE: ${{ runner.temp }}/show-summary.txt
+          TEST_PUSH: ${{ github.event.inputs.test_push }}
+        run: |
+          if [ "$TEST_PUSH" = "true" ] && [ ! -s "$VOD_SUMMARY_FILE" ]; then
+            echo "Test notification — show alerts are working." > "$VOD_SUMMARY_FILE"
+          fi
+          pip install --quiet pywebpush
+          python3 send_push.py
