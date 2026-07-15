@@ -15,7 +15,7 @@
  * CACHE_VERSION below and redeploy.
  */
 
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const CACHE_NAME = 'jp-dashboards-' + CACHE_VERSION;
 
 // Files fetched fresh every load (fall back to cache only when offline).
