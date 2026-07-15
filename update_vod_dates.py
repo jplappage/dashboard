@@ -162,8 +162,9 @@ def build_new_block(block, confirmed_dt, today):
         if platform is None:
             nb = set_or_replace(nb, 'platform', "'Digital'")
         nb = remove_field(nb, 'note')
-        action = 'set' if not cur_vod else f'changed {cur_vod} ->'
-        return nb, f'{action} {iso}'
+        summary = (f'now streaming {uk(iso)}' if not cur_vod
+                   else f'moved to {uk(iso)} (was {uk(cur_vod)})')
+        return nb, summary
     else:
         # confirmed but >3 months out: keep as estimate with a note, no firm vodDate
         note = f'Digital {confirmed_dt.strftime("%-d %b %Y")} (confirmed, >3mo out)'
@@ -172,7 +173,7 @@ def build_new_block(block, confirmed_dt, today):
         nb = set_or_replace(block, 'vodDate', 'null')
         nb = set_or_replace(nb, 'estimated', 'true')
         nb = set_or_replace(nb, 'note', f"'{note}'")
-        return nb, f'confirmed {iso} but >3mo out -> estimate'
+        return nb, f'{uk(iso)} confirmed (>3 months out, still tentative)'
 
 
 def main():
