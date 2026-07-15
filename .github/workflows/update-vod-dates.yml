@@ -96,5 +96,10 @@ jobs:
           if [ "$TEST_PUSH" = "true" ] && [ ! -s "$VOD_SUMMARY_FILE" ]; then
             echo "Test notification — your dashboard alerts are working." > "$VOD_SUMMARY_FILE"
           fi
+          # A rating-only change commits but has no date summary — don't push for that.
+          if [ ! -s "$VOD_SUMMARY_FILE" ]; then
+            echo "No date change to notify."
+            exit 0
+          fi
           pip install --quiet pywebpush
           python3 send_push.py
