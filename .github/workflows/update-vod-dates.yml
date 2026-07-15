@@ -39,6 +39,8 @@ jobs:
         env:
           # Write the run summary to a throwaway path, never a repo file.
           VOD_SUMMARY_FILE: ${{ runner.temp }}/vod-summary.txt
+          # Optional: fills IMDb ratings for released films (no key = skipped).
+          OMDB_API_KEY: ${{ secrets.OMDB_API_KEY }}
         run: python3 update_vod_dates.py
 
       - name: Detect real change
