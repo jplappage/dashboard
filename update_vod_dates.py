@@ -274,18 +274,24 @@ def main():
         else:
             print('    already up to date')
 
-    if not changes:
+    # Fill IMDb ratings for any newly-released films (persisted, not notified).
+    new_text, filled = fill_ratings(new_text)
+
+    if not changes and not filled:
         print('\nNo changes.')
         return 0
 
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         f.write(new_text)
-    print('\nUpdated films-data.js:')
-    for c in changes:
-        print(' -', c)
-    # One film per line — used verbatim as the notification body.
-    with open(SUMMARY_FILE, 'w') as f:
-        f.write('\n'.join(changes))
+    if changes:
+        print('\nDate changes:')
+        for c in changes:
+            print(' -', c)
+        # Only date changes go in the summary (that's what gets push-notified).
+        with open(SUMMARY_FILE, 'w') as f:
+            f.write('\n'.join(changes))
+    if filled:
+        print('\nRatings filled:', ', '.join(filled))
     return 0
 
 
