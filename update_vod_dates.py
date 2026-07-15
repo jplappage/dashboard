@@ -177,6 +177,10 @@ def build_new_block(block, confirmed_dt, today):
 
 
 def main():
+    # Never let a stale summary survive into this run.
+    if os.path.exists(SUMMARY_FILE):
+        os.remove(SUMMARY_FILE)
+
     with open(DATA_FILE, 'r', encoding='utf-8') as f:
         text = f.read()
 
