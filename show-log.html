@@ -993,10 +993,11 @@ function updateStats() {
 function updateFooter() {
   const w = SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched').length;
   const a = SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned').length;
-  document.getElementById('footer').textContent =
+  document.getElementById('footer').innerHTML =
     (w || a ? `${w} fully watched · ${a} abandoned · ${SHOWS.length - w - a} remaining`
             : `${SHOWS.length} shows total`)
-    + ` · Last updated: ${LAST_UPDATED}`;
+    + ` · Last updated: ${LAST_UPDATED}`
+    + ` · <a href="shows.ics" title="Subscribe to season-premiere dates" style="color:#ffe81f;text-decoration:none;">📅 Calendar feed</a>`;
 }
 
 function cid(n) { return n.replace(/[^a-z0-9]/gi, '-'); }
