@@ -80,13 +80,19 @@ jobs:
 
       - name: Send push notification
         # Web Push to the installed dashboard PWA, so tapping opens your Home
-        # Screen app. Only fires on a real change, and only if VAPID_PRIVATE_KEY
-        # is set. Fails safe — a send error never reds the workflow.
-        if: steps.diff.outputs.changed == 'true'
+        # Screen app. Fires on a real change, or on a manual run with the
+        # "test_push" box ticked. Only if VAPID_PRIVATE_KEY is set. Fails safe —
+        # a send error never reds the workflow.
+        if: steps.diff.outputs.changed == 'true' || github.event.inputs.test_push == 'true'
         env:
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
           VOD_SUMMARY_FILE: ${{ runner.temp }}/vod-summary.txt
+          TEST_PUSH: ${{ github.event.inputs.test_push }}
         run: |
+          # On a test run with no real change, put a friendly message in the body.
+          if [ "$TEST_PUSH" = "true" ] && [ ! -s "$VOD_SUMMARY_FILE" ]; then
+            echo "Test notification — your dashboard alerts are working." > "$VOD_SUMMARY_FILE"
+          fi
           pip install --quiet pywebpush
           python3 send_push.py
