@@ -59,7 +59,8 @@ jobs:
         run: |
           git config user.name "show-bot"
           git config user.email "actions@github.com"
-          git add shows-data.js
+          python3 generate_shows_ics.py
+          git add shows-data.js shows.ics
           git commit -m "auto: update show premiere dates from TVmaze" -m "$(cat "$SHOW_SUMMARY_FILE" 2>/dev/null)"
           git push
 

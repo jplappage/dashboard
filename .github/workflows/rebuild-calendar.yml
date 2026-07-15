@@ -22,12 +22,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate watchlist.ics
-        run: python3 generate_ics.py
+      - name: Generate calendars
+        run: |
+          python3 generate_ics.py
+          python3 generate_shows_ics.py
 
       - name: Commit if changed
         run: |
           git config user.name "calendar-bot"
           git config user.email "actions@github.com"
-          git add watchlist.ics
-          git diff --cached --quiet || (git commit -m "auto: rebuild watchlist.ics" && git push)
+          git add watchlist.ics shows.ics
+          git diff --cached --quiet || (git commit -m "auto: rebuild calendars" && git push)
