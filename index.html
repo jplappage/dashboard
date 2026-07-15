@@ -863,12 +863,12 @@
       const counts = key => {
         const st = data[key];
         if (!st || !st.c) return null;
-        let inj = 0, sus = 0;
+        let inj = 0, sus = 0, away = 0;
         Object.entries(st.c).forEach(([id, c]) => {
           if (st.ps && st.ps[id] && st.ps[id] !== 'squad') return; // main squad only
-          if (c === 'injured') inj++; else if (c === 'suspended') sus++;
+          if (c === 'injured') inj++; else if (c === 'suspended') sus++; else if (c === 'away') away++;
         });
-        return { inj, sus };
+        return { inj, sus, away };
       };
       return { france: counts('lineup_france'), liverpool: counts('lineup_liverpool') };
     } catch (_) { return null; }
@@ -924,6 +924,7 @@
       const bits = [];
       if (c.inj) bits.push('<span style="color:#f87171">' + c.inj + ' injured</span>');
       if (c.sus) bits.push('<span style="color:#fb923c">' + c.sus + ' suspended</span>');
+      if (c.away) bits.push('<span style="color:#60a5fa">' + c.away + ' away</span>');
       availLine = LABEL[nxt.team] + ': ' + (bits.length ? bits.join(', ') : '<span class="hot">all fit</span>');
     }
   }
