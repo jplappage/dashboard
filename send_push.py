@@ -28,7 +28,7 @@ DASH_URL = 'https://jplappage.github.io/dashboard/'
 
 SUMMARY_FILE = os.environ.get('VOD_SUMMARY_FILE', '.vod-update-summary.txt')
 VAPID_PRIVATE = os.environ.get('VAPID_PRIVATE_KEY', '').strip()
-VAPID_SUBJECT = os.environ.get('VAPID_SUBJECT', 'mailto:jplappage@outlook.com')
+VAPID_SUBJECT = os.environ.get('VAPID_SUBJECT') or 'mailto:jplappage@outlook.com'
 
 
 def load_summary():
