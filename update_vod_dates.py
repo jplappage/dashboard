@@ -41,12 +41,62 @@ FIXTURE_DIR = os.environ.get('WTS_FIXTURES')
 SUMMARY_FILE = os.environ.get('VOD_SUMMARY_FILE', os.path.join(SCRIPT_DIR, '.vod-update-summary.txt'))
 
 
+OMDB_KEY = os.environ.get('OMDB_API_KEY', '').strip()
+
+
 def uk(iso):
     """'2026-08-04' -> '4 Aug 2026'."""
     try:
         return datetime.strptime(iso, '%Y-%m-%d').strftime('%-d %b %Y')
     except (ValueError, TypeError):
         return iso
+
+
+def omdb_rating(title, year):
+    """IMDb rating for a released film via OMDb, or None. (OMDb only has a rating
+    once a film is out, so this naturally fills only on release.)"""
+    if not OMDB_KEY:
+        return None
+    import urllib.parse
+    url = ('https://www.omdbapi.com/?apikey=%s&t=%s&y=%s&type=movie'
+           % (OMDB_KEY, urllib.parse.quote(title), year))
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': UA})
+        with urllib.request.urlopen(req, timeout=25) as r:
+            d = json.loads(r.read().decode('utf-8', 'ignore'))
+        rv = d.get('imdbRating')
+        if rv and rv != 'N/A':
+            return float(rv)
+    except Exception as e:
+        print('    omdb failed:', e)
+    return None
+
+
+def fill_ratings(text):
+    """Add imdbRating to any FILMS entry missing one that OMDb now has a rating for.
+    Returns (new_text, filled_titles). These are persisted but not push-notified."""
+    if not OMDB_KEY:
+        return text, []
+    watched_at = text.find('const WATCHED')
+    region = text if watched_at < 0 else text[:watched_at]
+    todo = []
+    for m in re.finditer(r'\{[^{}]*\}', region):
+        block = m.group(0)
+        if get_field(block, 'imdbRating') is not None:
+            continue
+        title = get_field(block, 'title')
+        ym = re.search(r'year:\s*(\d{4})', block)
+        if title and ym:
+            todo.append((block, title, ym.group(1)))
+    filled = []
+    for block, title, year in todo:
+        r = omdb_rating(title, year)
+        if r is not None:
+            nb = set_or_replace(block, 'imdbRating', '%.1f' % r)
+            text = text.replace(block, nb, 1)
+            filled.append('%s (%.1f)' % (title, r))
+            print('  rating filled: %s -> %.1f' % (title, r))
+    return text, filled
 
 THREE_MONTHS = timedelta(days=92)
 UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
