@@ -31,51 +31,63 @@ jobs:
           python-version: '3.12'
 
       - name: Update VOD dates from WhenToStream
+        env:
+          # Write the run summary to a throwaway path, never a repo file.
+          VOD_SUMMARY_FILE: ${{ runner.temp }}/vod-summary.txt
         run: python3 update_vod_dates.py
 
+      - name: Detect real change
+        # Gate everything below on films-data.js actually changing. watchlist.ics
+        # is NOT part of this check — its DTSTAMP changes every run, which used to
+        # trigger a commit + notification even when no film date moved.
+        id: diff
+        run: |
+          if git diff --quiet films-data.js; then
+            echo "No film date changed."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Validate films-data.js
-        # Strip trailing NUL padding first — it's harmless in the browser but
-        # trips up `node --check`.
+        if: steps.diff.outputs.changed == 'true'
+        # Strip trailing NUL padding first — harmless in the browser, trips up node.
         run: tr -d '\000' < films-data.js > /tmp/check.js && node --check /tmp/check.js
 
       - name: Rebuild watchlist.ics
+        if: steps.diff.outputs.changed == 'true'
         # GITHUB_TOKEN pushes don't trigger the separate rebuild workflow, so
         # regenerate the calendar here and commit it in the same push.
         run: python3 generate_ics.py
 
-      - name: Commit if changed
-        id: commit
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          VOD_SUMMARY_FILE: ${{ runner.temp }}/vod-summary.txt
         run: |
-          if git diff --quiet films-data.js watchlist.ics; then
-            echo "No date changes."
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
           git config user.name "vod-bot"
           git config user.email "actions@github.com"
-          summary="auto: update VOD dates from WhenToStream"
-          if [ -f .vod-update-summary.txt ]; then
-            summary="$summary — $(cat .vod-update-summary.txt)"
-          fi
+          # Drop the stale tracked summary file if it's still around (one-time cleanup).
+          git rm --cached --ignore-unmatch .vod-update-summary.txt >/dev/null 2>&1 || true
           git add films-data.js watchlist.ics
-          git commit -m "$summary"
+          git commit -m "auto: update VOD dates from WhenToStream" -m "$(cat "$VOD_SUMMARY_FILE" 2>/dev/null)"
           git push
-          echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Push phone notification
-        # Fires only when something actually changed, and only if you've added
-        # the NTFY_TOPIC secret. Subscribe to that topic in the ntfy app.
-        if: steps.commit.outputs.changed == 'true'
+        # Only when a film date really changed, and only if the NTFY_TOPIC secret
+        # is set. Body is the fresh per-run summary, one film per line, UK dates.
+        if: steps.diff.outputs.changed == 'true'
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          VOD_SUMMARY_FILE: ${{ runner.temp }}/vod-summary.txt
         run: |
           if [ -z "$NTFY_TOPIC" ]; then
             echo "NTFY_TOPIC secret not set — skipping notification."
             exit 0
           fi
-          body="$(cat .vod-update-summary.txt 2>/dev/null || echo 'A film release date changed.')"
+          body="$(cat "$VOD_SUMMARY_FILE" 2>/dev/null || echo 'A film release date changed.')"
           curl -fsS \
-            -H "Title: 🎬 Watchlist date update" \
+            -H "Title: Watchlist date update" \
             -H "Tags: clapper" \
             -H "Click: https://jplappage.github.io/dashboard/" \
             -d "$body" \
