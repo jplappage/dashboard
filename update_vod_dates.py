@@ -35,6 +35,18 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # FILMS_DATA_FILE / WTS_FIXTURES env vars exist only for testing; the Action uses defaults.
 DATA_FILE = os.environ.get('FILMS_DATA_FILE', os.path.join(SCRIPT_DIR, 'films-data.js'))
 FIXTURE_DIR = os.environ.get('WTS_FIXTURES')
+# Summary is written fresh each run to a throwaway path (the workflow points this
+# at the runner temp dir) — it must never be a committed file, or a stale copy
+# gets read on later runs. Only written when a real change happens.
+SUMMARY_FILE = os.environ.get('VOD_SUMMARY_FILE', os.path.join(SCRIPT_DIR, '.vod-update-summary.txt'))
+
+
+def uk(iso):
+    """'2026-08-04' -> '4 Aug 2026'."""
+    try:
+        return datetime.strptime(iso, '%Y-%m-%d').strftime('%-d %b %Y')
+    except (ValueError, TypeError):
+        return iso
 
 THREE_MONTHS = timedelta(days=92)
 UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
