@@ -1,0 +1,55 @@
+name: Release-day notifications
+
+# Once a day, pushes a notification for anything that becomes available TODAY —
+# films hitting their VOD date, or shows premiering. Reuses the same Web Push
+# setup. Read-only: it doesn't modify the repo, just reads the data and notifies.
+
+on:
+  schedule:
+    - cron: '0 8 * * *'   # daily ~08:00 UTC (≈9am BST / 8am GMT)
+  workflow_dispatch:
+    inputs:
+      test_push:
+        description: 'Send a test notification'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-today
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Find today's releases
+        env:
+          RELEASE_SUMMARY_FILE: ${{ runner.temp }}/release-summary.txt
+        run: python3 release_today.py
+
+      - name: Send push if anything is out today
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          VOD_SUMMARY_FILE: ${{ runner.temp }}/release-summary.txt
+          TEST_PUSH: ${{ github.event.inputs.test_push }}
+        run: |
+          if [ "$TEST_PUSH" = "true" ] && [ ! -s "$VOD_SUMMARY_FILE" ]; then
+            echo "Test notification — release-day alerts are working." > "$VOD_SUMMARY_FILE"
+          fi
+          if [ ! -s "$VOD_SUMMARY_FILE" ]; then
+            echo "Nothing out today — no notification."
+            exit 0
+          fi
+          pip install --quiet pywebpush
+          python3 send_push.py
