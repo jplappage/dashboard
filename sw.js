@@ -94,3 +94,37 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
+/* ── Web Push ──────────────────────────────────────────────────────────────
+ * Shows the notification when a push arrives, and — the whole point on iOS —
+ * opens/focuses the installed Home Screen app when the notification is tapped.
+ */
+self.addEventListener('push', (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; }
+  catch (e) { data = { body: event.data ? event.data.text() : '' }; }
+
+  const title = data.title || 'Dashboard';
+  const options = {
+    body: data.body || 'A film release date changed.',
+    icon: 'Images/app-icon-192.png',
+    badge: 'Images/app-icon-192.png',
+    data: { url: data.url || './' },
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const target = (event.notification.data && event.notification.data.url) || './';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      // Focus an already-open dashboard window if there is one…
+      for (const c of clients) {
+        if ('focus' in c) return c.focus();
+      }
+      // …otherwise open the app (standalone display, i.e. the Home Screen shortcut).
+      if (self.clients.openWindow) return self.clients.openWindow(target);
+    })
+  );
+});
