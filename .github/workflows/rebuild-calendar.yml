@@ -9,6 +9,8 @@ on:
     paths:
       - 'films-data.js'
       - 'generate_ics.py'
+      - 'shows-data.js'
+      - 'generate_shows_ics.py'
   workflow_dispatch:
 
 permissions:
