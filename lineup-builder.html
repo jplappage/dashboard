@@ -1300,6 +1300,19 @@ function setDefaultTeam(team) {
   if (team !== 'france' && team !== 'liverpool') return;
   localStorage.setItem(DEFAULT_TEAM_KEY, team);
   updateToggleUI();
+  // Sync the preference to the gist so it applies on your other devices too.
+  (async () => {
+    try {
+      if (!binCache) {
+        const gr = await fetch(GIST_URL, { headers: BIN_HEADERS, cache: 'no-store' });
+        binCache = gr.ok ? JSON.parse((await gr.json()).files[GIST_FILE]?.content || '{}') : {};
+      }
+      binCache[DEFAULT_TEAM_KEY] = team;
+      setSyncStatus('loading');
+      const r = await fetch(GIST_URL, { method: 'PATCH', headers: BIN_HEADERS, body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(binCache) } } }) });
+      setSyncStatus(r.ok ? 'ok' : 'error');
+    } catch (e) { setSyncStatus('error'); }
+  })();
 }
 function updateToggleUI() {
   const d = getDefaultTeam();
