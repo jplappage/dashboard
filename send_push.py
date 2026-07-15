@@ -71,9 +71,13 @@ def main():
         print('No push subscriptions saved yet — nothing to send.')
         return 0
 
+    # Use the content itself as the headline (the app name already shows as the
+    # source, so a separate "Dashboard" title is redundant). First line = title,
+    # any remaining lines = body.
+    parts = [p for p in load_summary().split('\n') if p.strip()]
     payload = json.dumps({
-        'title': 'Dashboard',
-        'body': load_summary(),
+        'title': parts[0] if parts else 'Watchlist update',
+        'body': '\n'.join(parts[1:]),
         'url': DASH_URL,
     })
 

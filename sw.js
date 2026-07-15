@@ -104,9 +104,9 @@ self.addEventListener('push', (event) => {
   try { data = event.data ? event.data.json() : {}; }
   catch (e) { data = { body: event.data ? event.data.text() : '' }; }
 
-  const title = data.title || 'Dashboard';
+  const title = data.title || 'Watchlist update';
   const options = {
-    body: data.body || 'A film release date changed.',
+    body: data.body || '',
     icon: 'Images/app-icon-192.png',
     badge: 'Images/app-icon-192.png',
     data: { url: data.url || './' },
