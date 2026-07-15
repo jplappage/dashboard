@@ -233,9 +233,9 @@ def main():
     print('\nUpdated films-data.js:')
     for c in changes:
         print(' -', c)
-    # Emit a summary line the workflow can use as the commit message body.
-    with open(os.path.join(SCRIPT_DIR, '.vod-update-summary.txt'), 'w') as f:
-        f.write('; '.join(changes))
+    # One film per line — used verbatim as the notification body.
+    with open(SUMMARY_FILE, 'w') as f:
+        f.write('\n'.join(changes))
     return 0
 
 
