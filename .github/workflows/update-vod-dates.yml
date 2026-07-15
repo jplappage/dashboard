@@ -88,6 +88,6 @@ jobs:
           body="$(cat "$VOD_SUMMARY_FILE" 2>/dev/null || echo 'A film release date changed.')"
           curl -fsS \
             -H "Title: Dashboard" \
-            -H "Click: https://jplappage.github.io/dashboard/" \
+            -H "Click: x-safari-https://jplappage.github.io/dashboard/" \
             -d "$body" \
             "https://ntfy.sh/$NTFY_TOPIC"
