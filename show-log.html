@@ -452,13 +452,12 @@
     <h1>Show Log</h1>
     <p id="header-sub">Track your TV watching</p>
   </div>
-  <div class="header-stats" id="header-stats"></div>
 </header>
 
 <div class="filter-bar">
-  <button class="filter-btn active" onclick="setFilter('watchlist', this)">📺 WATCHLIST</button>
-  <button class="filter-btn" onclick="setFilter('coming-soon', this)">⏳ COMING SOON</button>
-  <button class="filter-btn" onclick="setFilter('archive', this)">📦 ARCHIVE</button>
+  <button class="filter-btn active" onclick="setFilter('watchlist', this)">📺 WATCHLIST <span class="chip-count" id="cnt-watchlist"></span></button>
+  <button class="filter-btn" onclick="setFilter('coming-soon', this)">⏳ COMING SOON <span class="chip-count" id="cnt-coming-soon"></span></button>
+  <button class="filter-btn" onclick="setFilter('archive', this)">📦 ARCHIVE <span class="chip-count" id="cnt-archive"></span></button>
   <input type="search" id="search-input" class="search-input" placeholder="Search shows…" oninput="setSearch(this.value)">
   <div class="filter-spacer"></div>
   <button class="clear-btn" onclick="clearAll()">Clear all marks</button>
