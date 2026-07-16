@@ -936,6 +936,60 @@
       .table-wrap { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .record-cards { display: none; }
     }
+
+    /* ════════ LOCK SCREEN ════════ */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .lock-card {
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+    .lock-icon { font-size: 2.4rem; margin-bottom: 14px; }
+    .lock-card h2 {
+      margin: 0 0 6px;
+      font-size: 1.3rem;
+      letter-spacing: 3px;
+      color: var(--pink);
+      text-transform: uppercase;
+    }
+    .lock-card p { margin: 0 0 20px; color: var(--text-dim); font-size: 0.85rem; }
+    #lock-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 2px;
+      box-sizing: border-box;
+    }
+    #lock-input:focus { outline: none; border-color: var(--pink); }
+    #lock-btn {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: var(--pink);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+    #lock-btn:disabled { opacity: 0.5; cursor: default; }
+    #lock-error { margin-top: 12px; color: var(--pink); font-size: 0.8rem; min-height: 1em; }
   </style>
 </head>
 <body>
