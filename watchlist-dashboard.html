@@ -259,6 +259,21 @@
       color: #000;
     }
 
+    .chip-count {
+      display: inline-block;
+      min-width: 18px;
+      padding: 0 5px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.12);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-align: center;
+      vertical-align: 1px;
+    }
+    .filter-btn:hover .chip-count, .filter-btn.active .chip-count {
+      background: rgba(0,0,0,0.18);
+    }
+
     .section {
       padding: 24px;
     }
@@ -540,11 +555,11 @@
 </header>
 
 <div class="filter-bar">
-  <button class="filter-btn status-btn active" onclick="setStatusFilter('all', this)">📋 ALL</button>
-  <button class="filter-btn status-btn" onclick="setStatusFilter('out', this)">✅ AVAILABLE</button>
-  <button class="filter-btn status-btn" onclick="setStatusFilter('soon', this)"><span style="color:#f59e0b">▶</span> COMING SOON</button>
-  <button class="filter-btn status-btn" onclick="setStatusFilter('waiting', this)">⏳ WAITING</button>
-  <button class="filter-btn status-btn" onclick="setStatusFilter('notout', this)">🚫 NOT OUT YET</button>
+  <button class="filter-btn status-btn active" onclick="setStatusFilter('all', this)">📋 ALL <span class="chip-count" id="cnt-all"></span></button>
+  <button class="filter-btn status-btn" onclick="setStatusFilter('out', this)">✅ AVAILABLE <span class="chip-count" id="cnt-out"></span></button>
+  <button class="filter-btn status-btn" onclick="setStatusFilter('soon', this)"><span style="color:#f59e0b">▶</span> COMING SOON <span class="chip-count" id="cnt-soon"></span></button>
+  <button class="filter-btn status-btn" onclick="setStatusFilter('waiting', this)">🎬 IN CINEMAS <span class="chip-count" id="cnt-waiting"></span></button>
+  <button class="filter-btn status-btn" onclick="setStatusFilter('notout', this)">🚫 NOT RELEASED <span class="chip-count" id="cnt-notout"></span></button>
 </div>
 
 </div>
