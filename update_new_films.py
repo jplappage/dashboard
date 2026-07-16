@@ -76,9 +76,9 @@ def existing_slugs(text):
 
 
 def tmdb_lookup(name):
-    """Return (poster_url, year) for a film name via TMDB, or (None, None)."""
+    """Return (poster_url, year, tmdb_id) for a film name via TMDB, or (None, None, None)."""
     if not TMDB_KEY:
-        return None, None
+        return None, None, None
     # name like "The Odyssey (2026)"
     ym = re.search(r'\((\d{4})\)\s*$', name)
     year = ym.group(1) if ym else ''
@@ -87,11 +87,33 @@ def tmdb_lookup(name):
            % (TMDB_KEY, urllib.parse.quote(title), '&year=' + year if year else ''))
     res = (fetch_json(url).get('results') or [])
     if not res:
-        return None, year or None
+        return None, year or None, None
     r = res[0]
     poster = ('https://image.tmdb.org/t/p/w342' + r['poster_path']) if r.get('poster_path') else None
     yr = (r.get('release_date') or '')[:4] or year
-    return poster, (yr or None)
+    return poster, (yr or None), r.get('id')
+
+
+def tmdb_cinema_date(movie_id):
+    """'In cinemas D Mon YYYY' from TMDB theatrical release dates (GB > US > any), else None."""
+    if not movie_id or not TMDB_KEY:
+        return None
+    url = 'https://api.themoviedb.org/3/movie/%s/release_dates?api_key=%s' % (movie_id, TMDB_KEY)
+    prio = {'GB': 0, 'US': 1}
+    best = None
+    for entry in (fetch_json(url).get('results') or []):
+        cc = entry.get('iso_3166_1')
+        for rd in (entry.get('release_dates') or []):
+            if rd.get('type') in (2, 3) and rd.get('release_date'):  # 2=limited, 3=theatrical
+                p = prio.get(cc, 2)
+                if best is None or p < best[0]:
+                    best = (p, rd['release_date'][:10])
+    if best:
+        try:
+            return 'In cinemas ' + datetime.strptime(best[1], '%Y-%m-%d').strftime('%-d %b %Y')
+        except ValueError:
+            return None
+    return None
 
 
 def build_entry(slug, name, poster, year):
