@@ -455,6 +455,34 @@
       .header-left p { font-size: 0.75rem; }
     }
 
+    /* ── Compact header on scroll ── */
+    header { transition: padding 0.2s ease; }
+    .header-left h1 { transition: font-size 0.2s ease; }
+    .sticky-top.compact .top-bar { display: none; }
+    .sticky-top.compact header { padding: 10px 32px 8px; }
+    .sticky-top.compact .header-left h1 { font-size: 1.15rem; letter-spacing: 2px; }
+    .sticky-top.compact .filter-bar { padding: 8px 24px; }
+    @media (max-width: 600px) {
+      .sticky-top.compact header { padding: 8px 16px 6px; }
+      .sticky-top.compact .header-left h1 { font-size: 1rem; }
+      .sticky-top.compact .filter-bar { padding: 6px 16px; }
+    }
+
+    /* ── Mobile agenda view for the calendar ── */
+    .agenda-row {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: #000; border: 1px solid rgba(255,232,31,0.25);
+      border-radius: 10px; padding: 10px 12px;
+    }
+    .agenda-row.cal-today { border-color: #ffe81f; background: #1a1800; }
+    .agenda-date {
+      min-width: 86px; font-size: 0.78rem; font-weight: 600;
+      color: #6b7280; padding-top: 2px;
+    }
+    .agenda-row.cal-today .agenda-date { color: #ffe81f; }
+    .agenda-events { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+    .agenda-events .cal-event { margin-bottom: 0; }
+
     .cal-day-header {
       text-align: center;
       font-size: 0.68rem;
@@ -762,6 +790,9 @@ function renderCalendar() {
   document.getElementById('cal-month-label').textContent = months[calMonth] + ' ' + calYear;
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
+  const mobile = window.matchMedia('(max-width: 600px)').matches;
+  grid.style.gridTemplateColumns = mobile ? '1fr' : 'repeat(7,1fr)';
+  if (mobile) { renderAgenda(grid); return; }
   ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d => {
     const h = document.createElement('div');
     h.className = 'cal-day-header';
