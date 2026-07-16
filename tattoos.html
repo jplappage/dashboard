@@ -994,6 +994,19 @@
 </head>
 <body>
 
+<!-- ════════ LOCK SCREEN ════════ -->
+<div id="lock-screen">
+  <div class="lock-card">
+    <div class="lock-icon">🔒</div>
+    <h2>No Entry</h2>
+    <p>Enter the passcode to continue.</p>
+    <input type="password" id="lock-input" placeholder="Passcode" autocomplete="off"
+           onkeydown="if(event.key==='Enter')attemptUnlock()">
+    <button id="lock-btn" onclick="attemptUnlock()">Enter</button>
+    <div id="lock-error"></div>
+  </div>
+</div>
+
 <!-- ════════ HEADER ════════ -->
 <header>
   <div class="header-inner">
