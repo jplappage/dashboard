@@ -1,0 +1,39 @@
+name: Send a notification
+
+# Manually push any text to your phone. Actions tab -> "Send a notification" ->
+# Run workflow -> type a message. First line becomes the headline. Handy for
+# testing or re-sending something.
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Notification text (first line = headline, extra lines = body)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Send push
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          VOD_SUMMARY_FILE: ${{ runner.temp }}/message.txt
+          MESSAGE: ${{ github.event.inputs.message }}
+        run: |
+          # Pass the message via env (never inline) to avoid shell-injection.
+          printf '%s' "$MESSAGE" > "$VOD_SUMMARY_FILE"
+          pip install --quiet pywebpush
+          python3 send_push.py
