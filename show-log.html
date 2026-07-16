@@ -833,22 +833,19 @@ function buildCard(s) {
 }
 
 function updateStats() {
-  const watched  = SHOWS.filter(s => s.status !== 'ongoing' && showState(s.name, s.aired) === 'watched').length;
-  const abandoned= SHOWS.filter(s => showState(s.name, s.aired) === 'abandoned').length;
-  const awaiting = SHOWS.filter(s => s.status === 'ongoing' && showState(s.name, s.aired) === 'watched').length;
-  const ongoing  = SHOWS.filter(s => s.status === 'ongoing').length - awaiting;
-  const ended    = SHOWS.filter(s => s.status !== 'ongoing').length;
-  const partial  = SHOWS.filter(s => showState(s.name, s.aired) === 'partial').length;
+  const watchlist = SHOWS.filter(s => {
+    const state = showState(s.name, s.aired);
+    return state !== 'abandoned' && state !== 'watched' && s.aired > 0;
+  }).length;
+  const comingSoon = SHOWS.filter(s => s.status === 'ongoing' && (showState(s.name, s.aired) === 'watched' || s.aired === 0)).length;
+  const archive = SHOWS.filter(s => {
+    const state = showState(s.name, s.aired);
+    return state === 'abandoned' || (state === 'watched' && s.status !== 'ongoing');
+  }).length;
 
-  const watching = SHOWS.filter(s => { const st = showState(s.name, s.aired); return st !== 'watched' && st !== 'abandoned'; }).length;
-  document.getElementById('header-stats').innerHTML = `
-    <div class="stat-pill"><span class="stat-dot dot-ongoing"></span>${watching} watching</div>
-    ${awaiting ? `<div class="stat-pill"><span class="stat-dot" style="background:#f59e0b"></span>${awaiting} awaiting</div>` : ''}
-    ${watched   ? `<div class="stat-pill"><span class="stat-dot dot-watched"></span>${watched} watched</div>` : ''}
-    ${abandoned ? `<div class="stat-pill"><span class="stat-dot dot-abandoned"></span>${abandoned} abandoned</div>` : ''}
-  `;
-  document.getElementById('header-sub').textContent =
-    `${SHOWS.length} shows · ${partial} in progress · ${SHOWS.length - watched - abandoned - partial} untouched`;
+  document.getElementById('cnt-watchlist').textContent   = watchlist;
+  document.getElementById('cnt-coming-soon').textContent = comingSoon;
+  document.getElementById('cnt-archive').textContent     = archive;
 }
 
 function updateFooter() {
