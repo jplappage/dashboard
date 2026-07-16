@@ -690,14 +690,13 @@
 
 <script src="films-data.js"></script>
 <script src="shows-data.js"></script>
+<script src="retro-data.js"></script>
 <script>
 (async function retroTeaser() {
   const el = document.getElementById('retro-sub');
-  if (!el) return;
+  if (!el || typeof RETRO_FILMS === 'undefined') return;
   try {
-    const html = await (await fetch('retro-watchlist.html')).text();
-    const films = [...html.matchAll(/\{id:(\d+),\s*title:"([^"]+)",\s*year:(\d{4})[^}]*?lbRating:([\d.]+)/g)]
-      .map(m => ({ id:+m[1], title:m[2], year:+m[3], lb:+m[4] }));
+    const films = RETRO_FILMS.map(f => ({ id: f.id, title: f.title }));
     if (!films.length) return;
 
     let watched = {};
@@ -705,7 +704,7 @@
       const j = await (await fetch('https://api.github.com/gists/5411ac8d12fdc31aa3fa73e4d66f6377', { cache:'no-store' })).json();
       watched = JSON.parse(j.files['watchlist.json'].content);
     } catch (_) {
-      [...html.matchAll(/^\s*(\d+):\s*"\d{4}-\d{2}-\d{2}"/gm)].forEach(m => watched[m[1]] = '1');
+      watched = RETRO_LETTERBOXD;
     }
 
     const isWatched = f => typeof watched[f.id] === 'string';
