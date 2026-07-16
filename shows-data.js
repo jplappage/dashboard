@@ -79,6 +79,4 @@ const SHOWS = [
   {name:"Agent Carter",                          status:"cancelled",aired:2, imdbId:"tt3475734"},
   {name:"Halo",                                  status:"cancelled",aired:2, imdbId:"tt2934286"},
   {name:"Raised by Wolves",                      status:"cancelled",aired:2, imdbId:"tt9170108"},
-  {name:"Gen V",                                 status:"cancelled",aired:2, imdbId:"tt13159924"},
-  {name:"Westworld",                             status:"cancelled",aired:4, imdbId:"tt0475784"},
-];
+  {name:"Gen V",                                 status:"canc
