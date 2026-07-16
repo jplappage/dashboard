@@ -14,7 +14,7 @@ Run all phases in order. Within each phase, do everything listed simultaneously.
   Expect `200`. The backup gist keeps revision history, so older copies are recoverable there.
 - Read `films-data.js` → note every film in FILMS array (title, vodDate, estimated, imdbRating, note with cinema date)
 - Read `shows-data.js` → note every ongoing show, its `next` field, and its `recheck` field (if any)
-- Read `retro-watchlist.html` → note the scrape cutoff date in the LETTERBOXD comment
+- Read `retro-data.js` → note the scrape cutoff date in the RETRO_LETTERBOXD comment
 - **Letterboxd via Chrome MCP only — WebFetch returns empty for letterboxd.com, do not try it.**
   Open a tab, then:
   - Navigate to `https://letterboxd.com/zidanejp/watchlist/` and extract slugs with `javascript_tool`:
@@ -39,6 +39,9 @@ Run these comparisons immediately from the data loaded in Phase 1:
 **Pre-theatrical skip rule:** a film whose cinema release date (in its `note`) has NOT yet passed cannot have a VOD date or an IMDb rating. Skip both searches for it, but list it under "Skipped (pre-theatrical)" so the Phase 3 verification can account for every film.
 
 **Show log**
+
+> **TVmaze automation note:** `update-show-dates.yml` runs every 6 hours and auto-confirms premiere dates via TVmaze for ONGOING shows with a vague `next` (it sets `next` to the confirmed date and drops `recheck` when TVmaze has episode 1 of the next season scheduled). So manual Phase 3 searches are a *fallback* — they mainly catch dates TVmaze doesn't have yet (renewal announcements without scheduled episodes). Still list every vague show below, but expect many to resolve themselves between refreshes.
+
 - Any `next` field with a specific date that has now passed → increment `aired`, update `next` to null or next known info, AND set `airing:"S<N> · <weekday>s"` + `airingUntil:"YYYY-MM-DD"` (search for the confirmed finale date; these power the hub-page teaser). **Use the UK viewing day** — US Sunday-night shows land Monday in the UK, so label them Mondays and set `airingUntil` to the day after the US finale.
 - Any `airingUntil` date that has now passed → remove the `airing` and `airingUntil` fields from that show
 - Any `next` field that is vague → queue for Phase 3 (need premiere date search), **unless its `recheck` field defers it (see below)**
@@ -131,8 +134,7 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 - Update `vodDate`, `platform`, `estimated` for any films with new streaming dates
 - Add/update `imdbRating` for newly released films
 
-**`watchlist-dashboard.html`**
-- Bump footer only: `Last updated: DD Mon YYYY (refresh #N)`
+**`watchlist-dashboard.html`** — no manual edits. The footer (`Last updated` + refresh #) auto-stamps via `.github/workflows/stamp-last-updated.yml` whenever a data file is pushed.
 
 **`watchlist.ics`** — do NOT regenerate locally. GitHub rebuilds it automatically whenever `films-data.js` is pushed (see `.github/workflows/rebuild-calendar.yml`).
 
