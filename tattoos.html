@@ -1197,8 +1197,9 @@ function getCryptoKey() {
   return cryptoKeyP;
 }
 function askDataKey() {
-  const v = prompt('NO ENTRY', '');
-  if (v !== null && v.trim()) { DATA_KEY = v.trim(); localStorage.setItem('tattooKey', DATA_KEY); cryptoKeyP = null; return true; }
+  // No native prompt (which had a dismissable Cancel). Re-show the blocking
+  // lock screen instead so the app can't be used without a valid passcode.
+  if (typeof showLock === 'function') showLock();
   return false;
 }
 async function encryptEntries(arr) {
@@ -1212,7 +1213,7 @@ async function decryptEntries(b64) {
   const pt = await crypto.subtle.decrypt({ name:'AES-GCM', iv: raw.slice(0,12) }, await getCryptoKey(), raw.slice(12));
   return JSON.parse(new TextDecoder().decode(pt));
 }
-document.addEventListener('click', e => { if (e.target.closest('#sync-status') && localStorage.getItem('gistToken') && !localStorage.getItem('tattooKey')) { if (askDataKey()) location.reload(); } });
+document.addEventListener('click', e => { if (e.target.closest('#sync-status') && localStorage.getItem('gistToken') && !localStorage.getItem('tattooKey')) { showLock(); } });
 
 let syncDirty = false;
 let syncTimer = null;
