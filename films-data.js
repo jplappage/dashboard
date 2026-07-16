@@ -91,7 +91,7 @@ const FILMS = [
     note: 'In cinemas Jun 26 (wide 10 Jul) · PVOD est. early Aug 2026',
     imdbRating: 6.2,
   },
-  // ── PRE-THEATRICAL (added refresh #65) ───────────────────────────────────
+  // ── PRE-THEATRICAL (not yet in cinemas) ───────────────────────────────────
   {
     title: 'Evil Dead Burn',
     year: 2026,
