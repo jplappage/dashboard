@@ -167,8 +167,9 @@ def main():
     added = []
     insert = ''
     for slug, name in new:
-        poster, year = tmdb_lookup(name)
-        insert += build_entry(slug, name, poster, year)
+        poster, year, mid = tmdb_lookup(name)
+        note = tmdb_cinema_date(mid)
+        insert += build_entry(slug, name, poster, year, note)
         clean = re.sub(r'\s*\(\d{4}\)\s*$', '', name)
         added.append(clean)
         print('  + %s (%s)' % (clean, slug))
