@@ -16,6 +16,7 @@ import os
 import json
 import urllib.request
 import urllib.parse
+from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 FILMS_FILE = os.path.join(SCRIPT_DIR, 'films-data.js')
