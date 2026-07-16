@@ -149,11 +149,11 @@ const FILMS = [
     title: 'The Breadwinner',
     year: 2026,
     slug: 'the-breadwinner-2026',
+    imdbRating: 6.4,
     poster: 'https://image.tmdb.org/t/p/w342/4apG9Xk6HQvV48JKEjSUeiebju7.jpg',
-    vodDate: null,
-    platform: null,
-    estimated: true,
-    note: 'Auto-added from Letterboxd — awaiting a streaming date',
+    vodDate: '2026-07-14',
+    platform: 'Digital',
+    estimated: false,
   },
 
 ];
