@@ -1288,14 +1288,72 @@ function triggerSync() {
   syncTimer = setTimeout(saveToCloud, 1500);
 }
 
-// ── Boot ─────────────────────────────────────────────
-load();
-updateYTD();
-loadFromCloud().then(() => updateYTD());
+// ── Boot (gated behind the lock screen) ──────────────
+function bootApp() {
+  load();
+  updateYTD();
+  loadFromCloud().then(() => updateYTD());
 
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') loadFromCloud();
-});
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') loadFromCloud();
+  });
+}
+
+function showLock() {
+  const el = document.getElementById('lock-screen');
+  if (el) { el.style.display = 'flex'; }
+  const inp = document.getElementById('lock-input');
+  if (inp) { inp.value = ''; setTimeout(() => inp.focus(), 50); }
+}
+function hideLock() {
+  const el = document.getElementById('lock-screen');
+  if (el) el.style.display = 'none';
+}
+
+let appStarted = false;
+async function attemptUnlock() {
+  const inp = document.getElementById('lock-input');
+  const btn = document.getElementById('lock-btn');
+  const err = document.getElementById('lock-error');
+  const pass = (inp.value || '').trim();
+  if (!pass) return;
+  err.textContent = '';
+  btn.disabled = true; btn.textContent = 'Checking…';
+  try {
+    const res = await fetch(GIST_URL + '?t=' + Date.now(), { headers: HEADERS });
+    if (!res.ok) throw new Error('net');
+    const gist = await res.json();
+    const data = JSON.parse(gist.files[GIST_FILE].content);
+    DATA_KEY = pass; cryptoKeyP = null;
+    // Verify by decrypting existing entries (skip if gist has none yet)
+    if (data.tattooEntries && data.tattooEntries.enc) {
+      await decryptEntries(data.tattooEntries.enc); // throws if passcode wrong
+    }
+    localStorage.setItem('tattooKey', DATA_KEY);
+    hideLock();
+    if (!appStarted) { appStarted = true; bootApp(); }
+    else loadFromCloud().then(() => updateYTD());
+  } catch(e) {
+    DATA_KEY = ''; cryptoKeyP = null;
+    localStorage.removeItem('tattooKey');
+    err.textContent = (e && e.message === 'net')
+      ? 'Network error — check connection and try again.'
+      : 'Incorrect passcode.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enter';
+  }
+}
+
+// On load: if a passcode is already stored on this device, boot straight in;
+// otherwise the lock screen (shown by default) blocks everything.
+if (localStorage.getItem('tattooKey')) {
+  DATA_KEY = localStorage.getItem('tattooKey');
+  hideLock();
+  appStarted = true;
+  bootApp();
+} else {
+  showLock();
+}
 
 // Default date = today
 (function setDefaultDate() {
