@@ -713,13 +713,19 @@ function renderAgenda(grid) {
 // Re-render calendar when crossing the mobile breakpoint
 window.matchMedia('(max-width: 600px)').addEventListener('change', () => { if (calendarOpen) renderCalendar(); });
 
-// Compact the sticky header once scrolled
+// Compact the sticky header once scrolled.
+// Uses hysteresis (separate enter/leave thresholds) so that the height change
+// from compacting can't push scrollY back across a single boundary and cause
+// the header to oscillate big/small and lock up scrolling.
 (function () {
   const st = document.querySelector('.sticky-top');
+  const ENTER = 150; // compact once scrolled past here
+  const LEAVE = 60;  // expand again only when back above here
   let compact = false;
   window.addEventListener('scroll', () => {
-    const c = window.scrollY > 60;
-    if (c !== compact) { compact = c; st.classList.toggle('compact', c); }
+    const y = window.scrollY;
+    if (!compact && y > ENTER) { compact = true;  st.classList.add('compact'); }
+    else if (compact && y < LEAVE) { compact = false; st.classList.remove('compact'); }
   }, { passive: true });
 })();
 
