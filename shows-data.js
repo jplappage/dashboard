@@ -39,6 +39,7 @@ const SHOWS = [
   {name:"The Mandalorian",                       status:"finished", aired:3, imdbId:"tt8111088"},
   {name:"Maul: Shadow Lord",                     status:"ongoing",  aired:1, next:"S2 · est. late 2027", recheck:"2026-07-17", imdbId:"tt36594331"},
   {name:"SAS: Rogue Heroes",                     status:"ongoing",  aired:2, next:"S3 · est. late 2026", recheck:"2026-07-17", imdbId:"tt10405370"},
+  {name:"Lanterns",                              status:"ongoing",  aired:0, next:"S1 · 16 Aug 2026", imdbId:"tt26545992"},
   // ENDED (finished)
   {name:"Extras",                                   status:"finished", aired:2, imdbId:"tt0445114"},
   {name:"Derek",                                    status:"finished", aired:2, imdbId:"tt2616280"},
