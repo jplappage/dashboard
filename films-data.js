@@ -134,16 +134,15 @@ const FILMS = [
     note: 'Auto-added from Letterboxd — awaiting a streaming date',
   },
   {
-    title: 'The Breadwinner',
+    title: 'Ice Cream Man',
     year: 2026,
-    slug: 'the-breadwinner-2026',
-    imdbRating: 6.4,
-    poster: 'https://image.tmdb.org/t/p/w342/4apG9Xk6HQvV48JKEjSUeiebju7.jpg',
-    vodDate: '2026-07-14',
-    platform: 'Digital',
-    estimated: false,
+    slug: 'ice-cream-man-2026',
+    poster: 'https://image.tmdb.org/t/p/w342/c987gxFjXqYOxZEZKcTkS1ONTWH.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'Auto-added from Letterboxd — awaiting a streaming date',
   },
-
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
