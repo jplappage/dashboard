@@ -127,6 +127,7 @@ const FILMS = [
     title: 'The Mandalorian and Grogu',
     year: 2026,
     slug: 'the-mandalorian-and-grogu',
+    imdbRating: 6.5,
     poster: 'https://image.tmdb.org/t/p/w342/5Vi8dSauVwH1HOsiZceDMbRr1Ca.jpg',
     vodDate: null,
     platform: null,
