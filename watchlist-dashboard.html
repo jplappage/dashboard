@@ -641,8 +641,11 @@ function renderFilms() {
     }),
   };
 
-  const elOut = document.getElementById('count-out'); if (elOut) elOut.textContent = groups.out.length;
-  const elSoon = document.getElementById('count-soon'); if (elSoon) elSoon.textContent = groups.soon.length;
+  document.getElementById('cnt-all').textContent     = FILMS.length;
+  document.getElementById('cnt-out').textContent     = groups.out.length;
+  document.getElementById('cnt-soon').textContent    = groups.soon.length;
+  document.getElementById('cnt-waiting').textContent = groups.waiting.length;
+  document.getElementById('cnt-notout').textContent  = groups.notout.length;
 
   let html = '';
 
@@ -659,8 +662,8 @@ function renderFilms() {
 
   html += renderSection('✅ Available Now on VOD / Streaming', groups.out, 'out');
   html += renderSection('<span style="color:#f59e0b">▶</span> Coming Soon', groups.soon, 'soon');
-  html += renderSection('⏳ Waiting for Streaming Date', groups.waiting, 'waiting');
-  html += renderSection('🚫 Not Out Yet', groups.notout, 'notout');
+  html += renderSection('🎬 In Cinemas — Awaiting Stream Date', groups.waiting, 'waiting');
+  html += renderSection('🚫 Not Released Yet', groups.notout, 'notout');
 
   container.innerHTML = html || '<p style="color:#6b7280;padding:24px">Nothing on the list.</p>';
 }
