@@ -720,7 +720,9 @@ window.matchMedia('(max-width: 600px)').addEventListener('change', () => { if (c
 (function () {
   const st = document.querySelector('.sticky-top');
   const ENTER = 150; // compact once scrolled past here
-  const LEAVE = 60;  // expand again only when back above here
+  const LEAVE = 50;  // expand again only when back near the top
+  // Gap (100px) comfortably exceeds the ~65px height the header loses when it
+  // compacts, so a single toggle can never bounce scrollY back across it.
   let compact = false;
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
