@@ -683,4 +683,55 @@ function renderAgenda(grid) {
     const ds  = `${calYear}-${pad(calMonth+1)}-${pad(d)}`;
     const evs = CAL_EVENTS[ds] || [];
     if (!evs.length) continue;
-    any = true;
+    any = true;
+    const row = document.createElement('div');
+    row.className = 'agenda-row' + (new Date(calYear,calMonth,d).getTime() === TODAY.getTime() ? ' cal-today' : '');
+    const lab = document.createElement('div');
+    lab.className = 'agenda-date';
+    lab.textContent = new Date(calYear, calMonth, d).toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
+    row.appendChild(lab);
+    const wrap = document.createElement('div');
+    wrap.className = 'agenda-events';
+    evs.forEach(ev => {
+      const s = document.createElement('span');
+      s.className = 'cal-event ' + ev.cls;
+      s.textContent = ev.title;
+      s.title = ev.title;
+      wrap.appendChild(s);
+    });
+    row.appendChild(wrap);
+    grid.appendChild(row);
+  }
+  if (!any) {
+    const e = document.createElement('div');
+    e.style.cssText = 'color:#6b7280;padding:12px 4px;font-size:0.85rem';
+    e.textContent = 'No releases this month.';
+    grid.appendChild(e);
+  }
+}
+
+// Re-render calendar when crossing the mobile breakpoint
+window.matchMedia('(max-width: 600px)').addEventListener('change', () => { if (calendarOpen) renderCalendar(); });
+
+// Compact the sticky header once scrolled
+(function () {
+  const st = document.querySelector('.sticky-top');
+  let compact = false;
+  window.addEventListener('scroll', () => {
+    const c = window.scrollY > 60;
+    if (c !== compact) { compact = c; st.classList.toggle('compact', c); }
+  }, { passive: true });
+})();
+
+renderFilms();
+</script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+  </script>
+</body>
+</html>
