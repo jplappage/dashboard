@@ -124,8 +124,8 @@ header::before {
 .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
 .left-sidebar  { width: 390px; }
 .right-sidebar { width: 320px; }
-.left-sidebar  .player-grid { grid-template-columns: repeat(5, 1fr); }
-.right-sidebar .player-grid { grid-template-columns: repeat(4, 1fr); }
+.left-sidebar  .player-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.right-sidebar .player-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 /* Section headers */
 .sec-hdr {
@@ -295,8 +295,8 @@ header::before {
     width: 100% !important;
     overflow-y: visible;
   }
-  .left-sidebar  .player-grid { grid-template-columns: repeat(5, 1fr); }
-  .right-sidebar .player-grid { grid-template-columns: repeat(4, 1fr); }
+  .left-sidebar  .player-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .right-sidebar .player-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .pitch-wrap {
     height: 480px;
     flex: none;
