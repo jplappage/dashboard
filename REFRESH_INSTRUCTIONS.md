@@ -143,11 +143,10 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 - Update `next` for shows with newly confirmed premiere dates (and remove their `recheck`)
 - Set/update `recheck:"YYYY-MM-DD"` (one week ahead, aligned to a Friday) on shows searched but still without a confirmed date
 
-**`show-log.html`**
-- Update `LAST_UPDATED` constant to `'DD Mon YYYY HH:MM'`
+**`show-log.html`** — no manual edits. `LAST_UPDATED` auto-stamps via the same workflow.
 
-**`retro-watchlist.html`**
-- Add new entries to `LETTERBOXD` object: `id: "YYYY-MM-DD"` — this is a bootstrap fallback only. The live source of truth is the GitHub Gist, so also patch it directly via the Chrome MCP javascript_tool (use the tab with the retro watchlist open, or any tab):
+**`retro-data.js`** (single source of truth for RETRO_FILMS / RETRO_LETTERBOXD / RETRO_RATINGS — do NOT edit retro film data in the HTML; the page footer auto-stamps)
+- Add new entries to `RETRO_LETTERBOXD` object: `id: "YYYY-MM-DD"` — this is a bootstrap fallback only. The live source of truth is the GitHub Gist, so also patch it directly via the Chrome MCP javascript_tool (use the tab with the retro watchlist open, or any tab):
   The token is NOT in this file (it's a secret — never commit it). Read it from `gist-token.txt` in the project root (gitignored) and substitute it for `TOKEN_FROM_FILE` below:
   ```js
   const GIST_ID='5411ac8d12fdc31aa3fa73e4d66f6377', GIST_KEY='TOKEN_FROM_FILE', GIST_FILE='watchlist.json', H={'Content-Type':'application/json','Authorization':`token ${GIST_KEY}`,'Accept':'application/vnd.github.v3+json'};
