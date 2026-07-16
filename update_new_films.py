@@ -116,9 +116,10 @@ def tmdb_cinema_date(movie_id):
     return None
 
 
-def build_entry(slug, name, poster, year):
+def build_entry(slug, name, poster, year, note=None):
     title = re.sub(r'\s*\(\d{4}\)\s*$', '', name).replace("'", "\\'")
     y = year or 'null'
+    note = (note or 'Auto-added from Letterboxd — awaiting a streaming date').replace("'", "\\'")
     lines = [
         '  {',
         "    title: '%s'," % title,
@@ -131,7 +132,7 @@ def build_entry(slug, name, poster, year):
         '    vodDate: null,',
         '    platform: null,',
         '    estimated: true,',
-        "    note: 'Auto-added from Letterboxd — awaiting a streaming date',",
+        "    note: '%s'," % note,
         '  },',
     ]
     return '\n'.join(lines) + '\n'
