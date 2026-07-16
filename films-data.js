@@ -131,7 +131,7 @@ const FILMS = [
     vodDate: null,
     platform: null,
     estimated: true,
-    note: 'Auto-added from Letterboxd — awaiting a streaming date',
+    note: 'In cinemas 7 Aug 2026',
   },
 ];
 
