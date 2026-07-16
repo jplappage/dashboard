@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
-  // ── DATE UNKNOWN ──────────────────────────────────────────────────────────
+  // ── CONFIRMED STREAMING DATE ──────────────────────────────────────────────
   {
     title: 'Backrooms',
     year: 2026,
@@ -48,6 +48,17 @@ const FILMS = [
     imdbRating: 6.9,
   },
   {
+    title: 'The Death of Robin Hood',
+    year: 2026,
+    slug: 'the-death-of-robin-hood',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/8/5/8/1167858-the-death-of-robin-hood-0-230-0-345-crop.jpg?v=39347a2edd',
+    vodDate: '2026-08-04',
+    platform: 'Digital',
+    estimated: false,
+    imdbRating: 7.6,
+  },
+  // ── IN CINEMAS — AWAITING STREAMING DATE ─────────────────────────────────
+  {
     title: 'Jackass: Best and Last',
     year: 2026,
     slug: 'jackass-best-and-last',
@@ -68,16 +79,6 @@ const FILMS = [
     estimated: true,
     note: 'In cinemas Jun 26 · PVOD est. 28 Jul 2026 (~32-day window); HBO Max est. Sep 2026',
     imdbRating: 6.1,
-  },
-  {
-    title: 'The Death of Robin Hood',
-    year: 2026,
-    slug: 'the-death-of-robin-hood',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/8/5/8/1167858-the-death-of-robin-hood-0-230-0-345-crop.jpg?v=39347a2edd',
-    vodDate: '2026-08-04',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 7.6,
   },
   {
     title: 'The Invite',
