@@ -425,24 +425,6 @@
     .date-soon { color: #fbbf24; }
     .date-unknown { color: #f87171; }
 
-    .date-platform {
-      font-size: 0.65rem;
-      color: #6b7280;
-      margin-top: 2px;
-    }
-
-    .date-estimated {
-      font-size: 0.62rem;
-      color: #6b7280;
-      font-style: italic;
-    }
-
-    .tv-divider {
-      margin: 8px 24px 0;
-      border: none;
-      border-top: 1px solid #333;
-    }
-
     .last-updated {
       text-align: center;
       padding: 20px;
@@ -607,7 +589,7 @@ function getStatus(film) {
 
 function formatDate(dateStr) {
   if (!dateStr) return '??';
-  const d = new Date(dateStr);
+  const d = parseLocalDate(dateStr);
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
