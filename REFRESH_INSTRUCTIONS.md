@@ -153,9 +153,16 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
   (async()=>{const r=await fetch(`https://api.github.com/gists/${GIST_ID}`,{headers:H,cache:'no-store'});const j=await r.json();const d=JSON.parse(j.files[GIST_FILE].content);d[ID]='YYYY-MM-DD';const p=await fetch(`https://api.github.com/gists/${GIST_ID}`,{method:'PATCH',headers:H,body:JSON.stringify({files:{[GIST_FILE]:{content:JSON.stringify(d)}}})});return p.status})()
   ```
   Replace `ID` and `'YYYY-MM-DD'` with the film's id and watched date. Expect `200` back.
-- Add entries to `MY_RATINGS` object: `id: X.X`
+- Add entries to `RETRO_RATINGS` object: `id: X.X`
 - Update the scrape cutoff date comment to today
-- Update footer text: `Last updated: DD Mon YYYY HH:MM`
+
+**Validate before finishing (catches broken pushes before they deploy):**
+```
+for f in films-data.js shows-data.js retro-data.js; do
+  tr -d '\000' < "$f" > /tmp/check.js && node --check /tmp/check.js || echo "FAIL: $f"
+done
+```
+All three must pass. (The `tr` strips trailing null bytes that break `node --check` but not the browser — a known Windows-save artefact.)
 
 ---
 
@@ -181,7 +188,7 @@ If main is ahead of origin and the watcher hasn't pushed within a minute, tell J
 - JP is in **GB** — UK platforms preferred, but US digital dates count
 - **All footer/LAST_UPDATED timestamps use UK time** — the sandbox clock is UTC, so always get the time with `TZ='Europe/London' date '+%d %b %Y %H:%M'`
 - `whentostream.com` is sandbox-blocked — always use WebSearch instead
-- Retro watchlist scrape cutoff: check the comment above `const LETTERBOXD` in `retro-watchlist.html`
+- Retro watchlist scrape cutoff: check the comment above `const RETRO_LETTERBOXD` in `retro-data.js`
 
 ## Data rules
 
