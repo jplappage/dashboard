@@ -133,16 +133,6 @@ const FILMS = [
     estimated: true,
     note: 'Auto-added from Letterboxd — awaiting a streaming date',
   },
-  {
-    title: 'Ice Cream Man',
-    year: 2026,
-    slug: 'ice-cream-man-2026',
-    poster: 'https://image.tmdb.org/t/p/w342/c987gxFjXqYOxZEZKcTkS1ONTWH.jpg',
-    vodDate: null,
-    platform: null,
-    estimated: true,
-    note: 'Auto-added from Letterboxd — awaiting a streaming date',
-  },
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
