@@ -716,24 +716,6 @@ function renderCard(film) {
   `;
 }
 
-// ── PLATFORM LOGOS ────────────────────────────────────────────────────────
-function getPlatformLogo(platform) {
-  if (!platform) return '';
-  const p = platform.toLowerCase();
-  let domain = 'plex.tv';
-  if      (p.includes('netflix'))                          domain = 'netflix.com';
-  else if (p.includes('disney'))                           domain = 'disneyplus.com';
-  else if (p.includes('prime video') || p.includes('amazon prime')) domain = 'primevideo.com';
-  else if (p.includes('apple tv'))                         domain = 'tv.apple.com';
-  else if (p.includes('hbo') || p.includes('max.com'))    domain = 'max.com';
-  else if (p.includes('youtube'))                          domain = 'youtube.com';
-  else if (p.includes('plex'))                             domain = 'plex.tv';
-  else if (p.includes('paramount'))                        domain = 'paramountplus.com';
-  else if (p.includes('peacock'))                          domain = 'peacocktv.com';
-  else if (p.includes('hulu'))                             domain = 'hulu.com';
-  return `<img src="https://logo.clearbit.com/${domain}" alt="${platform}" title="${platform}" style="height:18px;vertical-align:middle;border-radius:3px;opacity:0.9;" onerror="this.src='https://logo.clearbit.com/plex.tv'">`;
-}
-
 // ── CALENDAR ──────────────────────────────────────────────────────────────
 let calendarOpen = false;
 let calYear  = TODAY.getFullYear();
