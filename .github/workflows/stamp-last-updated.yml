@@ -1,0 +1,41 @@
+name: Stamp last-updated footers
+
+# Auto-updates the 'Last updated' footers (and the films-page refresh counter)
+# whenever the data files are pushed, so Phase 4 of a refresh never needs to
+# touch the HTML. Pushes made by other workflows (actions token) don't trigger
+# this, so the stamps always reflect the last manual refresh.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'films-data.js'
+      - 'shows-data.js'
+      - 'retro-data.js'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stamp-last-updated
+  cancel-in-progress: false
+
+jobs:
+  stamp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stamp footers
+        run: python3 stamp_last_updated.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "stamp-bot"
+          git config user.email "actions@github.com"
+          git add watchlist-dashboard.html show-log.html retro-watchlist.html
+          git diff --cached --quiet && exit 0
+          git commit -m "auto: stamp last-updated footers"
+          git pull --rebase origin main
+          git push
