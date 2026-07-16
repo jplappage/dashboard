@@ -26,6 +26,7 @@ const PRECACHE = [
   './',
   'index.html',
   'watchlist-dashboard.html',
+  'stars.css',
   'manifest.json',
   'Images/app-icon-180.png',
   'Images/app-icon-192.png',
