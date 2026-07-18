@@ -97,6 +97,7 @@ const FILMS = [
     title: 'The Odyssey',
     year: 2026,
     slug: 'the-odyssey-2026',
+    imdbRating: 8.3,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/5/5/3/9/4/1255394-the-odyssey-2026-0-600-0-900-crop.jpg?v=1eed046d0c',
     vodDate: null,
     platform: null,
