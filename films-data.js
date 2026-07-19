@@ -67,7 +67,7 @@ const FILMS = [
     vodDate: null,
     platform: null,
     estimated: true,
-    note: 'In cinemas Jun 26 · PVOD est. 28 Jul 2026 (~32-day window); HBO Max est. Sep 2026',
+    note: 'In cinemas Jun 26 · PVOD est. late Jul 2026 (30-day window now expected)',
     imdbRating: 6.1,
   },
   {
@@ -78,7 +78,7 @@ const FILMS = [
     vodDate: null,
     platform: null,
     estimated: true,
-    note: 'In cinemas Jun 26 (wide 10 Jul) · PVOD est. early Aug 2026',
+    note: 'In cinemas Jun 26 (wide 10 Jul) · PVOD est. early/mid Aug 2026 (~month after expansion)',
     imdbRating: 6.2,
   },
   // ── PRE-THEATRICAL (not yet in cinemas) ───────────────────────────────────
