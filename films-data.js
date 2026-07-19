@@ -6,7 +6,8 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
-  // ── CONFIRMED STREAMING DATE ──────────────────────────────────────────────
+  // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
+  // actual date (release window + films usually drop on a Tuesday) — see note.
   {
     title: 'Scary Movie',
     year: 2026,
@@ -38,6 +39,17 @@ const FILMS = [
     imdbRating: 6.9,
   },
   {
+    title: 'Supergirl',
+    year: 2026,
+    slug: 'supergirl-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/9/7/4/2/8/6/974286-supergirl-2026-0-230-0-345-crop.jpg?v=16179d9c14',
+    vodDate: '2026-07-28',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas Jun 26 + 30-day window (WTS says 30 now likelier than 45), Tuesday drop',
+    imdbRating: 6.1,
+  },
+  {
     title: 'The Death of Robin Hood',
     year: 2026,
     slug: 'the-death-of-robin-hood',
@@ -47,38 +59,26 @@ const FILMS = [
     estimated: false,
     imdbRating: 7.6,
   },
-  // ── IN CINEMAS — AWAITING STREAMING DATE ─────────────────────────────────
   {
     title: 'Jackass: Best and Last',
     year: 2026,
     slug: 'jackass-best-and-last',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/4/8/1/8/5/1/1481851-jackass-best-and-last-0-230-0-345-crop.jpg?v=42485392b4',
-    vodDate: null,
+    vodDate: '2026-08-11',
     platform: 'Paramount+',
     estimated: true,
-    note: 'In cinemas Jun 26 · PVOD est. early Aug 2026 (45-day window)',
+    note: 'Est. — cinemas Jun 26 + Paramount 45-day mandate (10 Aug), Tuesday drop',
     imdbRating: 6.9,
-  },
-  {
-    title: 'Supergirl',
-    year: 2026,
-    slug: 'supergirl-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/9/7/4/2/8/6/974286-supergirl-2026-0-230-0-345-crop.jpg?v=16179d9c14',
-    vodDate: null,
-    platform: null,
-    estimated: true,
-    note: 'In cinemas Jun 26 · PVOD est. late Jul 2026 (30-day window now expected)',
-    imdbRating: 6.1,
   },
   {
     title: 'The Invite',
     year: 2026,
     slug: 'the-invite-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/8/5/4/8/3/1/854831-the-invite-2026-0-230-0-345-crop.jpg?v=ee72905e48',
-    vodDate: null,
+    vodDate: '2026-08-11',
     platform: null,
     estimated: true,
-    note: 'In cinemas Jun 26 (wide 10 Jul) · PVOD est. early/mid Aug 2026 (~month after expansion)',
+    note: 'Est. — A24, ~month after 10 Jul wide expansion, Tuesday drop',
     imdbRating: 6.2,
   },
   {
@@ -86,33 +86,32 @@ const FILMS = [
     year: 2026,
     slug: 'evil-dead-burn',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/9/7/0/2/2/1097022-evil-dead-burn-0-600-0-900-crop.jpg?v=398ff82d46',
-    vodDate: null,
+    vodDate: '2026-08-11',
     platform: null,
     estimated: true,
-    note: 'In cinemas 10 Jul · PVOD est. early/mid Aug 2026 (WB 30-day window likely)',
+    note: 'Est. — cinemas 10 Jul + WB 30-day window (WTS: 30-ish likelier than 45), Tuesday drop',
     imdbRating: 6.8,
   },
-  // ── PRE-THEATRICAL (not yet in cinemas) ───────────────────────────────────
   {
     title: 'Spider-Man: Brand New Day',
     year: 2026,
     slug: 'spider-man-brand-new-day',
     plexSlug: 'spider-man-brand-new-day-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/8/7/2/8/7/1/872871-spider-man-brand-new-day-0-600-0-900-crop.jpg?v=c4e8aa418f',
-    vodDate: null,
+    vodDate: '2026-09-15',
     platform: null,
     estimated: true,
-    note: 'In cinemas 29 Jul 2026 (UK)',
+    note: 'Est. — in cinemas 29 Jul 2026 (UK) + Sony ~45-day window, Tuesday drop',
   },
   {
     title: 'Ice Cream Man',
     year: 2026,
     slug: 'ice-cream-man-2026',
     poster: 'https://image.tmdb.org/t/p/w342/c987gxFjXqYOxZEZKcTkS1ONTWH.jpg',
-    vodDate: null,
+    vodDate: '2026-09-22',
     platform: null,
     estimated: true,
-    note: 'In cinemas 7 Aug 2026',
+    note: 'Est. — in cinemas 7 Aug 2026 + ~45-day window, Tuesday drop',
   },
 ];
 
