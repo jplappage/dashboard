@@ -23,7 +23,7 @@ const SHOWS = [
   {name:"The Gentlemen",                         status:"ongoing",  aired:1, next:"S2 · 3 Sep 2026", imdbId:"tt13210838"},
   {name:"Severance",                             status:"ongoing",  aired:2, next:"S3 · est. Summer 2027", recheck:"2026-07-24", imdbId:"tt11280740"},
   {name:"Rings of Power",                        status:"ongoing",  aired:2, next:"S3 · 11 Nov 2026", imdbId:"tt7631058"},
-  {name:"House of the Dragon",                   status:"ongoing",  aired:3, next:"S4 · 2028", recheck:"2026-07-24", airing:"S3 · Mondays (UK)", airingUntil:"2026-08-10", imdbId:"tt11198330"},
+  {name:"House of the Dragon",                   status:"ongoing",  aired:3, next:"S4 · 2028", recheck:"2026-07-24", airing:"S3 · Mondays", airingUntil:"2026-08-10", imdbId:"tt11198330"},
   {name:"Ted Lasso",                             status:"ongoing",  aired:3, next:"S4 · 5 Aug 2026", imdbId:"tt10986410"},
   {name:"Ted",                                   status:"finished", aired:2, imdbId:"tt14824792"},
   {name:"Tires",                                 status:"ongoing",  aired:2, next:"S3 · 13 Aug 2026", imdbId:"tt31491435"},

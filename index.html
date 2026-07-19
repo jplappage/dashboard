@@ -356,7 +356,8 @@
     const ymd = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
     const today = ymd(now);
 
-    const dated    = FILMS.filter(f => f.vodDate);
+    // Only surface confirmed dates in the teaser — estimates aren't reliable enough to promise.
+    const dated    = FILMS.filter(f => f.vodDate && f.estimated !== true);
     const ready    = dated.filter(f => f.vodDate <= today);
     const upcoming = dated.filter(f => f.vodDate > today).sort((a,b) => a.vodDate.localeCompare(b.vodDate));
 
