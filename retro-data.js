@@ -181,8 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 16 Jul 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 19 Jul 2026)
 const RETRO_LETTERBOXD = {
+
+  130:"2026-07-18", // King Richard
 
   79: "2026-07-12", // The Assassination of Jesse James
   125:"2026-07-03", // Licorice Pizza
@@ -277,6 +279,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  130: 4.0,  // King Richard
   79:  3.0,  // The Assassination of Jesse James
   125: 3.0,  // Licorice Pizza
   80:  2.0,  // Synecdoche, New York
