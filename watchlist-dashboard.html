@@ -366,6 +366,7 @@
     .cal-film-watched { background: #0c2616; color: #52a06e; opacity: 0.85; }
     .cal-tv        { background: #252525; color: #aaaaaa; }
     .cal-est       { opacity: 0.72; }
+    .cal-film-cinema  { background: #312e81; color: #a5b4fc; }
     .back-arrow {
       display: inline-flex; align-items: center; gap: 5px;
       padding: 5px 14px; border-radius: 100px; border: 1px solid #333;
@@ -597,6 +598,7 @@ const CAL_EVENTS = (() => {
   FILMS.forEach(f => {
     if (!f.vodDate) return;
     const past = parseLocalDate(f.vodDate) <= TODAY;
+    if (f.cinema) { add(f.vodDate, '🎬 ' + f.title, 'cal-film-cinema'); return; }
     add(f.vodDate, f.title, past ? 'cal-film-out' : 'cal-film-soon' + (f.estimated ? ' cal-est' : ''));
   });
   WATCHED.forEach(w => add(w.vodDate, '✓ ' + w.title, 'cal-film-watched'));
