@@ -60,6 +60,7 @@ const FILMS = [
     vodDate: '2026-07-29',
     platform: null,
     estimated: true,
+    cinema: true,
     note: 'Cinema release 29 Jul 2026 (UK) · VOD est. follows once released (~45-day window)',
   },
   {
@@ -82,6 +83,7 @@ const FILMS = [
     vodDate: '2026-08-07',
     platform: null,
     estimated: true,
+    cinema: true,
     note: 'Cinema release 7 Aug 2026 · VOD est. follows once released (~45-day window)',
   },
   {

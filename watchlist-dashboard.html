@@ -544,9 +544,11 @@ function renderCard(film) {
     }
     return 'Stream date TBC';
   }
-  const dateText = film.estimated
-    ? getEstText(film)
-    : (status === 'out' || status === 'soon') ? formatDate(film.vodDate) : 'Stream date TBC';
+  const dateText = film.cinema
+    ? `🎬 Cinemas ${formatDate(film.vodDate)}`
+    : film.estimated
+      ? getEstText(film)
+      : (status === 'out' || status === 'soon') ? formatDate(film.vodDate) : 'Stream date TBC';
 
   const newBadge = film.isNew ? `<span style="display:inline-block;background:#7c3aed;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px;vertical-align:middle;">🆕 NEW</span>` : '';
 
