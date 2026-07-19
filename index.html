@@ -402,7 +402,61 @@
   try {
     const j = await (await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200')).json();
     const now = new Date();
-    const games = (j.events || [])
+    const events = j.events || [];
+
+    // ── End of tournament: show the champion + Golden Boot instead of fixtures ──
+    const stateOf = e => (e.status && e.status.type && e.status.type.state) || '';
+    const final = events.find(e => e.season && e.season.slug === 'final');
+
+    // Golden Boot: tally every scoring play across the tournament.
+    // Own goals and shootout penalties don't count towards the award.
+    const topScorer = () => {
+      const tally = {};
+      events.forEach(e => {
+        ((e.competitions && e.competitions[0] && e.competitions[0].details) || []).forEach(d => {
+          if (!d.scoringPlay || d.ownGoal || d.shootout) return;
+          (d.athletesInvolved || []).slice(0, 1).forEach(a => {
+            const key = a.displayName || a.fullName;
+            if (key) tally[key] = (tally[key] || 0) + 1;
+          });
+        });
+      });
+      const ranked = Object.entries(tally).sort((a, b) => b[1] - a[1]);
+      if (!ranked.length || ranked[0][1] === 0) return null;
+      const top = ranked[0][1];
+      const tied = ranked.filter(r => r[1] === top);
+      return { name: tied[0][0], goals: top, shared: tied.length - 1 };
+    };
+
+    if (final && stateOf(final) === 'post') {
+      const c = final.competitions[0].competitors;
+      const win = c.find(x => x.winner) || c[0];
+      const lose = c.find(x => x !== win);
+      const score = win.score + '–' + lose.score;
+      const shootout = (final.competitions[0].details || []).some(d => d.shootout);
+      let line1 = '<span class="hot">CHAMPIONS: ' + win.team.displayName + '</span> · beat ' +
+                  lose.team.shortDisplayName + ' ' + score + (shootout ? ' (pens)' : '');
+      const gb = gbCache = topScorer();
+      const line2 = gb
+        ? 'Golden Boot: <span class="soon">' + gb.name + '</span> · ' + gb.goals + ' goals' +
+          (gb.shared ? ' (shared +' + gb.shared + ')' : '')
+        : '';
+      el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
+      return;
+    }
+
+    // Final kicked off but not finished — show it live.
+    if (final && stateOf(final) === 'in') {
+      const c = final.competitions[0].competitors;
+      const h = c.find(x => x.homeAway === 'home'), a = c.find(x => x.homeAway === 'away');
+      const st = final.status.type.detail || final.status.type.description || 'Live';
+      el.innerHTML = '<span class="dot"></span><span class="hot">FINAL LIVE</span> · ' +
+                     h.team.shortDisplayName + ' ' + h.score + '–' + a.score + ' ' +
+                     a.team.shortDisplayName + '<br><span class="soon">' + st + '</span>';
+      return;
+    }
+
+    const games = events
       .filter(e => new Date(e.date) > now && e.status && e.status.type && e.status.type.state === 'pre')
       .map(e => {
         let label = e.shortName || e.name || '';
