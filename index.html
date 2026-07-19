@@ -436,7 +436,7 @@
       const shootout = (final.competitions[0].details || []).some(d => d.shootout);
       let line1 = '<span class="hot">CHAMPIONS: ' + win.team.displayName + '</span> · beat ' +
                   lose.team.shortDisplayName + ' ' + score + (shootout ? ' (pens)' : '');
-      const gb = gbCache = topScorer();
+      const gb = topScorer();
       const line2 = gb
         ? 'Golden Boot: <span class="soon">' + gb.name + '</span> · ' + gb.goals + ' goals' +
           (gb.shared ? ' (shared +' + gb.shared + ')' : '')
