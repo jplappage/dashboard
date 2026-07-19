@@ -81,7 +81,6 @@ const FILMS = [
     note: 'In cinemas Jun 26 (wide 10 Jul) · PVOD est. early/mid Aug 2026 (~month after expansion)',
     imdbRating: 6.2,
   },
-  // ── PRE-THEATRICAL (not yet in cinemas) ───────────────────────────────────
   {
     title: 'Evil Dead Burn',
     year: 2026,
@@ -90,20 +89,10 @@ const FILMS = [
     vodDate: null,
     platform: null,
     estimated: true,
-    note: 'In cinemas 10 Jul · PVOD est. late Aug 2026 (WB 45-day window)',
+    note: 'In cinemas 10 Jul · PVOD est. early/mid Aug 2026 (WB 30-day window likely)',
     imdbRating: 6.8,
   },
-  {
-    title: 'The Odyssey',
-    year: 2026,
-    slug: 'the-odyssey-2026',
-    imdbRating: 8.3,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/5/5/3/9/4/1255394-the-odyssey-2026-0-600-0-900-crop.jpg?v=1eed046d0c',
-    vodDate: null,
-    platform: null,
-    estimated: true,
-    note: 'In cinemas 17 Jul 2026',
-  },
+  // ── PRE-THEATRICAL (not yet in cinemas) ───────────────────────────────────
   {
     title: 'Spider-Man: Brand New Day',
     year: 2026,
