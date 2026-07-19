@@ -50,6 +50,19 @@ const FILMS = [
     imdbRating: 6.1,
   },
   {
+    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
+    // snapped VOD estimate (Sony ~45-day window) once it opens.
+    title: 'Spider-Man: Brand New Day',
+    year: 2026,
+    slug: 'spider-man-brand-new-day',
+    plexSlug: 'spider-man-brand-new-day-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/8/7/2/8/7/1/872871-spider-man-brand-new-day-0-600-0-900-crop.jpg?v=c4e8aa418f',
+    vodDate: '2026-07-29',
+    platform: null,
+    estimated: true,
+    note: 'Cinema release 29 Jul 2026 (UK) · VOD est. follows once released (~45-day window)',
+  },
+  {
     title: 'The Death of Robin Hood',
     year: 2026,
     slug: 'the-death-of-robin-hood',
@@ -58,6 +71,18 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     imdbRating: 7.6,
+  },
+  {
+    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
+    // snapped VOD estimate (~45-day window) once it opens.
+    title: 'Ice Cream Man',
+    year: 2026,
+    slug: 'ice-cream-man-2026',
+    poster: 'https://image.tmdb.org/t/p/w342/c987gxFjXqYOxZEZKcTkS1ONTWH.jpg',
+    vodDate: '2026-08-07',
+    platform: null,
+    estimated: true,
+    note: 'Cinema release 7 Aug 2026 · VOD est. follows once released (~45-day window)',
   },
   {
     title: 'Jackass: Best and Last',
@@ -91,27 +116,6 @@ const FILMS = [
     estimated: true,
     note: 'Est. — cinemas 10 Jul + WB 30-day window (WTS: 30-ish likelier than 45), Tuesday drop',
     imdbRating: 6.8,
-  },
-  {
-    title: 'Spider-Man: Brand New Day',
-    year: 2026,
-    slug: 'spider-man-brand-new-day',
-    plexSlug: 'spider-man-brand-new-day-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/8/7/2/8/7/1/872871-spider-man-brand-new-day-0-600-0-900-crop.jpg?v=c4e8aa418f',
-    vodDate: '2026-09-15',
-    platform: null,
-    estimated: true,
-    note: 'Est. — in cinemas 29 Jul 2026 (UK) + Sony ~45-day window, Tuesday drop',
-  },
-  {
-    title: 'Ice Cream Man',
-    year: 2026,
-    slug: 'ice-cream-man-2026',
-    poster: 'https://image.tmdb.org/t/p/w342/c987gxFjXqYOxZEZKcTkS1ONTWH.jpg',
-    vodDate: '2026-09-22',
-    platform: null,
-    estimated: true,
-    note: 'Est. — in cinemas 7 Aug 2026 + ~45-day window, Tuesday drop',
   },
 ];
 
