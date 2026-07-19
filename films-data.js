@@ -158,4 +158,5 @@ const WATCHED = [
   { title: 'Moana', vodDate: '2026-07-12', imdbRating: 5.8 },
   { title: "California Schemin'", vodDate: '2026-07-06', imdbRating: 7.2 },
   { title: 'Backrooms', vodDate: '2026-07-14', imdbRating: 7.2 },
+  { title: 'The Odyssey', vodDate: '2026-07-18', imdbRating: 8.4 },
 ];
