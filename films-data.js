@@ -29,6 +29,16 @@ const FILMS = [
     imdbRating: 6.9,
   },
   {
+    title: 'Masters of the Universe',
+    year: 2026,
+    slug: 'masters-of-the-universe-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/3/8/6/6/1/3/386613-masters-of-the-universe-2026-0-230-0-345-crop.jpg?v=8340b3dfbe',
+    vodDate: '2026-07-22',
+    platform: 'Prime Video',
+    estimated: false,
+    imdbRating: 7.1,
+  },
+  {
     title: 'Supergirl',
     year: 2026,
     slug: 'supergirl-2026',
