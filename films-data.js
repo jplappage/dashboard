@@ -53,16 +53,6 @@ const FILMS = [
     note: 'Cinema release 29 Jul 2026 (UK) · VOD est. follows once released (~45-day window)',
   },
   {
-    title: 'The Death of Robin Hood',
-    year: 2026,
-    slug: 'the-death-of-robin-hood',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/8/5/8/1167858-the-death-of-robin-hood-0-230-0-345-crop.jpg?v=39347a2edd',
-    vodDate: '2026-07-28',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 7.6,
-  },
-  {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
     // snapped VOD estimate (~45-day window) once it opens.
     title: 'Ice Cream Man',
