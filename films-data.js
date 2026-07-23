@@ -19,16 +19,6 @@ const FILMS = [
     imdbRating: 5.6,
   },
   {
-    title: 'Disclosure Day',
-    year: 2026,
-    slug: 'disclosure-day',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/5/9/2/5/1/1159251-disclosure-day-0-230-0-345-crop.jpg?v=d5668e0229',
-    vodDate: '2026-07-21',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 6.9,
-  },
-  {
     title: 'Masters of the Universe',
     year: 2026,
     slug: 'masters-of-the-universe-2026',
