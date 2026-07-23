@@ -133,4 +133,5 @@ const WATCHED = [
   { title: 'Backrooms', vodDate: '2026-07-14', imdbRating: 7.2 },
   { title: 'The Odyssey', vodDate: '2026-07-18', imdbRating: 8.4 },
   { title: 'Disclosure Day', vodDate: '2026-07-21', imdbRating: 6.9 },
+  { title: 'Masters of the Universe', vodDate: '2026-07-22', imdbRating: 7.1 },
 ];
