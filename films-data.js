@@ -39,6 +39,16 @@ const FILMS = [
     imdbRating: 6.1,
   },
   {
+    title: 'The Death of Robin Hood',
+    year: 2026,
+    slug: 'the-death-of-robin-hood',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/8/5/8/1167858-the-death-of-robin-hood-0-230-0-345-crop.jpg?v=39347a2edd',
+    vodDate: '2026-07-28',
+    platform: 'Digital',
+    estimated: false,
+    imdbRating: 7.6,
+  },
+  {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
     // snapped VOD estimate (Sony ~45-day window) once it opens.
     title: 'Spider-Man: Brand New Day',
@@ -132,4 +142,5 @@ const WATCHED = [
   { title: "California Schemin'", vodDate: '2026-07-06', imdbRating: 7.2 },
   { title: 'Backrooms', vodDate: '2026-07-14', imdbRating: 7.2 },
   { title: 'The Odyssey', vodDate: '2026-07-18', imdbRating: 8.4 },
+  { title: 'Disclosure Day', vodDate: '2026-07-21', imdbRating: 6.9 },
 ];

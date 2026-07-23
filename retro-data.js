@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 21 Jul 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 23 Jul 2026)
 const RETRO_LETTERBOXD = {
 
   130:"2026-07-18", // King Richard
