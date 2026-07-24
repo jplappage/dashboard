@@ -9,6 +9,16 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
+    title: 'Carolina Caroline',
+    year: 2026,
+    slug: 'carolina-caroline',
+    imdbRating: 7.1,
+    poster: 'https://image.tmdb.org/t/p/w342/9Jkylw7Y5NQyi7C8IwXLBvVSrH2.jpg',
+    vodDate: '2026-06-23',
+    platform: 'Digital',
+    estimated: false,
+  },
+  {
     title: 'Scary Movie',
     year: 2026,
     slug: 'scary-movie-2026',
@@ -98,18 +108,6 @@ const FILMS = [
     note: 'Est. — cinemas 10 Jul + WB 30-day window (WTS: 30-ish likelier than 45), Tuesday drop',
     imdbRating: 6.8,
   },
-  {
-    title: 'Carolina Caroline',
-    year: 2026,
-    slug: 'carolina-caroline',
-    imdbRating: 7.1,
-    poster: 'https://image.tmdb.org/t/p/w342/9Jkylw7Y5NQyi7C8IwXLBvVSrH2.jpg',
-    vodDate: null,
-    platform: null,
-    estimated: true,
-    note: 'In cinemas 5 Jun 2026',
-  },
-
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
