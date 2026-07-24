@@ -19,16 +19,6 @@ const FILMS = [
     estimated: false,
   },
   {
-    title: 'Scary Movie',
-    year: 2026,
-    slug: 'scary-movie-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/5/6/9/1/0/1156910-scary-movie-2026-0-230-0-345-crop.jpg?v=b50abf5b96',
-    vodDate: '2026-07-21',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 5.6,
-  },
-  {
     title: 'Supergirl',
     year: 2026,
     slug: 'supergirl-2026',
@@ -144,4 +134,5 @@ const WATCHED = [
   { title: 'The Odyssey', vodDate: '2026-07-18', imdbRating: 8.4 },
   { title: 'Disclosure Day', vodDate: '2026-07-21', imdbRating: 6.9 },
   { title: 'Masters of the Universe', vodDate: '2026-07-22', imdbRating: 7.1 },
+  { title: 'Scary Movie', vodDate: '2026-07-21', imdbRating: 5.6 },
 ];
