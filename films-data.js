@@ -102,6 +102,7 @@ const FILMS = [
     title: 'Carolina Caroline',
     year: 2026,
     slug: 'carolina-caroline',
+    imdbRating: 7.1,
     poster: 'https://image.tmdb.org/t/p/w342/9Jkylw7Y5NQyi7C8IwXLBvVSrH2.jpg',
     vodDate: null,
     platform: null,
