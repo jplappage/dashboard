@@ -98,6 +98,17 @@ const FILMS = [
     note: 'Est. — cinemas 10 Jul + WB 30-day window (WTS: 30-ish likelier than 45), Tuesday drop',
     imdbRating: 6.8,
   },
+  {
+    title: 'Carolina Caroline',
+    year: 2026,
+    slug: 'carolina-caroline',
+    poster: 'https://image.tmdb.org/t/p/w342/9Jkylw7Y5NQyi7C8IwXLBvVSrH2.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 5 Jun 2026',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
