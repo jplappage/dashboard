@@ -9,16 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Carolina Caroline',
-    year: 2026,
-    slug: 'carolina-caroline',
-    imdbRating: 7.1,
-    poster: 'https://image.tmdb.org/t/p/w342/9Jkylw7Y5NQyi7C8IwXLBvVSrH2.jpg',
-    vodDate: '2026-06-23',
-    platform: 'Digital',
-    estimated: false,
-  },
-  {
     title: 'Supergirl',
     year: 2026,
     slug: 'supergirl-2026',
@@ -135,4 +125,5 @@ const WATCHED = [
   { title: 'Disclosure Day', vodDate: '2026-07-21', imdbRating: 6.9 },
   { title: 'Masters of the Universe', vodDate: '2026-07-22', imdbRating: 7.1 },
   { title: 'Scary Movie', vodDate: '2026-07-21', imdbRating: 5.6 },
+  { title: 'Carolina Caroline', vodDate: '2026-06-23', imdbRating: 7.1 },
 ];
