@@ -516,6 +516,8 @@ document.addEventListener('visibilitychange', () => {
 
 // ── INIT ──────────────────────────────────────────────────
 async function init() {
+  // default view: watchlist on, watched off
+  showWatched = false; showWatchlist = true;
   document.getElementById('filter-status').value = 'unwatched';
   // Show year column as active sort on load
   const yearArrow = document.getElementById('sort-year');
@@ -667,12 +669,8 @@ function syncPillFilter() {
 function resetFilters() {
   ['filter-genre','filter-decade','filter-runtime'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('filter-search').value = '';
-  document.getElementById('filter-status').value = 'unwatched';
-  const btn = document.getElementById('toggle-watched');
-  btn.textContent = '＋ Show watched';
-  btn.style.borderColor = '#444';
-  btn.style.color = '#888';
-  updateFilterOptions(); renderTable();
+  showWatched = false; showWatchlist = true;
+  syncPillFilter();
 }
 
 // ── SORT ──────────────────────────────────────────────────
