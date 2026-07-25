@@ -120,14 +120,16 @@
       font-family: inherit;
     }
     .btn-reset:hover { border-color: var(--gold); color: var(--gold); background: rgba(255,232,31,0.05); }
-    .btn-toggle-watched {
+    .pill-group { display: flex; gap: 8px; }
+    .pill {
       background: transparent; border: 1px solid rgba(255,232,31,0.35);
       color: #ffe81f; padding: 7px 16px; border-radius: 100px;
       cursor: pointer; font-size: 0.82rem; transition: all 0.15s;
       font-family: inherit; white-space: nowrap; letter-spacing: 0.3px;
-      align-self: flex-end;
+      opacity: 0.5;
     }
-    .btn-toggle-watched:hover, .btn-toggle-watched.showing { background: rgba(255,232,31,0.1); border-color: #ffe81f; }
+    .pill:hover { border-color: #ffe81f; opacity: 0.85; }
+    .pill.active { background: rgba(255,232,31,0.15); border-color: #ffe81f; opacity: 1; }
 
     /* ── TABLE META ── */
     .table-meta {
