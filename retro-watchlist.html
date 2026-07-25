@@ -768,25 +768,36 @@ function esc(s) {
 
 // ── STATS ─────────────────────────────────────────────────
 function updateStats() {
-  const total        = FILMS.length;
-  const watchedIds   = FILMS.filter(f => watchedData[f.id]).map(f => f.id);
-  const watchedCount = watchedIds.length;
-  const pct          = (watchedCount / total * 100).toFixed(1);
+  // Respect the active category filters (genre/decade/runtime/search) but IGNORE
+  // the Watched/Watchlist pills — otherwise the denominator would collapse.
+  const pool         = filterFilms({ status: '' });
+  const total        = pool.length;
+  const watchedCount = pool.filter(f => watchedData[f.id]).length;
+  const pct          = total ? (watchedCount / total * 100).toFixed(1) : '0.0';
+
+  // Describe the filtered subset, e.g. "Drama" or "1980s Comedy"
+  const gVal   = document.getElementById('filter-genre').value;
+  const dVal   = document.getElementById('filter-decade').value;
+  const label  = [dVal, gVal].filter(Boolean).join(' ');
+  const noun   = label ? `${label} films` : 'films';
 
   document.getElementById('stat-pct').textContent        = pct + '%';
-  document.getElementById('stat-count').textContent      = `${watchedCount} of ${total} films`;
+  document.getElementById('stat-count').textContent      = `${watchedCount} of ${total} ${noun}`;
   document.getElementById('progress-fill').style.width   = pct + '%';
 
-  // Runtime remaining
-  const unwatched    = FILMS.filter(f => !watchedData[f.id]);
+  // Runtime remaining (within the filtered pool)
+  const unwatched    = pool.filter(f => !watchedData[f.id]);
   const remMins      = unwatched.reduce((s, f) => s + f.runtime, 0);
   const remHours     = Math.round(remMins / 60);
   const remDays      = (remMins / 60 / 24).toFixed(1);
   document.getElementById('stat-runtime').textContent    = remHours.toLocaleString() + 'h';
   document.getElementById('stat-runtime-sub').textContent = `${remMins.toLocaleString()} mins · ${unwatched.length} films · ${remDays} days`;
 
-  // Completion estimate: rate based on first watch date to today
-  const datedEntries = FILMS
+  // Completion estimate: rate based on first watch date to today (within the pool)
+  document.getElementById('stat-est').textContent     = '—';
+  document.getElementById('stat-est-sub').textContent = 'based on your watching pace';
+
+  const datedEntries = pool
     .filter(f => watchedData[f.id])
     .map(f => new Date(watchedData[f.id]))
     .filter(d => !isNaN(d))
