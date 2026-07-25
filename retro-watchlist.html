@@ -324,12 +324,19 @@
     <option value="">All Films</option>
     <option value="unwatched">Unwatched</option>
     <option value="watched">Watched</option>
+    <option value="__none__">None</option>
   </select>
   <div class="filter-group">
     <span class="filter-label">Search</span>
     <input type="text" class="search-input" id="filter-search" placeholder="Search title…" oninput="applyFilters()">
   </div>
-  <button id="toggle-watched" class="btn-toggle-watched" onclick="toggleWatchedFilter()">＋ Show watched</button>
+  <div class="filter-group">
+    <span class="filter-label">Show</span>
+    <div class="pill-group">
+      <button id="pill-watched" class="pill" onclick="togglePill('watched')">Watched</button>
+      <button id="pill-watchlist" class="pill active" onclick="togglePill('watchlist')">Watchlist</button>
+    </div>
+  </div>
   <button class="btn-reset" onclick="resetFilters()">↺ Reset</button>
 </div>
 
@@ -550,6 +557,7 @@ function filterFilms({ genre, decade, runtime, status, search } = {}) {
     if (r === 'r120'     && f.runtime >= 120) return false;
     if (r === 'r150'     && f.runtime >= 150) return false;
     if (r === 'r150plus' && f.runtime <  150) return false;
+    if (s === '__none__') return false;
     if (s === 'watched'   && !watchedData[f.id]) return false;
     if (s === 'unwatched' &&  watchedData[f.id]) return false;
     if (q && !f.title.toLowerCase().includes(q)) return false;
