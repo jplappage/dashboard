@@ -734,7 +734,7 @@ function renderTable() {
           : (f.lbRating != null ? `<span class="lb-star">★</span><span class="lb-val"> ${f.lbRating.toFixed(1)}</span>` : '—')
         }
       </td>
-      <td class="td-date">${date || '—'}</td>
+      <td class="td-date">${formatDate(date) || '—'}</td>
     </tr>`;
   }).join('');
 }
