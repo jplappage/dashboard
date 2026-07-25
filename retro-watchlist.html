@@ -630,7 +630,7 @@ function updateFilterOptions() {
 
 function populateFilters() { updateFilterOptions(); }
 
-function applyFilters() { updateFilterOptions(); renderTable(); }
+function applyFilters() { updateFilterOptions(); renderTable(); updateStats(); }
 
 function pickRandom() {
   // Use current filters, but always exclude already-watched films
@@ -819,7 +819,7 @@ function updateStats() {
       document.getElementById('stat-est-sub').textContent = `~${Math.round(daysLeft/30)} months · ${ratePerMo} films/month pace`;
     } else if (remaining === 0) {
       document.getElementById('stat-est').textContent    = 'Complete! 🎬';
-      document.getElementById('stat-est-sub').textContent = 'All 170 films watched';
+      document.getElementById('stat-est-sub').textContent = `All ${total} ${noun} watched`;
     }
   }
 }
