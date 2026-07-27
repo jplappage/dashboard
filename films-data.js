@@ -88,6 +88,17 @@ const FILMS = [
     note: 'Est. — cinemas 10 Jul + WB 30-day window (WTS: 30-ish likelier than 45), Tuesday drop',
     imdbRating: 6.8,
   },
+  {
+    title: 'Leviticus',
+    year: 2026,
+    slug: 'leviticus-2026',
+    poster: 'https://image.tmdb.org/t/p/w342/cu0XnXLzJGPeI0msCoJKgnEecKz.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 4 Sep 2026',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
