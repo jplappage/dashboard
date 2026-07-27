@@ -282,8 +282,8 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
-  57:  2.5,  // The Princess Diaries
-  117: 3.5,  // Suspiria
+  57:  3.0,  // The Princess Diaries
+  117: 2.0,  // Suspiria
   130: 4.0,  // King Richard
   79:  3.0,  // The Assassination of Jesse James
   125: 3.0,  // Licorice Pizza
