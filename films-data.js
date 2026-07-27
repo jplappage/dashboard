@@ -92,11 +92,11 @@ const FILMS = [
     title: 'Leviticus',
     year: 2026,
     slug: 'leviticus-2026',
+    imdbRating: 5.3,
     poster: 'https://image.tmdb.org/t/p/w342/cu0XnXLzJGPeI0msCoJKgnEecKz.jpg',
-    vodDate: null,
-    platform: null,
-    estimated: true,
-    note: 'In cinemas 4 Sep 2026',
+    vodDate: '2026-07-28',
+    platform: 'Digital',
+    estimated: false,
   },
 
 ];
