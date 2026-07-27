@@ -103,22 +103,20 @@ Then verify both the Letterboxd and Plex slugs:
 WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = update `next` and remove any `recheck`. Still vague = leave or refine the window, and set `recheck` to one week ahead (`"YYYY-MM-DD"`), aligned to a Friday — most release-date announcements cluster midweek and WhenToStream's tracker rounds them up on Fridays.
 
 **For each retro film newly watched:**
-The watched date comes from the diary (already loaded). The personal rating comes from JP's own review page.
+Both the watched date AND the personal rating come straight from the **diary page** (`https://letterboxd.com/zidanejp/films/diary/`, already loaded in Phase 1). The diary has a **RATING column** next to each entry showing JP's own stars — read it there. Do NOT open the individual review page for the rating.
 
-Navigate to `https://letterboxd.com/zidanejp/film/{slug}/`.
+⚠️ **Why not the review page:** `letterboxd.com/zidanejp/film/{slug}/` shows TWO ratings — JP's and a FRIEND's rating in the "YOUR FRIENDS" sidebar (`-nano`). A blind `.rating` / `[class*="rated-"]` query there grabs the friend's, which has produced wrong ratings on multiple refreshes (logged friend's ★★½/★★★½ instead of JP's ★★★/★★). The diary page has no friend ratings, so it's the safe source.
 
-⚠️ **CRITICAL — the recurring bug:** this page shows TWO ratings: JP's own rating in the review header (green stars directly under the film title, mirrored in the "Rated" box top-right), AND a **friend's** rating down in the "YOUR FRIENDS" sidebar. A blind `[class*="rated-"]` / `.rating` query returns the FRIEND's rating (rendered `-nano`), not JP's — this has produced wrong ratings on multiple refreshes (e.g. logged the friend's ★★½/★★★½ instead of JP's ★★★/★★). **JP's rating is the ONLY one that counts.**
-
-**Method — screenshot is the source of truth, not the DOM:**
-1. Take a screenshot of the page (`mcp__claude-in-chrome__computer` action `screenshot`).
-2. Read the green star row **directly beneath the film title** (e.g. `★★★` = 3.0, `★★½` = 2.5). Cross-check it against the "Rated" panel in the top-right sidebar — they must agree. That is JP's rating.
-3. **Ignore entirely** any stars in the "YOUR FRIENDS" section lower on the page.
-
-Only if you also want a DOM cross-check, scope it to the review header and exclude the friend sidebar — never read a bare `.rating`:
+**Extract diary rating + date together** — each diary row carries JP's rating in `td.td-rating`. Run this on the diary page:
 ```js
-(document.querySelector('.film-detail-content .rating, section.viewings .-green.rating, .review .rating:not(.-nano)')||{}).textContent
+[...document.querySelectorAll('tr.diary-entry-row, .diary-entry-row, tbody tr')].map(tr=>{
+  const name=(tr.querySelector('[data-item-name]')||{}).dataset?.itemName || (tr.querySelector('.headline-3, h2')||{}).textContent?.trim();
+  const r=tr.querySelector('td.td-rating .rating, .td-rating .rating');
+  const cls=r? r.className.match(/rated-(\d+)/) : null;
+  return {name, stars: cls? (+cls[1])/2 : null, ratedClass: r?r.className:null};
+}).filter(x=>x.name)
 ```
-But if the DOM value and the screenshot ever disagree, the screenshot wins. Half-star mapping: `rated-N` = N ÷ 2 stars (rated-6 = 3.0, rated-4 = 2.0), but only trust it once you've confirmed you scoped to JP's element and not a friend's.
+`rated-N` on the diary page = N ÷ 2 stars (rated-6 = 3.0, rated-4 = 2.0, rated-7 = 3.5). If the scrape is ever unclear, screenshot the diary page and read the RATING column directly — that column is the source of truth.
 
 **Before moving to Phase 4, verify:**
 - [ ] Every film with `vodDate: null` or `estimated: true` was searched OR listed as skipped (pre-theatrical)
