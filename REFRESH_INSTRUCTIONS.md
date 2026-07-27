@@ -103,17 +103,22 @@ Then verify both the Letterboxd and Plex slugs:
 WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = update `next` and remove any `recheck`. Still vague = leave or refine the window, and set `recheck` to one week ahead (`"YYYY-MM-DD"`), aligned to a Friday — most release-date announcements cluster midweek and WhenToStream's tracker rounds them up on Fridays.
 
 **For each retro film newly watched:**
-The watched date comes from the diary (already loaded). Personal rating comes from the diary entry.
+The watched date comes from the diary (already loaded). The personal rating comes from JP's own review page.
 
-To get the personal rating, navigate to `https://letterboxd.com/zidanejp/film/{slug}/` and extract the `rated-N` CSS class from the DOM:
+Navigate to `https://letterboxd.com/zidanejp/film/{slug}/`.
+
+⚠️ **CRITICAL — the recurring bug:** this page shows TWO ratings: JP's own rating in the review header (green stars directly under the film title, mirrored in the "Rated" box top-right), AND a **friend's** rating down in the "YOUR FRIENDS" sidebar. A blind `[class*="rated-"]` / `.rating` query returns the FRIEND's rating (rendered `-nano`), not JP's — this has produced wrong ratings on multiple refreshes (e.g. logged the friend's ★★½/★★★½ instead of JP's ★★★/★★). **JP's rating is the ONLY one that counts.**
+
+**Method — screenshot is the source of truth, not the DOM:**
+1. Take a screenshot of the page (`mcp__claude-in-chrome__computer` action `screenshot`).
+2. Read the green star row **directly beneath the film title** (e.g. `★★★` = 3.0, `★★½` = 2.5). Cross-check it against the "Rated" panel in the top-right sidebar — they must agree. That is JP's rating.
+3. **Ignore entirely** any stars in the "YOUR FRIENDS" section lower on the page.
+
+Only if you also want a DOM cross-check, scope it to the review header and exclude the friend sidebar — never read a bare `.rating`:
 ```js
-[...document.querySelectorAll('[class*="rated-"]')].map(el=>el.className.toString())
+(document.querySelector('.film-detail-content .rating, section.viewings .-green.rating, .review .rating:not(.-nano)')||{}).textContent
 ```
-**Do NOT infer the rating from `rated-N` alone** — the class value does not reliably map to star count without visual confirmation. Instead, also extract the `aria-label` which contains the plain-English rating:
-```js
-[...document.querySelectorAll('[aria-label*="star"], [aria-label*="rating"], .rating[aria-label]')].map(el=>el.getAttribute('aria-label'))
-```
-If `aria-label` is unavailable, take a screenshot of the page and count the filled stars visually. The review page header shows stars like `★★` or `★★½` — use that as the source of truth. Previous errors have come from misreading `rated-5` as 2.5 stars when the actual rating was 2.0 stars.
+But if the DOM value and the screenshot ever disagree, the screenshot wins. Half-star mapping: `rated-N` = N ÷ 2 stars (rated-6 = 3.0, rated-4 = 2.0), but only trust it once you've confirmed you scoped to JP's element and not a friend's.
 
 **Before moving to Phase 4, verify:**
 - [ ] Every film with `vodDate: null` or `estimated: true` was searched OR listed as skipped (pre-theatrical)
