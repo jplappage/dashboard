@@ -181,8 +181,11 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 25 Jul 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 27 Jul 2026)
 const RETRO_LETTERBOXD = {
+
+  57: "2026-07-26", // The Princess Diaries
+  117:"2026-07-25", // Suspiria
 
   130:"2026-07-18", // King Richard
 
@@ -279,6 +282,8 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  57:  2.5,  // The Princess Diaries
+  117: 3.5,  // Suspiria
   130: 4.0,  // King Richard
   79:  3.0,  // The Assassination of Jesse James
   125: 3.0,  // Licorice Pizza
