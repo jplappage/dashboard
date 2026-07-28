@@ -82,10 +82,9 @@ const FILMS = [
     year: 2026,
     slug: 'evil-dead-burn',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/9/7/0/2/2/1097022-evil-dead-burn-0-600-0-900-crop.jpg?v=398ff82d46',
-    vodDate: '2026-08-11',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 10 Jul + WB 30-day window (WTS: 30-ish likelier than 45), Tuesday drop',
+    vodDate: '2026-08-04',
+    platform: 'Digital',
+    estimated: false,
     imdbRating: 6.8,
   },
   {
