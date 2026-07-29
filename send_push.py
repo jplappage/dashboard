@@ -71,15 +71,15 @@ def main():
         print('No push subscriptions saved yet — nothing to send.')
         return 0
 
-    # "Dashboard" (the source, like a news app's name) is the bold title; the
-    # full message — a short label line then the detail — goes in the body
-    # below, so long lines wrap instead of truncating in the title.
-    # NOTIFY_TITLE can override the title if ever needed.
-    title = os.environ.get('NOTIFY_TITLE', '').strip() or 'Dashboard'
+    # iOS already shows "from Dashboard" (the app name) as the source line, so
+    # the bold title should be the alert's own label — the first line each
+    # summary starts with (e.g. "Match reminder") — and the rest is the body.
+    # Reads as:  from Dashboard  /  <label>  /  <detail>.  (Manual sends set no
+    # label, so their first typed line is the title, as before.)
     parts = [p for p in load_summary().split('\n') if p.strip()]
     payload = json.dumps({
-        'title': title,
-        'body': '\n'.join(parts),
+        'title': parts[0] if parts else 'Watchlist update',
+        'body': '\n'.join(parts[1:]),
         'url': DASH_URL,
     })
 
