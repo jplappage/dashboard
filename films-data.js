@@ -9,24 +9,14 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Supergirl',
+    title: 'Leviticus',
     year: 2026,
-    slug: 'supergirl-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/9/7/4/2/8/6/974286-supergirl-2026-0-230-0-345-crop.jpg?v=16179d9c14',
+    slug: 'leviticus-2026',
+    imdbRating: 5.3,
+    poster: 'https://image.tmdb.org/t/p/w342/cu0XnXLzJGPeI0msCoJKgnEecKz.jpg',
     vodDate: '2026-07-28',
     platform: 'Digital',
     estimated: false,
-    imdbRating: 6.1,
-  },
-  {
-    title: 'The Death of Robin Hood',
-    year: 2026,
-    slug: 'the-death-of-robin-hood',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/8/5/8/1167858-the-death-of-robin-hood-0-230-0-345-crop.jpg?v=39347a2edd',
-    vodDate: '2026-07-28',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 7.6,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
@@ -41,6 +31,16 @@ const FILMS = [
     estimated: true,
     cinema: true,
     note: 'Cinema release 29 Jul 2026 (UK) · VOD est. follows once released (~45-day window)',
+  },
+  {
+    title: 'Evil Dead Burn',
+    year: 2026,
+    slug: 'evil-dead-burn',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/9/7/0/2/2/1097022-evil-dead-burn-0-600-0-900-crop.jpg?v=398ff82d46',
+    vodDate: '2026-08-04',
+    platform: 'Prime Video / Apple TV+',
+    estimated: false,
+    imdbRating: 6.8,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
@@ -76,26 +76,6 @@ const FILMS = [
     estimated: true,
     note: 'Est. — A24, ~month after 10 Jul wide expansion, Tuesday drop',
     imdbRating: 6.2,
-  },
-  {
-    title: 'Evil Dead Burn',
-    year: 2026,
-    slug: 'evil-dead-burn',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/9/7/0/2/2/1097022-evil-dead-burn-0-600-0-900-crop.jpg?v=398ff82d46',
-    vodDate: '2026-08-04',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 6.8,
-  },
-  {
-    title: 'Leviticus',
-    year: 2026,
-    slug: 'leviticus-2026',
-    imdbRating: 5.3,
-    poster: 'https://image.tmdb.org/t/p/w342/cu0XnXLzJGPeI0msCoJKgnEecKz.jpg',
-    vodDate: '2026-07-28',
-    platform: 'Digital',
-    estimated: false,
   },
 
 ];
@@ -136,4 +116,6 @@ const WATCHED = [
   { title: 'Masters of the Universe', vodDate: '2026-07-22', imdbRating: 7.1 },
   { title: 'Scary Movie', vodDate: '2026-07-21', imdbRating: 5.6 },
   { title: 'Carolina Caroline', vodDate: '2026-06-23', imdbRating: 7.1 },
+  { title: 'Supergirl', vodDate: '2026-07-28', imdbRating: 6.1 },
+  { title: 'The Death of Robin Hood', vodDate: '2026-07-28', imdbRating: 7.6 },
 ];

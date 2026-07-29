@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 27 Jul 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 29 Jul 2026)
 const RETRO_LETTERBOXD = {
 
   57: "2026-07-26", // The Princess Diaries

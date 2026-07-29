@@ -122,8 +122,9 @@ def main():
         json.dump(notified, f, indent=0, sort_keys=True)
 
     if lines:
+        header = 'Match reminder' if len(lines) == 1 else 'Match reminders'
         with open(SUMMARY_FILE, 'w') as f:
-            f.write('\n'.join(lines))
+            f.write(header + '\n' + '\n'.join(lines))
     else:
         print('No matches within the next %g hours.' % LEAD_HOURS)
     return 0
