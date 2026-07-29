@@ -288,8 +288,9 @@ def main():
         for c in changes:
             print(' -', c)
         # Only date changes go in the summary (that's what gets push-notified).
+        header = 'Release date update' if len(changes) == 1 else 'Release date updates'
         with open(SUMMARY_FILE, 'w') as f:
-            f.write('\n'.join(changes))
+            f.write(header + '\n' + '\n'.join(changes))
     if filled:
         print('\nRatings filled:', ', '.join(filled))
     return 0

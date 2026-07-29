@@ -82,7 +82,7 @@ def main():
         return 0
 
     with open(SUMMARY_FILE, 'w') as f:
-        f.write('\n'.join(lines))
+        f.write('Out today\n' + '\n'.join(lines))
     print('Out today (%s):' % TODAY)
     for l in lines:
         print(' -', l)

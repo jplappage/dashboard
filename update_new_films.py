@@ -178,8 +178,9 @@ def main():
 
     with open(FILMS_FILE, 'w', encoding='utf-8') as f:
         f.write(text)
+    header = 'New film added' if len(added) == 1 else 'New films added'
     with open(SUMMARY_FILE, 'w') as f:
-        f.write('\n'.join('Added to watchlist: %s' % a for a in added))
+        f.write(header + '\n' + '\n'.join(added))
     print('\nAdded %d film(s).' % len(added))
     return 0
 

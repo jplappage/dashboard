@@ -158,8 +158,9 @@ def main():
     print('\nUpdated shows-data.js:')
     for c in changes:
         print(' -', c)
+    header = 'Show update' if len(changes) == 1 else 'Show updates'
     with open(SUMMARY_FILE, 'w') as f:
-        f.write('\n'.join(changes))
+        f.write(header + '\n' + '\n'.join(changes))
     return 0
 
 
