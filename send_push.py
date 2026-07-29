@@ -71,13 +71,15 @@ def main():
         print('No push subscriptions saved yet — nothing to send.')
         return 0
 
-    # Use the content itself as the headline (the app name already shows as the
-    # source, so a separate "Dashboard" title is redundant). First line = title,
-    # any remaining lines = body.
+    # "Dashboard" (the source, like a news app's name) is the bold title; the
+    # full message — a short label line then the detail — goes in the body
+    # below, so long lines wrap instead of truncating in the title.
+    # NOTIFY_TITLE can override the title if ever needed.
+    title = os.environ.get('NOTIFY_TITLE', '').strip() or 'Dashboard'
     parts = [p for p in load_summary().split('\n') if p.strip()]
     payload = json.dumps({
-        'title': parts[0] if parts else 'Watchlist update',
-        'body': '\n'.join(parts[1:]),
+        'title': title,
+        'body': '\n'.join(parts),
         'url': DASH_URL,
     })
 
