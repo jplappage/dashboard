@@ -9,30 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Leviticus',
-    year: 2026,
-    slug: 'leviticus-2026',
-    imdbRating: 5.3,
-    poster: 'https://image.tmdb.org/t/p/w342/cu0XnXLzJGPeI0msCoJKgnEecKz.jpg',
-    vodDate: '2026-07-28',
-    platform: 'Digital',
-    estimated: false,
-  },
-  {
-    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
-    // snapped VOD estimate (Sony ~45-day window) once it opens.
-    title: 'Spider-Man: Brand New Day',
-    year: 2026,
-    slug: 'spider-man-brand-new-day',
-    plexSlug: 'spider-man-brand-new-day-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/8/7/2/8/7/1/872871-spider-man-brand-new-day-0-600-0-900-crop.jpg?v=c4e8aa418f',
-    vodDate: '2026-07-29',
-    platform: null,
-    estimated: true,
-    cinema: true,
-    note: 'Cinema release 29 Jul 2026 (UK) · VOD est. follows once released (~45-day window)',
-  },
-  {
     title: 'Evil Dead Burn',
     year: 2026,
     slug: 'evil-dead-burn',
