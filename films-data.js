@@ -53,6 +53,85 @@ const FILMS = [
     note: 'Est. — A24, ~month after 10 Jul wide expansion, Tuesday drop',
     imdbRating: 6.2,
   },
+  {
+    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
+    // snapped VOD estimate (~45-day window) once it opens.
+    title: 'The End of Oak Street',
+    year: 2026,
+    slug: 'the-end-of-oak-street',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/9/9/2/9/6/2/992962-the-end-of-oak-street-0-600-0-900-crop.jpg?v=b06dbfb4c9',
+    vodDate: '2026-08-14',
+    platform: null,
+    estimated: true,
+    cinema: true,
+    note: 'Cinema release 14 Aug 2026 (Warner Bros) · VOD est. follows once released (~45-day window)',
+  },
+  {
+    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
+    // snapped VOD estimate (~45-day window) once it opens.
+    title: 'Insidious: Out of the Further',
+    year: 2026,
+    slug: 'insidious-out-of-the-further',
+    plexSlug: 'insidious-out-of-the-further-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/4/1/5/7/1174157-insidious-out-of-the-further-0-600-0-900-crop.jpg?v=b6c81c5505',
+    vodDate: '2026-08-21',
+    platform: null,
+    estimated: true,
+    cinema: true,
+    note: 'Cinema release 21 Aug 2026 (Sony) · VOD est. follows once released (~45-day window)',
+  },
+  {
+    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
+    // snapped VOD estimate (~45-day window) once it opens.
+    title: 'Mutiny',
+    year: 2026,
+    slug: 'mutiny-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/1/6/8/9/1171689-mutiny-2026-0-600-0-900-crop.jpg?v=ff413ceded',
+    vodDate: '2026-08-21',
+    platform: null,
+    estimated: true,
+    cinema: true,
+    note: 'Cinema release 21 Aug 2026 (Lionsgate) · VOD est. follows once released (~45-day window)',
+  },
+  {
+    title: 'I Want Your Sex',
+    year: 2026,
+    slug: 'i-want-your-sex',
+    plexSlug: 'i-want-your-sex-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/9/5/4/1170954-i-want-your-sex-0-600-0-900-crop.jpg?v=c13a0c57b7',
+    vodDate: '2026-08-25',
+    platform: null,
+    estimated: true,
+    note: 'Est. — Magnolia, VOD est. ~3-4 wks after 31 Jul theatrical, Tuesday drop',
+    imdbRating: 6.1,
+  },
+  {
+    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
+    // snapped VOD estimate (~45-day window) once it opens.
+    title: 'The Dog Stars',
+    year: 2026,
+    slug: 'the-dog-stars',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/9/2/8/7/1269287-the-dog-stars-0-600-0-900-crop.jpg?v=b44af504b0',
+    vodDate: '2026-08-26',
+    platform: null,
+    estimated: true,
+    cinema: true,
+    note: 'Cinema release 26 Aug 2026 (20th Century) · VOD est. follows once released (~45-day window)',
+  },
+  {
+    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
+    // snapped VOD estimate (~45-day window) once it opens. Festival IMDb score set.
+    title: 'Colony',
+    year: 2026,
+    slug: 'colony-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/2/1/7/0/1262170-colony-2026-0-600-0-900-crop.jpg?v=10448d0145',
+    vodDate: '2026-08-28',
+    platform: null,
+    estimated: true,
+    cinema: true,
+    note: 'Cinema release 28 Aug 2026 (Well Go USA) · VOD est. follows once released (~45-day window)',
+    imdbRating: 6.6,
+  },
 
 ];
 
