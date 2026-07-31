@@ -94,4 +94,6 @@ const WATCHED = [
   { title: 'Carolina Caroline', vodDate: '2026-06-23', imdbRating: 7.1 },
   { title: 'Supergirl', vodDate: '2026-07-28', imdbRating: 6.1 },
   { title: 'The Death of Robin Hood', vodDate: '2026-07-28', imdbRating: 7.6 },
+  { title: 'Leviticus', vodDate: '2026-07-28', imdbRating: 5.3 },
+  { title: 'Spider-Man: Brand New Day', vodDate: '2026-07-29', imdbRating: 8.3 },
 ];
