@@ -132,6 +132,20 @@ const FILMS = [
     note: 'Cinema release 28 Aug 2026 (Well Go USA) · VOD est. follows once released (~45-day window)',
     imdbRating: 6.6,
   },
+  {
+    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
+    // snapped VOD estimate (~45-day window) once it opens.
+    title: 'Cliffhanger',
+    year: 2026,
+    slug: 'cliffhanger-2026',
+    lbSlug: 'cliffhanger-1',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/0/9/9/3/3/1009933-cliffhanger-2026-0-600-0-900-crop.jpg?v=f866b04974',
+    vodDate: '2026-08-28',
+    platform: null,
+    estimated: true,
+    cinema: true,
+    note: 'Cinema release 28 Aug 2026 (Decal) · VOD est. follows once released (~45-day window)',
+  },
 
 ];
 
