@@ -151,6 +151,7 @@ const FILMS = [
     title: 'Cliffhanger',
     year: 1993,
     slug: 'cliffhanger-1',
+    imdbRating: 6.5,
     poster: 'https://image.tmdb.org/t/p/w342/b28DOM54OHb1c7Lsk6Nu7Kwuonj.jpg',
     vodDate: null,
     platform: null,
