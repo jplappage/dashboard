@@ -136,15 +136,16 @@ const FILMS = [
   },
 
   {
-    title: 'Cliffhanger',
-    year: 1993,
-    slug: 'cliffhanger-1',
-    imdbRating: 6.5,
-    poster: 'https://image.tmdb.org/t/p/w342/b28DOM54OHb1c7Lsk6Nu7Kwuonj.jpg',
-    vodDate: null,
+    title: 'I Want Your Sex',
+    year: 2026,
+    slug: 'i-want-your-sex',
+    plexSlug: 'i-want-your-sex-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/9/5/4/1170954-i-want-your-sex-0-600-0-900-crop.jpg?v=c13a0c57b7',
+    vodDate: '2026-09-01',
     platform: null,
     estimated: true,
-    note: 'In cinemas 25 Jun 1993',
+    note: 'Est. — Magnolia wide, VOD before Labor Day (early Sep per WhenToStream 7/31), Tuesday drop',
+    imdbRating: 6.1,
   },
 
 ];
