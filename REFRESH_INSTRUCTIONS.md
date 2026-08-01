@@ -2,6 +2,8 @@
 
 Run all phases in order. Within each phase, do everything listed simultaneously.
 
+**Commentary style:** keep running commentary to a minimum. A short headline before each phase is fine, and give a proper final summary at the end. Don't narrate every search, diff, or edit in between — just do the work and report changes in the closing summary.
+
 ---
 
 ## Phase 1 — Load (all at once)
