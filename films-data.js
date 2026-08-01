@@ -94,18 +94,6 @@ const FILMS = [
     note: 'Cinema release 21 Aug 2026 (Lionsgate) · VOD est. follows once released (~45-day window)',
   },
   {
-    title: 'I Want Your Sex',
-    year: 2026,
-    slug: 'i-want-your-sex',
-    plexSlug: 'i-want-your-sex-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/9/5/4/1170954-i-want-your-sex-0-600-0-900-crop.jpg?v=c13a0c57b7',
-    vodDate: '2026-08-25',
-    platform: null,
-    estimated: true,
-    note: 'Est. — Magnolia, VOD est. ~3-4 wks after 31 Jul theatrical, Tuesday drop',
-    imdbRating: 6.1,
-  },
-  {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
     // snapped VOD estimate (~45-day window) once it opens.
     title: 'The Dog Stars',
