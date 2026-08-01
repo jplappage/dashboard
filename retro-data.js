@@ -181,9 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 31 Jul 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 1 Aug 2026)
 const RETRO_LETTERBOXD = {
 
+  65: "2026-08-01", // Mean Girls
   57: "2026-07-26", // The Princess Diaries
   117:"2026-07-25", // Suspiria
 
@@ -282,6 +283,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  65:  3.0,  // Mean Girls
   57:  3.0,  // The Princess Diaries
   117: 2.0,  // Suspiria
   130: 4.0,  // King Richard
