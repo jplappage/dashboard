@@ -462,6 +462,8 @@ function parseLocalDate(s) {
 }
 
 function getStatus(film) {
+  // Pre-theatrical film whose cinema date hasn't arrived yet isn't "in cinemas".
+  if (film.cinema && parseLocalDate(film.vodDate) > TODAY) return 'notout';
   if (!film.vodDate || film.estimated) return film.imdbRating ? 'waiting' : 'notout';
   return parseLocalDate(film.vodDate) <= TODAY ? 'out' : 'soon';
 }
