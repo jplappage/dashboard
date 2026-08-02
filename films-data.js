@@ -148,6 +148,17 @@ const FILMS = [
     imdbRating: 6.1,
   },
 
+  {
+    title: 'Cliffhanger',
+    year: 1993,
+    slug: 'cliffhanger-1',
+    poster: 'https://image.tmdb.org/t/p/w342/b28DOM54OHb1c7Lsk6Nu7Kwuonj.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 25 Jun 1993',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
