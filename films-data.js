@@ -160,6 +160,17 @@ const FILMS = [
     note: 'In cinemas 25 Jun 1993',
   },
 
+  {
+    title: 'Cliffhanger',
+    year: 2027,
+    slug: 'cliffhanger-2027',
+    poster: 'https://image.tmdb.org/t/p/w342/92cL0rfm6eK6cUU8UciorsX0Fpg.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 29 Apr 2027',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
