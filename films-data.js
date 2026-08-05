@@ -48,9 +48,8 @@ const FILMS = [
     slug: 'the-invite-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/8/5/4/8/3/1/854831-the-invite-2026-0-230-0-345-crop.jpg?v=ee72905e48',
     vodDate: '2026-08-11',
-    platform: null,
-    estimated: true,
-    note: 'Est. — A24, ~month after 10 Jul wide expansion, Tuesday drop',
+    platform: 'Digital',
+    estimated: false,
     imdbRating: 6.2,
   },
   {
