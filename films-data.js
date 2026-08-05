@@ -9,16 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Evil Dead Burn',
-    year: 2026,
-    slug: 'evil-dead-burn',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/9/7/0/2/2/1097022-evil-dead-burn-0-600-0-900-crop.jpg?v=398ff82d46',
-    vodDate: '2026-08-04',
-    platform: 'Prime Video / Apple TV+',
-    estimated: false,
-    imdbRating: 6.8,
-  },
-  {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
     // snapped VOD estimate (~45-day window) once it opens.
     title: 'Ice Cream Man',
@@ -189,4 +179,5 @@ const WATCHED = [
   { title: 'The Death of Robin Hood', vodDate: '2026-07-28', imdbRating: 7.6 },
   { title: 'Leviticus', vodDate: '2026-07-28', imdbRating: 5.3 },
   { title: 'Spider-Man: Brand New Day', vodDate: '2026-07-29', imdbRating: 8.3 },
+  { title: 'Evil Dead Burn', vodDate: '2026-08-04', imdbRating: 6.8 },
 ];
