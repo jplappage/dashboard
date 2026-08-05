@@ -325,7 +325,8 @@
       return s + (extra > 0 ? ' +' + extra : '');
     };
 
-    const airing = SHOWS.filter(s => s.airing && s.airingUntil && s.airingUntil >= today);
+    // Explicitly flagged as currently airing.
+    const nowNames = SHOWS.filter(s => s.airing && s.airingUntil && s.airingUntil >= today).map(s => s.name);
 
     // Only shows with a full, confirmed date (D Mon YYYY) group into coming-soon lines.
     const groups = [];
@@ -333,9 +334,14 @@
       const m = s.next && s.next.match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/);
       if (!m) return;
       const iso = m[3] + '-' + String(MONTHS[m[2]]+1).padStart(2,'0') + '-' + String(+m[1]).padStart(2,'0');
-      if (iso <= today) return;
       const season = (s.next.match(/^(S\d+)/) || [,''])[1];
       const title = s.name + (season ? ' ' + season : '');
+      if (iso <= today) {
+        // Premiere date has arrived but the show isn't flagged airing yet (data not
+        // refreshed since it dropped) — treat as streaming now, like a released film.
+        if (!s.airing && !nowNames.includes(s.name)) nowNames.push(s.name);
+        return;
+      }
       const g = groups.find(x => x.date === iso);
       if (g) g.titles.push(title); else groups.push({ date: iso, titles: [title] });
     });
@@ -344,8 +350,8 @@
     const soonLine = g => dateLabel(g.date) + ': <span class="soon">' + joinTitles(g.titles) + '</span>';
 
     let line1 = '', line2 = '';
-    if (airing.length) {
-      line1 = '<span class="dot"></span><span class="hot">Airing now: ' + joinTitles(airing.map(s => s.name)) + '</span>';
+    if (nowNames.length) {
+      line1 = '<span class="dot"></span><span class="hot">Airing now: ' + joinTitles(nowNames) + '</span>';
       if (groups[0]) line2 = soonLine(groups[0]);
     } else if (groups.length) {
       line1 = soonLine(groups[0]);
