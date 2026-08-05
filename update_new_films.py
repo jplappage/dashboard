@@ -165,10 +165,14 @@ def main():
         print('No watchlist slugs fetched (blocked or empty) — nothing to do.')
         return 0
     have = existing_slugs(text)
-    new = [(s, n) for s, n in wl.items() if s not in have]
+    ignore = ignored_slugs()
+    new = [(s, n) for s, n in wl.items() if s not in have and s not in ignore]
     if not new:
         print('No new films on the watchlist.')
         return 0
+    skipped = [s for s in wl if s in ignore]
+    if skipped:
+        print('Skipping ignored slug(s): ' + ', '.join(sorted(skipped)))
 
     # Insert before the closing "];" of the FILMS array.
     m = re.search(r'(const FILMS = \[.*?)(\n\];)', text, re.S)
