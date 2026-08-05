@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 1 Aug 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 5 Aug 2026)
 const RETRO_LETTERBOXD = {
 
   13: "2026-08-05", // Rocky II
