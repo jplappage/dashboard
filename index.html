@@ -500,7 +500,7 @@
         if (!st || !st.c) return null;
         let inj = 0, sus = 0, away = 0;
         Object.entries(st.c).forEach(([id, c]) => {
-          if (st.ps && st.ps[id] && st.ps[id] !== 'squad') return; // main squad only
+          if (!st.ps || !(id in st.ps)) return; // only players still in the squad (skips departed/stale ids); matches lineup page (incl. fringe)
           if (c === 'injured') inj++; else if (c === 'suspended') sus++; else if (c === 'away') away++;
         });
         return { inj, sus, away };
