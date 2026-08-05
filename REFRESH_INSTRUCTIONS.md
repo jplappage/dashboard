@@ -32,7 +32,7 @@ Run all phases in order. Within each phase, do everything listed simultaneously.
 Run these comparisons immediately from the data loaded in Phase 1:
 
 **Films watchlist**
-- New films on Letterboxd not in FILMS → queue for Phase 3 (need poster + IMDb check)
+- New films on Letterboxd not in FILMS → queue for Phase 3 (need poster + IMDb check). **First exclude any slug listed in `film-ignore.txt`** — these were removed on purpose (e.g. a title match pulling in the wrong-year version of a remake or the old original). Never re-add an ignored slug; if a genuinely new, wanted film shares a title with an ignored one, that's fine because the ignore list keys on the exact slug.
 - Films in FILMS not on Letterboxd → mark for archiving (move from FILMS to the WATCHED list, both in `films-data.js` — this keeps it on the page calendar and in watchlist.ics)
 - Films with `vodDate: null` or `estimated: true` → queue for Phase 3 (need streaming date), **except pre-theatrical films (see skip rule below)**
 - Films with no `imdbRating` → queue for Phase 3 (need IMDb check), **except pre-theatrical films**
