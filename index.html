@@ -314,35 +314,42 @@
     const ymd = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
     const today = ymd(now);
 
+    const MONTHS = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+    const ord = n => n + (n%10===1&&n%100!==11?'st':n%10===2&&n%100!==12?'nd':n%10===3&&n%100!==13?'rd':'th');
+    const dateLabel = iso => { const d = new Date(iso + 'T00:00:00'); return ord(d.getDate()) + ' ' + d.toLocaleString('en-GB',{month:'short'}); };
+    const joinTitles = (arr, cap=3) => {
+      const shown = arr.slice(0, cap);
+      const s = shown.length <= 1 ? (shown[0] || '')
+              : shown.slice(0,-1).join(', ') + ' & ' + shown[shown.length-1];
+      const extra = arr.length - shown.length;
+      return s + (extra > 0 ? ' +' + extra : '');
+    };
+
     const airing = SHOWS.filter(s => s.airing && s.airingUntil && s.airingUntil >= today);
 
-    const MONTHS = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
-    const upcoming = SHOWS
-      .map(s => {
-        const m = s.next && s.next.match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/);
-        if (!m) return null;
-        const d = new Date(+m[3], MONTHS[m[2]], +m[1]);
-        return ymd(d) > today ? { s, d, iso: ymd(d) } : null;
-      })
-      .filter(Boolean)
-      .sort((a,b) => a.iso.localeCompare(b.iso));
+    // Only shows with a full, confirmed date (D Mon YYYY) group into coming-soon lines.
+    const groups = [];
+    SHOWS.forEach(s => {
+      const m = s.next && s.next.match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/);
+      if (!m) return;
+      const iso = m[3] + '-' + String(MONTHS[m[2]]+1).padStart(2,'0') + '-' + String(+m[1]).padStart(2,'0');
+      if (iso <= today) return;
+      const season = (s.next.match(/^(S\d+)/) || [,''])[1];
+      const title = s.name + (season ? ' ' + season : '');
+      const g = groups.find(x => x.date === iso);
+      if (g) g.titles.push(title); else groups.push({ date: iso, titles: [title] });
+    });
+    groups.sort((a,b) => a.date.localeCompare(b.date));
 
-    const fmtUp = u => {
-      const days = Math.round((u.d - new Date(today + 'T00:00:00')) / 86400000);
-      const season = (u.s.next.match(/^(S\d+)/) || [,''])[1];
-      return '<span class="soon">' + u.s.name + (season ? ' ' + season : '') + '</span> · ' +
-             (days === 1 ? 'tomorrow' : days + ' days');
-    };
+    const soonLine = g => dateLabel(g.date) + ': <span class="soon">' + joinTitles(g.titles) + '</span>';
 
     let line1 = '', line2 = '';
     if (airing.length) {
-      line1 = '<span class="dot"></span><span class="hot">' +
-              (airing.length === 1 ? airing[0].name + ' · ' + airing[0].airing : airing.length + ' shows airing now') +
-              '</span>';
-      if (upcoming[0]) line2 = 'soon: ' + fmtUp(upcoming[0]);
-    } else {
-      if (upcoming[0]) line1 = 'next: ' + fmtUp(upcoming[0]);
-      if (upcoming[1]) line2 = 'then: ' + fmtUp(upcoming[1]);
+      line1 = '<span class="dot"></span><span class="hot">Airing now: ' + joinTitles(airing.map(s => s.name)) + '</span>';
+      if (groups[0]) line2 = soonLine(groups[0]);
+    } else if (groups.length) {
+      line1 = soonLine(groups[0]);
+      if (groups[1]) line2 = soonLine(groups[1]);
     }
     el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
   } catch (_) {}
