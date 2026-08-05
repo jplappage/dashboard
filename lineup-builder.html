@@ -672,7 +672,11 @@ function cloudKey(team) { return 'lineup_' + team; }
 function saveKey()       { return TEAM_CONFIG[activeTeam].saveKey; }
 
 function currentStateObj() {
-  return { f: formation, s: slots, c: conditions,
+  // Prune conditions for players no longer in the squad so departed players
+  // (e.g. transfers out) don't linger and inflate counts on the index page.
+  const ids = new Set(PLAYERS.map(p => p.id));
+  const c = Object.fromEntries(Object.entries(conditions).filter(([id]) => ids.has(id)));
+  return { f: formation, s: slots, c,
            ps: Object.fromEntries(PLAYERS.map(p => [p.id, p.sec])) };
 }
 
