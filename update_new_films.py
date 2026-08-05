@@ -20,6 +20,7 @@ from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 FILMS_FILE = os.path.join(SCRIPT_DIR, 'films-data.js')
+IGNORE_FILE = os.path.join(SCRIPT_DIR, 'film-ignore.txt')
 SUMMARY_FILE = os.environ.get('NEWFILM_SUMMARY_FILE', os.path.join(SCRIPT_DIR, '.newfilm-summary.txt'))
 TMDB_KEY = os.environ.get('TMDB_API_KEY', '').strip()
 LB_USER = os.environ.get('LETTERBOXD_USER', 'zidanejp')
@@ -73,6 +74,17 @@ def watchlist_slugs():
 
 def existing_slugs(text):
     return set(re.findall(r"slug:\s*'([^']*)'", text))
+
+
+def ignored_slugs():
+    """Letterboxd slugs to never auto-add (removed on purpose — e.g. a title-match
+    picked up the wrong-year version of a film). One slug per line in film-ignore.txt;
+    blank lines and #comments ignored."""
+    try:
+        with open(IGNORE_FILE, encoding='utf-8') as f:
+            return {ln.strip() for ln in f if ln.strip() and not ln.lstrip().startswith('#')}
+    except FileNotFoundError:
+        return set()
 
 
 def tmdb_lookup(name):
