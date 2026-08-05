@@ -356,39 +356,38 @@
     const ymd = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
     const today = ymd(now);
 
-    // Only surface confirmed dates in the teaser — estimates aren't reliable enough to promise.
-    const dated    = FILMS.filter(f => f.vodDate && f.estimated !== true);
-    const ready    = dated.filter(f => f.vodDate <= today);
-    const upcoming = dated.filter(f => f.vodDate > today).sort((a,b) => a.vodDate.localeCompare(b.vodDate));
-
-    const niceWhen = iso => {
-      const target = new Date(iso + 'T00:00:00');
-      const days = Math.round((target - new Date(today + 'T00:00:00')) / 86400000);
-      if (days === 0) return 'today';
-      if (days === 1) return 'tomorrow';
-      return days + ' days';
+    const ord = n => n + (n%10===1&&n%100!==11?'st':n%10===2&&n%100!==12?'nd':n%10===3&&n%100!==13?'rd':'th');
+    const dateLabel = iso => { const d = new Date(iso + 'T00:00:00'); return ord(d.getDate()) + ' ' + d.toLocaleString('en-GB',{month:'short'}); };
+    const joinTitles = (arr, cap=3) => {
+      const shown = arr.slice(0, cap);
+      const s = shown.length <= 1 ? (shown[0] || '')
+              : shown.slice(0,-1).join(', ') + ' & ' + shown[shown.length-1];
+      const extra = arr.length - shown.length;
+      return s + (extra > 0 ? ' +' + extra : '');
+    };
+    const groupByDate = list => {
+      const map = new Map();
+      list.forEach(f => { if (!map.has(f.vodDate)) map.set(f.vodDate, []); map.get(f.vodDate).push(f.title); });
+      return [...map.entries()].sort((a,b) => a[0].localeCompare(b[0])).map(([date, titles]) => ({ date, titles }));
     };
 
-    const soonLine = (label, nxt) => {
-      const also = upcoming.filter(f => f.vodDate === nxt.vodDate).length - 1;
-      return label + ': <span class="soon">' + nxt.title + '</span>' +
-             (also > 0 ? ' +' + also : '') + ' · ' + niceWhen(nxt.vodDate);
-    };
+    // Exclude pre-theatrical cinema-only entries — their date is the cinema release, not VOD availability.
+    const vod      = FILMS.filter(f => f.vodDate && f.cinema !== true);
+    // "Available now" stays confirmed-only (don't promise an estimate as already out).
+    const availNow = vod.filter(f => f.vodDate <= today && f.estimated !== true)
+                        .sort((a,b) => b.vodDate.localeCompare(a.vodDate));
+    // Coming-soon groups include estimated dates.
+    const upcoming = groupByDate(vod.filter(f => f.vodDate > today));
+
+    const soonLine = g => dateLabel(g.date) + ': <span class="soon">' + joinTitles(g.titles) + '</span>';
 
     let line1 = '', line2 = '';
-    if (ready.length > 0) {
-      const droppedToday = ready.filter(f => f.vodDate === today);
-      const pick = ready.slice().sort((a,b) => (b.imdbRating||0) - (a.imdbRating||0))[0];
-      line1 = droppedToday.length
-        ? '<span class="dot"></span><span class="hot">NEW TODAY: ' + droppedToday[0].title + '</span>'
-        : '<span class="dot"></span><span class="hot">' + ready.length +
-          (ready.length === 1 ? ' film ready' : ' films ready') + '</span>' +
-          (pick && pick.imdbRating ? ' · top: ' + pick.title + ' ★' + pick.imdbRating.toFixed(1) : '');
-      if (upcoming.length) line2 = soonLine('soon', upcoming[0]);
+    if (availNow.length) {
+      line1 = '<span class="dot"></span><span class="hot">Available now: ' + joinTitles(availNow.map(f => f.title)) + '</span>';
+      if (upcoming[0]) line2 = soonLine(upcoming[0]);
     } else if (upcoming.length) {
-      line1 = soonLine('next', upcoming[0]);
-      const then = upcoming.find(f => f.vodDate > upcoming[0].vodDate);
-      if (then) line2 = 'then: <span class="soon">' + then.title + '</span> · ' + niceWhen(then.vodDate);
+      line1 = soonLine(upcoming[0]);
+      if (upcoming[1]) line2 = soonLine(upcoming[1]);
     } else {
       line1 = FILMS.length + ' tracked · no dates confirmed yet';
     }
