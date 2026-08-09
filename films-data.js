@@ -9,19 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
-    // snapped VOD estimate (~45-day window) once it opens.
-    title: 'Ice Cream Man',
-    year: 2026,
-    slug: 'ice-cream-man-2026',
-    poster: 'https://image.tmdb.org/t/p/w342/c987gxFjXqYOxZEZKcTkS1ONTWH.jpg',
-    vodDate: '2026-08-07',
-    platform: null,
-    estimated: true,
-    cinema: true,
-    note: 'Cinema release 7 Aug 2026 · VOD est. follows once released (~45-day window)',
-  },
-  {
     title: 'Jackass: Best and Last',
     year: 2026,
     slug: 'jackass-best-and-last',
@@ -133,8 +120,19 @@ const FILMS = [
     vodDate: '2026-09-01',
     platform: null,
     estimated: true,
-    note: 'Est. — Magnolia wide, VOD before Labor Day (early Sep per WhenToStream 7/31), Tuesday drop',
+    note: 'Est. — Magnolia wide, VOD before Labor Day (early Sep per WhenToStream 8/7), Tuesday drop',
     imdbRating: 6.1,
+  },
+  {
+    title: 'Ice Cream Man',
+    year: 2026,
+    slug: 'ice-cream-man-2026',
+    poster: 'https://image.tmdb.org/t/p/w342/c987gxFjXqYOxZEZKcTkS1ONTWH.jpg',
+    vodDate: '2026-09-01',
+    platform: null,
+    estimated: true,
+    note: 'Est. — Eli Roth horror (wide 7 Aug), quick digital pivot (late Aug/early Sep per WhenToStream 8/7), Tuesday drop',
+    imdbRating: 3.8,
   },
 
 ];
