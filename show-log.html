@@ -864,15 +864,9 @@ function buildCard(s) {
 }
 
 function updateStats() {
-  const watchlist = SHOWS.filter(s => {
-    const state = showState(s.name, s.aired);
-    return state !== 'abandoned' && state !== 'watched' && s.aired > 0;
-  }).length;
-  const comingSoon = SHOWS.filter(s => s.status === 'ongoing' && (showState(s.name, s.aired) === 'watched' || s.aired === 0)).length;
-  const archive = SHOWS.filter(s => {
-    const state = showState(s.name, s.aired);
-    return state === 'abandoned' || (state === 'watched' && s.status !== 'ongoing');
-  }).length;
+  const watchlist  = SHOWS.filter(inWatchlist).length;
+  const comingSoon = SHOWS.filter(inComingSoon).length;
+  const archive    = SHOWS.filter(inArchive).length;
 
   document.getElementById('cnt-watchlist').textContent   = watchlist;
   document.getElementById('cnt-coming-soon').textContent = comingSoon;
