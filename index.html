@@ -521,9 +521,17 @@
     } catch (_) { return null; }
   })();
 
-  // Next scheduled game — France (World Cup) / Liverpool (Premier League) via ESPN
+  // Next scheduled game — Liverpool (domestic + European) and France (post-World-Cup:
+  // Nations League, qualifiers, friendlies). ESPN's per-team `nextEvent` endpoint
+  // returns an empty array in some regions, so instead read each league's scoreboard
+  // over a rolling date window and match by team name.
   const nextP = (async () => {
     const games = [];
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const ymd = d => d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
+    const end = new Date(now); end.setDate(end.getDate() + 150);
+    const range = ymd(now) + '-' + ymd(end);
     const compName = e => {
       try {
         const c = e.competitions[0].competitors;
@@ -531,25 +539,32 @@
         return h.team.shortDisplayName + ' v ' + a.team.shortDisplayName;
       } catch (_) { return e.shortName || e.name || ''; }
     };
-    const pull = async (team, url, filter) => {
+    const pull = async (team, league, re) => {
       try {
-        const j = await (await fetch(url)).json();
-        const evs = j.events || (j.team && j.team.nextEvent) || [];
-        evs.forEach(e => {
+        const j = await (await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/' + league +
+                                     '/scoreboard?dates=' + range + '&limit=300')).json();
+        (j.events || []).forEach(e => {
           const d = new Date(e.date);
-          if (d > new Date() && (!filter || filter(e))) games.push({ d, team, label: compName(e) });
+          if (d > now && re.test(e.name || '')) games.push({ d, team, label: compName(e) });
         });
       } catch (_) {}
     };
-    // Liverpool: ESPN team endpoints are per-competition, so check them all —
-    // Premier League, Champions League, FA Cup, League Cup, friendlies
-    const LFC_COMPS = ['eng.1', 'uefa.champions', 'eng.fa', 'eng.league_cup', 'club.friendly'];
+    const LFC = /liverpool/i, FRA = /france/i;
     await Promise.all([
-      pull('france', 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200',
-           e => /france/i.test(e.name || '')),
-      ...LFC_COMPS.map(c => pull('liverpool', 'https://site.api.espn.com/apis/site/v2/sports/soccer/' + c + '/teams/364')),
+      pull('liverpool', 'eng.1', LFC),
+      pull('liverpool', 'uefa.champions', LFC),
+      pull('liverpool', 'eng.fa', LFC),
+      pull('liverpool', 'eng.league_cup', LFC),
+      pull('france', 'uefa.nations', FRA),
+      pull('france', 'fifa.worldq.uefa', FRA),
+      pull('france', 'fifa.friendly', FRA),
+      pull('france', 'fifa.world', FRA),
     ]);
-    return games.sort((a,b) => a.d - b.d)[0] || null;
+    // De-dupe (a match can surface in overlapping feeds), then take the soonest.
+    const seen = new Set();
+    return games
+      .filter(g => { const k = +g.d + '|' + g.label; if (seen.has(k)) return false; seen.add(k); return true; })
+      .sort((a, b) => a.d - b.d)[0] || null;
   })();
 
   const [avail, nxt] = await Promise.all([availP, nextP]);
