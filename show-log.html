@@ -708,7 +708,12 @@ function applyThumbs() {
 function buildMainSection(shows) {
   const alpha = (a, b) => a.name.localeCompare(b.name);
 
-  const activeOngoing = shows.filter(s => s.status === 'ongoing'  && !['watched','abandoned'].includes(showState(s.name, s.aired))).sort(alpha);
+  const activeOngoing = shows.filter(s => {
+    if (s.status !== 'ongoing') return false;
+    const st = showState(s.name, s.aired);
+    if (st === 'abandoned') return false;
+    return isAiringNow(s) || st !== 'watched';           // airing now overrides fully-watched
+  }).sort(alpha);
   const activeEnded   = shows.filter(s => s.status !== 'ongoing'  && !['watched','abandoned'].includes(showState(s.name, s.aired))).sort(alpha);
 
   let html = '';
