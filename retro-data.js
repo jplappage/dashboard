@@ -286,6 +286,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  116: 3.0,  // Murder on the Orient Express
   86:  3.0,  // Moon
   13:  3.0,  // Rocky II
   65:  3.0,  // Mean Girls
