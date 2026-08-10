@@ -14,9 +14,8 @@ const FILMS = [
     slug: 'jackass-best-and-last',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/4/8/1/8/5/1/1481851-jackass-best-and-last-0-230-0-345-crop.jpg?v=42485392b4',
     vodDate: '2026-08-11',
-    platform: 'Paramount+',
-    estimated: true,
-    note: 'Est. — cinemas Jun 26 + Paramount 45-day mandate (10 Aug), Tuesday drop',
+    platform: 'Digital',
+    estimated: false,
     imdbRating: 6.9,
   },
   {
@@ -102,13 +101,13 @@ const FILMS = [
     title: 'Cliffhanger',
     year: 2026,
     slug: 'cliffhanger-2026',
-    lbSlug: 'cliffhanger-1',
+    lbSlug: 'cliffhanger-2027',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/0/9/9/3/3/1009933-cliffhanger-2026-0-600-0-900-crop.jpg?v=f866b04974',
     vodDate: '2026-08-28',
     platform: null,
     estimated: true,
     cinema: true,
-    note: 'Cinema release 28 Aug 2026 (Decal) · VOD est. follows once released (~45-day window)',
+    note: 'Cinema release 28 Aug 2026 (Decal) — but Letterboxd now lists it as 2027; possible slip to Q1 2027 (Neon). VOD est. follows once released (~45-day window)',
   },
 
   {
