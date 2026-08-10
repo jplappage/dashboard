@@ -181,9 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 5 Aug 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 10 Aug 2026)
 const RETRO_LETTERBOXD = {
 
+  116:"2026-08-09", // Murder on the Orient Express
   86: "2026-08-07", // Moon (manual add — Letterboxd outage 9 Aug 2026)
   13: "2026-08-05", // Rocky II
   65: "2026-08-01", // Mean Girls
