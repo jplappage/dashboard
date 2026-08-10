@@ -638,14 +638,21 @@ function inArchive(s) {
   return state === 'abandoned' || (state === 'watched' && s.status !== 'ongoing');
 }
 function inComingSoon(s) {
-  if (s.status !== 'ongoing' || isAiringNow(s)) return false;
-  return showState(s.name, s.aired) === 'watched' || s.aired === 0;
+  if (s.status !== 'ongoing') return false;
+  // Fully watched ongoing show → awaiting its next season, even if the finale
+  // is airing today (isAiringNow stays true through airingUntil == today).
+  if (showState(s.name, s.aired) === 'watched') return true;
+  if (isAiringNow(s)) return false;
+  return s.aired === 0;
 }
 function inWatchlist(s) {
   const state = showState(s.name, s.aired);
-  if (state === 'abandoned') return false;
+  // A fully watched (or abandoned) show never belongs in Out Now — it moves to
+  // Coming Soon or Archive. The isAiringNow override only surfaces seasons you
+  // haven't finished yet, so it must come after the watched check.
+  if (state === 'abandoned' || state === 'watched') return false;
   if (isAiringNow(s)) return true;                       // currently airing → always Out Now
-  return state !== 'watched' && s.aired > 0;
+  return s.aired > 0;
 }
 
 function showsForFilter() {
