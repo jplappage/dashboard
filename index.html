@@ -594,6 +594,42 @@
   }
   el.innerHTML = [nextLine, availLine].filter(Boolean).join('<br>');
 })();
+
+(async function tattooTeaser() {
+  // Tattoo entries live encrypted in the gist (tattooEntries.enc). index.html and
+  // tattoos.html share an origin, so the per-device passphrase in localStorage
+  // ('tattooKey') lets us decrypt here too. Locked device / no key → leave blank.
+  const el = document.getElementById('tattoo-sub');
+  if (!el) return;
+  try {
+    const key = localStorage.getItem('tattooKey');
+    if (!key) return; // locked on this device — stay silent
+
+    const ord = n => n + (n%10===1&&n%100!==11?'st':n%10===2&&n%100!==12?'nd':n%10===3&&n%100!==13?'rd':'th');
+    const dateLabel = iso => { const d = new Date(iso + 'T00:00:00'); return ord(d.getDate()) + ' ' + d.toLocaleString('en-GB',{month:'short',year:'numeric'}); };
+
+    const j = await (await fetch('https://api.github.com/gists/5411ac8d12fdc31aa3fa73e4d66f6377', { cache:'no-store' })).json();
+    const data = JSON.parse(j.files['watchlist.json'].content);
+    const t = data.tattooEntries;
+    let entries = null;
+    if (Array.isArray(t)) entries = t;                 // legacy plaintext
+    else if (t && t.enc) {                             // encrypted (current format)
+      const enc = new TextEncoder();
+      const km = await crypto.subtle.importKey('raw', enc.encode(key), 'PBKDF2', false, ['deriveKey']);
+      const ck = await crypto.subtle.deriveKey({ name:'PBKDF2', salt: enc.encode('charlotte-tattoos-salt-v1'), iterations: 250000, hash:'SHA-256' }, km, { name:'AES-GCM', length:256 }, false, ['decrypt']);
+      const raw = Uint8Array.from(atob(t.enc), c => c.charCodeAt(0));
+      const pt = await crypto.subtle.decrypt({ name:'AES-GCM', iv: raw.slice(0,12) }, ck, raw.slice(12));
+      entries = JSON.parse(new TextDecoder().decode(pt));
+    }
+    if (!entries || !entries.length) return;
+
+    const latest = entries.reduce((m, e) => e.date > m ? e.date : m, entries[0].date);
+    const n = entries.length;
+    const line1 = 'Last updated: <span class="soon">' + dateLabel(latest) + '</span>';
+    const line2 = '<span class="hot">' + n + '</span> session' + (n !== 1 ? 's' : '') + ' logged';
+    el.innerHTML = line1 + '<br>' + line2;
+  } catch (_) { /* leave blank on any hiccup (locked / wrong key / offline) */ }
+})();
 </script>
 
   <script>
