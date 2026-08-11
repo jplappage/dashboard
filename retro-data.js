@@ -185,6 +185,7 @@ const RETRO_FILMS = [
 const RETRO_LETTERBOXD = {
 
   116:"2026-08-09", // Murder on the Orient Express
+  14: "2026-08-10", // Serpico
   86: "2026-08-07", // Moon (manual add — Letterboxd outage 9 Aug 2026)
   13: "2026-08-05", // Rocky II
   65: "2026-08-01", // Mean Girls
@@ -287,6 +288,7 @@ const RETRO_LETTERBOXD = {
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
   116: 3.0,  // Murder on the Orient Express
+  14:  3.5,  // Serpico
   86:  3.0,  // Moon
   13:  3.0,  // Rocky II
   65:  3.0,  // Mean Girls
