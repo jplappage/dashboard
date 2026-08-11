@@ -9,16 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Jackass: Best and Last',
-    year: 2026,
-    slug: 'jackass-best-and-last',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/4/8/1/8/5/1/1481851-jackass-best-and-last-0-230-0-345-crop.jpg?v=42485392b4',
-    vodDate: '2026-08-11',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 6.9,
-  },
-  {
     title: 'The Invite',
     year: 2026,
     slug: 'the-invite-2026',
@@ -177,4 +167,5 @@ const WATCHED = [
   { title: 'Leviticus', vodDate: '2026-07-28', imdbRating: 5.3 },
   { title: 'Spider-Man: Brand New Day', vodDate: '2026-07-29', imdbRating: 8.3 },
   { title: 'Evil Dead Burn', vodDate: '2026-08-04', imdbRating: 6.8 },
+  { title: 'Jackass: Best and Last', vodDate: '2026-08-11', imdbRating: 6.9 },
 ];
