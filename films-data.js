@@ -83,7 +83,7 @@ const FILMS = [
     estimated: true,
     cinema: true,
     note: 'Cinema release 28 Aug 2026 (Well Go USA) · VOD est. follows once released (~45-day window)',
-    imdbRating: 6.6,
+    imdbRating: 6.5,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
