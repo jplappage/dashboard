@@ -9,6 +9,16 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
+    title: 'Star Wars: Visions Presents - The Ninth Jedi',
+    year: 2026,
+    slug: 'star-wars-visions-presents-the-ninth-jedi',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/6/0/9/7/0/2/1609702-star-wars-visions-presents-the-ninth-jedi-0-230-0-345-crop.jpg?v=ede94747bd',
+    vodDate: '2026-08-05',
+    platform: 'Disney+',
+    estimated: false,
+    imdbRating: 7.0,
+  },
+  {
     title: 'The Invite',
     year: 2026,
     slug: 'the-invite-2026',
