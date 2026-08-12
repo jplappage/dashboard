@@ -107,9 +107,8 @@ const FILMS = [
     plexSlug: 'i-want-your-sex-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/9/5/4/1170954-i-want-your-sex-0-600-0-900-crop.jpg?v=c13a0c57b7',
     vodDate: '2026-09-01',
-    platform: null,
-    estimated: true,
-    note: 'Est. — Magnolia wide, VOD before Labor Day (early Sep per WhenToStream 8/7), Tuesday drop',
+    platform: 'Digital',
+    estimated: false,
     imdbRating: 6.1,
   },
   {
