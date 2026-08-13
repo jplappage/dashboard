@@ -133,6 +133,17 @@ const FILMS = [
     imdbRating: 3.8,
   },
 
+  {
+    title: 'Trainwreck: Poop Cruise',
+    year: 2025,
+    slug: 'trainwreck-poop-cruise',
+    poster: 'https://image.tmdb.org/t/p/w342/nJZlsBpDxx3LrGwXvwXkQyVnp9A.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'Auto-added from Letterboxd — awaiting a streaming date',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
