@@ -137,6 +137,7 @@ const FILMS = [
     title: 'Trainwreck: Poop Cruise',
     year: 2025,
     slug: 'trainwreck-poop-cruise',
+    imdbRating: 6.0,
     poster: 'https://image.tmdb.org/t/p/w342/nJZlsBpDxx3LrGwXvwXkQyVnp9A.jpg',
     vodDate: null,
     platform: null,
