@@ -849,11 +849,8 @@ function buildCard(s) {
     return `<button class="season-pill ${cls}" onclick="cycleSeasonMark('${esc(s.name)}',${n})" title="S${n}: tap to cycle">S${n}${ico ? ' '+ico : ''}</button>`;
   }).join('') + upcomingPill;
 
-  // With an IMDb ID, open the IMDb app straight to the episodes tab (imdb:/// scheme
-  // launches the native app on iOS instead of Safari). Without one, fall back to a web search.
-  const imdbOpen = s.imdbId
-    ? `location.href='imdb:///title/${s.imdbId}/episodes'`
-    : `window.open('https://www.imdb.com/find/?q=${encodeURIComponent(s.name)}&s=tt','_blank','noopener')`;
+  // Launch IMDb — app on mobile, website on desktop (see openShowImdb).
+  const imdbOpen = `openShowImdb('${s.imdbId || ''}','${esc(s.name)}')`;
 
   return `<div class="show-card ${cardCls}">
     <div class="poster-wrap imdb-link" onclick="${imdbOpen}" title="View “${esc(s.name)}” on IMDb">
@@ -892,6 +889,19 @@ function updateFooter() {
 
 function cid(n) { return n.replace(/[^a-z0-9]/gi, '-'); }
 function esc(n) { return n.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+// Open a show on IMDb. Mobile has the IMDb app, so use the imdb:/// scheme to
+// launch it straight to the episodes tab. Desktop has no handler for that scheme
+// (tap did nothing on laptop), so open the IMDb website in a new tab instead.
+function openShowImdb(imdbId, name) {
+  const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  if (imdbId) {
+    if (isMobile) location.href = 'imdb:///title/' + imdbId + '/episodes';
+    else window.open('https://www.imdb.com/title/' + imdbId + '/episodes/', '_blank', 'noopener');
+  } else {
+    window.open('https://www.imdb.com/find/?q=' + encodeURIComponent(name) + '&s=tt', '_blank', 'noopener');
+  }
+}
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
 async function init() {
