@@ -56,6 +56,7 @@ const FILMS = [
     estimated: true,
     cinema: true,
     note: 'Cinema release 21 Aug 2026 (Sony) · VOD est. follows once released (~45-day window)',
+    runtime: 106,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
@@ -69,6 +70,7 @@ const FILMS = [
     estimated: true,
     cinema: true,
     note: 'Cinema release 21 Aug 2026 (Lionsgate) · VOD est. follows once released (~45-day window)',
+    runtime: 95,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
@@ -96,6 +98,7 @@ const FILMS = [
     cinema: true,
     note: 'Cinema release 28 Aug 2026 (Well Go USA) · VOD est. follows once released (~45-day window)',
     imdbRating: 6.5,
+    runtime: 123,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
@@ -122,6 +125,7 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     imdbRating: 6.4,
+    runtime: 90,
   },
   {
     title: 'Ice Cream Man',
@@ -133,6 +137,7 @@ const FILMS = [
     estimated: true,
     note: 'Est. — Eli Roth horror (wide 7 Aug), quick digital pivot (late Aug/early Sep per WhenToStream 8/7), Tuesday drop',
     imdbRating: 3.8,
+    runtime: 86,
   },
 
 ];
