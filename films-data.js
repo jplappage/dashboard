@@ -9,6 +9,16 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
+    title: 'Trainwreck: Poop Cruise',
+    year: 2025,
+    slug: 'trainwreck-poop-cruise',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/6/0/9/7/9/1360979-trainwreck-poop-cruise-0-600-0-900-crop.jpg?v=af68ee74a8',
+    vodDate: '2025-06-24',
+    platform: 'Netflix',
+    estimated: false,
+    imdbRating: 6.0,
+  },
+  {
     title: 'Star Wars: Visions Presents - The Ninth Jedi',
     year: 2026,
     slug: 'star-wars-visions-presents-the-ninth-jedi',
@@ -17,16 +27,6 @@ const FILMS = [
     platform: 'Disney+',
     estimated: false,
     imdbRating: 7.0,
-  },
-  {
-    title: 'The Invite',
-    year: 2026,
-    slug: 'the-invite-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/8/5/4/8/3/1/854831-the-invite-2026-0-230-0-345-crop.jpg?v=ee72905e48',
-    vodDate: '2026-08-11',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 6.2,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
@@ -119,7 +119,7 @@ const FILMS = [
     vodDate: '2026-09-01',
     platform: 'Digital',
     estimated: false,
-    imdbRating: 6.1,
+    imdbRating: 6.4,
   },
   {
     title: 'Ice Cream Man',
@@ -189,4 +189,5 @@ const WATCHED = [
   { title: 'Spider-Man: Brand New Day', vodDate: '2026-07-29', imdbRating: 8.3 },
   { title: 'Evil Dead Burn', vodDate: '2026-08-04', imdbRating: 6.8 },
   { title: 'Jackass: Best and Last', vodDate: '2026-08-11', imdbRating: 6.9 },
+  { title: 'The Invite', vodDate: '2026-08-11', imdbRating: 6.2 },
 ];
