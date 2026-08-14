@@ -134,6 +134,7 @@ Both the watched date AND the personal rating come straight from the **diary pag
 **Before moving to Phase 4, verify:**
 - [ ] Every film with `vodDate: null` or `estimated: true` was searched OR listed as skipped (pre-theatrical)
 - [ ] Every film with no `imdbRating` was searched OR listed as skipped (pre-theatrical)
+- [ ] Every film with no `runtime` had a Letterboxd runtime scrape attempted (set if found, left absent if Letterboxd doesn't list it yet)
 - [ ] Every film with a confirmed future `vodDate` was re-verified against WhenToStream (date unchanged or updated)
 - [ ] Every show with a vague `next` field was searched OR listed as skipped (recheck not due) — check counts against Phase 2 lists
 - [ ] All results have been applied or explicitly noted as no-change
@@ -145,10 +146,11 @@ Both the watched date AND the personal rating come straight from the **diary pag
 Apply everything found in Phases 2–3 in a single editing pass per file:
 
 **`films-data.js`** (single source of truth — do NOT edit film data in the HTML or python files)
-- Add new film entries (with poster, slug, imdbRating if known, vodDate if known, lbSlug if different from slug, plexSlug if different from slug)
+- Add new film entries (with poster, slug, imdbRating if known, vodDate if known, runtime if listed, lbSlug if different from slug, plexSlug if different from slug)
 - Remove archived films from FILMS and append them to the `WATCHED` array (title + vodDate + imdbRating) so they stay on the calendar
 - Update `vodDate`, `platform`, `estimated` for any films with new streaming dates
 - Add/update `imdbRating` for newly released films
+- Add `runtime` (integer minutes) for any film that gained one on Letterboxd since last refresh
 
 **`watchlist-dashboard.html`** — no manual edits. The footer (`Last updated` + refresh #) auto-stamps via `.github/workflows/stamp-last-updated.yml` whenever a data file is pushed.
 
