@@ -101,6 +101,16 @@ Fetch the film's Letterboxd page to get the poster `<img>` src URL and the slug 
 Then verify both the Letterboxd and Plex slugs:
 - Fetch `https://letterboxd.com/film/{slug}/` — if it 404s, find the correct slug and set `lbSlug: 'correct-slug'`
 - Fetch `https://watch.plex.tv/en-GB/movie/{slug}/` — if it 404s or returns the wrong film, try `{slug}-{year}` and set `plexSlug: 'correct-slug'` if different
+Also grab the `runtime` while you're on the Letterboxd page (see runtime step below).
+
+**For each film needing a runtime (new films + any existing film with no `runtime`):**
+Scrape it from the film's Letterboxd page and store as `runtime: <minutes>` (integer). Do all queued slugs in one batched `javascript_tool` fetch loop on a letterboxd.com tab (same-origin). **Gotcha:** the raw HTML has the value as `95&nbsp;mins`, so a plain `\s` regex misses it — parse the response into a DOM first so the entity decodes, then read the footer text:
+```js
+const doc = new DOMParser().parseFromString(html, 'text/html');
+const txt = (doc.querySelector('.text-footer, p.text-link') || doc.body).textContent;
+const m = txt.match(/(\d+)\s*mins?/);   // m[1] = minutes
+```
+Found = set `runtime: <minutes>`. Not listed yet (common for unreleased films) = leave absent; the badge just doesn't render until a later refresh fills it. The films-watchlist card shows this as a runtime badge (e.g. `1h 35m`) top-left of the poster.
 
 **For each show with a vague `next` field (and recheck due or absent):**
 WebSearch `"[show name]" season [N] premiere date 2026` — confirmed date = update `next` and remove any `recheck`. Still vague = leave or refine the window, and set `recheck` to one week ahead (`"YYYY-MM-DD"`), aligned to a Friday — most release-date announcements cluster midweek and WhenToStream's tracker rounds them up on Fridays.
