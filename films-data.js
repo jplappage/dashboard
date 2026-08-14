@@ -17,6 +17,7 @@ const FILMS = [
     platform: 'Netflix',
     estimated: false,
     imdbRating: 6.0,
+    runtime: 55,
   },
   {
     title: 'Star Wars: Visions Presents - The Ninth Jedi',
@@ -40,6 +41,7 @@ const FILMS = [
     estimated: true,
     cinema: true,
     note: 'Cinema release 14 Aug 2026 (Warner Bros) · VOD est. follows once released (~45-day window)',
+    runtime: 100,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
