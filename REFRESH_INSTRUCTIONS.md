@@ -212,6 +212,7 @@ If main is ahead of origin and the watcher hasn't pushed within a minute, tell J
 
 **VOD dates:** Confirmed = streaming now or specific announced date. Pre-order or "coming soon" = do not set `vodDate`.
 **IMDb ratings:** Only from the film's actual IMDb page. No guesses.
+**Runtime:** Integer minutes, scraped from the film's Letterboxd page (`runtime: 95`). No guesses — if Letterboxd doesn't list it, leave the field absent. Powers the runtime badge on the films-watchlist card.
 **Estimated dates:** Set `estimated: true` and add a `note` string explaining the expected window.
 **Platform names:** `'Prime Video'` · `'Netflix'` · `'Disney+'` · `'Apple TV+'` · `'MUBI'` · `'Sky Cinema / NOW'` · `'Paramount+'` · multiple: `'Prime Video / Apple TV+'`
 **Show log `next` field:** Only a full **day + month + year** counts as a confirmed date (e.g. `"S3 · 14 Sep 2026"`). A month+year alone (e.g. `"Oct 2026"`) is an estimate — the show-log page files it under *Awaiting Date*, not *Date Announced*. Format for confirmed: `"S3 · 14 Sep 2026"`.
