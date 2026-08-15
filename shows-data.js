@@ -35,7 +35,7 @@ const SHOWS = [
   {name:"Spider-Noir",                           status:"ongoing",  aired:1, next:"S2 · unannounced", recheck:"2026-08-21", imdbId:"tt30460310"},
   {name:"Your Friendly Neighbourhood Spider-Man",status:"ongoing",  aired:1, next:"S2 · Fall 2026", recheck:"2026-08-21", imdbId:"tt16027074"},
   {name:"Daredevil: Born Again",                 status:"ongoing",  aired:2, next:"S3 · Mar 2027", recheck:"2026-08-21", imdbId:"tt18923754"},
-  {name:"Ahsoka",                                status:"ongoing",  aired:1, next:"S2 · early 2027", recheck:"2026-08-21", imdbId:"tt13622776"},
+  {name:"Ahsoka",                                status:"ongoing",  aired:1, next:"S2 · 20 Jan 2027", imdbId:"tt13622776"},
   {name:"The Mandalorian",                       status:"finished", aired:3, imdbId:"tt8111088"},
   {name:"Maul: Shadow Lord",                     status:"ongoing",  aired:1, next:"S2 · est. late 2027", recheck:"2026-08-21", imdbId:"tt36594331"},
   {name:"SAS: Rogue Heroes",                     status:"ongoing",  aired:2, next:"S3 · est. late 2026", recheck:"2026-08-21", imdbId:"tt10405370"},
