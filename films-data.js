@@ -140,6 +140,27 @@ const FILMS = [
     runtime: 86,
   },
 
+  {
+    title: 'Tony',
+    year: 2026,
+    slug: 'tony-2026',
+    poster: 'https://image.tmdb.org/t/p/w342/3WN0JWwRI7oGH7Ni2R6poVWej05.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 14 Aug 2026',
+  },
+  {
+    title: 'Teenage Sex and Death at Camp Miasma',
+    year: 2026,
+    slug: 'teenage-sex-and-death-at-camp-miasma',
+    poster: 'https://image.tmdb.org/t/p/w342/5Cz1EJOKpZ8hqvBNZYF9C2zTB2T.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 21 Aug 2026',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
