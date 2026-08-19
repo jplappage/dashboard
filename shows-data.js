@@ -30,7 +30,7 @@ const SHOWS = [
   {name:"The Boys",                              status:"finished", aired:5, next:null, imdbId:"tt1190634"},
   {name:"Vought Rising",                         status:"ongoing",  aired:0, next:"S1 · est. early 2027", recheck:"2026-08-21", poster:"Images/vought-rising-poster.avif", imdbId:"tt33041431"},
   {name:"Alley Cats",                            status:"ongoing",  aired:1, next:null, recheck:"2026-08-21", imdbId:"tt38264832"},
-  {name:"Stranger Things: Tales from '85",       status:"ongoing",  aired:1, next:"S2 · Fall 2026", recheck:"2026-08-21", imdbId:"tt27486290"},
+  {name:"Stranger Things: Tales from '85",       status:"ongoing",  aired:1, next:"S2 · 17 Sep 2026", imdbId:"tt27486290"},
   {name:"Welcome to Wrexham",                    status:"ongoing",  aired:5, next:"S6 · 27 May 2027", imdbId:"tt14674086"},
   {name:"Spider-Noir",                           status:"ongoing",  aired:1, next:"S2 · unannounced", recheck:"2026-08-21", imdbId:"tt30460310"},
   {name:"Your Friendly Neighbourhood Spider-Man",status:"ongoing",  aired:1, next:"S2 · Fall 2026", recheck:"2026-08-21", imdbId:"tt16027074"},
