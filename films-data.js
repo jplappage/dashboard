@@ -20,30 +20,6 @@ const FILMS = [
     runtime: 55,
   },
   {
-    title: 'Star Wars: Visions Presents - The Ninth Jedi',
-    year: 2026,
-    slug: 'star-wars-visions-presents-the-ninth-jedi',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/6/0/9/7/0/2/1609702-star-wars-visions-presents-the-ninth-jedi-0-230-0-345-crop.jpg?v=ede94747bd',
-    vodDate: '2026-08-05',
-    platform: 'Disney+',
-    estimated: false,
-    imdbRating: 7.0,
-  },
-  {
-    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
-    // snapped VOD estimate (~45-day window) once it opens.
-    title: 'The End of Oak Street',
-    year: 2026,
-    slug: 'the-end-of-oak-street',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/9/9/2/9/6/2/992962-the-end-of-oak-street-0-600-0-900-crop.jpg?v=b06dbfb4c9',
-    vodDate: '2026-08-14',
-    platform: null,
-    estimated: true,
-    cinema: true,
-    note: 'Cinema release 14 Aug 2026 (Warner Bros) · VOD est. follows once released (~45-day window)',
-    runtime: 100,
-  },
-  {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
     // snapped VOD estimate (~45-day window) once it opens.
     title: 'Insidious: Out of the Further',
@@ -56,6 +32,7 @@ const FILMS = [
     estimated: true,
     cinema: true,
     note: 'Cinema release 21 Aug 2026 (Sony) · VOD est. follows once released (~45-day window)',
+    imdbRating: 6.3,
     runtime: 106,
   },
   {
