@@ -186,4 +186,5 @@ const WATCHED = [
   { title: 'Evil Dead Burn', vodDate: '2026-08-04', imdbRating: 6.8 },
   { title: 'Jackass: Best and Last', vodDate: '2026-08-11', imdbRating: 6.9 },
   { title: 'The Invite', vodDate: '2026-08-11', imdbRating: 6.2 },
+  { title: 'Star Wars: Visions Presents - The Ninth Jedi', vodDate: '2026-08-05', imdbRating: 7.0 },
 ];
