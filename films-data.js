@@ -20,18 +20,15 @@ const FILMS = [
     runtime: 55,
   },
   {
-    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
-    // snapped VOD estimate (~45-day window) once it opens.
     title: 'Insidious: Out of the Further',
     year: 2026,
     slug: 'insidious-out-of-the-further',
     plexSlug: 'insidious-out-of-the-further-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/4/1/5/7/1174157-insidious-out-of-the-further-0-600-0-900-crop.jpg?v=b6c81c5505',
-    vodDate: '2026-08-21',
+    vodDate: '2026-10-06',
     platform: null,
     estimated: true,
-    cinema: true,
-    note: 'Cinema release 21 Aug 2026 (Sony) · VOD est. follows once released (~45-day window)',
+    note: 'Cinema release 21 Aug 2026 (Sony) · digital VOD est. ~early Oct 2026 (~45-day window)',
     imdbRating: 6.3,
     runtime: 106,
   },
