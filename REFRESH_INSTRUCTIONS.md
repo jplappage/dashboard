@@ -39,7 +39,9 @@ Run these comparisons immediately from the data loaded in Phase 1:
 - Films with no `runtime` → queue for Phase 3 (need Letterboxd runtime scrape). This one **includes pre-theatrical films** — Letterboxd usually lists a runtime before release even when there's no VOD date or IMDb rating yet. If Letterboxd has no runtime yet, leave it absent and it'll be picked up on a later refresh.
 - Films with a **confirmed** `vodDate` (`estimated: false`) that is still in the future → queue for Phase 3 **re-verification**. A confirmed date is NOT locked: studios push already-announced dates, and once a film has a date it drops off WhenToStream's weekly report, so a per-film re-check is the only way to catch a slip. (Past miss: *The Death of Robin Hood* moved 21 Jul → 4 Aug and was skipped because it already had a firm date.)
 
-**Pre-theatrical skip rule:** a film whose cinema release date (in its `note`) has NOT yet passed cannot have a VOD date or an IMDb rating. Skip both searches for it, but list it under "Skipped (pre-theatrical)" so the Phase 3 verification can account for every film.
+**Pre-theatrical skip rule:** a film whose cinema release date (in its `note`) is still in the FUTURE cannot have a VOD date or an IMDb rating. Skip both searches for it, but list it under "Skipped (pre-theatrical)" so the Phase 3 verification can account for every film.
+
+**Cinema-date-reached rule (flip to VOD estimate):** the moment a film's cinema date is **today or earlier** (i.e. it has opened), it is no longer pre-theatrical — do NOT leave it showing `cinema: true` with the cinema date as `vodDate` (that renders "🎬 Cinemas …" and no VOD estimate, which JP flagged). Instead, in Phase 4: remove `cinema: true`, set `vodDate` to a Tuesday-snapped estimate ~45 days after the cinema open (or the studio's known window — WB PVOD ~31 days, A24 digital ~45–60 days), keep `estimated: true`, and rewrite the `note` to describe the digital window (e.g. `Cinema release 21 Aug 2026 (Sony) · digital VOD est. ~early Oct 2026 (~45-day window)`). Also queue it for an IMDb check now that it's released. Only future-cinema films keep `cinema: true`.
 
 **Show log**
 
