@@ -73,21 +73,6 @@ const FILMS = [
     runtime: 123,
   },
   {
-    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
-    // snapped VOD estimate (~45-day window) once it opens.
-    title: 'Cliffhanger',
-    year: 2026,
-    slug: 'cliffhanger-2026',
-    lbSlug: 'cliffhanger-2027',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/0/9/9/3/3/1009933-cliffhanger-2026-0-600-0-900-crop.jpg?v=f866b04974',
-    vodDate: '2026-08-28',
-    platform: null,
-    estimated: true,
-    cinema: true,
-    note: 'Cinema release 28 Aug 2026 (Decal) — but Letterboxd now lists it as 2027; possible slip to Q1 2027 (Neon). VOD est. follows once released (~45-day window)',
-  },
-
-  {
     title: 'I Want Your Sex',
     year: 2026,
     slug: 'i-want-your-sex',
