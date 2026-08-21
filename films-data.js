@@ -33,17 +33,14 @@ const FILMS = [
     runtime: 106,
   },
   {
-    // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
-    // snapped VOD estimate (~45-day window) once it opens.
     title: 'Mutiny',
     year: 2026,
     slug: 'mutiny-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/1/6/8/9/1171689-mutiny-2026-0-600-0-900-crop.jpg?v=ff413ceded',
-    vodDate: '2026-08-21',
+    vodDate: '2026-10-06',
     platform: null,
     estimated: true,
-    cinema: true,
-    note: 'Cinema release 21 Aug 2026 (Lionsgate) · VOD est. follows once released (~45-day window)',
+    note: 'Cinema release 21 Aug 2026 (Lionsgate) · digital VOD est. ~early Oct 2026 (~45-day window)',
     runtime: 95,
   },
   {
@@ -145,10 +142,10 @@ const FILMS = [
     slug: 'tony-2026',
     imdbRating: 7.7,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/0/9/0/0/1/1209001-tony-2026-0-600-0-900-crop.jpg?v=63ce7b9234',
-    vodDate: '2026-12-22',
+    vodDate: '2026-10-13',
     platform: null,
     estimated: true,
-    note: 'A24 Anthony Bourdain biopic (Matt Johnson) · cinemas 21 Aug 2026 · digital est. ~Dec 2026 (A24→HBO Max ~120-day window)',
+    note: 'A24 Anthony Bourdain biopic (Matt Johnson) · cinemas 21 Aug 2026 · digital VOD est. ~mid-Oct 2026 (~45-60 day window)',
     runtime: 106,
   },
 
