@@ -146,6 +146,7 @@ const FILMS = [
     title: 'Tony',
     year: 2026,
     slug: 'tony-2026',
+    imdbRating: 7.7,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/0/9/0/0/1/1209001-tony-2026-0-600-0-900-crop.jpg?v=63ce7b9234',
     vodDate: '2026-12-22',
     platform: null,
