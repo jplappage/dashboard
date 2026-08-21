@@ -9,17 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Trainwreck: Poop Cruise',
-    year: 2025,
-    slug: 'trainwreck-poop-cruise',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/6/0/9/7/9/1360979-trainwreck-poop-cruise-0-600-0-900-crop.jpg?v=af68ee74a8',
-    vodDate: '2025-06-24',
-    platform: 'Netflix',
-    estimated: false,
-    imdbRating: 6.0,
-    runtime: 55,
-  },
-  {
     title: 'Insidious: Out of the Further',
     year: 2026,
     slug: 'insidious-out-of-the-further',
@@ -180,4 +169,5 @@ const WATCHED = [
   { title: 'Jackass: Best and Last', vodDate: '2026-08-11', imdbRating: 6.9 },
   { title: 'The Invite', vodDate: '2026-08-11', imdbRating: 6.2 },
   { title: 'Star Wars: Visions Presents - The Ninth Jedi', vodDate: '2026-08-05', imdbRating: 7.0 },
+  { title: 'Trainwreck: Poop Cruise', vodDate: '2025-06-24', imdbRating: 6.0 },
 ];
