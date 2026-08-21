@@ -3,6 +3,3 @@
 # wrong-year version of a remake, or the old original alongside it.
 # One Letterboxd slug per line. Blank lines and #comments are ignored.
 # Respected by update_new_films.py AND the manual refresh (see REFRESH_INSTRUCTIONS.md).
-
-cliffhanger-1
-cliffhanger-2027
