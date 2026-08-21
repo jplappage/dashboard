@@ -131,6 +131,20 @@ Both the watched date AND the personal rating come straight from the **diary pag
 ```
 `rated-N` on the diary page = N ÷ 2 stars (rated-6 = 3.0, rated-4 = 2.0, rated-7 = 3.5). If the scrape is ever unclear, screenshot the diary page and read the RATING column directly — that column is the source of truth.
 
+⚠️ **Owner-view gotcha (common):** when the browser is logged in as zidanejp, `/films/diary/` redirects to `/zidanejp/diary/` and the RATING column (`.col-rating`) renders an **editable rateit widget**, not a static `rated-N` span — so the `rated-N` / `[class*="rated-"]` selectors above all return null. In that view read the value from the hidden input instead: `.col-rating input.rateit-field` carries a 0–10 value, and stars = value ÷ 2 (input value 7 = 3.5★). Robust per-row extractor:
+```js
+[...document.querySelectorAll('tr.diary-entry-row')].map(tr=>{
+  const name=(tr.querySelector('[data-item-name]')||{}).dataset?.itemName;
+  const inp=tr.querySelector('.col-rating input.rateit-field');   // owner view
+  const rd=tr.querySelector('.col-rating [class*="rated-"]');     // logged-out view
+  const v=inp&&inp.value!==''?+inp.value:(rd?(rd.className.match(/rated-(\d+)/)||[])[1]:null);
+  let date=null; const a=[...tr.querySelectorAll('a')].map(x=>x.getAttribute('href')).find(h=>h&&/for\/\d{4}\/\d{2}\/\d{2}/.test(h));
+  if(a){const m=a.match(/for\/(\d{4})\/(\d{2})\/(\d{2})/);date=m[1]+'-'+m[2]+'-'+m[3];}
+  return {name, stars: v!=null?(+v)/2:null, date};
+}).filter(x=>x.name)
+```
+This is still JP's own rating (the rateit widget is the owner's), so it's safe from the friend-sidebar trap — don't fall back to the review page.
+
 **Before moving to Phase 4, verify:**
 - [ ] Every film with `vodDate: null` or `estimated: true` was searched OR listed as skipped (pre-theatrical)
 - [ ] Every film with no `imdbRating` was searched OR listed as skipped (pre-theatrical)
