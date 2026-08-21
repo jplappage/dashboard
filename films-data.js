@@ -61,6 +61,7 @@ const FILMS = [
     estimated: true,
     cinema: true,
     note: 'Cinema release 26 Aug 2026 (20th Century) · VOD est. follows once released (~45-day window)',
+    runtime: 119,
   },
   {
     // Pre-theatrical: date below is the CINEMA release. Switch to a Tuesday-
