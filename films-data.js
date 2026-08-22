@@ -127,6 +127,7 @@ const FILMS = [
     title: 'The Rivals of Amziah King',
     year: 2026,
     slug: 'the-rivals-of-amziah-king',
+    imdbRating: 7.7,
     poster: 'https://image.tmdb.org/t/p/w342/3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg',
     vodDate: null,
     platform: null,
