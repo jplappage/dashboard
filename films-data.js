@@ -123,6 +123,17 @@ const FILMS = [
     runtime: 106,
   },
 
+  {
+    title: 'The Rivals of Amziah King',
+    year: 2026,
+    slug: 'the-rivals-of-amziah-king',
+    poster: 'https://image.tmdb.org/t/p/w342/3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 14 Aug 2026',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
