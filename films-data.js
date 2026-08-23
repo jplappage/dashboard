@@ -122,6 +122,18 @@ const FILMS = [
     note: 'A24 Anthony Bourdain biopic (Matt Johnson) · cinemas 21 Aug 2026 · digital VOD est. ~mid-Oct 2026 (~45-60 day window)',
     runtime: 106,
   },
+  {
+    title: 'The Rivals of Amziah King',
+    year: 2025,
+    slug: 'the-rivals-of-amziah-king',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/1/3/2/9/8/1013298-the-rivals-of-amziah-king-0-600-0-900-crop.jpg?v=7714bd135c',
+    vodDate: '2026-10-06',
+    platform: null,
+    estimated: true,
+    note: 'Andrew Patterson crime drama (SXSW 2025) · US cinemas 21 Aug 2026 · digital VOD est. ~early Oct 2026 (~45-day window)',
+    imdbRating: 7.3,
+    runtime: 130,
+  },
 
   {
     title: 'The Rivals of Amziah King',

@@ -181,9 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 21 Aug 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 23 Aug 2026)
 const RETRO_LETTERBOXD = {
 
+  92: "2026-08-23", // Les Misérables
   102:"2026-08-19", // Tusk
   116:"2026-08-09", // Murder on the Orient Express
   14: "2026-08-10", // Serpico
@@ -288,6 +289,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  92:  2.0,  // Les Misérables
   102: 3.5,  // Tusk
   116: 3.0,  // Murder on the Orient Express
   14:  3.5,  // Serpico
