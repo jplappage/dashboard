@@ -134,6 +134,17 @@ const FILMS = [
     runtime: 130,
   },
 
+  {
+    title: 'Coyote vs. Acme',
+    year: 2026,
+    slug: 'coyote-vs-acme',
+    poster: 'https://image.tmdb.org/t/p/w342/orkLtdgMGiO9rTVMqJ1kKwrnup1.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 21 Aug 2026',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
