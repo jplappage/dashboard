@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 23 Aug 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 26 Aug 2026)
 const RETRO_LETTERBOXD = {
 
   92: "2026-08-23", // Les Misérables
