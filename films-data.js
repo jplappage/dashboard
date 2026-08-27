@@ -138,6 +138,17 @@ const FILMS = [
     runtime: 112,
   },
 
+  {
+    title: 'Batman: Knightfall Part 1: Knightfall',
+    year: 2026,
+    slug: 'batman-knightfall-part-1-knightfall',
+    poster: 'https://image.tmdb.org/t/p/w342/360qdtu2hLnqMu8SVHMywn420w1.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'Auto-added from Letterboxd — awaiting a streaming date',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
