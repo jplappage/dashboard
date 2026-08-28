@@ -148,6 +148,17 @@ const FILMS = [
     note: 'Auto-added from Letterboxd — awaiting a streaming date',
   },
 
+  {
+    title: 'Grand Theft Auto VI: An Extended Look',
+    year: 2026,
+    slug: 'grand-theft-auto-vi-an-extended-look',
+    poster: 'https://image.tmdb.org/t/p/w342/xTZuh9ziUjIyHBWO9OvqNIPqVWe.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'Auto-added from Letterboxd — awaiting a streaming date',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
