@@ -458,13 +458,10 @@ function makeSVG(full, pos) {
 
 function loadImg(el, sfId, ssId, full, pos, lfcImg) {
   const svgSrc = makeSVG(full, pos);
+  el.referrerPolicy = 'no-referrer';   // SofaScore blocks cross-origin hotlinks by Referer; weserv blocks the domain
   const sources = [];
   if (lfcImg) sources.push(lfcImg);
-  if (ssId) {
-    const raw = `api.sofascore.com/api/v1/player/${ssId}/image`;
-    sources.push(`https://images.weserv.nl/?url=${encodeURIComponent(raw)}&w=220&fit=cover&a=top&output=jpg`);
-    sources.push(`https://api.sofascore.com/api/v1/player/${ssId}/image`);
-  }
+  if (ssId) sources.push(`https://api.sofascore.com/api/v1/player/${ssId}/image`);
   if (sfId) {
     sources.push(`https://cdn.sofifa.net/players/${sfId}/25_120.png`);
     sources.push(`https://cdn.sofifa.net/players/${sfId}/24_120.png`);
