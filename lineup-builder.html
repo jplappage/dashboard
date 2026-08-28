@@ -456,14 +456,14 @@ function makeSVG(full, pos) {
   );
 }
 
-function loadImg(el, sfId, tmImg, full, pos, lfcImg) {
+function loadImg(el, sfId, ssId, full, pos, lfcImg) {
   const svgSrc = makeSVG(full, pos);
   const sources = [];
   if (lfcImg) sources.push(lfcImg);
-  if (tmImg) {
-    const raw = `img.a.transfermarkt.technology/portrait/medium/${tmImg}`;
+  if (ssId) {
+    const raw = `api.sofascore.com/api/v1/player/${ssId}/image`;
     sources.push(`https://images.weserv.nl/?url=${encodeURIComponent(raw)}&w=220&fit=cover&a=top&output=jpg`);
-    sources.push(`https://img.a.transfermarkt.technology/portrait/medium/${tmImg}`);
+    sources.push(`https://api.sofascore.com/api/v1/player/${ssId}/image`);
   }
   if (sfId) {
     sources.push(`https://cdn.sofifa.net/players/${sfId}/25_120.png`);
@@ -503,7 +503,7 @@ const FRANCE_PLAYERS = [
   { id:'zaireemery', name:'Zaïre-Emery',  full:'Warren Zaïre-Emery',   pos:'MID', sec:'squad',  sfId:266741,  tmImg:'810092-1777411744.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/dc56020d1eb06b8a33496793162c4a0f.png?twic=v1/resize=400' },
   // ── ATT
   { id:'akliouche',  name:'Akliouche',    full:'Maghnés Akliouche',    pos:'ATT', sec:'squad',  sfId:265018,  tmImg:'745200-1717406573.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/0aa87cd41623745bcfe60efb379f8fa4.png?twic=v1/resize=400' },
-  { id:'barcola',    name:'Barcola',      full:'Bradley Barcola',      pos:'ATT', sec:'squad',  sfId:263993,  tmImg:'708265-1653406915.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/24b441d43cc16ff2b9f238d4357ad948.png?twic=v1/resize=400' },
+  { id:'barcola',    name:'Barcola',      full:'Bradley Barcola',      pos:'ATT', sec:'squad',  sfId:263993, ssId:996952,  tmImg:'708265-1653406915.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/24b441d43cc16ff2b9f238d4357ad948.png?twic=v1/resize=400' },
   { id:'cherki',     name:'Cherki',       full:'Rayan Cherki',         pos:'ATT', sec:'squad',  sfId:269072,  tmImg:'607223-1773302431.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/df3123a6c38bba48301851fbc342da89.png?twic=v1/resize=400' },
   { id:'dembele',    name:'Dembélé',      full:'Ousmane Dembélé',      pos:'ATT', sec:'squad',  sfId:221439,  tmImg:'288230-1684148641.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/564683a99ff82dbb62982478c185ced9.png?twic=v1/resize=400' },
   { id:'doue',       name:'Doué',         full:'Désiré Doué',          pos:'ATT', sec:'squad',  sfId:268960,  tmImg:'914562-1667317075.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/e04b9b08e1bdc310cb6aae9dd6572b08.png?twic=v1/resize=400' },
@@ -512,18 +512,18 @@ const FRANCE_PLAYERS = [
   { id:'olise',      name:'Olise',        full:'Michael Olise',        pos:'ATT', sec:'squad',  sfId:258177,  tmImg:'566723-1762944477.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/2a1f9a654eda3a124018bcebcb46223f.png?twic=v1/resize=400' },
   { id:'thuram',     name:'Thuram',       full:'Marcus Thuram',        pos:'ATT', sec:'squad',  sfId:259358,  tmImg:'318528-1746041509.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/b6c575766c446f10634e366e142e9528.png?twic=v1/resize=400' },
   // ── FRINGE DEF
-  { id:'pavard',     name:'Pavard',       full:'Benjamin Pavard',      pos:'DEF', sec:'fringe', sfId:213741,  tmImg:'353366-1713819215.jpg'  },
-  { id:'clauss',     name:'Clauss',       full:'Jonathan Clauss',      pos:'DEF', sec:'fringe', sfId:207984,  tmImg:'175639-1756827010.jpg'  },
-  { id:'disasi',     name:'Disasi',       full:'Axel Disasi',          pos:'DEF', sec:'fringe', sfId:246977,  tmImg:'386047-1727785671.jpg'  },
-  { id:'bade',       name:'Badé',         full:'Loïc Badé',            pos:'DEF', sec:'fringe', sfId:null,    tmImg:'730581-1758704021.jpg'  },
+  { id:'pavard',     name:'Pavard',       full:'Benjamin Pavard',      pos:'DEF', sec:'fringe', sfId:213741, ssId:787505,  tmImg:'353366-1713819215.jpg'  },
+  { id:'clauss',     name:'Clauss',       full:'Jonathan Clauss',      pos:'DEF', sec:'fringe', sfId:207984, ssId:821728,  tmImg:'175639-1756827010.jpg'  },
+  { id:'disasi',     name:'Disasi',       full:'Axel Disasi',          pos:'DEF', sec:'fringe', sfId:246977, ssId:827243,  tmImg:'386047-1727785671.jpg'  },
+  { id:'bade',       name:'Badé',         full:'Loïc Badé',            pos:'DEF', sec:'fringe', sfId:null, ssId:1006489,    tmImg:'730581-1758704021.jpg'  },
   // ── FRINGE MID
-  { id:'camavinga',  name:'Camavinga',    full:'E. Camavinga',         pos:'MID', sec:'fringe', sfId:254195,  tmImg:'640428-1668500874.jpg'  },
-  { id:'fofana',     name:'Fofana',       full:'Youssouf Fofana',      pos:'MID', sec:'fringe', sfId:248032,  tmImg:'569598-1725528517.jpg'  },
-  { id:'guendouzi',  name:'Guendouzi',    full:'M. Guendouzi',         pos:'MID', sec:'fringe', sfId:233616,  tmImg:'465830-1770049970.png'  },
+  { id:'camavinga',  name:'Camavinga',    full:'E. Camavinga',         pos:'MID', sec:'fringe', sfId:254195, ssId:973887,  tmImg:'640428-1668500874.jpg'  },
+  { id:'fofana',     name:'Fofana',       full:'Youssouf Fofana',      pos:'MID', sec:'fringe', sfId:248032, ssId:945062,  tmImg:'569598-1725528517.jpg'  },
+  { id:'guendouzi',  name:'Guendouzi',    full:'M. Guendouzi',         pos:'MID', sec:'fringe', sfId:233616, ssId:852404,  tmImg:'465830-1770049970.png'  },
   // ── FRINGE ATT
-  { id:'kolomuani',  name:'Kolo Muani',   full:'R. Kolo Muani',        pos:'ATT', sec:'fringe', sfId:248034,  tmImg:'487969-1718697120.jpg'  },
-  { id:'coman',      name:'Coman',        full:'Kingsley Coman',       pos:'ATT', sec:'fringe', sfId:224222,  tmImg:'243714-1700040256.jpg'  },
-  { id:'nkunku',     name:'Nkunku',       full:'Ch. Nkunku',           pos:'ATT', sec:'fringe', sfId:246978,  tmImg:'344381-1663686834.jpg'  },
+  { id:'kolomuani',  name:'Kolo Muani',   full:'R. Kolo Muani',        pos:'ATT', sec:'fringe', sfId:248034, ssId:871706,  tmImg:'487969-1718697120.jpg'  },
+  { id:'coman',      name:'Coman',        full:'Kingsley Coman',       pos:'ATT', sec:'fringe', sfId:224222, ssId:280441,  tmImg:'243714-1700040256.jpg'  },
+  { id:'nkunku',     name:'Nkunku',       full:'Ch. Nkunku',           pos:'ATT', sec:'fringe', sfId:246978, ssId:769333,  tmImg:'344381-1663686834.jpg'  },
   { id:'ekitike',    name:'Ekitike',      full:'Hugo Ekitike',         pos:'ATT', sec:'fringe', sfId:267921,  tmImg:'709726-1758714741.jpg',  lfcImg:'https://backend.liverpoolfc.com/sites/default/files/styles/sm/public/2026-06/hugo-ekitike-2026-27-headshot_089dc5cf294aec299aee16a3d72af5ba.webp?itok=MJ5k0ncK' },
 ];
 
@@ -844,7 +844,7 @@ function buildPill(p, onPitch, isUnavail = false) {
 
   const av = document.createElement('div'); av.className = 'pcard-av';
   const img = document.createElement('img'); img.className = 'pcard-img';
-  loadImg(img, p.sfId, p.tmImg, p.full, p.pos, p.lfcImg||null);
+  loadImg(img, p.sfId, p.ssId, p.full, p.pos, p.lfcImg||null);
   av.appendChild(img);
 
   const nm = document.createElement('div'); nm.className = 'pcard-name'; nm.textContent = p.name;
@@ -1034,7 +1034,7 @@ function renderPitch() {
         if (cond==='suspended') circle.classList.add('sus-ring');
         circle.draggable = true;
         const img = document.createElement('img'); img.className = 'slot-img';
-        loadImg(img, player.sfId, player.tmImg, player.full, player.pos, player.lfcImg||null);
+        loadImg(img, player.sfId, player.ssId, player.full, player.pos, player.lfcImg||null);
         circle.appendChild(img);
         if (cond) {
           const b = document.createElement('div'); b.className = 'slot-badge';
