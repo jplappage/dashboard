@@ -157,6 +157,17 @@ const FILMS = [
     note: 'Auto-added from Letterboxd — awaiting a streaming date',
   },
 
+  {
+    title: 'Buddy',
+    year: 2026,
+    slug: 'buddy-2026',
+    poster: 'https://image.tmdb.org/t/p/w342/6Lh4ZlsAISFQFVfLZ90sE9ycVnN.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 28 Aug 2026',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
