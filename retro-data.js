@@ -181,8 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 26 Aug 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 29 Aug 2026)
 const RETRO_LETTERBOXD = {
+
+  128:"2026-08-29", // House of Gucci
 
   92: "2026-08-23", // Les Misérables
   102:"2026-08-19", // Tusk
@@ -289,6 +291,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  128: 2.5,  // House of Gucci
   92:  2.0,  // Les Misérables
   102: 3.5,  // Tusk
   116: 3.0,  // Murder on the Orient Express
