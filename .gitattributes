@@ -1,0 +1,19 @@
+# Stop the CRLF vs LF churn that jams the auto-deploy watcher.
+# Text/code/data files are stored with LF so Windows saves stop
+# showing every file as "fully changed" (which caused rebase loops).
+* text=auto eol=lf
+
+# Windows scripts must keep CRLF line endings
+*.bat text eol=crlf
+*.vbs text eol=crlf
+*.ps1 text eol=crlf
+
+# iCalendar files require CRLF per spec
+*.ics text eol=crlf
+
+# Binary assets — never modify
+*.png binary
+*.PNG binary
+*.jpg binary
+*.avif binary
+*.ico binary
