@@ -181,8 +181,11 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 29 Aug 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 31 Aug 2026)
 const RETRO_LETTERBOXD = {
+
+  136:"2026-08-31", // Death on the Nile
+  16: "2026-08-30", // Dirty Harry
 
   128:"2026-08-29", // House of Gucci
 
@@ -291,6 +294,8 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  136: 3.0,  // Death on the Nile
+  16:  3.0,  // Dirty Harry
   128: 2.5,  // House of Gucci
   92:  2.0,  // Les Misérables
   102: 3.5,  // Tusk
