@@ -20,18 +20,6 @@ const FILMS = [
     runtime: 101,
   },
   {
-    title: 'I Want Your Sex',
-    year: 2026,
-    slug: 'i-want-your-sex',
-    plexSlug: 'i-want-your-sex-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/9/5/4/1170954-i-want-your-sex-0-600-0-900-crop.jpg?v=c13a0c57b7',
-    vodDate: '2026-09-01',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 6.4,
-    runtime: 90,
-  },
-  {
     title: 'The Incomer',
     year: 2026,
     slug: 'the-incomer',
@@ -249,4 +237,5 @@ const WATCHED = [
   { title: 'Trainwreck: Poop Cruise', vodDate: '2025-06-24', imdbRating: 6.0 },
   { title: 'Mutiny', vodDate: '2026-08-21', imdbRating: 5.7 },
   { title: 'Batman: Knightfall Part 1: Knightfall', vodDate: '2026-08-28', imdbRating: 8.0 },
+  { title: 'I Want Your Sex', vodDate: '2026-09-01', imdbRating: 6.4 },
 ];
