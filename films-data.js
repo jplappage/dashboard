@@ -188,6 +188,17 @@ const FILMS = [
     runtime: 119,
   },
 
+  {
+    title: 'Onslaught',
+    year: 2026,
+    slug: 'onslaught-2026',
+    poster: 'https://image.tmdb.org/t/p/w342/cOGtvhc6Ij9KvzM6jZsfQyg0B0O.jpg',
+    vodDate: null,
+    platform: null,
+    estimated: true,
+    note: 'In cinemas 11 Dec 2026',
+  },
+
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
