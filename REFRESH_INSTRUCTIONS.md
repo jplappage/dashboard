@@ -32,7 +32,7 @@ Run all phases in order. Within each phase, do everything listed simultaneously.
 Run these comparisons immediately from the data loaded in Phase 1:
 
 **Films watchlist**
-- New films on Letterboxd not in FILMS → queue for Phase 3 (need poster + IMDb check). **First exclude any slug listed in `film-ignore.txt`** — these were removed on purpose (e.g. a title match pulling in the wrong-year version of a remake or the old original). Never re-add an ignored slug; if a genuinely new, wanted film shares a title with an ignored one, that's fine because the ignore list keys on the exact slug. **Also watch for the reverse:** `update_new_films.py` may have already added (or add mid-refresh) a stub for a new slug — match slugs against the CURRENT file including stubs, fill the stub in rather than adding a second entry, and rely on the Phase 4 duplicate-slug check to catch a concurrent double-add.
+- New films on Letterboxd not in FILMS → queue for Phase 3 (need poster + IMDb check). **First exclude any slug listed in `film-ignore.txt`** — these were removed on purpose (e.g. a title match pulling in the wrong-year version of a remake or the old original). Never re-add an ignored slug; if a genuinely new, wanted film shares a title with an ignored one, that's fine because the ignore list keys on the exact slug. (The old `update-new-films` GitHub workflow that auto-added Letterboxd stubs was disabled 2 Sep 2026 — the manual refresh is now the only thing that adds films.)
 - Films in FILMS not on Letterboxd → mark for archiving (move from FILMS to the WATCHED list, both in `films-data.js` — this keeps it on the page calendar and in watchlist.ics)
 - Films with `vodDate: null` or `estimated: true` → queue for Phase 3 (need streaming date), **except pre-theatrical films (see skip rule below)**
 - Films with no `imdbRating` → queue for Phase 3 (need IMDb check), **except pre-theatrical films**
@@ -201,11 +201,11 @@ done
 ```
 All three must pass. (The `tr` strips trailing null bytes that break `node --check` but not the browser — a known Windows-save artefact.)
 
-**Then check for duplicate films (catches the importer double-adding during the refresh):**
+**Then check for duplicate films:**
 ```
 grep -oE "slug: '[^']+'" films-data.js | sort | uniq -d
 ```
-Output MUST be empty. `update_new_films.py` runs on the watcher independently and can append its own stub for a slug you added this same refresh (TMDB poster, `vodDate:null`, a guessed `note:"In cinemas …"`). If a slug prints here, remove the stub entry and keep the researched one, then re-validate. Do NOT rely on a `grep -c "<Title>"` returning ">0" — it must be exactly the expected count.
+Output MUST be empty. If a slug prints here, remove the duplicate entry and re-validate.
 
 ---
 
