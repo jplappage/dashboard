@@ -17,7 +17,8 @@ Run all phases in order. Within each phase, do everything listed simultaneously.
 - Read `films-data.js` → note every film in FILMS array (title, vodDate, estimated, imdbRating, note with cinema date)
 - Read `shows-data.js` → note every ongoing show, its `next` field, and its `recheck` field (if any)
 - Read `retro-data.js` → note the scrape cutoff date in the RETRO_LETTERBOXD comment
-- **Letterboxd via Chrome MCP only — WebFetch returns empty for letterboxd.com, do not try it.**
+- **Browser choice (added 4 Sep 2026):** use the **built-in browser** (the `Claude_Browser` tools in the desktop app) for ALL browser steps in this refresh — Letterboxd, IMDb, WhenToStream and the gist backup/patch — rather than the Claude in Chrome extension. Reason: when a refresh runs from the desktop app, the Chrome extension's site-permission prompt appears in the chat every session and "always allow" is not remembered, so JP has to click through for each site every time. The built-in browser keeps its own site approvals; if it asks for site access, request scope "site" so it sticks. JP needs to be logged into Letterboxd in the built-in browser the first time (the diary rating scrape depends on the owner view). Only fall back to Chrome if the built-in browser is offline, and say so.
+- **Letterboxd via browser tools only — WebFetch returns empty for letterboxd.com, do not try it.**
   Open a tab, then:
   - Navigate to `https://letterboxd.com/zidanejp/watchlist/` and extract slugs with `javascript_tool`:
     ```js
