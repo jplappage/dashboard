@@ -78,6 +78,10 @@ Do not proceed until all five lists are complete. Every film and every vague-nex
 **What does NOT need a search:**
 - next with a specific confirmed day+month+year (e.g. "S3 · 21 Jun 2026")
 
+**Dated-show sanity check (added 5 Sep 2026):** shows with a specific date are NOT exempt from scrutiny. Each refresh, run one quick WebSearch per dated ongoing show (`"[show]" season [N] premiere date`) to confirm (a) the date still stands and (b) the show hasn't been cancelled. Past miss: *Spider-Noir* sat on a fabricated "S2 · 6 Jun 2027" for weeks and was only caught after Prime Video cancelled it; *Welcome to Wrexham* carried "27 May 2027" when only "May 2027" was ever expected. Cancelled = move to the ENDED (cancelled) section with `status:"cancelled"` and no `next`. Date only partly confirmed = downgrade to `est.` + `recheck`.
+
+**"Don't ignore shows" override:** if JP adds this (or similar) to `/refresh`, search EVERY ongoing show — vague-next shows regardless of `recheck`, AND every dated show per the sanity check above. Nothing in the SHOWS array is skipped.
+
 Sanity check: searched + skipped (recheck not due) together must equal the total count of vague-next shows — typically 15+ entries combined. If the combined count looks short, go back through the SHOWS array line by line.
 
 ---
