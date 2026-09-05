@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 4 Sep 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 5 Sep 2026)
 const RETRO_LETTERBOXD = {
 
   136:"2026-08-31", // Death on the Nile
