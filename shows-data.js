@@ -31,7 +31,7 @@ const SHOWS = [
   {name:"Vought Rising",                         status:"ongoing",  aired:0, next:"S1 · est. early 2027", recheck:"2026-09-11", poster:"Images/vought-rising-poster.avif", imdbId:"tt33041431"},
   {name:"Alley Cats",                            status:"ongoing",  aired:1, next:null, recheck:"2026-09-11", imdbId:"tt38264832"},
   {name:"Stranger Things: Tales from '85",       status:"ongoing",  aired:1, next:"S2 · 17 Sep 2026", imdbId:"tt27486290"},
-  {name:"Welcome to Wrexham",                    status:"ongoing",  aired:5, next:"S6 · 27 May 2027", imdbId:"tt14674086"},
+  {name:"Welcome to Wrexham",                    status:"ongoing",  aired:5, next:"S6 · est. May 2027", recheck:"2026-09-11", imdbId:"tt14674086"},
   {name:"Your Friendly Neighbourhood Spider-Man",status:"ongoing",  aired:1, next:"S2 · Jan 2027", recheck:"2026-09-11", imdbId:"tt16027074"},
   {name:"Daredevil: Born Again",                 status:"ongoing",  aired:2, next:"S3 · Mar 2027", recheck:"2026-09-11", imdbId:"tt18923754"},
   {name:"Ahsoka",                                status:"ongoing",  aired:1, next:"S2 · 20 Jan 2027", imdbId:"tt13622776"},
