@@ -50,9 +50,8 @@ const FILMS = [
     imdbRating: 7.7,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/0/9/0/0/1/1209001-tony-2026-0-600-0-900-crop.jpg?v=63ce7b9234',
     vodDate: '2026-09-15',
-    platform: null,
-    estimated: true,
-    note: 'A24 Anthony Bourdain biopic (Matt Johnson) · cinemas 7 Aug 2026 · digital PVOD est. mid Sep 2026 (WhenToStream 9/4)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 106,
   },
   {
