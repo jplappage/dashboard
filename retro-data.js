@@ -184,6 +184,7 @@ const RETRO_FILMS = [
 // Pre-populated from zidanejp's Letterboxd diary (scraped 5 Sep 2026)
 const RETRO_LETTERBOXD = {
 
+  142:"2026-09-06", // A Haunting in Venice
   136:"2026-08-31", // Death on the Nile
   16: "2026-08-30", // Dirty Harry
 
@@ -294,6 +295,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  142: 2.5,  // A Haunting in Venice
   136: 3.0,  // Death on the Nile
   16:  3.0,  // Dirty Harry
   128: 2.5,  // House of Gucci
