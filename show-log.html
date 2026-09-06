@@ -600,6 +600,7 @@ function cycleSeasonMark(name, s) {
   if (Object.keys(marks[name]).length === 0) delete marks[name];
   scheduleSave();
   render();
+  loadRuntimes();   // un-ticking a season may need runtimes not fetched yet
 }
 
 function showState(name, aired) {
