@@ -284,6 +284,25 @@
     .badge-ended     { background: #1a1a1a; color: #9ca3af; border: 1px solid rgba(107,114,128,0.3); }
     .badge-cancelled { background: #2d0a0a; color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
+    /* Runtime badge — total runtime of the seasons not yet ticked (mirrors films) */
+    .runtime-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0,0,0,0.75);
+      color: #cbd5e1;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 5px;
+      backdrop-filter: blur(4px);
+      letter-spacing: 0.3px;
+      line-height: 1;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .runtime-badge:empty { display: none; }
+
     /* Watched overlay tick */
     .watched-overlay {
       position: absolute;
@@ -483,9 +502,12 @@ const GIST_HEADERS = { 'Content-Type': 'application/json', 'Accept': 'applicatio
 const LOCAL_KEY = 'show-log-v2';
 const LAST_UPDATED = '5 Sep 2026 22:11';
 const THUMB_KEY = 'show-log-thumbs-v3';
+const RT_KEY    = 'show-log-runtimes-v1';   // per-season runtimes from TVmaze
 
 let marks      = {};
 let thumbCache = {};
+let rtCache    = {};   // { showName: { id, s: { '1': mins, ... }, t: fetchedAt } }
+let rtLoading  = false, rtRerun = false;
 let binCache   = null;
 let syncDirty  = false;
 let syncTimer  = null;
@@ -712,6 +734,93 @@ function applyThumbs() {
   }
 }
 
+// ── Season runtimes ──────────────────────────────────────────────────────────
+// Total runtime of the seasons you haven't ticked as watched — the show-log
+// equivalent of the runtime badge on the films dashboard. Per-season minutes
+// come from TVmaze's episode list (same source as the thumbnails) and are
+// cached in localStorage: a week for ended shows, a day for ongoing ones so an
+// airing season picks up new episodes' runtimes.
+const fmtRuntime = (m) => m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? ' ' + (m % 60) + 'm' : ''}` : `${m}m`;
+
+function needsRuntime(s) {
+  if (!s.aired) return false;
+  const st = showState(s.name, s.aired);
+  return st !== 'watched' && st !== 'abandoned';
+}
+
+// Minutes left on a show, or null if any unticked season has no data yet
+// (a partial total would mislead, so the badge stays hidden until complete).
+function unwatchedMins(s) {
+  const rt = rtCache[s.name];
+  if (!rt || !rt.s || !needsRuntime(s)) return null;
+  let total = 0;
+  for (let n = 1; n <= s.aired; n++) {
+    if (getSeasonMark(s.name, n) === 'w') continue;
+    const m = rt.s[n];
+    if (!m) return null;
+    total += m;
+  }
+  return total || null;
+}
+
+function runtimeBadgeText(s) {
+  const m = unwatchedMins(s);
+  return m ? '🕐 ' + fmtRuntime(m) : '';
+}
+
+function patchRuntimeBadge(s) {
+  const el = document.getElementById('rt-' + cid(s.name));
+  if (el) el.textContent = runtimeBadgeText(s);
+}
+
+async function loadRuntimes() {
+  if (rtLoading) { rtRerun = true; return; }
+  rtLoading = true;
+  try {
+    const now = Date.now();
+    const stale = (s) => {
+      const rt = rtCache[s.name];
+      if (!rt || !rt.t) return true;
+      const ttl = s.status === 'ongoing' ? 24 * 3600e3 : 7 * 24 * 3600e3;
+      return now - rt.t > ttl;
+    };
+    const todo = SHOWS.filter(s => needsRuntime(s) && stale(s));
+    for (const show of todo) {
+      try {
+        let id = show.tvmazeId || (rtCache[show.name] && rtCache[show.name].id) || null;
+        if (!id) {
+          const endpoint = show.imdbId
+            ? `https://api.tvmaze.com/lookup/shows?imdb=${show.imdbId}`
+            : `https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(show.tvmazeQuery || show.name)}`;
+          const r = await fetch(endpoint);
+          if (!r.ok) { if (r.status === 404) rtCache[show.name] = { id: null, s: {}, t: now }; continue; }
+          const d = await r.json();
+          id = d && d.id;
+          if (!id) continue;
+          await new Promise(r => setTimeout(r, 250));
+        }
+        let r = await fetch(`https://api.tvmaze.com/shows/${id}/episodes`);
+        if (r.status === 429) { await new Promise(r => setTimeout(r, 4000)); r = await fetch(`https://api.tvmaze.com/shows/${id}/episodes`); }
+        if (!r.ok) continue;
+        const eps = await r.json();
+        // Episodes with no runtime yet (unaired) fall back to the show's average.
+        let avg = 0, cnt = 0;
+        eps.forEach(e => { if (e.runtime) { avg += e.runtime; cnt++; } });
+        avg = cnt ? Math.round(avg / cnt) : 0;
+        const seasons = {};
+        eps.forEach(e => { seasons[e.season] = (seasons[e.season] || 0) + (e.runtime || avg); });
+        rtCache[show.name] = { id, s: seasons, t: now };
+        patchRuntimeBadge(show);
+      } catch(e) {}
+      await new Promise(r => setTimeout(r, 250));
+    }
+    try { localStorage.setItem(RT_KEY, JSON.stringify(rtCache)); } catch(_) {}
+  } finally {
+    rtLoading = false;
+    if (rtRerun) { rtRerun = false; loadRuntimes(); }
+  }
+}
+
 // ── Render ───────────────────────────────────────────────────────────────────
 // Unified layout: still-airing active shows, then ended-but-unwatched shows,
 // then awaiting, then collapsible watched/abandoned drawers. All sorted A–Z.
@@ -859,6 +968,7 @@ function buildCard(s) {
     <div class="poster-wrap imdb-link" onclick="${imdbOpen}" title="View “${esc(s.name)}” on IMDb">
       ${imgHtml}
       <div class="poster-placeholder" id="ph-${cid(s.name)}"${url ? ' style="display:none"' : ''}>📺</div>
+      <span class="runtime-badge" id="rt-${cid(s.name)}">${runtimeBadgeText(s)}</span>
       <div class="watched-overlay">✓</div>
       <div class="imdb-overlay"><span class="imdb-overlay-text">IMDb →</span></div>
     </div>
@@ -923,10 +1033,14 @@ async function init() {
     }
   } catch(_){}
 
+  // Season-runtime cache (TVmaze) — loaded before first render so badges are inline
+  try { const s = localStorage.getItem(RT_KEY); if (s) rtCache = JSON.parse(s) || {}; } catch(_){}
+
   render();              // thumbCache already populated → images inline from the start
   await loadFromCloud(); // sync marks from cloud
   render();              // re-render with updated marks (thumbCache still populated)
   loadThumbs();          // fetch any missing thumbnails in the background
+  loadRuntimes();        // fetch any missing/stale season runtimes in the background
 }
 
 init();
