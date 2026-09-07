@@ -120,6 +120,7 @@ const FILMS = [
     title: 'Primetime',
     year: 2026,
     slug: 'primetime-2026',
+    imdbRating: 8.7,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/2/0/1/9/1262019-primetime-2026-0-600-0-900-crop.jpg?v=ffa882dc9a',
     vodDate: '2026-09-25',
     platform: null,
