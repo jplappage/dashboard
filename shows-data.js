@@ -74,6 +74,7 @@ const SHOWS = [
   {name:"The Bad Batch",                         status:"finished", aired:3, imdbId:"tt12708542"},
   {name:"Loki",                                  status:"finished", aired:2, imdbId:"tt9140554"},
   {name:"What If…?",                             status:"finished", aired:3, imdbId:"tt10168312"},
+  {name:"The Inbetweeners",                      status:"finished", aired:3, imdbId:"tt1220617"},
   // ENDED (cancelled)
   {name:"Agent Carter",                          status:"cancelled",aired:2, imdbId:"tt3475734"},
   {name:"Halo",                                  status:"cancelled",aired:2, imdbId:"tt2934286"},
