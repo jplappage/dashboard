@@ -144,6 +144,8 @@
     }
     .card-sub .hot { color: #d9dcea; font-weight: 600; }
     .card-sub .soon { color: #d9dcea; font-weight: 600; }
+    .card-sub .ep-show { color: #d9dcea; font-weight: 600; }
+    .card-sub .ep-info { color: #8a8899; }
     .card-sub .dot {
       display: inline-block; width: 7px; height: 7px; border-radius: 50%;
       background: #4ade80; margin-right: 5px; vertical-align: 1px;
@@ -310,56 +312,187 @@
 (function showsTeaser() {
   const el = document.getElementById('shows-sub');
   if (!el || typeof SHOWS === 'undefined') return;
-  try {
-    const now = new Date();
-    const ymd = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-    const today = ymd(now);
 
-    const MONTHS = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
-    const ord = n => n + (n%10===1&&n%100!==11?'st':n%10===2&&n%100!==12?'nd':n%10===3&&n%100!==13?'rd':'th');
-    const dateLabel = iso => { const d = new Date(iso + 'T00:00:00'); return ord(d.getDate()) + ' ' + d.toLocaleString('en-GB',{month:'short'}); };
-    const joinTitles = (arr, cap=3) => {
-      const shown = arr.slice(0, cap);
-      const s = shown.length <= 1 ? (shown[0] || '')
-              : shown.slice(0,-1).join(', ') + ' & ' + shown[shown.length-1];
-      const extra = arr.length - shown.length;
-      return s + (extra > 0 ? ' +' + extra : '');
-    };
+  // ── Out-now summary ────────────────────────────────────────────────────────
+  // A show sits in this list from the moment its current season starts landing
+  // until JP ticks that season watched in the show log — NOT until some fixed
+  // `airingUntil` date. The per-season ticks live in the shared gist under
+  // `showLog` (and in localStorage 'show-log-v2', same origin as this page), so
+  // ticking a season on any device drops it off the hub next time this loads.
+  //
+  // Episode counts and the weekly release day come from TVmaze, so nothing here
+  // has to be hand-maintained between refreshes: a season that dropped all at
+  // once reads "all 8 episodes out now", a weekly one reads "6 of 10 · new every
+  // Wednesday" and ticks up on its own as episodes air.
+  const MARKS_KEY = 'show-log-v2';
+  const EPS_KEY   = 'hub-eps-v1';
+  const GIST_ID   = '5411ac8d12fdc31aa3fa73e4d66f6377';
+  const GIST_FILE = 'watchlist.json';
+  const EPS_TTL   = 6 * 3600e3;   // re-check TVmaze every 6h
+  const MAX_ROWS  = 3;
 
-    // Explicitly flagged as currently airing.
-    const nowNames = SHOWS.filter(s => s.airing && s.airingUntil && s.airingUntil >= today).map(s => s.name);
+  let marks = {}, epsCache = {};
+  try { marks    = JSON.parse(localStorage.getItem(MARKS_KEY) || '{}') || {}; } catch (_) {}
+  try { epsCache = JSON.parse(localStorage.getItem(EPS_KEY)   || '{}') || {}; } catch (_) {}
 
-    // Only shows with a full, confirmed date (D Mon YYYY) group into coming-soon lines.
+  const MONTHS = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+  const ymd  = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  const ord  = n => n + (n%10===1&&n%100!==11?'st':n%10===2&&n%100!==12?'nd':n%10===3&&n%100!==13?'rd':'th');
+  const dateLabel = iso => { const d = new Date(iso + 'T00:00:00'); return ord(d.getDate()) + ' ' + d.toLocaleString('en-GB',{month:'short'}); };
+  const esc  = t => String(t).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const today = () => ymd(new Date());
+
+  const joinTitles = (arr, cap=3) => {
+    const shown = arr.slice(0, cap);
+    const s = shown.length <= 1 ? (shown[0] || '')
+            : shown.slice(0,-1).join(', ') + ' & ' + shown[shown.length-1];
+    const extra = arr.length - shown.length;
+    return s + (extra > 0 ? ' +' + extra : '');
+  };
+
+  // Season ticked watched ('w') or abandoned ('a') — either way it's done with.
+  const seasonDone = (name, n) => {
+    const m = marks[name];
+    const v = (m && typeof m === 'object') ? m['s'+n] : null;
+    return v === 'w' || v === 'a';
+  };
+
+  const nextDateISO = s => {
+    const m = s.next && s.next.match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/);
+    if (!m) return null;
+    return m[3] + '-' + String(MONTHS[m[2]]+1).padStart(2,'0') + '-' + String(+m[1]).padStart(2,'0');
+  };
+  const seasonNum = str => { const m = str && str.match(/S(\d+)/); return m ? +m[1] : null; };
+
+  // Every ongoing show with a season currently out that hasn't been ticked off.
+  function outNowList() {
+    const t = today();
+    const out = [];
+    SHOWS.forEach(s => {
+      if (s.status !== 'ongoing') return;
+      let season = null;
+      if (s.airing) {
+        season = seasonNum(s.airing) || s.aired || null;
+      } else {
+        const iso = nextDateISO(s);
+        if (iso && iso <= t) season = seasonNum(s.next) || (s.aired || 0) + 1;
+      }
+      if (!season) return;
+      if (seasonDone(s.name, season)) return;
+      out.push({ show: s, season });
+    });
+    return out;
+  }
+
+  function epsLabel(item) {
+    const c = epsCache[item.show.name];
+    if (!c || c.season !== item.season || !c.total) return '';
+    if (c.out >= c.total)      return 'all ' + c.total + ' episodes out now';
+    if (c.mode === 'binge')    return 'all ' + c.total + ' episodes out now';
+    return c.out + ' of ' + c.total + ' · new every ' + c.day;
+  }
+
+  function render() {
+    const t = today();
+    const items = outNowList();
+    const lines = [];
+
+    if (items.length) {
+      lines.push('<span class="dot"></span><span class="hot">Out now</span>');
+      items.slice(0, MAX_ROWS).forEach(it => {
+        const label = epsLabel(it);
+        lines.push('<span class="ep-show">' + esc(it.show.name) + ' S' + it.season + '</span>'
+                 + (label ? ' <span class="ep-info">' + label + '</span>' : ''));
+      });
+      if (items.length > MAX_ROWS) lines.push('<span class="ep-info">+' + (items.length - MAX_ROWS) + ' more out now</span>');
+    }
+
+    // Coming soon — only shows with a full, confirmed date group into a line.
     const groups = [];
     SHOWS.forEach(s => {
-      const m = s.next && s.next.match(/(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/);
-      if (!m) return;
-      const iso = m[3] + '-' + String(MONTHS[m[2]]+1).padStart(2,'0') + '-' + String(+m[1]).padStart(2,'0');
+      const iso = nextDateISO(s);
+      if (!iso || iso <= t) return;
       const season = (s.next.match(/^(S\d+)/) || [,''])[1];
-      const title = s.name + (season ? ' ' + season : '');
-      if (iso <= today) {
-        // Premiere date has arrived but the show isn't flagged airing yet (data not
-        // refreshed since it dropped) — treat as streaming now, like a released film.
-        if (!s.airing && !nowNames.includes(s.name)) nowNames.push(s.name);
-        return;
-      }
+      const title  = s.name + (season ? ' ' + season : '');
       const g = groups.find(x => x.date === iso);
       if (g) g.titles.push(title); else groups.push({ date: iso, titles: [title] });
     });
     groups.sort((a,b) => a.date.localeCompare(b.date));
+    const soonLine = g => dateLabel(g.date) + ': <span class="soon">' + esc(joinTitles(g.titles)) + '</span>';
 
-    const soonLine = g => dateLabel(g.date) + ': <span class="soon">' + joinTitles(g.titles) + '</span>';
+    if (groups[0]) lines.push(soonLine(groups[0]));
+    if (!items.length && groups[1]) lines.push(soonLine(groups[1]));
 
-    let line1 = '', line2 = '';
-    if (nowNames.length) {
-      line1 = '<span class="dot"></span><span class="hot">Airing now: ' + joinTitles(nowNames) + '</span>';
-      if (groups[0]) line2 = soonLine(groups[0]);
-    } else if (groups.length) {
-      line1 = soonLine(groups[0]);
-      if (groups[1]) line2 = soonLine(groups[1]);
+    el.innerHTML = lines.join('<br>');
+  }
+
+  // ── TVmaze: episode count, how many have aired, weekly day ─────────────────
+  // Uses each episode's `airstamp` (a real timestamp with timezone) rather than
+  // `airdate`, so a US Sunday-night drop reads as Monday here — the UK viewing
+  // day — without any special-casing.
+  async function loadEpisodes() {
+    const items = outNowList();
+    let dirty = false;
+    for (const it of items) {
+      const s = it.show;
+      const cached = epsCache[s.name];
+      if (cached && cached.season === it.season && cached.t && Date.now() - cached.t < EPS_TTL) continue;
+      try {
+        let id = s.tvmazeId || (cached && cached.id) || null;
+        if (!id) {
+          const endpoint = s.imdbId
+            ? 'https://api.tvmaze.com/lookup/shows?imdb=' + s.imdbId
+            : 'https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(s.tvmazeQuery || s.name);
+          const r = await fetch(endpoint);
+          if (!r.ok) continue;
+          const d = await r.json();
+          id = d && d.id;
+          if (!id) continue;
+          await sleep(250);
+        }
+        let r = await fetch('https://api.tvmaze.com/shows/' + id + '/episodes');
+        if (r.status === 429) { await sleep(4000); r = await fetch('https://api.tvmaze.com/shows/' + id + '/episodes'); }
+        if (!r.ok) continue;
+        const all = await r.json();
+        const season = all.filter(e => e.season === it.season);
+        if (!season.length) continue;
+        const when = e => e.airstamp ? new Date(e.airstamp)
+                       : e.airdate  ? new Date(e.airdate + 'T00:00:00') : null;
+        const dates = season.map(when).filter(d => d && !isNaN(d));
+        if (!dates.length) continue;
+        const now = new Date();
+        const out = dates.filter(d => d <= now).length;
+        // All episodes landing on one local day = a single drop, not a rollout.
+        const days = new Set(dates.map(d => d.toDateString()));
+        const tally = {};
+        dates.forEach(d => { const w = d.toLocaleDateString('en-GB', { weekday:'long' }); tally[w] = (tally[w]||0)+1; });
+        const day = Object.keys(tally).sort((a,b) => tally[b]-tally[a])[0] || '';
+        epsCache[s.name] = { id, season: it.season, total: season.length, out, mode: days.size <= 1 ? 'binge' : 'weekly', day, t: Date.now() };
+        dirty = true;
+        render();
+      } catch (_) {}
+      await sleep(250);
     }
-    el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
-  } catch (_) {}
+    if (dirty) { try { localStorage.setItem(EPS_KEY, JSON.stringify(epsCache)); } catch (_) {} }
+  }
+
+  // ── Watched ticks from the gist (catches ticks made on another device) ─────
+  async function refreshMarks() {
+    try {
+      const j = await (await fetch('https://api.github.com/gists/' + GIST_ID, { cache:'no-store' })).json();
+      const data = JSON.parse((j.files && j.files[GIST_FILE] && j.files[GIST_FILE].content) || '{}');
+      const cloud = data.showLog;
+      if (cloud && typeof cloud === 'object' && Object.keys(cloud).length) {
+        marks = cloud;
+        try { localStorage.setItem(MARKS_KEY, JSON.stringify(marks)); } catch (_) {}
+        render();
+      }
+    } catch (_) {}
+  }
+
+  try { render(); } catch (_) {}
+  refreshMarks().then(loadEpisodes);
 })();
 
 (function filmsTeaser() {
