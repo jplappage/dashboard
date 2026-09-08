@@ -12,13 +12,8 @@ const SHOWS = [
   {name:"Splinter Cell: Deathwatch",             status:"ongoing",  aired:1, next:"S2 · 2026", recheck:"2026-09-18", imdbId:"tt12809802"},
   {name:"Alien: Earth",                          status:"ongoing",  aired:1, next:"S2 · est. 2027", recheck:"2026-09-18", imdbId:"tt13623632"},
   {name:"The Paper",                             status:"ongoing",  aired:1, next:"S2 · 9 Sep 2026", imdbId:"tt32159809"},
-<<<<<<< HEAD
-  {name:"Peacemaker",                            status:"ongoing",  aired:2, next:null, recheck:"2026-09-11", imdbId:"tt13146488"},
-  {name:"The Studio",                            status:"ongoing",  aired:1, next:"S2 · est. Mar 2027", recheck:"2026-09-11", imdbId:"tt23649128"},
-=======
   {name:"Peacemaker",                            status:"ongoing",  aired:2, next:null, recheck:"2026-09-18", imdbId:"tt13146488"},
   {name:"The Studio",                            status:"ongoing",  aired:1, next:"S2 · est. Mar 2027", recheck:"2026-09-18", imdbId:"tt23649128"},
->>>>>>> f7f85d3 (update 08/09/2026 23:16:25.17)
   {name:"Dexter: Resurrection",                  status:"ongoing",  aired:1, next:"S2 · 30 Oct 2026", imdbId:"tt33043892"},
   {name:"MobLand",                               status:"ongoing",  aired:1, next:"S2 · 18 Sep 2026", imdbId:"tt31510819"},
   {name:"Dune: Prophecy",                        status:"ongoing",  aired:1, next:"S2 · late 2026", recheck:"2026-09-18", imdbId:"tt10466872"},

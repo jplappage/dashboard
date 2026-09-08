@@ -180,20 +180,6 @@ const FILMS = [
     runtime: 103,
   },
   {
-<<<<<<< HEAD
-    title: 'The End of Oak Street',
-    year: 2026,
-    slug: 'the-end-of-oak-street',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/9/9/2/9/6/2/992962-the-end-of-oak-street-0-600-0-900-crop.jpg?v=b06dbfb4c9',
-    vodDate: '2026-09-15',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 6.6,
-    runtime: 100,
-  },
-  {
-=======
->>>>>>> f7f85d3 (update 08/09/2026 23:16:25.17)
     title: 'Colony',
     year: 2026,
     slug: 'colony-2026',
