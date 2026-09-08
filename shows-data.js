@@ -20,7 +20,7 @@ const SHOWS = [
   {name:"Twisted Metal",                         status:"ongoing",  aired:2, next:"S3 · est. 2027", recheck:"2026-09-18", imdbId:"tt14261112"},
   {name:"The Witcher",                           status:"ongoing",  aired:4, next:"S5 · est. 2027 · final season", recheck:"2026-09-18", imdbId:"tt5180504"},
   {name:"Fallout",                               status:"ongoing",  aired:2, next:"S3 · est. mid/late 2027", recheck:"2026-09-18", imdbId:"tt12637874"},
-  {name:"The Gentlemen",                         status:"ongoing",  aired:2, next:"S3 · unannounced", recheck:"2026-09-18", airing:"S2 · all 8 episodes (Netflix)", airingUntil:"2026-09-17", imdbId:"tt13210838"},
+  {name:"The Gentlemen",                         status:"ongoing",  aired:2, next:"S3 · unannounced", recheck:"2026-09-18", imdbId:"tt13210838"},
   {name:"Severance",                             status:"ongoing",  aired:2, next:"S3 · est. Summer 2027", recheck:"2026-09-18", imdbId:"tt11280740"},
   {name:"Rings of Power",                        status:"ongoing",  aired:2, next:"S3 · 11 Nov 2026", imdbId:"tt7631058"},
   {name:"House of the Dragon",                   status:"ongoing",  aired:3, next:"S4 · 2028", recheck:"2026-09-18", imdbId:"tt11198330"},
