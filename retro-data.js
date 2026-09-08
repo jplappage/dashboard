@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 5 Sep 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 8 Sep 2026)
 const RETRO_LETTERBOXD = {
 
   142:"2026-09-06", // A Haunting in Venice
