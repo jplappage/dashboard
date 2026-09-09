@@ -399,10 +399,9 @@
     const lines = [];
 
     if (items.length) {
-      lines.push('<span class="dot"></span><span class="hot">Out now</span>');
       items.slice(0, MAX_ROWS).forEach(it => {
         const label = epsLabel(it);
-        lines.push('<span class="ep-show">' + esc(it.show.name) + ' S' + it.season + '</span>'
+        lines.push('<span class="dot"></span><span class="ep-show">' + esc(it.show.name) + ' S' + it.season + '</span>'
                  + (label ? ' <span class="ep-info">— ' + label + '</span>' : ''));
       });
       if (items.length > MAX_ROWS) lines.push('<span class="ep-info">+' + (items.length - MAX_ROWS) + ' more out now</span>');
