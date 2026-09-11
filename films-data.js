@@ -9,30 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Runner',
-    year: 2026,
-    slug: 'runner-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/3/5/3/0/1263530-runner-2026-0-600-0-900-crop.jpg?v=3039597d39',
-    vodDate: '2026-09-11',
-    platform: null,
-    cinema: true,
-    estimated: true,
-    note: 'In cinemas 11 Sep 2026 (Angel Studios · Scott Waugh) · digital TBA',
-    runtime: 97,
-  },
-  {
-    title: 'The Uprising',
-    year: 2026,
-    slug: 'the-uprising-2026',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/8/8/0/4/2/5/880425-the-uprising-2026-0-600-0-900-crop.jpg?v=71d42e25d2',
-    vodDate: '2026-09-11',
-    platform: null,
-    cinema: true,
-    estimated: true,
-    note: 'In cinemas 11 Sep 2026 (Focus Features / Entertainment Film UK · Paul Greengrass · Andrew Garfield) · digital TBA',
-    runtime: 128,
-  },
-  {
     title: 'The Rivals of Amziah King',
     year: 2025,
     slug: 'the-rivals-of-amziah-king',
@@ -227,6 +203,18 @@ const FILMS = [
     runtime: 92,
   },
   {
+    title: 'Runner',
+    year: 2026,
+    slug: 'runner-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/3/5/3/0/1263530-runner-2026-0-600-0-900-crop.jpg?v=3039597d39',
+    vodDate: '2026-10-13',
+    platform: null,
+    estimated: true,
+    note: 'Cinema release 11 Sep 2026 (Angel Studios · Scott Waugh · Alan Ritchson / Owen Wilson) · theatrical-exclusive per Angel · digital PVOD est. mid-Oct 2026 (~4-5 week window, WhenToStream TBA 9/11)',
+    imdbRating: 6.5,
+    runtime: 97,
+  },
+  {
     title: 'The Incomer',
     year: 2026,
     slug: 'the-incomer',
@@ -249,6 +237,18 @@ const FILMS = [
     note: 'Ridley Scott · cinema release 28 Aug 2026 (20th Century) · digital PVOD est. late Oct 2026 (~7-8 week window, WhenToStream 9/4)',
     imdbRating: 6.5,
     runtime: 119,
+  },
+  {
+    title: 'The Uprising',
+    year: 2026,
+    slug: 'the-uprising-2026',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/8/8/0/4/2/5/880425-the-uprising-2026-0-600-0-900-crop.jpg?v=71d42e25d2',
+    vodDate: '2026-10-27',
+    platform: null,
+    estimated: true,
+    note: 'Cinema release 11 Sep 2026 (Focus Features / Entertainment Film UK · Paul Greengrass · Andrew Garfield) · digital PVOD est. late Oct 2026 (Focus committed to a 45-day theatrical window in 2026, WhenToStream TBA 9/11)',
+    imdbRating: 6.5,
+    runtime: 128,
   },
 
 
