@@ -4,3 +4,4 @@
 # One Letterboxd slug per line. Blank lines and #comments are ignored.
 # Respected by update_new_films.py AND the manual refresh (see REFRESH_INSTRUCTIONS.md).
 pressure-2026
+the-end-of-oak-street

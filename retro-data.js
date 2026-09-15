@@ -181,9 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 9 Sep 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 15 Sep 2026)
 const RETRO_LETTERBOXD = {
 
+  72: "2026-09-13", // Memoirs of a Geisha
   28: "2026-09-08", // The King of Comedy
 
   142:"2026-09-06", // A Haunting in Venice
@@ -297,6 +298,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  72:  3.0,  // Memoirs of a Geisha
   28:  3.5,  // The King of Comedy
   142: 2.5,  // A Haunting in Venice
   136: 3.0,  // Death on the Nile
