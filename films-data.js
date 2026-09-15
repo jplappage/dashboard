@@ -31,17 +31,6 @@ const FILMS = [
     runtime: 106,
   },
   {
-    title: 'The End of Oak Street',
-    year: 2026,
-    slug: 'the-end-of-oak-street',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/9/9/2/9/6/2/992962-the-end-of-oak-street-0-600-0-900-crop.jpg?v=b06dbfb4c9',
-    vodDate: '2026-09-15',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 6.6,
-    runtime: 100,
-  },
-  {
     title: 'Resident Evil',
     year: 2026,
     slug: 'untitled-resident-evil-reboot',
@@ -250,6 +239,19 @@ const FILMS = [
     imdbRating: 6.5,
     runtime: 128,
   },
+  {
+    title: 'Hope',
+    year: 2026,
+    slug: 'hope-2026',
+    plexSlug: 'hope-2026-2',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/9/5/4/6/6/3/954663-hope-2026-0-600-0-900-crop.jpg?v=102a8bfda2',
+    vodDate: '2026-10-27',
+    platform: null,
+    estimated: true,
+    note: 'Cinema release 9 Sep 2026 (US · Neon · Na Hong-jin; UK premiere Edinburgh 16 Aug 2026) · widest US bow for a Korean film since Parasite · digital PVOD est. late Oct 2026 (~45-day Neon window, WhenToStream TBA 9/15)',
+    imdbRating: 6.9,
+    runtime: 157,
+  },
 
 
 ];
@@ -303,4 +305,5 @@ const WATCHED = [
   { title: 'Batman: Knightfall Part 1: Knightfall', vodDate: '2026-08-28', imdbRating: 8.0 },
   { title: 'I Want Your Sex', vodDate: '2026-09-01', imdbRating: 6.4 },
   { title: 'Pressure', vodDate: '2026-06-16', imdbRating: 7.3 },
+  { title: 'The End of Oak Street', vodDate: '2026-09-15', imdbRating: 6.6 },
 ];
