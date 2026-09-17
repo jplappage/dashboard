@@ -167,20 +167,6 @@ const FILMS = [
     runtime: 95,
   },
   {
-<<<<<<< HEAD
-    title: 'Teenage Sex and Death at Camp Miasma',
-    year: 2026,
-    slug: 'teenage-sex-and-death-at-camp-miasma',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/2/3/8/6/7/1123867-teenage-sex-and-death-at-camp-miasma-0-600-0-900-crop.jpg?v=f6059120f8',
-    vodDate: '2026-09-18',
-    platform: 'MUBI',
-    estimated: false,
-    imdbRating: 7.2,
-    runtime: 112,
-  },
-  {
-=======
->>>>>>> b23d05e (update 17/09/2026 23:01:23.11)
     title: 'Onslaught',
     year: 2026,
     slug: 'onslaught-2026',
