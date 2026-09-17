@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 15 Sep 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 17 Sep 2026)
 const RETRO_LETTERBOXD = {
 
   72: "2026-09-13", // Memoirs of a Geisha

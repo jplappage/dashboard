@@ -9,17 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'The Rivals of Amziah King',
-    year: 2025,
-    slug: 'the-rivals-of-amziah-king',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/1/3/2/9/8/1013298-the-rivals-of-amziah-king-0-600-0-900-crop.jpg?v=7714bd135c',
-    vodDate: '2026-09-15',
-    platform: 'Digital',
-    estimated: false,
-    imdbRating: 7.3,
-    runtime: 130,
-  },
-  {
     title: 'Tony',
     year: 2026,
     slug: 'tony-2026',
@@ -33,8 +22,7 @@ const FILMS = [
   {
     title: 'Resident Evil',
     year: 2026,
-    slug: 'untitled-resident-evil-reboot',
-    plexSlug: 'resident-evil-2026',
+    slug: 'resident-evil-2026',
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/0/2/7/1/7/1302717-untitled-resident-evil-reboot-0-600-0-900-crop.jpg?v=2eb2af9c80',
     vodDate: '2026-09-18',
     platform: null,
@@ -69,6 +57,17 @@ const FILMS = [
     note: 'In cinemas 18 Sep 2026 (UK/US · Paramount · Jonatan Etzler · Saoirse Ronan) · TIFF 2025 · digital TBA',
     imdbRating: 7.2,
     runtime: 100,
+  },
+  {
+    title: 'Teenage Sex and Death at Camp Miasma',
+    year: 2026,
+    slug: 'teenage-sex-and-death-at-camp-miasma',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/2/3/8/6/7/1123867-teenage-sex-and-death-at-camp-miasma-0-600-0-900-crop.jpg?v=f6059120f8',
+    vodDate: '2026-09-18',
+    platform: 'Digital',
+    estimated: false,
+    imdbRating: 7.2,
+    runtime: 112,
   },
   {
     title: 'Ice Cream Man',
@@ -168,6 +167,7 @@ const FILMS = [
     runtime: 95,
   },
   {
+<<<<<<< HEAD
     title: 'Teenage Sex and Death at Camp Miasma',
     year: 2026,
     slug: 'teenage-sex-and-death-at-camp-miasma',
@@ -179,6 +179,8 @@ const FILMS = [
     runtime: 112,
   },
   {
+=======
+>>>>>>> b23d05e (update 17/09/2026 23:01:23.11)
     title: 'Onslaught',
     year: 2026,
     slug: 'onslaught-2026',
@@ -305,4 +307,5 @@ const WATCHED = [
   { title: 'I Want Your Sex', vodDate: '2026-09-01', imdbRating: 6.4 },
   { title: 'Pressure', vodDate: '2026-06-16', imdbRating: 7.3 },
   { title: 'The End of Oak Street', vodDate: '2026-09-15', imdbRating: 6.6 },
+  { title: 'The Rivals of Amziah King', vodDate: '2026-09-15', imdbRating: 7.3 },
 ];
