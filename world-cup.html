@@ -2511,7 +2511,22 @@ document.getElementById('picker-list').addEventListener('click', e => {
 // Matches are paired to FIXTURES by exact UTC kickoff (date+time), with team-name
 // disambiguation for simultaneous kickoffs. Knockout TBD slots are filled with
 // real team names once ESPN knows them.
-const ESPN_URL = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200';
+// ESPN stopped accepting a start-end date range on the scoreboard endpoint
+// (any `dates=YYYYMMDD-YYYYMMDD` now 400s), but single months still work, so
+// the tournament window is fetched a month at a time and merged. Broke ~18 Sep 2026.
+const ESPN_MONTHS = ['202606', '202607'];
+async function fetchEspnEvents() {
+  const seen = new Set(), all = [];
+  const parts = await Promise.all(ESPN_MONTHS.map(async m => {
+    const r = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world' +
+                          '/scoreboard?dates=' + m + '&limit=300');
+    if (!r.ok) throw new Error('espn ' + r.status);
+    return (await r.json()).events || [];
+  }));
+  parts.forEach(evs => evs.forEach(e => { if (!seen.has(e.id)) { seen.add(e.id); all.push(e); } }));
+  all.sort((a, b) => new Date(a.date) - new Date(b.date));
+  return all;
+}
 
 // ESPN display name → our FIXTURES name (normalised keys: lowercase, letters only)
 const TEAM_ALIASES = {
@@ -2543,12 +2558,10 @@ let liveTimer = null;
 async function loadResults() {
   const el = document.getElementById('live-status');
   try {
-    const r = await fetch(ESPN_URL);
-    if (!r.ok) throw new Error();
-    const data = await r.json();
+    const espnEvents = await fetchEspnEvents();
 
     const byKey = {};
-    (data.events || []).forEach(e => {
+    espnEvents.forEach(e => {
       const comp = e.competitions && e.competitions[0];
       if (!comp || !comp.competitors) return;
       const homeC = comp.competitors.find(c => c.homeAway === 'home');
