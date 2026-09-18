@@ -31,8 +31,12 @@ NOW = (datetime.fromisoformat(os.environ['MATCH_NOW']) if os.environ.get('MATCH_
        else datetime.now(timezone.utc))
 
 UA = 'Mozilla/5.0 (compatible; JP-Dashboard/1.0)'
-WC_SCOREBOARD = ('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/'
-                 'scoreboard?dates=20260611-20260719&limit=200')
+# ESPN stopped accepting a start-end date range on the scoreboard endpoint
+# (any dates=YYYYMMDD-YYYYMMDD now 400s), but single months still work, so the
+# tournament window is fetched a month at a time. Broke ~18 Sep 2026.
+WC_MONTHS = ['202606', '202607']
+WC_SCOREBOARD_FMT = ('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/'
+                     'scoreboard?dates=%s&limit=300')
 LFC_COMPS = ['eng.1', 'uefa.champions', 'eng.fa', 'eng.league_cup', 'club.friendly']
 
 
@@ -67,12 +71,17 @@ def parse_event(e, team):
 
 def gather():
     out = []
-    j = fetch(WC_SCOREBOARD)
-    for e in j.get('events', []):
-        if 'france' in (e.get('name', '').lower()):
-            g = parse_event(e, 'France')
-            if g:
-                out.append(g)
+    seen = set()
+    for month in WC_MONTHS:
+        j = fetch(WC_SCOREBOARD_FMT % month)
+        for e in j.get('events', []):
+            if e.get('id') in seen:
+                continue
+            seen.add(e.get('id'))
+            if 'france' in (e.get('name', '').lower()):
+                g = parse_event(e, 'France')
+                if g:
+                    out.append(g)
     for comp in LFC_COMPS:
         j = fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/%s/teams/364' % comp)
         evs = (j.get('team', {}) or {}).get('nextEvent') or j.get('events') or []
