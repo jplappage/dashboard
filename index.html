@@ -531,17 +531,24 @@
 
     const soonLine = g => dateLabel(g.date) + ': <span class="soon">' + joinTitles(g.titles) + '</span>';
 
-    let line1 = '', line2 = '';
+    // One line per film that's out now; coming-soon dates fill whatever's left.
+    const MAX_LINES = 4;
+    const lines = [];
+
     if (availNow.length) {
-      line1 = '<span class="dot"></span><span class="hot">Available now: ' + joinTitles(availNow.map(f => f.title)) + '</span>';
-      if (upcoming[0]) line2 = soonLine(upcoming[0]);
-    } else if (upcoming.length) {
-      line1 = soonLine(upcoming[0]);
-      if (upcoming[1]) line2 = soonLine(upcoming[1]);
-    } else {
-      line1 = FILMS.length + ' tracked · no dates confirmed yet';
+      const overflow = availNow.length > MAX_LINES;
+      const shown    = overflow ? MAX_LINES - 1 : availNow.length;
+      availNow.slice(0, shown).forEach(f => {
+        lines.push('<span class="dot"></span><span class="hot">' + f.title + '</span>'
+                 + (f.platform ? ' <span class="ep-info">— ' + f.platform + '</span>' : ''));
+      });
+      if (overflow) lines.push('<span class="ep-info">+' + (availNow.length - shown) + ' more available now</span>');
     }
-    el.innerHTML = [line1, line2].filter(Boolean).join('<br>');
+
+    upcoming.forEach(g => { if (lines.length < MAX_LINES) lines.push(soonLine(g)); });
+
+    if (!lines.length) lines.push(FILMS.length + ' tracked · no dates confirmed yet');
+    el.innerHTML = lines.join('<br>');
   } catch (_) { /* leave blank on any hiccup */ }
 })();
 
