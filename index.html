@@ -539,8 +539,10 @@
       const overflow = availNow.length > MAX_LINES;
       const shown    = overflow ? MAX_LINES - 1 : availNow.length;
       availNow.slice(0, shown).forEach(f => {
+        // 'Digital' is the default and says nothing — only a named service earns a mention.
+        const where = (f.platform && f.platform !== 'Digital') ? f.platform : 'out now';
         lines.push('<span class="dot"></span><span class="hot">' + f.title + '</span>'
-                 + (f.platform ? ' <span class="ep-info">— ' + f.platform + '</span>' : ''));
+                 + ' <span class="ep-info">— ' + where + '</span>');
       });
       if (overflow) lines.push('<span class="ep-info">+' + (availNow.length - shown) + ' more available now</span>');
     }
