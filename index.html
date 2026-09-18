@@ -100,6 +100,7 @@
       grid-template-columns: auto 1fr;
       column-gap: 16px;
       align-items: center;
+      align-content: center;
       min-height: 96px;
       text-align: left;
       transition: all 0.2s ease;
@@ -329,7 +330,7 @@
   const GIST_ID   = '5411ac8d12fdc31aa3fa73e4d66f6377';
   const GIST_FILE = 'watchlist.json';
   const EPS_TTL   = 6 * 3600e3;   // re-check TVmaze every 6h
-  const MAX_ROWS  = 3;
+  const MAX_LINES = 4;   // total lines in the tile — out-now fills these first
 
   let marks = {}, epsCache = {};
   try { marks    = JSON.parse(localStorage.getItem(MARKS_KEY) || '{}') || {}; } catch (_) {}
@@ -398,13 +399,16 @@
     const items = outNowList();
     const lines = [];
 
+    // Out-now always wins the available lines; coming-soon only gets what's left.
     if (items.length) {
-      items.slice(0, MAX_ROWS).forEach(it => {
+      const overflow = items.length > MAX_LINES;
+      const shown    = overflow ? MAX_LINES - 1 : items.length;
+      items.slice(0, shown).forEach(it => {
         const label = epsLabel(it);
         lines.push('<span class="dot"></span><span class="ep-show">' + esc(it.show.name) + ' S' + it.season + '</span>'
                  + (label ? ' <span class="ep-info">— ' + label + '</span>' : ''));
       });
-      if (items.length > MAX_ROWS) lines.push('<span class="ep-info">+' + (items.length - MAX_ROWS) + ' more out now</span>');
+      if (overflow) lines.push('<span class="ep-info">+' + (items.length - shown) + ' more out now</span>');
     }
 
     // Coming soon — only shows with a full, confirmed date group into a line.
@@ -420,8 +424,8 @@
     groups.sort((a,b) => a.date.localeCompare(b.date));
     const soonLine = g => dateLabel(g.date) + ': <span class="soon">' + esc(joinTitles(g.titles)) + '</span>';
 
-    if (groups[0]) lines.push(soonLine(groups[0]));
-    if (!items.length && groups[1]) lines.push(soonLine(groups[1]));
+    if (groups[0] && lines.length < MAX_LINES) lines.push(soonLine(groups[0]));
+    if (!items.length && groups[1] && lines.length < MAX_LINES) lines.push(soonLine(groups[1]));
 
     el.innerHTML = lines.join('<br>');
   }
