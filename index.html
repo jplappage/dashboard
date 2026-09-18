@@ -273,6 +273,40 @@
 <!-- redeploy trigger: 2026-07-05 22:15 icon fixes -->
 
 
+<script>
+// ── ESPN fixture fetch ─────────────────────────────────────────────────────
+// ESPN stopped accepting a start-end date range on the scoreboard endpoint
+// (any `dates=YYYYMMDD-YYYYMMDD` now 400s, even a short one), but single
+// months still work. espnEvents() walks the months a window spans, merges the
+// results and de-duplicates by event id. Broke ~18 Sep 2026.
+window.espnEvents = async function (league, fromISO, toISO) {
+  const from = new Date(fromISO + 'T00:00:00Z'), to = new Date(toISO + 'T23:59:59Z');
+  const months = [];
+  const cur = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), 1));
+  while (cur <= to) {
+    months.push(cur.getUTCFullYear() + String(cur.getUTCMonth() + 1).padStart(2, '0'));
+    cur.setUTCMonth(cur.getUTCMonth() + 1);
+  }
+  const seen = new Set(), all = [];
+  await Promise.all(months.map(async m => {
+    try {
+      const r = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/' + league +
+                            '/scoreboard?dates=' + m + '&limit=300');
+      if (!r.ok) return;
+      const j = await r.json();
+      (j.events || []).forEach(e => {
+        if (seen.has(e.id)) return;
+        const d = new Date(e.date);
+        if (d < from || d > to) return;
+        seen.add(e.id); all.push(e);
+      });
+    } catch (_) {}
+  }));
+  all.sort((a, b) => new Date(a.date) - new Date(b.date));
+  return all;
+};
+</script>
+
 <script src="films-data.js"></script>
 <script src="shows-data.js"></script>
 <script src="retro-data.js"></script>
@@ -556,9 +590,8 @@
   const el = document.getElementById('wc-sub');
   if (!el) return;
   try {
-    const j = await (await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200')).json();
+    const events = await espnEvents('fifa.world', '2026-06-11', '2026-07-19');
     const now = new Date();
-    const events = j.events || [];
 
     // ── End of tournament: show the champion + Golden Boot instead of fixtures ──
     const stateOf = e => (e.status && e.status.type && e.status.type.state) || '';
@@ -685,9 +718,9 @@
     };
     const pull = async (team, league, re) => {
       try {
-        const j = await (await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/' + league +
-                                     '/scoreboard?dates=' + range + '&limit=300')).json();
-        (j.events || []).forEach(e => {
+        const evs = await espnEvents(league, range.slice(0,4) + '-' + range.slice(4,6) + '-' + range.slice(6,8),
+                                             range.slice(9,13) + '-' + range.slice(13,15) + '-' + range.slice(15,17));
+        evs.forEach(e => {
           const d = new Date(e.date);
           if (d > now && re.test(e.name || '')) games.push({ d, team, label: compName(e) });
         });
