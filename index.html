@@ -307,6 +307,41 @@ window.espnEvents = async function (league, fromISO, toISO) {
 };
 </script>
 
+<script>
+// ── Shared gist read ───────────────────────────────────────────────────────
+// Every card on this page needs the same gist (watched ticks, squad
+// conditions, retro progress, tattoos). Four separate unauthenticated reads
+// per page load burned GitHub's 60-requests-per-hour-per-IP anonymous
+// allowance in about fifteen refreshes, after which the gist returned 403 and
+// those cards silently rendered blank. So: one request per load, shared by
+// all callers, signed with the browser's saved token when there is one
+// (5,000/hour instead of 60), cached briefly, and falling back to the last
+// good copy rather than going blank if the request does fail.
+window.gistData = (function () {
+  const ID = '5411ac8d12fdc31aa3fa73e4d66f6377', FILE = 'watchlist.json';
+  const CACHE = 'hub-gist-v1', TTL = 5 * 60e3;
+  let inflight = null;
+  const cached = () => { try { const c = JSON.parse(sessionStorage.getItem(CACHE)); return (c && c.data) ? c : null; } catch (_) { return null; } };
+  return function () {
+    if (inflight) return inflight;
+    const c = cached();
+    if (c && Date.now() - c.t < TTL) { inflight = Promise.resolve(c.data); return inflight; }
+    let tok = null; try { tok = localStorage.getItem('gistToken'); } catch (_) {}
+    const h = { 'Accept': 'application/vnd.github.v3+json' };
+    if (tok) h.Authorization = 'token ' + tok;
+    inflight = fetch('https://api.github.com/gists/' + ID, { headers: h, cache: 'no-store' })
+      .then(r => { if (!r.ok) throw new Error('gist ' + r.status); return r.json(); })
+      .then(j => {
+        const d = JSON.parse((j.files && j.files[FILE] && j.files[FILE].content) || '{}');
+        try { sessionStorage.setItem(CACHE, JSON.stringify({ t: Date.now(), data: d })); } catch (_) {}
+        return d;
+      })
+      .catch(e => { const c2 = cached(); if (c2) return c2.data; throw e; });
+    return inflight;
+  };
+})();
+</script>
+
 <script src="films-data.js"></script>
 <script src="shows-data.js"></script>
 <script src="retro-data.js"></script>
@@ -320,8 +355,7 @@ window.espnEvents = async function (league, fromISO, toISO) {
 
     let watched = {};
     try {
-      const j = await (await fetch('https://api.github.com/gists/5411ac8d12fdc31aa3fa73e4d66f6377', { cache:'no-store' })).json();
-      watched = JSON.parse(j.files['watchlist.json'].content);
+      watched = await gistData();
     } catch (_) {
       watched = RETRO_LETTERBOXD;
     }
@@ -517,8 +551,7 @@ window.espnEvents = async function (league, fromISO, toISO) {
   // ── Watched ticks from the gist (catches ticks made on another device) ─────
   async function refreshMarks() {
     try {
-      const j = await (await fetch('https://api.github.com/gists/' + GIST_ID, { cache:'no-store' })).json();
-      const data = JSON.parse((j.files && j.files[GIST_FILE] && j.files[GIST_FILE].content) || '{}');
+      const data = await gistData();
       const cloud = data.showLog;
       if (cloud && typeof cloud === 'object' && Object.keys(cloud).length) {
         marks = cloud;
@@ -682,8 +715,7 @@ window.espnEvents = async function (league, fromISO, toISO) {
   // (c = conditions keyed by player id, ps = section: 'squad' = main squad)
   const availP = (async () => {
     try {
-      const j = await (await fetch('https://api.github.com/gists/5411ac8d12fdc31aa3fa73e4d66f6377', { cache:'no-store' })).json();
-      const data = JSON.parse(j.files['watchlist.json'].content);
+      const data = await gistData();
       const counts = key => {
         const st = data[key];
         if (!st || !st.c) return null;
@@ -784,8 +816,7 @@ window.espnEvents = async function (league, fromISO, toISO) {
     const ord = n => n + (n%10===1&&n%100!==11?'st':n%10===2&&n%100!==12?'nd':n%10===3&&n%100!==13?'rd':'th');
     const dateLabel = iso => { const d = new Date(iso + 'T00:00:00'); return ord(d.getDate()) + ' ' + d.toLocaleString('en-GB',{month:'short',year:'numeric'}); };
 
-    const j = await (await fetch('https://api.github.com/gists/5411ac8d12fdc31aa3fa73e4d66f6377', { cache:'no-store' })).json();
-    const data = JSON.parse(j.files['watchlist.json'].content);
+    const data = await gistData();
     const t = data.tattooEntries;
     let entries = null;
     if (Array.isArray(t)) entries = t;                 // legacy plaintext
