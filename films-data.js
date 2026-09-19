@@ -146,9 +146,8 @@ const FILMS = [
     imdbRating: 6.2,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/4/1/5/7/1174157-insidious-out-of-the-further-0-600-0-900-crop.jpg?v=b6c81c5505',
     vodDate: '2026-10-06',
-    platform: null,
-    estimated: true,
-    note: 'Cinema release 21 Aug 2026 (Sony) · digital PVOD est. early Oct 2026 (~30-day window, WhenToStream 9/18)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 106,
   },
   {
