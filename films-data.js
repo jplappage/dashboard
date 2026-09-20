@@ -9,17 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Tony',
-    year: 2026,
-    slug: 'tony-2026',
-    imdbRating: 7.7,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/0/9/0/0/1/1209001-tony-2026-0-600-0-900-crop.jpg?v=63ce7b9234',
-    vodDate: '2026-09-15',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 106,
-  },
-  {
     title: 'Ice Cream Man',
     year: 2026,
     slug: 'ice-cream-man-2026',
@@ -80,6 +69,18 @@ const FILMS = [
     estimated: true,
     note: 'In cinemas 25 Sep 2026 (Amazon MGM / Orion · Bassam Tariq · Mahershala Ali) · digital TBA',
     runtime: 112,
+  },
+  {
+    title: 'Forgotten Island',
+    year: 2026,
+    slug: 'forgotten-island-2026',
+    imdbRating: 7.6,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/4/1/7/3/7/1341737-forgotten-island-2026-0-600-0-900-crop.jpg?v=92321a8101',
+    vodDate: '2026-09-25',
+    platform: null,
+    cinema: true,
+    estimated: true,
+    note: 'In cinemas 25 Sep 2026 (Universal / DreamWorks Animation · Joel Crawford & Januel Mercado) · digital TBA',
   },
   {
     title: 'Coyote vs. Acme',
@@ -290,4 +291,5 @@ const WATCHED = [
   { title: 'Pressure', vodDate: '2026-06-16', imdbRating: 7.3 },
   { title: 'The End of Oak Street', vodDate: '2026-09-15', imdbRating: 6.6 },
   { title: 'The Rivals of Amziah King', vodDate: '2026-09-15', imdbRating: 7.3 },
+  { title: 'Tony', vodDate: '2026-09-15', imdbRating: 7.7 },
 ];
