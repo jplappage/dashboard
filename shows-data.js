@@ -15,7 +15,7 @@ const SHOWS = [
   {name:"Peacemaker",                            status:"ongoing",  aired:2, next:null, recheck:"2026-09-25", imdbId:"tt13146488"},
   {name:"The Studio",                            status:"ongoing",  aired:1, next:"S2 · est. Mar 2027", recheck:"2026-09-25", imdbId:"tt23649128"},
   {name:"Dexter: Resurrection",                  status:"ongoing",  aired:1, next:"S2 · 30 Oct 2026", imdbId:"tt33043892"},
-  {name:"MobLand",                               status:"ongoing",  aired:2, next:null, airing:"S2 · Fridays", airingUntil:"2026-11-20", imdbId:"tt31510819"},
+  {name:"MobLand",                               status:"ongoing",  aired:2, next:"S3 · unannounced", recheck:"2026-10-02", airing:"S2 · Fridays", airingUntil:"2026-11-20", imdbId:"tt31510819"},
   {name:"Dune: Prophecy",                        status:"ongoing",  aired:1, next:"S2 · late 2026", recheck:"2026-09-25", imdbId:"tt10466872"},
   {name:"Twisted Metal",                         status:"ongoing",  aired:2, next:"S3 · est. 2027", recheck:"2026-09-25", imdbId:"tt14261112"},
   {name:"The Witcher",                           status:"ongoing",  aired:4, next:"S5 · est. 2027 · final season", recheck:"2026-09-25", imdbId:"tt5180504"},
@@ -38,7 +38,7 @@ const SHOWS = [
   {name:"The Mandalorian",                       status:"finished", aired:3, imdbId:"tt8111088"},
   {name:"Maul: Shadow Lord",                     status:"ongoing",  aired:1, next:"S2 · est. late 2027", recheck:"2026-09-25", imdbId:"tt36594331"},
   {name:"SAS: Rogue Heroes",                     status:"ongoing",  aired:2, next:"S3 · est. late 2026", recheck:"2026-09-25", imdbId:"tt10405370"},
-  {name:"Lanterns",                              status:"ongoing",  aired:1, next:null, recheck:"2026-09-25", airing:"S1 · Mondays", airingUntil:"2026-10-05", tvmazeId:44776, imdbId:"tt26545992"},
+  {name:"Lanterns",                              status:"ongoing",  aired:1, next:"S2 · unannounced", recheck:"2026-10-02", airing:"S1 · Mondays", airingUntil:"2026-10-05", tvmazeId:44776, imdbId:"tt26545992"},
   // ENDED (finished)
   {name:"Extras",                                   status:"finished", aired:2, imdbId:"tt0445114"},
   {name:"Derek",                                    status:"finished", aired:2, imdbId:"tt2616280"},
