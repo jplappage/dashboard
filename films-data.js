@@ -25,10 +25,9 @@ const FILMS = [
     slug: 'teenage-sex-and-death-at-camp-miasma',
     imdbRating: 7.2,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/2/3/8/6/7/1123867-teenage-sex-and-death-at-camp-miasma-0-600-0-900-crop.jpg?v=f6059120f8',
-    vodDate: '2026-09-25',
-    platform: null,
-    estimated: true,
-    note: 'US PVOD was listed for 18 Sep 2026 but no UK buy/rent offer has appeared (still in UK cinemas, JustWatch 20 Sep) · digital est. 25 Sep 2026',
+    vodDate: '2026-09-18',
+    platform: 'Digital',
+    estimated: false,
     runtime: 112,
   },
   {
