@@ -100,9 +100,8 @@ const FILMS = [
     imdbRating: 6.5,
     poster: 'https://a.ltrbxd.com/resized/film-poster/8/8/0/4/2/5/880425-the-uprising-2026-0-600-0-900-crop.jpg?v=71d42e25d2',
     vodDate: '2026-09-29',
-    platform: null,
-    estimated: true,
-    note: 'Cinema release 11 Sep 2026 (Focus Features / Entertainment Film UK · Paul Greengrass · Andrew Garfield) · digital PVOD est. late Sep 2026 (Focus looks likely to go PVOD after a 17-day window, WhenToStream 9/18)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 128,
   },
   {
