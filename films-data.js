@@ -9,17 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Ice Cream Man',
-    year: 2026,
-    slug: 'ice-cream-man-2026',
-    imdbRating: 3.8,
-    poster: 'https://image.tmdb.org/t/p/w342/c987gxFjXqYOxZEZKcTkS1ONTWH.jpg',
-    vodDate: '2026-09-22',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 86,
-  },
-  {
     title: 'Teenage Sex and Death at Camp Miasma',
     year: 2026,
     slug: 'teenage-sex-and-death-at-camp-miasma',
@@ -290,4 +279,5 @@ const WATCHED = [
   { title: 'The End of Oak Street', vodDate: '2026-09-15', imdbRating: 6.6 },
   { title: 'The Rivals of Amziah King', vodDate: '2026-09-15', imdbRating: 7.3 },
   { title: 'Tony', vodDate: '2026-09-15', imdbRating: 7.7 },
+  { title: 'Ice Cream Man', vodDate: '2026-09-22', imdbRating: 3.8 },
 ];

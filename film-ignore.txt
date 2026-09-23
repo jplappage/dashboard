@@ -5,3 +5,4 @@
 # Respected by update_new_films.py AND the manual refresh (see REFRESH_INSTRUCTIONS.md).
 pressure-2026
 the-end-of-oak-street
+ice-cream-man-2026
