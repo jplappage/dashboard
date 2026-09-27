@@ -159,9 +159,8 @@ const FILMS = [
     imdbRating: 6.9,
     poster: 'https://a.ltrbxd.com/resized/film-poster/9/5/4/6/6/3/954663-hope-2026-0-600-0-900-crop.jpg?v=102a8bfda2',
     vodDate: '2026-10-13',
-    platform: null,
-    estimated: true,
-    note: 'Cinema release 9 Sep 2026 (US · Neon · Na Hong-jin; UK premiere Edinburgh 16 Aug 2026) · priced for PVOD · digital est. mid-Oct 2026 (~30-day Neon window, WhenToStream 9/18)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 157,
   },
   {
