@@ -181,9 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 23 Sep 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 27 Sep 2026)
 const RETRO_LETTERBOXD = {
 
+  85: "2026-09-27", // Ip Man
   72: "2026-09-13", // Memoirs of a Geisha
   28: "2026-09-08", // The King of Comedy
 
@@ -298,6 +299,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  85:  3.5,  // Ip Man
   72:  3.0,  // Memoirs of a Geisha
   28:  3.5,  // The King of Comedy
   142: 2.5,  // A Haunting in Venice
