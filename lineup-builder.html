@@ -937,9 +937,11 @@ function renderSidebar() {
     ORDER.forEach(pos => {
       const grp = PLAYERS.filter(p => p.sec === sec && p.pos === pos && !unavailIds.has(p.id));
       if (!grp.length) return;
-      const lbl = document.createElement('div'); lbl.className = 'pos-ttl';
-      lbl.style.gridColumn = '1 / -1'; lbl.textContent = pos;
-      grid.appendChild(lbl);
+      if (sec === 'squad') {   // fringe: no GK/DEF/MID/ATT sub-headings, just the pills (still in position order)
+        const lbl = document.createElement('div'); lbl.className = 'pos-ttl';
+        lbl.style.gridColumn = '1 / -1'; lbl.textContent = pos;
+        grid.appendChild(lbl);
+      }
       grp.forEach(p => grid.appendChild(buildPill(p, assigned.has(p.id))));
     });
     cont.appendChild(grid);
