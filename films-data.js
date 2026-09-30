@@ -20,17 +20,6 @@ const FILMS = [
     runtime: 103,
   },
   {
-    title: 'The Uprising',
-    year: 2026,
-    slug: 'the-uprising-2026',
-    imdbRating: 6.5,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/8/8/0/4/2/5/880425-the-uprising-2026-0-600-0-900-crop.jpg?v=71d42e25d2',
-    vodDate: '2026-09-29',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 128,
-  },
-  {
     title: 'Colony',
     year: 2026,
     slug: 'colony-2026',
@@ -265,4 +254,5 @@ const WATCHED = [
   { title: 'Tony', vodDate: '2026-09-15', imdbRating: 7.7 },
   { title: 'Ice Cream Man', vodDate: '2026-09-22', imdbRating: 3.8 },
   { title: 'Teenage Sex and Death at Camp Miasma', vodDate: '2026-09-18', imdbRating: 7.2 },
+  { title: 'The Uprising', vodDate: '2026-09-29', imdbRating: 6.5 },
 ];

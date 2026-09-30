@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 27 Sep 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 30 Sep 2026)
 const RETRO_LETTERBOXD = {
 
   85: "2026-09-27", // Ip Man
