@@ -72,9 +72,8 @@ const FILMS = [
     imdbRating: 6.5,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/3/5/3/0/1263530-runner-2026-0-600-0-900-crop.jpg?v=3039597d39',
     vodDate: '2026-10-13',
-    platform: null,
-    estimated: true,
-    note: 'Cinema release 11 Sep 2026 (Angel Studios · Scott Waugh · Alan Ritchson / Owen Wilson) · digital PVOD est. mid-Oct 2026 (WhenToStream 9/25)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 97,
   },
   {
