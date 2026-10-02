@@ -360,7 +360,7 @@ const WATCHED = [
   { title: 'The Furious', vodDate: '2026-07-07', imdbRating: 7.7 },
   { title: 'The Selfish Giant', vodDate: '2026-07-07', imdbRating: 7.3 },
   { title: 'Moana', vodDate: '2026-07-12', imdbRating: 5.8 },
-  { title: 'California Schemin\'', vodDate: '2026-07-06', imdbRating: 7.2 },
+  { title: "California Schemin'", vodDate: '2026-07-06', imdbRating: 7.2 },
   { title: 'Backrooms', vodDate: '2026-07-14', imdbRating: 7.2 },
   { title: 'The Odyssey', vodDate: '2026-07-18', imdbRating: 8.4 },
   { title: 'Disclosure Day', vodDate: '2026-07-21', imdbRating: 6.9 },
