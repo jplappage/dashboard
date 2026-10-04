@@ -218,6 +218,18 @@ const FILMS = [
     runtime: 102,
   },
   {
+    title: 'Ali G: Who Iz I?',
+    year: 2026,
+    slug: 'ali-g-who-iz-i',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/5/9/4/1/9/3/1594193-ali-g-who-iz-i-0-600-0-900-crop.jpg?v=0e3e07fb61',
+    vodDate: '2026-10-23',
+    platform: null,
+    cinema: true,
+    estimated: true,
+    note: 'In cinemas 23 Oct 2026 (Amazon MGM · Sacha Baron Cohen) · digital TBA',
+    runtime: 89,
+  },
+  {
     title: 'Wicker',
     year: 2026,
     slug: 'wicker',
