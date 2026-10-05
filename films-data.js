@@ -73,9 +73,8 @@ const FILMS = [
     imdbRating: 7.1,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/8/9/7/1/4/1389714-buddy-2026-0-600-0-900-crop.jpg?v=6a078eb95a',
     vodDate: '2026-10-13',
-    platform: null,
-    estimated: true,
-    note: 'Casper Kelly horror-comedy · cinemas 28 Aug 2026 (Roadside Attractions) · digital VOD est. early/mid Oct 2026 (~30-45 day window, no date announced yet — WhenToStream 10/2)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 95,
   },
   {
