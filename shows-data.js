@@ -24,7 +24,7 @@ const SHOWS = [
   {name:"Severance",                             status:"ongoing",  aired:2, next:"S3 · est. Summer 2027", recheck:"2026-10-09", imdbId:"tt11280740"},
   {name:"Rings of Power",                        status:"ongoing",  aired:2, next:"S3 · 11 Nov 2026", imdbId:"tt7631058"},
   {name:"House of the Dragon",                   status:"ongoing",  aired:3, next:"S4 · 2028", recheck:"2026-10-09", imdbId:"tt11198330"},
-  {name:"Ted Lasso",                             status:"ongoing",  aired:4, next:null, recheck:"2026-10-09", airing:"S4 · Wednesdays", airingUntil:"2026-10-07", imdbId:"tt10986410"},
+  {name:"Ted Lasso",                             status:"ongoing",  aired:4, next:null, recheck:"2026-10-09", imdbId:"tt10986410"},
   {name:"Ted",                                   status:"finished", aired:2, imdbId:"tt14824792"},
   {name:"Tires",                                 status:"ongoing",  aired:3, next:"S4 · est. late 2027", recheck:"2026-10-09", imdbId:"tt31491435"},
   {name:"The Boys",                              status:"finished", aired:5, next:null, imdbId:"tt1190634"},
@@ -38,7 +38,7 @@ const SHOWS = [
   {name:"The Mandalorian",                       status:"finished", aired:3, imdbId:"tt8111088"},
   {name:"Maul: Shadow Lord",                     status:"ongoing",  aired:1, next:"S2 · est. late 2027", recheck:"2026-10-09", imdbId:"tt36594331"},
   {name:"SAS: Rogue Heroes",                     status:"ongoing",  aired:2, next:"S3 · est. late 2026", recheck:"2026-10-09", imdbId:"tt10405370"},
-  {name:"Lanterns",                              status:"ongoing",  aired:1, next:"S2 · unannounced", recheck:"2026-10-09", airing:"S1 · Mondays", airingUntil:"2026-10-05", tvmazeId:44776, imdbId:"tt26545992"},
+  {name:"Lanterns",                              status:"ongoing",  aired:1, next:"S2 · unannounced", recheck:"2026-10-09", tvmazeId:44776, imdbId:"tt26545992"},
   // ENDED (finished)
   {name:"Extras",                                   status:"finished", aired:2, imdbId:"tt0445114"},
   {name:"Derek",                                    status:"finished", aired:2, imdbId:"tt2616280"},
