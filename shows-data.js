@@ -39,6 +39,7 @@ const SHOWS = [
   {name:"Maul: Shadow Lord",                     status:"ongoing",  aired:1, next:"S2 · est. late 2027", recheck:"2026-10-09", imdbId:"tt36594331"},
   {name:"SAS: Rogue Heroes",                     status:"ongoing",  aired:2, next:"S3 · est. late 2026", recheck:"2026-10-09", imdbId:"tt10405370"},
   {name:"Lanterns",                              status:"ongoing",  aired:1, next:"S2 · unannounced", recheck:"2026-10-09", tvmazeId:44776, imdbId:"tt26545992"},
+  {name:"VisionQuest",                           status:"ongoing",  aired:0, next:"S1 · 14 Oct 2026", imdbId:"tt23112594"},
   // ENDED (finished)
   {name:"Extras",                                   status:"finished", aired:2, imdbId:"tt0445114"},
   {name:"Derek",                                    status:"finished", aired:2, imdbId:"tt2616280"},

@@ -89,15 +89,6 @@ const FILMS = [
     runtime: 157,
   },
   {
-    title: 'VisionQuest',
-    year: 2026,
-    slug: 'visionquest',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/6/4/1/5/0/7/1641507-visionquest-0-600-0-900-crop.jpg?v=29b4ed2f41',
-    vodDate: '2026-10-14',
-    platform: 'Disney+',
-    estimated: false,
-  },
-  {
     title: 'Street Fighter',
     year: 2026,
     slug: 'street-fighter-2026',
