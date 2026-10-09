@@ -32,7 +32,7 @@ const SHOWS = [
   {name:"Alley Cats",                            status:"ongoing",  aired:1, next:null, recheck:"2026-10-09", imdbId:"tt38264832"},
   {name:"Stranger Things: Tales from '85",       status:"ongoing",  aired:2, next:null, recheck:"2026-10-09", imdbId:"tt27486290"},
   {name:"Welcome to Wrexham",                    status:"ongoing",  aired:5, next:"S6 · est. May 2027", recheck:"2026-10-09", imdbId:"tt14674086"},
-  {name:"Your Friendly Neighbourhood Spider-Man",status:"ongoing",  aired:1, next:"S2 · Jan 2027", recheck:"2026-10-09", imdbId:"tt16027074"},
+  {name:"Your Friendly Neighbourhood Spider-Man",status:"ongoing",  aired:1, next:"S2 · 13 Jan 2027", imdbId:"tt16027074"},
   {name:"Daredevil: Born Again",                 status:"ongoing",  aired:2, next:"S3 · est. spring 2027 · final season", recheck:"2026-10-09", imdbId:"tt18923754"},
   {name:"Ahsoka",                                status:"ongoing",  aired:1, next:"S2 · 20 Jan 2027", imdbId:"tt13622776"},
   {name:"The Mandalorian",                       status:"finished", aired:3, imdbId:"tt8111088"},
