@@ -252,9 +252,8 @@ const FILMS = [
     imdbRating: 7.1,
     poster: 'https://image.tmdb.org/t/p/w342/sDgb5jVuZ6ZOh4YjtSMMnbovkCi.jpg',
     vodDate: '2026-11-03',
-    platform: null,
-    estimated: true,
-    note: 'Cinema release 18 Sep 2026 (UK/US · Paramount · Jonatan Etzler · Saoirse Ronan) · TIFF 2025 · digital PVOD est. early Nov 2026 (Paramount-mandated 45-day window)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 100,
   },
   {
