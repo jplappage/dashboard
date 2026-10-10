@@ -181,9 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 7 Oct 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 10 Oct 2026)
 const RETRO_LETTERBOXD = {
 
+  132:"2026-10-10", // Triangle of Sadness
   85: "2026-09-27", // Ip Man
   89: "2026-10-04", // The Help
   72: "2026-09-13", // Memoirs of a Geisha
@@ -300,6 +301,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  132: 3.5,  // Triangle of Sadness
   85:  3.5,  // Ip Man
   89:  4.0,  // The Help
   72:  3.0,  // Memoirs of a Geisha
