@@ -924,5 +924,17 @@ window.gistData = (function () {
     })();
   })();
   </script>
+  <script>
+  // Keep every green "live" dot pulsing in step. Dots are drawn at different
+  // moments (each card fills in when its data arrives), so each one would
+  // otherwise start its own pulse cycle. Pin them all to the same clock.
+  (function(){
+    function sync(){document.querySelectorAll(".card-sub .dot").forEach(function(d){
+      (d.getAnimations?d.getAnimations():[]).forEach(function(a){a.startTime=0;});});}
+    var t; new MutationObserver(function(){clearTimeout(t);t=setTimeout(sync,0);})
+      .observe(document.body,{childList:true,subtree:true});
+    document.addEventListener("visibilitychange",sync); sync();
+  })();
+  </script>
 </body>
 </html>

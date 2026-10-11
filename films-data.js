@@ -9,17 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Colony',
-    year: 2026,
-    slug: 'colony-2026',
-    imdbRating: 6.5,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/2/1/7/0/1262170-colony-2026-0-600-0-900-crop.jpg?v=10448d0145',
-    vodDate: '2026-10-06',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 123,
-  },
-  {
     title: 'Buddy',
     year: 2026,
     slug: 'buddy-2026',
@@ -366,4 +355,5 @@ const WATCHED = [
   { title: 'Coyote vs. Acme', vodDate: '2026-09-29', imdbRating: 7.6 },
   { title: 'Insidious: Out of the Further', vodDate: '2026-10-06', imdbRating: 6.2 },
   { title: 'Onslaught', vodDate: '2026-10-06', imdbRating: 5.9 },
+  { title: 'Colony', vodDate: '2026-10-06', imdbRating: 6.5 },
 ];
