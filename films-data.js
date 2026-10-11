@@ -181,9 +181,8 @@ const FILMS = [
     imdbRating: 7.3,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/2/0/1/9/1262019-primetime-2026-0-600-0-900-crop.jpg?v=ffa882dc9a',
     vodDate: '2026-11-03',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 25 Sep 2026 (A24 · Lance Oppenheim), expanding · PVOD est. early Nov 2026, Tuesday drop (pre-order open — WhenToStream 10/9)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 110,
   },
   {
