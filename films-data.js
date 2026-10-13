@@ -20,17 +20,6 @@ const FILMS = [
     runtime: 95,
   },
   {
-    title: 'Runner',
-    year: 2026,
-    slug: 'runner-2026',
-    imdbRating: 6.5,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/3/5/3/0/1263530-runner-2026-0-600-0-900-crop.jpg?v=3039597d39',
-    vodDate: '2026-10-13',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 97,
-  },
-  {
     title: 'Hope',
     year: 2026,
     slug: 'hope-2026',
@@ -355,4 +344,5 @@ const WATCHED = [
   { title: 'Insidious: Out of the Further', vodDate: '2026-10-06', imdbRating: 6.2 },
   { title: 'Onslaught', vodDate: '2026-10-06', imdbRating: 5.9 },
   { title: 'Colony', vodDate: '2026-10-06', imdbRating: 6.5 },
+  { title: 'Runner', vodDate: '2026-10-13', imdbRating: 6.5 },
 ];
