@@ -133,9 +133,8 @@ const FILMS = [
     imdbRating: 7.8,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/4/1/7/3/7/1341737-forgotten-island-2026-0-600-0-900-crop.jpg?v=92321a8101',
     vodDate: '2026-10-27',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 25 Sep 2026 (Universal / DreamWorks Animation) + 30-day minimum window, Tuesday drop · PVOD est. late Oct 2026 (WhenToStream 10/9)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 109,
   },
   {
