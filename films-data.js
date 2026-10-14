@@ -9,17 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Buddy',
-    year: 2026,
-    slug: 'buddy-2026',
-    imdbRating: 7,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/8/9/7/1/4/1389714-buddy-2026-0-600-0-900-crop.jpg?v=6a078eb95a',
-    vodDate: '2026-10-13',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 95,
-  },
-  {
     title: 'Hope',
     year: 2026,
     slug: 'hope-2026',
@@ -344,4 +333,5 @@ const WATCHED = [
   { title: 'Onslaught', vodDate: '2026-10-06', imdbRating: 5.9 },
   { title: 'Colony', vodDate: '2026-10-06', imdbRating: 6.5 },
   { title: 'Runner', vodDate: '2026-10-13', imdbRating: 6.5 },
+  { title: 'Buddy', vodDate: '2026-10-13', imdbRating: 7 },
 ];
