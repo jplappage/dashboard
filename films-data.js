@@ -21,6 +21,7 @@ const FILMS = [
     runtime: 157,
   },
   {
+<<<<<<< HEAD
     title: 'Street Fighter',
     year: 2026,
     slug: 'street-fighter-2026',
@@ -58,6 +59,8 @@ const FILMS = [
     runtime: 119,
   },
   {
+=======
+>>>>>>> 1988d84 (update 16/10/2026 20:58:14.48)
     title: 'The Weight',
     year: 2026,
     slug: 'the-weight-2026',
@@ -117,6 +120,18 @@ const FILMS = [
     runtime: 89,
   },
   {
+    title: 'The Dog Stars',
+    year: 2026,
+    slug: 'the-dog-stars',
+    imdbRating: 6.5,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/9/2/8/7/1269287-the-dog-stars-0-600-0-900-crop.jpg?v=b44af504b0',
+    vodDate: '2026-10-27',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 28 Aug 2026 (20th Century · Ridley Scott) + 7-8 week window · PVOD est. late Oct 2026; no date announced by 16 Oct, so moved from 20 Oct to 27 Oct, Tuesday drop (WhenToStream 10/16)',
+    runtime: 119,
+  },
+  {
     title: 'Forgotten Island',
     year: 2026,
     slug: 'forgotten-island-2026',
@@ -149,7 +164,7 @@ const FILMS = [
     vodDate: '2026-11-03',
     platform: null,
     estimated: true,
-    note: 'Est. — US cinemas 25 Sep 2026 (Sumerian; UK/Ireland 4 Sep via Universal/Focus) + 30+ day window, Tuesday drop · digital est. early Nov 2026 (pre-order open — WhenToStream 10/9)',
+    note: 'Est. — US cinemas 25 Sep 2026 (Sumerian; UK/Ireland 4 Sep via Universal/Focus) + 30+ day window, Tuesday drop · digital est. early Nov 2026 (pre-order open — WhenToStream 10/16)',
     runtime: 102,
   },
   {
@@ -172,7 +187,7 @@ const FILMS = [
     vodDate: '2026-11-03',
     platform: null,
     estimated: true,
-    note: 'Cinema release 18 Sep 2026 (Sony · Zach Cregger) · digital PVOD est. late Oct / early Nov 2026 (~5-6 week window, WhenToStream 10/9)',
+    note: 'Cinema release 18 Sep 2026 (Sony · Zach Cregger) · digital PVOD est. late Oct / early Nov 2026 (~5-6 week window, WhenToStream 10/16)',
     runtime: 89,
   },
   {
@@ -188,6 +203,18 @@ const FILMS = [
     runtime: 100,
   },
   {
+    title: 'Digger',
+    year: 2026,
+    slug: 'digger-2026',
+    imdbRating: 7.3,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/2/6/8/8/1132688-digger-2026-0-600-0-900-crop.jpg?v=81ec883a95',
+    vodDate: '2026-11-03',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · weak run, WB expected to go to PVOD early · est. late Oct / early Nov 2026, Tuesday drop (WhenToStream 10/16)',
+    runtime: 129,
+  },
+  {
     title: 'Other Mommy',
     year: 2026,
     slug: 'other-mommy',
@@ -196,7 +223,7 @@ const FILMS = [
     vodDate: '2026-11-10',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 9 Oct 2026 (Universal) + 30-day window, Tuesday drop · PVOD est. early Nov 2026 (pre-order open — WhenToStream 10/9)',
+    note: 'Est. — cinemas 9 Oct 2026 (Universal) + 30-day window, Tuesday drop · PVOD est. early Nov 2026 (pre-order open — WhenToStream 10/16)',
     runtime: 93,
   },
   {
@@ -208,7 +235,7 @@ const FILMS = [
     vodDate: '2026-11-10',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 25 Sep 2026 (Paramount · David Ayer / Brad Pitt) + mandated 45-day window, Tuesday drop · PVOD est. early Nov 2026 (WhenToStream 10/9)',
+    note: 'Est. — cinemas 25 Sep 2026 (Paramount · David Ayer / Brad Pitt) + mandated 45-day window, Tuesday drop · PVOD est. early Nov 2026 (WhenToStream 10/16)',
     runtime: 101,
   },
   {
@@ -221,7 +248,7 @@ const FILMS = [
     vodDate: '2026-11-10',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 25 Sep 2026 (Amazon MGM / Orion · limited, expanding through Oct) + ~45-day window, Tuesday drop · PVOD est. early Nov 2026 (WhenToStream 10/9)',
+    note: 'Est. — cinemas 25 Sep 2026 (Amazon MGM / Orion · limited, expanding through Oct) + ~45-day window, Tuesday drop · PVOD est. early Nov 2026 (WhenToStream 10/16)',
     runtime: 112,
   },
   {
@@ -233,7 +260,7 @@ const FILMS = [
     vodDate: '2026-11-10',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 2 Oct 2026 (Amazon MGM · Anne Hathaway) + ~5 weekends theatrical, Tuesday drop · PVOD est. early/mid Nov 2026 (pre-order open — WhenToStream 10/9)',
+    note: 'Est. — cinemas 2 Oct 2026 (Amazon MGM · Anne Hathaway) + ~5 weekends theatrical, Tuesday drop · PVOD est. early/mid Nov 2026 (pre-order open — WhenToStream 10/16)',
     runtime: 114,
   },
   {
@@ -245,20 +272,8 @@ const FILMS = [
     vodDate: '2026-11-17',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 9 Oct 2026 (Sony · Aaron Sorkin) + 5-6 week window, Tuesday drop · PVOD est. early/mid Nov 2026 (pre-order open — WhenToStream 10/9)',
+    note: 'Est. — cinemas 9 Oct 2026 (Sony · Aaron Sorkin) + 5-6 week window, Tuesday drop · PVOD est. early/mid Nov 2026 (pre-order open — WhenToStream 10/16)',
     runtime: 112,
-  },
-  {
-    title: 'Digger',
-    year: 2026,
-    slug: 'digger-2026',
-    imdbRating: 7.3,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/2/6/8/8/1132688-digger-2026-0-600-0-900-crop.jpg?v=81ec883a95',
-    vodDate: '2026-11-17',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · PVOD est. mid/late Nov 2026, before Thanksgiving (WhenToStream 10/9)',
-    runtime: 129,
   },
   {
     title: 'Fjord',
@@ -269,8 +284,32 @@ const FILMS = [
     vodDate: '2026-11-24',
     platform: null,
     estimated: true,
-    note: 'Est. — US cinemas 9 Oct 2026 (NEON, limited; nationwide 23 Oct) · UK cinemas 13 Nov · PVOD est. late Nov 2026, Thanksgiving week Tuesday drop (pre-order open — WhenToStream 10/9)',
+    note: 'Est. — US cinemas 9 Oct 2026 (NEON, limited; nationwide 23 Oct) · UK cinemas 13 Nov · PVOD est. late Nov 2026, Thanksgiving week Tuesday drop (pre-order open — WhenToStream 10/16)',
     runtime: 146,
+  },
+  {
+    title: 'Street Fighter',
+    year: 2026,
+    slug: 'street-fighter-2026',
+    imdbRating: 6.3,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/4/0/2/9/0/1040290-street-fighter-2026-0-600-0-900-crop.jpg?v=5cc9002644',
+    vodDate: '2026-12-01',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 16 Oct 2026 (Paramount) + mandated 45-day window, Tuesday drop · PVOD est. early Dec 2026 (pre-order open — WhenToStream 10/16)',
+    runtime: 125,
+  },
+  {
+    title: 'Whalefall',
+    year: 2026,
+    slug: 'whalefall',
+    imdbRating: 6.8,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/9/8/3/4/1139834-whalefall-0-600-0-900-crop.jpg?v=e0ec86ea62',
+    vodDate: '2026-12-15',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 16 Oct 2026 (20th Century) + usual 7-8 week window, Tuesday drop · PVOD est. mid Dec 2026 (WhenToStream 10/16)',
+    runtime: 98,
   },
 ];
 
