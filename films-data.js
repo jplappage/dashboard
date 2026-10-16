@@ -24,6 +24,7 @@ const FILMS = [
     title: 'Street Fighter',
     year: 2026,
     slug: 'street-fighter-2026',
+    imdbRating: 6.2,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/4/0/2/9/0/1040290-street-fighter-2026-0-600-0-900-crop.jpg?v=5cc9002644',
     vodDate: '2026-10-16',
     platform: null,
