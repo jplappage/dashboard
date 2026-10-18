@@ -9,18 +9,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'Hope',
-    year: 2026,
-    slug: 'hope-2026',
-    plexSlug: 'hope-2026-2',
-    imdbRating: 6.9,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/9/5/4/6/6/3/954663-hope-2026-0-600-0-900-crop.jpg?v=102a8bfda2',
-    vodDate: '2026-10-13',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 157,
-  },
-  {
     title: 'The Weight',
     year: 2026,
     slug: 'the-weight-2026',
@@ -260,6 +248,19 @@ const FILMS = [
     runtime: 125,
   },
   {
+    title: 'You Can See Everything',
+    year: 2026,
+    slug: 'you-can-see-everything',
+    plexSlug: 'you-can-see-everything-2026',
+    imdbRating: 9.4,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/6/2/9/4/4/3/1629443-you-can-see-everything-0-600-0-900-crop.jpg?v=84f6724d74',
+    vodDate: '2026-12-01',
+    platform: null,
+    estimated: true,
+    note: 'Est. — US cinemas 16 Oct 2026 (A24 · Nathan Fielder / Lance Oppenheim doc) + ~45-day A24 digital window, Tuesday drop · digital not yet announced (WhenToStream PVOD TBA, 18 Oct)',
+    runtime: 175,
+  },
+  {
     title: 'Whalefall',
     year: 2026,
     slug: 'whalefall',
@@ -334,4 +335,5 @@ const WATCHED = [
   { title: 'Colony', vodDate: '2026-10-06', imdbRating: 6.5 },
   { title: 'Runner', vodDate: '2026-10-13', imdbRating: 6.5 },
   { title: 'Buddy', vodDate: '2026-10-13', imdbRating: 7 },
+  { title: 'Hope', vodDate: '2026-10-13', imdbRating: 6.9 },
 ];
