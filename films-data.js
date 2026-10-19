@@ -181,9 +181,8 @@ const FILMS = [
     imdbRating: 7.3,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/4/7/4/6/8/1147468-heart-of-the-beast-2026-0-600-0-900-crop.jpg?v=9503afe033',
     vodDate: '2026-11-10',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 25 Sep 2026 (Paramount · David Ayer / Brad Pitt) + mandated 45-day window, Tuesday drop · PVOD est. early Nov 2026 (WhenToStream 10/16)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 101,
   },
   {
