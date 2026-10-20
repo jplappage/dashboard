@@ -74,9 +74,8 @@ const FILMS = [
     imdbRating: 6.5,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/9/2/8/7/1269287-the-dog-stars-0-600-0-900-crop.jpg?v=b44af504b0',
     vodDate: '2026-10-27',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 28 Aug 2026 (20th Century · Ridley Scott) + 7-8 week window · PVOD est. late Oct 2026; no date announced by 16 Oct, so moved from 20 Oct to 27 Oct, Tuesday drop (WhenToStream 10/16)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 119,
   },
   {
