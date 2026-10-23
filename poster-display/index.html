@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poster Display</title>
+<style>
+  @font-face { font-family: "Bebas Neue"; src: url("fonts/bebas-neue-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Limelight"; src: url("fonts/limelight-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Inter"; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Inter"; src: url("fonts/inter-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Inter"; src: url("fonts/inter-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+  :root {
+    --bg: #000;
+    --gold: #f6c453;
+    --gold-deep: #b8862b;
+    --gold-glow: rgba(246, 196, 83, 0.6);
+    --velvet: #3b0a0f;
+    --velvet-deep: #1a0306;
+    --ink: #f7f2e7;
+    --muted: rgba(247, 242, 231, 0.68);
+    --glass: rgba(12, 10, 8, 0.72);
+    --fade: 2.5s;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; background: var(--bg); overflow: hidden; cursor: none; }
+  body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); }
+
+  /* ---------- Poster layers ---------- */
+  .layer { position: absolute; inset: 0; opacity: 0; transition: opacity var(--fade) ease; }
+  .layer.show { opacity: 1; }
+  .layer .bg {
+    position: absolute; inset: -6%;
+    background-size: cover; background-position: center;
+    filter: blur(40px) brightness(0.45) saturate(1.2);
+  }
+  .layer .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  /* While a film is on, the poster sits neatly between the sign and the panel */
+  .layer .poster { transition: top 1.4s ease, bottom 1.4s ease, height 1.4s ease; }
+  .playing-mode .layer .poster {
+    top: 18.5vh; bottom: auto; height: calc(100% - 18.5vh - 27.5vh);
+    filter: drop-shadow(0 1.5vh 3vh rgba(0,0,0,0.8));
+    animation: drift 60s ease-in-out infinite alternate;
+  }
+  @keyframes drift { from { transform: scale(1); } to { transform: scale(1.04); } }
+
+  /* ---------- Now playing overlay ---------- */
+  #np { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.4s ease; }
+  #np.show { opacity: 1; }
+
+  /* Soft darkening at top and bottom so the sign and panel stand out */
+  #np::before, #np::after { content: ""; position: absolute; left: 0; right: 0; }
+  #np::before { top: 0; height: 26vh; background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent); }
+  #np::after { bottom: 0; height: 42vh; background: linear-gradient(to top, rgba(0,0,0,0.95) 35%, transparent); }
+
+  /* The marquee sign */
+  .marquee {
+    position: absolute; z-index: 2; top: 2.6vh; left: 50%; transform: translateX(-50%);
+    width: 78vw; padding: 2.4vw;
+    border-radius: 2vw;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+    box-shadow: 0 0 40px rgba(246,196,83,0.35), 0 1.5vh 4vh rgba(0,0,0,0.7);
+  }
+  .marquee .inner {
+    position: relative;
+    border-radius: 1.2vw;
+    padding: 3.4vw 3vw 3vw;
+    background: radial-gradient(ellipse at 50% 30%, var(--velvet) 0%, var(--velvet-deep) 100%);
+    text-align: center;
+  }
+  /* Bulb border */
+  .marquee .inner::before {
+    content: ""; position: absolute; inset: 1.1vw;
+    border: 1.3vw dotted var(--gold);
+    border-radius: 0.8vw;
+    filter: drop-shadow(0 0 0.6vw var(--gold-glow));
+    animation: twinkle 1.4s steps(2) infinite;
+  }
+  @keyframes twinkle { 50% { opacity: 0.55; } }
+  .marquee .label {
+    position: relative;
+    font-family: "Limelight", serif;
+    font-size: 8.6vw; line-height: 1;
+    letter-spacing: 0.06em;
+    color: #fff6dc;
+    text-shadow: 0 0 1vw var(--gold-glow), 0 0 3vw var(--gold-glow), 0 0 6vw rgba(246,196,83,0.35);
+    animation: hum 5s ease-in-out infinite;
+  }
+  @keyframes hum { 0%,100% { opacity: 1; } 48% { opacity: 1; } 50% { opacity: 0.86; } 52% { opacity: 1; } }
+  .marquee .where {
+    position: relative; margin-top: 1.4vw;
+    font-family: "Bebas Neue", sans-serif; font-size: 3.3vw; letter-spacing: 0.4em; padding-left: 0.4em;
+    color: var(--gold);
+  }
+
+  /* Paused: the sign dims */
+  .paused .marquee .inner::before { animation: none; opacity: 0.35; }
+  .paused .marquee .label { animation: none; color: rgba(255,246,220,0.75); text-shadow: none; }
+
+  /* Info panel */
+  .panel {
+    position: absolute; z-index: 2; left: 5vw; right: 5vw; bottom: 3.5vh;
+    padding: 4.2vw 5vw 4.6vw;
+    border-radius: 2.4vw;
+    background: var(--glass);
+    border: 1px solid rgba(246,196,83,0.28);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 2vh 6vh rgba(0,0,0,0.6);
+  }
+  .panel .title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 10vw; line-height: 0.95; letter-spacing: 0.02em;
+  }
+  .panel .episode { margin-top: 0.8vw; font-size: 3vw; color: var(--gold); font-weight: 500; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 1.6vw; margin-top: 2.2vw; }
+  .meta span { font-size: 2.6vw; color: var(--muted); font-weight: 500; }
+  .meta .chip {
+    color: var(--ink);
+    border: 1px solid rgba(247,242,231,0.45);
+    border-radius: 0.8vw; padding: 0.3vw 1.3vw;
+    font-weight: 600;
+  }
+  .meta .dot { width: 0.7vw; height: 0.7vw; border-radius: 50%; background: var(--gold); opacity: 0.7; }
+  .director { margin-top: 1.8vw; font-size: 2.6vw; color: var(--muted); }
+  .director b { color: var(--ink); font-weight: 600; }
+
+  .progress { margin-top: 3.4vw; }
+  .bar { position: relative; height: 0.9vw; border-radius: 1vw; background: rgba(247,242,231,0.14); overflow: hidden; }
+  .bar i {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
+    border-radius: 1vw;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+    box-shadow: 0 0 1.2vw var(--gold-glow);
+    transition: width 1s linear;
+  }
+  .times { display: flex; justify-content: space-between; margin-top: 1.4vw; font-size: 2.5vw; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .times b { color: var(--ink); font-weight: 600; }
+  .hide { display: none !important; }
+
+  /* Fallback card if there's no image at all */
+  .card {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: "Bebas Neue", sans-serif; font-size: 12vw; text-align: center; padding: 8vw;
+    background: radial-gradient(circle at 50% 40%, #2a2216 0%, #000 70%);
+  }
+</style>
+</head>
+<body>
+<div id="a" class="layer"></div>
+<div id="b" class="layer"></div>
+
+<div id="np">
+  <div class="marquee">
+    <div class="inner">
+      <div class="label" id="np-label">Now Playing</div>
+      <div class="where" id="np-where">Tonight's Feature</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="title" id="np-title"></div>
+    <div class="episode hide" id="np-episode"></div>
+    <div class="meta" id="np-meta"></div>
+    <div class="director hide" id="np-director"></div>
+    <div class="progress hide" id="np-progress">
+      <div class="bar"><i id="np-bar"></i></div>
+      <div class="times"><span id="np-elapsed"></span><span id="np-ends"></span><span id="np-left"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Your watchlist (from the Watchlist v4 dashboard) and its text-free posters -->
+<script src="../films-data.js"></script>
+<script src="../watchlist-posters.js"></script>
+<script>
+  const ROTATE_MS = 5 * 60 * 1000;   // each poster stays up 5 minutes
+  const CHECK_MS = 5 * 1000;         // check Plex every 5 seconds
+  const RELOAD_MS = 3 * 60 * 60 * 1000; // re-read the watchlist every 3 hours (when nothing's playing)
+  const PLEX_API = "https://jp-poster-display.netlify.app/api";
+  const FAV_LISTING = "https://api.github.com/repos/jplappage/dashboard/contents/poster-display/posters/favourites";
+  const TMDB_IMG = "https://image.tmdb.org/t/p/original/";
+
+  const params = new URLSearchParams(location.search);
+  const demo = params.get("demo");   // e.g. ?demo=Inception to preview the overlay
+  const demoStart = Date.now();
+
+  let posters = [];                  // favourites: the rotation
+  let allPosters = [];               // favourites + watchlist: used to find "now playing" posters
+  let order = [];
+  let idx = 0;
+  let front = document.getElementById("a");
+  let back = document.getElementById("b");
+  let nowKey = null;                 // what's currently on screen for "now playing"
+  let current = null;                // latest now-playing details
+  let rotateTimer = null;
+
+  const $ = (id) => document.getElementById(id);
+  const slug = (s) => String(s || "").toLowerCase()
+    .replace(/&/g, "and").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+
+  // Favourites: whatever images are in the posters/favourites folder.
+  // Reads the folder straight from GitHub, so dropping a new image in is enough;
+  // falls back to posters.json if GitHub can't be reached.
+  async function listFavourites() {
+    try {
+      const r = await fetch(FAV_LISTING, { cache: "no-store" });
+      if (r.ok) {
+        const items = await r.json();
+        const list = items.filter((i) => i.type === "file" && /\.(jpe?g|png|webp)$/i.test(i.name))
+          .map((i) => "posters/favourites/" + encodeURIComponent(i.name)).sort();
+        if (list.length) return list;
+      }
+    } catch (e) {}
+    try {
+      const r = await fetch("posters.json?t=" + Date.now(), { cache: "no-store" });
+      return (await r.json()).favourites || [];
+    } catch (e) { return null; }
+  }
+
+  async function loadPosters() {
+    const fav = await listFavourites();
+    if (fav && fav.length) {
+      allPosters = fav;
+      if (fav.join() !== posters.join()) { posters = fav; order = shuffle(fav); idx = 0; }
+    }
+  }
+
+  // Your watchlist, from films-data.js, with the text-free posters where we have them
+  const norm = (s) => slug(String(s || "").replace(/^the\s+/i, ""));
+  function watchlistPoster(title, year) {
+    if (typeof FILMS === "undefined") return null;
+    const t = norm(title);
+    const hits = FILMS.filter((f) => norm(f.title) === t);
+    const film = hits.find((f) => !year || Math.abs((f.year || 0) - year) <= 1) || hits[0];
+    if (!film) return null;
+    const tl = (typeof WATCHLIST_POSTERS !== "undefined") && WATCHLIST_POSTERS[film.slug];
+    if (tl && tl.poster) return TMDB_IMG + tl.poster;
+    return film.poster ? film.poster.replace(/-0-\d+-0-\d+-crop/, "-0-1000-0-1500-crop") : null;
+  }
+
+  function show(src, fallbackText) {
+    back.innerHTML = "";
+    if (src) {
+      const bg = document.createElement("div");
+      bg.className = "bg";
+      bg.style.backgroundImage = `url("${src}")`;
+      const img = document.createElement("img");
+      img.className = "poster";
+      img.alt = "";
+      img.src = src;
+      back.append(bg, img);
+      img.onload = swap;
+      img.onerror = () => { back.innerHTML = `<div class="card"></div>`; back.firstChild.textContent = fallbackText || ""; swap(); };
+    } else {
+      back.innerHTML = `<div class="card"></div>`;
+      back.firstChild.textContent = fallbackText || "";
+      swap();
+    }
+  }
+  function swap() {
+    back.classList.add("show");
+    front.classList.remove("show");
+    [front, back] = [back, front];
+  }
+
+  async function nextPoster() {
+    if (nowKey) return;              // don't rotate while a film is on
+    await loadPosters();
+    if (!order.length) return show(null, "Add some posters");
+    if (idx >= order.length) { order = shuffle(posters); idx = 0; }
+    show(order[idx++]);
+  }
+
+  function startRotation() {
+    clearInterval(rotateTimer);
+    rotateTimer = setInterval(nextPoster, ROTATE_MS);
+  }
+
+  // Find one of your own (sharper) posters that matches the film's title
+  function findOwnPoster(title) {
+    const s = slug(title);
+    if (!s) return null;
+    const matches = allPosters.filter((p) =>
+      slug(decodeURIComponent(p.split("/").pop()).replace(/\.[a-z]+$/i, "").replace(/-\d+$/, "")) === s);
+    return matches.length ? matches[Math.floor(Math.random() * matches.length)] : null;
+  }
+
+  // ---------- Overlay ----------
+  const fmtDur = (ms) => {
+    const m = Math.max(0, Math.round(ms / 60000));
+    const h = Math.floor(m / 60);
+    return h ? `${h}h ${String(m % 60).padStart(2, "0")}m` : `${m}m`;
+  };
+  const fmtClock = (ms) => {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(sec).padStart(2, "0");
+  };
+  const fmtTime = (d) => d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+
+  function buildOverlay(s) {
+    $("np-title").textContent = s.title || "";
+
+    const ep = $("np-episode");
+    ep.textContent = s.subtitle || "";
+    ep.classList.toggle("hide", !s.subtitle);
+
+    const meta = $("np-meta");
+    meta.innerHTML = "";
+    const add = (text, cls) => { if (!text) return; const el = document.createElement("span"); if (cls) el.className = cls; el.textContent = text; meta.appendChild(el); };
+    const dot = () => { const el = document.createElement("span"); el.className = "dot"; meta.appendChild(el); };
+    const bits = [];
+    if (s.year) bits.push(() => add(String(s.year)));
+    if (s.rating) bits.push(() => add(s.rating, "chip"));
+    if (s.duration) bits.push(() => add(fmtDur(s.duration)));
+    if (s.genres && s.genres.length) bits.push(() => add(s.genres.join(" · ")));
+    bits.forEach((fn, i) => { if (i) dot(); fn(); });
+
+    const dir = $("np-director");
+    if (s.director) { dir.innerHTML = "Directed by <b></b>"; dir.querySelector("b").textContent = s.director; }
+    dir.classList.toggle("hide", !s.director);
+
+    $("np-where").textContent = s.type === "episode" ? "Now Showing" : "Tonight's Feature";
+  }
+
+  // Work out how far through we are, counting on from the last alert
+  function currentOffset(s) {
+    let off = s.viewOffset || 0;
+    if (s.state === "playing") off += Date.now() - (s.updatedAt || Date.now());
+    return Math.min(off, s.duration || off);
+  }
+
+  function tickProgress() {
+    const s = current;
+    const wrap = $("np-progress");
+    if (!s || !s.duration) { wrap.classList.add("hide"); return; }
+    wrap.classList.remove("hide");
+    const off = currentOffset(s);
+    const left = s.duration - off;
+    $("np-bar").style.width = (100 * off / s.duration).toFixed(2) + "%";
+    $("np-elapsed").textContent = fmtClock(off);
+    $("np-left").textContent = "-" + fmtClock(left);
+    const ends = $("np-ends");
+    if (s.state === "paused") ends.innerHTML = "<b>Paused</b>";
+    else { ends.innerHTML = "Ends <b></b>"; ends.querySelector("b").textContent = fmtTime(new Date(Date.now() + left)); }
+  }
+
+  function setOverlay(s) {
+    current = s;
+    const np = $("np");
+    np.classList.toggle("paused", s.state === "paused");
+    $("np-label").textContent = s.state === "paused" ? "Intermission" : "Now Playing";
+    buildOverlay(s);
+    tickProgress();
+    np.classList.add("show");
+    document.body.classList.add("playing-mode");
+  }
+
+  function demoState() {
+    // Preview only: fills in sample details for the film named in ?demo=
+    return {
+      state: params.get("state") || "playing",
+      title: demo,
+      year: params.get("year") || "",
+      rating: params.get("rating") || "",
+      duration: (Number(params.get("mins")) || 0) * 60000,
+      viewOffset: (Number(params.get("at")) || 0) * 60000,
+      genres: (params.get("genres") || "").split(",").filter(Boolean),
+      director: params.get("director") || "",
+      updatedAt: demoStart,
+    };
+  }
+
+  async function checkPlex() {
+    let s;
+    if (demo) s = demoState();
+    else {
+      try {
+        const r = await fetch(PLEX_API + "/now", { cache: "no-store" });
+        if (!r.ok) return;
+        s = await r.json();
+      } catch (e) { return; }
+    }
+
+    if (s.state === "playing" || s.state === "paused") {
+      const key = s.title + "|" + (s.subtitle || "");
+      if (key !== nowKey) {
+        nowKey = key;
+        // Best picture first: your favourite's poster → watchlist text-free poster → Plex's own
+        const pic = findOwnPoster(s.title)
+          || (s.type !== "episode" && watchlistPoster(s.title, Number(s.year) || 0))
+          || (s.hasThumb ? PLEX_API + "/thumb?t=" + s.updatedAt : null);
+        show(pic, s.title);
+      }
+      setOverlay(s);
+    } else if (nowKey) {
+      nowKey = null;
+      current = null;
+      $("np").classList.remove("show");
+      document.body.classList.remove("playing-mode");
+      nextPoster();
+      startRotation();
+    }
+  }
+
+  (async () => {
+    await loadPosters();
+    await checkPlex();
+    if (!nowKey) nextPoster();
+    startRotation();
+    setInterval(checkPlex, CHECK_MS);
+    setInterval(tickProgress, 1000);
+    // Pick up watchlist changes from the latest refresh (only while nothing's playing)
+    setInterval(() => { if (!nowKey && !demo) location.reload(); }, RELOAD_MS);
+  })();
+</script>
+</body>
+</html>
