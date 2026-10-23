@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // FAVOURITE POSTERS — the films the TV poster display rotates through
-// Source: JP's Letterboxd likes (letterboxd.com/zidanejp/likes/films/), 23 Oct 2026.
+// Source: JP's Letterboxd likes (letterboxd.com/zidanejp/likes/films/ — both pages), 23 Oct 2026.
 // poster = file name of an official English poster on TMDB
 // (served from https://image.tmdb.org/t/p/original/<poster>).
 // Read by poster-display/index.html. Any images dropped into
@@ -80,4 +80,32 @@ const FAVOURITE_POSTERS = [
   { slug: "return-of-the-jedi", title: "Return of the Jedi", year: 1983, tmdb: 1892, poster: "jQYlydvHm3kUix1f8prMucrplhm.jpg" },
   { slug: "walle", title: "WALL·E", year: 2008, tmdb: 10681, poster: "dp6BdKiuDm9cKMT7JYNUWiUNR0o.jpg" },
   { slug: "iron-man-2008", title: "Iron Man", year: 2008, tmdb: 1726, poster: "78lPtwv72eTNqFW9COBYI0dWDJa.jpg" },
+  { slug: "avengers-age-of-ultron", title: "Avengers: Age of Ultron", year: 2015, tmdb: 99861, poster: "4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg" },
+  { slug: "the-dark-knight-rises", title: "The Dark Knight Rises", year: 2012, tmdb: 49026, poster: "8JCu1wi83pirpHEbVpmpfowDolX.jpg" },
+  { slug: "alien", title: "Alien", year: 1979, tmdb: 348, poster: "vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg" },
+  { slug: "the-revenant-2015", title: "The Revenant", year: 2015, tmdb: 281957, poster: "ji3ecJphATlVgWNY0B0RVXZizdf.jpg" },
+  { slug: "captain-america-the-winter-soldier", title: "Captain America: The Winter Soldier", year: 2014, tmdb: 100402, poster: "tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg" },
+  { slug: "the-lord-of-the-rings-the-fellowship-of-the-ring", title: "The Lord of the Rings: The Fellowship of the Ring", year: 2001, tmdb: 120, poster: "6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg" },
+  { slug: "the-matrix", title: "The Matrix", year: 1999, tmdb: 603, poster: "dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg" },
+  { slug: "captain-america-civil-war", title: "Captain America: Civil War", year: 2016, tmdb: 271110, poster: "rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg" },
+  { slug: "it-2017", title: "It", year: 2017, tmdb: 346364, poster: "9E2y5Q7WlCVNEhP5GiVTjhEhx1o.jpg" },
+  { slug: "logan-2017", title: "Logan", year: 2017, tmdb: 263115, poster: "fnbjcRDYn6YviCcePDnGdyAkYsB.jpg" },
+  { slug: "the-avengers-2012", title: "The Avengers", year: 2012, tmdb: 24428, poster: "RYMX2wcKCBAr24UyPD7xwmjaTn.jpg" },
+  { slug: "drive-2011", title: "Drive", year: 2011, tmdb: 64690, poster: "tDTdhAr6qe5bTXHxScNDOpaeTEL.jpg" },
+  { slug: "deadpool", title: "Deadpool", year: 2016, tmdb: 293660, poster: "3E53WEZJqP6aM84D8CckXx4pIHw.jpg" },
+  { slug: "star-wars", title: "Star Wars", year: 1977, tmdb: 11, poster: "fai0rspsNeJCS69wHNjOdWxcI7P.jpg" },
+  { slug: "django-unchained", title: "Django Unchained", year: 2012, tmdb: 68718, poster: "7oWY8VDWW7thTzWh3OKYRkWUlD5.jpg" },
+  { slug: "thor-ragnarok", title: "Thor: Ragnarok", year: 2017, tmdb: 284053, poster: "rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg" },
+  { slug: "gone-girl", title: "Gone Girl", year: 2014, tmdb: 210577, poster: "yOGG2o157R4b5XpfiRVRrVqMRIx.jpg" },
+  { slug: "the-wolf-of-wall-street", title: "The Wolf of Wall Street", year: 2013, tmdb: 106646, poster: "4O5XrcJuTIlMiDM6VO7VqPUIh1t.jpg" },
+  { slug: "star-wars-the-force-awakens", title: "Star Wars: The Force Awakens", year: 2015, tmdb: 140607, poster: "gzFoqLYdFClzfXBsxUTjfFwMvXe.jpg" },
+  { slug: "inglourious-basterds", title: "Inglourious Basterds", year: 2009, tmdb: 16869, poster: "aupnPtagH9JVBuMrGEanf4iqXEQ.jpg" },
+  { slug: "guardians-of-the-galaxy", title: "Guardians of the Galaxy", year: 2014, tmdb: 118340, poster: "r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg" },
+  { slug: "mad-max-fury-road", title: "Mad Max: Fury Road", year: 2015, tmdb: 76341, poster: "ulcAi4dKpAjHwYGS08vNyx9H6I9.jpg" },
+  { slug: "avengers-endgame", title: "Avengers: Endgame", year: 2019, tmdb: 299534, poster: "oihnoMVJHcdmUe0FbxWbwk1YbGZ.jpg" },
+  { slug: "inception", title: "Inception", year: 2010, tmdb: 27205, poster: "xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg" },
+  { slug: "the-dark-knight", title: "The Dark Knight", year: 2008, tmdb: 155, poster: "r3UKPGdQC5mPiA9bE9otM9CN4lW.jpg" },
+  { slug: "avengers-infinity-war", title: "Avengers: Infinity War", year: 2018, tmdb: 299536, poster: "7WsyChQLEftFiDOVTGkv3hFpyyt.jpg" },
+  { slug: "pulp-fiction", title: "Pulp Fiction", year: 1994, tmdb: 680, poster: "vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg" },
+  { slug: "joker-2019", title: "Joker", year: 2019, tmdb: 475557, poster: "udDclJoHjfjb8Ekgsd4FDteOkCU.jpg" },
 ];
