@@ -11,6 +11,8 @@
   @font-face { font-family: "Inter"; src: url("fonts/inter-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
   @font-face { font-family: "Inter"; src: url("fonts/inter-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
   :root {
+    --sw: 1vw;   /* 1% of the poster screen's width  */
+    --sh: 1vh;   /* 1% of the poster screen's height */
     --bg: #000;
     --gold: #f6c453;
     --gold-deep: #b8862b;
@@ -38,8 +40,8 @@
   /* While a film is on, the poster sits neatly between the sign and the panel */
   .layer .poster { transition: top 1.4s ease, bottom 1.4s ease, height 1.4s ease; }
   .playing-mode .layer .poster {
-    top: 18.5vh; bottom: auto; height: calc(100% - 18.5vh - 27.5vh);
-    filter: drop-shadow(0 1.5vh 3vh rgba(0,0,0,0.8));
+    top: calc(18.5 * var(--sh)); bottom: auto; height: calc(100% - calc(18.5 * var(--sh)) - calc(27.5 * var(--sh)));
+    filter: drop-shadow(0 calc(1.5 * var(--sh)) calc(3 * var(--sh)) rgba(0,0,0,0.8));
     animation: drift 60s ease-in-out infinite alternate;
   }
   @keyframes drift { from { transform: scale(1); } to { transform: scale(1.04); } }
@@ -50,46 +52,46 @@
 
   /* Soft darkening at top and bottom so the sign and panel stand out */
   #np::before, #np::after { content: ""; position: absolute; left: 0; right: 0; }
-  #np::before { top: 0; height: 26vh; background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent); }
-  #np::after { bottom: 0; height: 42vh; background: linear-gradient(to top, rgba(0,0,0,0.95) 35%, transparent); }
+  #np::before { top: 0; height: calc(26 * var(--sh)); background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent); }
+  #np::after { bottom: 0; height: calc(42 * var(--sh)); background: linear-gradient(to top, rgba(0,0,0,0.95) 35%, transparent); }
 
   /* The marquee sign */
   .marquee {
-    position: absolute; z-index: 2; top: 2.6vh; left: 50%; transform: translateX(-50%);
-    width: 78vw; padding: 2.4vw;
-    border-radius: 2vw;
+    position: absolute; z-index: 2; top: calc(2.6 * var(--sh)); left: 50%; transform: translateX(-50%);
+    width: calc(78 * var(--sw)); padding: calc(2.4 * var(--sw));
+    border-radius: calc(2 * var(--sw));
     background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
-    box-shadow: 0 0 40px rgba(246,196,83,0.35), 0 1.5vh 4vh rgba(0,0,0,0.7);
+    box-shadow: 0 0 40px rgba(246,196,83,0.35), 0 calc(1.5 * var(--sh)) calc(4 * var(--sh)) rgba(0,0,0,0.7);
   }
   .marquee .inner {
     position: relative;
-    border-radius: 1.2vw;
-    padding: 3.4vw 3vw 3vw;
+    border-radius: calc(1.2 * var(--sw));
+    padding: calc(3.4 * var(--sw)) calc(3 * var(--sw)) calc(3 * var(--sw));
     background: radial-gradient(ellipse at 50% 30%, var(--velvet) 0%, var(--velvet-deep) 100%);
     text-align: center;
   }
   /* Bulb border */
   .marquee .inner::before {
-    content: ""; position: absolute; inset: 1.1vw;
-    border: 1.3vw dotted var(--gold);
-    border-radius: 0.8vw;
-    filter: drop-shadow(0 0 0.6vw var(--gold-glow));
+    content: ""; position: absolute; inset: calc(1.1 * var(--sw));
+    border: calc(1.3 * var(--sw)) dotted var(--gold);
+    border-radius: calc(0.8 * var(--sw));
+    filter: drop-shadow(0 0 calc(0.6 * var(--sw)) var(--gold-glow));
     animation: twinkle 1.4s steps(2) infinite;
   }
   @keyframes twinkle { 50% { opacity: 0.55; } }
   .marquee .label {
     position: relative;
     font-family: "Limelight", serif;
-    font-size: 8.6vw; line-height: 1;
+    font-size: calc(8.6 * var(--sw)); line-height: 1;
     letter-spacing: 0.06em;
     color: #fff6dc;
-    text-shadow: 0 0 1vw var(--gold-glow), 0 0 3vw var(--gold-glow), 0 0 6vw rgba(246,196,83,0.35);
+    text-shadow: 0 0 calc(1 * var(--sw)) var(--gold-glow), 0 0 calc(3 * var(--sw)) var(--gold-glow), 0 0 calc(6 * var(--sw)) rgba(246,196,83,0.35);
     animation: hum 5s ease-in-out infinite;
   }
   @keyframes hum { 0%,100% { opacity: 1; } 48% { opacity: 1; } 50% { opacity: 0.86; } 52% { opacity: 1; } }
   .marquee .where {
-    position: relative; margin-top: 1.4vw;
-    font-family: "Bebas Neue", sans-serif; font-size: 3.3vw; letter-spacing: 0.4em; padding-left: 0.4em;
+    position: relative; margin-top: calc(1.4 * var(--sw));
+    font-family: "Bebas Neue", sans-serif; font-size: calc(3.3 * var(--sw)); letter-spacing: 0.4em; padding-left: 0.4em;
     color: var(--gold);
   }
 
@@ -99,53 +101,61 @@
 
   /* Info panel */
   .panel {
-    position: absolute; z-index: 2; left: 5vw; right: 5vw; bottom: 3.5vh;
-    padding: 4.2vw 5vw 4.6vw;
-    border-radius: 2.4vw;
+    position: absolute; z-index: 2; left: calc(5 * var(--sw)); right: calc(5 * var(--sw)); bottom: calc(3.5 * var(--sh));
+    padding: calc(4.2 * var(--sw)) calc(5 * var(--sw)) calc(4.6 * var(--sw));
+    border-radius: calc(2.4 * var(--sw));
     background: var(--glass);
     border: 1px solid rgba(246,196,83,0.28);
     backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 2vh 6vh rgba(0,0,0,0.6);
+    box-shadow: 0 calc(2 * var(--sh)) calc(6 * var(--sh)) rgba(0,0,0,0.6);
   }
   .panel .title {
     font-family: "Bebas Neue", sans-serif;
-    font-size: 10vw; line-height: 0.95; letter-spacing: 0.02em;
+    font-size: calc(10 * var(--sw)); line-height: 0.95; letter-spacing: 0.02em;
   }
-  .panel .episode { margin-top: 0.8vw; font-size: 3vw; color: var(--gold); font-weight: 500; }
-  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 1.6vw; margin-top: 2.2vw; }
-  .meta span { font-size: 2.6vw; color: var(--muted); font-weight: 500; }
+  .panel .episode { margin-top: calc(0.8 * var(--sw)); font-size: calc(3 * var(--sw)); color: var(--gold); font-weight: 500; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: calc(1.6 * var(--sw)); margin-top: calc(2.2 * var(--sw)); }
+  .meta span { font-size: calc(2.6 * var(--sw)); color: var(--muted); font-weight: 500; }
   .meta .chip {
     color: var(--ink);
     border: 1px solid rgba(247,242,231,0.45);
-    border-radius: 0.8vw; padding: 0.3vw 1.3vw;
+    border-radius: calc(0.8 * var(--sw)); padding: calc(0.3 * var(--sw)) calc(1.3 * var(--sw));
     font-weight: 600;
   }
-  .meta .dot { width: 0.7vw; height: 0.7vw; border-radius: 50%; background: var(--gold); opacity: 0.7; }
-  .director { margin-top: 1.8vw; font-size: 2.6vw; color: var(--muted); }
+  .meta .dot { width: calc(0.7 * var(--sw)); height: calc(0.7 * var(--sw)); border-radius: 50%; background: var(--gold); opacity: 0.7; }
+  .director { margin-top: calc(1.8 * var(--sw)); font-size: calc(2.6 * var(--sw)); color: var(--muted); }
   .director b { color: var(--ink); font-weight: 600; }
 
-  .progress { margin-top: 3.4vw; }
-  .bar { position: relative; height: 0.9vw; border-radius: 1vw; background: rgba(247,242,231,0.14); overflow: hidden; }
+  .progress { margin-top: calc(3.4 * var(--sw)); }
+  .bar { position: relative; height: calc(0.9 * var(--sw)); border-radius: calc(1 * var(--sw)); background: rgba(247,242,231,0.14); overflow: hidden; }
   .bar i {
     position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
-    border-radius: 1vw;
+    border-radius: calc(1 * var(--sw));
     background: linear-gradient(90deg, var(--gold-deep), var(--gold));
-    box-shadow: 0 0 1.2vw var(--gold-glow);
+    box-shadow: 0 0 calc(1.2 * var(--sw)) var(--gold-glow);
     transition: width 1s linear;
   }
-  .times { display: flex; justify-content: space-between; margin-top: 1.4vw; font-size: 2.5vw; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .times { display: flex; justify-content: space-between; margin-top: calc(1.4 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: var(--muted); font-variant-numeric: tabular-nums; }
   .times b { color: var(--ink); font-weight: 600; }
   .hide { display: none !important; }
 
   /* Fallback card if there's no image at all */
   .card {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    font-family: "Bebas Neue", sans-serif; font-size: 12vw; text-align: center; padding: 8vw;
+    font-family: "Bebas Neue", sans-serif; font-size: calc(12 * var(--sw)); text-align: center; padding: calc(8 * var(--sw));
     background: radial-gradient(circle at 50% 40%, #2a2216 0%, #000 70%);
   }
+
+  /* Everything sits on a "stage" that can be turned to suit a sideways TV */
+  #stage { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; overflow: hidden; background: var(--bg); }
+  html.rot90 #stage, html.rot270 #stage { width: 100vh; height: 100vw; left: 50%; top: 50%; transform-origin: center; }
+  html.rot90 #stage  { transform: translate(-50%, -50%) rotate(90deg); }
+  html.rot270 #stage { transform: translate(-50%, -50%) rotate(-90deg); }
+  html.rot90, html.rot270 { --sw: 1vh; --sh: 1vw; }
 </style>
 </head>
 <body>
+<div id="stage">
 <div id="a" class="layer"></div>
 <div id="b" class="layer"></div>
 
@@ -168,6 +178,7 @@
     </div>
   </div>
 </div>
+</div><!-- /stage -->
 
 <!-- Your watchlist (from the Watchlist v4 dashboard) and its text-free posters -->
 <script src="../films-data.js"></script>
@@ -181,6 +192,17 @@
   const TMDB_IMG = "https://image.tmdb.org/t/p/original/";
 
   const params = new URLSearchParams(location.search);
+
+  // Turn the picture for a portrait TV fed a landscape signal (e.g. Fire TV Stick).
+  // Open the page once with ?rotate=90 or ?rotate=270 and the choice is remembered; ?rotate=0 clears it.
+  (function () {
+    let r = params.get("rotate");
+    try {
+      if (r !== null) localStorage.setItem("rotate", r);
+      else r = localStorage.getItem("rotate");
+    } catch (e) {}
+    if (r === "90" || r === "270") document.documentElement.classList.add("rot" + r);
+  })();
   const demo = params.get("demo");   // e.g. ?demo=Inception to preview the overlay
   const demoStart = Date.now();
 
