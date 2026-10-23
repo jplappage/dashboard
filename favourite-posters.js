@@ -103,7 +103,7 @@ const FAVOURITE_POSTERS = [
   { slug: "inglourious-basterds", title: "Inglourious Basterds", year: 2009, tmdb: 16869, poster: "col4fqppvbht1nvT4OL11SDG4We.jpg" },
   { slug: "guardians-of-the-galaxy", title: "Guardians of the Galaxy", year: 2014, tmdb: 118340, poster: "1v2d0ysTQHja2HzJjG1sCdUSkM1.jpg" },
   { slug: "mad-max-fury-road", title: "Mad Max: Fury Road", year: 2015, tmdb: 76341, poster: "tvpf0gi4EOIuI9in1obHaNezJc2.jpg" },
-  { slug: "avengers-endgame", title: "Avengers: Endgame", year: 2019, tmdb: 299534, poster: "3YBoaKqcCl5FEVPFgycG5jWw3ky.jpg" },
+  { slug: "avengers-endgame", title: "Avengers: Endgame", year: 2019, tmdb: 299534, poster: "dro7XhClHnLhc2zqi97Hjg5gCf6.jpg" /* Endgame Encore (2026 re-release) artwork */ },
   { slug: "inception", title: "Inception", year: 2010, tmdb: 27205, poster: "frq4ygwcIMusECNv9rPBrvJwyxG.jpg" },
   { slug: "the-dark-knight", title: "The Dark Knight", year: 2008, tmdb: 155, poster: "eMaH8xS0vXae1jm1Ry0S3yRBEhM.jpg" },
   { slug: "avengers-infinity-war", title: "Avengers: Infinity War", year: 2018, tmdb: 299536, poster: "dW88Lx1nwaUQgXIvjg2kRrbIOH1.jpg" },
