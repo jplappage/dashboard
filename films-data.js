@@ -3,6 +3,7 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
+// Last full refresh: 23 Oct 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
