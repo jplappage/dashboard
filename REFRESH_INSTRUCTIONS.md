@@ -128,7 +128,7 @@ const d=await get('/search/movie?query='+encodeURIComponent(TITLE));
 const g=await get(`/movie/${ID}/images/posters?image_language=xx`);
 const posters=[...g.querySelectorAll('ul.images.posters li.card')].map(li=>[li.querySelector('a[href*="/t/p/original/"]')?.getAttribute('href').split('/').pop(), +(li.innerText.match(/(\d{3,4})x\d{3,4}/)||[])[1]||0]);
 ```
-Pick the first poster at least 1400px wide (else the first one). If a film has **no** "No Language" posters yet (common months before release), skip it — the display falls back to the Letterboxd poster and the next refresh tries again. Optionally eyeball the picks as a thumbnail grid (`https://media.themoviedb.org/t/p/w220_and_h330_face/<file>`) before writing.
+Pick the first poster at least 1400px wide (else the first one). **New shows too:** every show in SHOWS with no entry in `show-posters.js` (match on `imdbId`) — get the TMDB TV id via `/redirect?external_source=imdb_id&external_id=<imdbId>` (the response URL contains `/tv/<id>`), then list posters from `/tv/<id>/images/posters?image_language=xx`. If the best text-free one is under ~700px wide, use the first English poster ≥1400px instead. If a film has **no** "No Language" posters yet (common months before release), skip it — the display falls back to the Letterboxd poster and the next refresh tries again. Optionally eyeball the picks as a thumbnail grid (`https://media.themoviedb.org/t/p/w220_and_h330_face/<file>`) before writing.
 
 **For each film needing a runtime (new films + any existing film with no `runtime`):**
 Scrape it from the film's Letterboxd page and store as `runtime: <minutes>` (integer). Do all queued slugs in one batched `javascript_tool` fetch loop on a letterboxd.com tab (same-origin). **Gotcha:** the raw HTML has the value as `95&nbsp;mins`, so a plain `\s` regex misses it — parse the response into a DOM first so the entity decodes, then read the footer text:
@@ -194,6 +194,7 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 - Add `runtime` (integer minutes) for any film that gained one on Letterboxd since last refresh
 
 **`watchlist-posters.js`** (text-free posters for the TV poster display)
+- (`show-posters.js`: add `{ name: '<show name>', imdb: '<imdbId>', tmdb: <tv id>, poster: '<file>.jpg' },` for each new show.)
 - Add `'<slug>': { tmdb: <id>, poster: '<file>.jpg' },` for each film found in the text-free poster step (key = the film's `slug` in films-data.js). Leave entries for archived films — harmless. Validate with `node --check` like the other data files.
 
 **`watchlist-dashboard.html`** — no manual edits. The footer (`Last updated` + refresh #) auto-stamps via `.github/workflows/stamp-last-updated.yml` whenever a data file is pushed.
