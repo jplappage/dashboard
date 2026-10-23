@@ -184,6 +184,7 @@
 <script src="../films-data.js"></script>
 <script src="../watchlist-posters.js"></script>
 <script src="../favourite-posters.js"></script>
+<script src="../retro-posters.js"></script>
 <script>
   const ROTATE_MS = 5 * 60 * 1000;   // each poster stays up 5 minutes
   const CHECK_MS = 5 * 1000;         // check Plex every 5 seconds
@@ -277,6 +278,15 @@
       allPosters = fav;
       if (fav.join() !== posters.join()) { posters = fav; order = shuffle(fav); idx = 0; }
     }
+  }
+
+  // Unwatched retro watchlist films (retro-posters.js)
+  function retroPoster(title, year) {
+    if (typeof RETRO_POSTERS === "undefined") return null;
+    const t = norm(title);
+    const hits = RETRO_POSTERS.filter((f) => norm(f.title) === t);
+    const film = hits.find((f) => !year || Math.abs(f.year - year) <= 1) || hits[0];
+    return film && film.poster ? TMDB_IMG + film.poster : null;
   }
 
   // Your watchlist, from films-data.js, with the text-free posters where we have them
@@ -444,6 +454,7 @@
         // Best picture first: your favourite's poster → watchlist text-free poster → Plex's own
         const pic = findOwnPoster(s.title)
           || (s.type !== "episode" && watchlistPoster(s.title, Number(s.year) || 0))
+          || (s.type !== "episode" && retroPoster(s.title, Number(s.year) || 0))
           || (s.hasThumb ? PLEX_API + "/thumb?t=" + s.updatedAt : null);
         show(pic, s.title);
       }
