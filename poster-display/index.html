@@ -6,7 +6,7 @@
 <title>Poster Display</title>
 <style>
   @font-face { font-family: "Bebas Neue"; src: url("fonts/bebas-neue-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
-  @font-face { font-family: "Limelight"; src: url("fonts/limelight-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Righteous"; src: url("fonts/righteous-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
   @font-face { font-family: "Inter"; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
   @font-face { font-family: "Inter"; src: url("fonts/inter-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
   @font-face { font-family: "Inter"; src: url("fonts/inter-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
@@ -37,106 +37,43 @@
     filter: blur(40px) brightness(0.45) saturate(1.2);
   }
   .layer .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-  /* While a film is on, the poster sits neatly between the sign and the panel */
-  .layer .poster { transition: top 1.4s ease, bottom 1.4s ease, height 1.4s ease; }
-  .playing-mode .layer .poster {
-    top: calc(18.5 * var(--sh)); bottom: auto; height: calc(100% - calc(18.5 * var(--sh)) - calc(27.5 * var(--sh)));
-    filter: drop-shadow(0 calc(1.5 * var(--sh)) calc(3 * var(--sh)) rgba(0,0,0,0.8));
-    animation: drift 60s ease-in-out infinite alternate;
-  }
-  @keyframes drift { from { transform: scale(1); } to { transform: scale(1.04); } }
+  /* While a film is on, the poster stays full size and drifts very slowly */
+  .playing-mode .layer.show .poster { animation: drift 60s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: scale(1); } to { transform: scale(1.03); } }
 
-  /* ---------- Now playing overlay ---------- */
-  #np { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.4s ease; }
+  /* ---------- Now playing overlay: frosted glass ---------- */
+  #np { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
   #np.show { opacity: 1; }
 
-  /* Soft darkening at top and bottom so the sign and panel stand out */
-  #np::before, #np::after { content: ""; position: absolute; left: 0; right: 0; }
-  #np::before { top: 0; height: calc(26 * var(--sh)); background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent); }
-  #np::after { bottom: 0; height: calc(42 * var(--sh)); background: linear-gradient(to top, rgba(0,0,0,0.95) 35%, transparent); }
+  .glass {
+    position: absolute; z-index: 2; overflow: hidden;
+    background: linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08) 55%, rgba(255,255,255,0.14));
+    border: 1px solid rgba(255,255,255,0.42);
+    backdrop-filter: blur(22px) saturate(1.7) brightness(1.08);
+    -webkit-backdrop-filter: blur(22px) saturate(1.7) brightness(1.08);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(255,255,255,0.12), 0 calc(2 * var(--sw)) calc(6 * var(--sw)) rgba(0,0,0,0.35);
+  }
+  .glass::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 50%; background: linear-gradient(to bottom, rgba(255,255,255,0.22), transparent); pointer-events: none; }
+  .glass > * { position: relative; z-index: 1; }
+  .soft { text-shadow: 0 calc(0.3 * var(--sw)) calc(1.2 * var(--sw)) rgba(0,0,0,0.45); }
 
-  /* The marquee sign */
-  .marquee {
-    position: absolute; z-index: 2; top: calc(2.6 * var(--sh)); left: 50%; transform: translateX(-50%);
-    width: calc(78 * var(--sw)); padding: calc(2.4 * var(--sw));
-    border-radius: calc(2 * var(--sw));
-    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
-    box-shadow: 0 0 40px rgba(246,196,83,0.35), 0 calc(1.5 * var(--sh)) calc(4 * var(--sh)) rgba(0,0,0,0.7);
-  }
-  .marquee .inner {
-    position: relative;
-    border-radius: calc(1.2 * var(--sw));
-    padding: calc(3.4 * var(--sw)) calc(3 * var(--sw)) calc(3 * var(--sw));
-    background: radial-gradient(ellipse at 50% 30%, var(--velvet) 0%, var(--velvet-deep) 100%);
-    text-align: center;
-  }
-  /* Bulb border */
-  .marquee .inner::before {
-    content: ""; position: absolute; inset: calc(1.1 * var(--sw));
-    border: calc(1.3 * var(--sw)) dotted var(--gold);
-    border-radius: calc(0.8 * var(--sw));
-    filter: drop-shadow(0 0 calc(0.6 * var(--sw)) var(--gold-glow));
-    animation: twinkle 1.4s steps(2) infinite;
-  }
-  @keyframes twinkle { 50% { opacity: 0.55; } }
-  .marquee .label {
-    position: relative;
-    font-family: "Limelight", serif;
-    font-size: calc(8.6 * var(--sw)); line-height: 1;
-    letter-spacing: 0.06em;
-    color: #fff6dc;
-    text-shadow: 0 0 calc(1 * var(--sw)) var(--gold-glow), 0 0 calc(3 * var(--sw)) var(--gold-glow), 0 0 calc(6 * var(--sw)) rgba(246,196,83,0.35);
-    animation: hum 5s ease-in-out infinite;
-  }
-  @keyframes hum { 0%,100% { opacity: 1; } 48% { opacity: 1; } 50% { opacity: 0.86; } 52% { opacity: 1; } }
-  .marquee .where {
-    position: relative; margin-top: calc(1.4 * var(--sw));
-    font-family: "Bebas Neue", sans-serif; font-size: calc(3.3 * var(--sw)); letter-spacing: 0.4em; padding-left: 0.4em;
-    color: var(--gold);
-  }
+  /* Big "Now Playing" banner */
+  .np-banner { top: calc(4.5 * var(--sw)); left: calc(6 * var(--sw)); right: calc(6 * var(--sw)); border-radius: 999px; padding: calc(3.8 * var(--sw)) calc(5 * var(--sw)); display: flex; align-items: center; justify-content: center; gap: calc(3.4 * var(--sw)); }
+  .np-dot { width: calc(3.4 * var(--sw)); height: calc(3.4 * var(--sw)); border-radius: 50%; background: #ff3b3b; flex: none; animation: livepulse 2s infinite; }
+  @keyframes livepulse { 0% { box-shadow: 0 0 0 0 rgba(255,59,59,0.6); } 70% { box-shadow: 0 0 0 calc(3 * var(--sw)) rgba(255,59,59,0); } 100% { box-shadow: 0 0 0 0 rgba(255,59,59,0); } }
+  .np-label { font-family: "Righteous", sans-serif; font-size: calc(7.6 * var(--sw)); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+  .paused .np-dot { animation: none; background: #fff; opacity: 0.75; border-radius: calc(0.6 * var(--sw)); width: calc(3 * var(--sw)); height: calc(3 * var(--sw)); }
 
-  /* Paused: the sign dims */
-  .paused .marquee .inner::before { animation: none; opacity: 0.35; }
-  .paused .marquee .label { animation: none; color: rgba(255,246,220,0.75); text-shadow: none; }
-
-  /* Info panel */
-  .panel {
-    position: absolute; z-index: 2; left: calc(5 * var(--sw)); right: calc(5 * var(--sw)); bottom: calc(3.5 * var(--sh));
-    padding: calc(4.2 * var(--sw)) calc(5 * var(--sw)) calc(4.6 * var(--sw));
-    border-radius: calc(2.4 * var(--sw));
-    background: var(--glass);
-    border: 1px solid rgba(246,196,83,0.28);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 calc(2 * var(--sh)) calc(6 * var(--sh)) rgba(0,0,0,0.6);
-  }
-  .panel .title {
-    font-family: "Bebas Neue", sans-serif;
-    font-size: calc(10 * var(--sw)); line-height: 0.95; letter-spacing: 0.02em;
-  }
-  .panel .episode { margin-top: calc(0.8 * var(--sw)); font-size: calc(3 * var(--sw)); color: var(--gold); font-weight: 500; }
-  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: calc(1.6 * var(--sw)); margin-top: calc(2.2 * var(--sw)); }
-  .meta span { font-size: calc(2.6 * var(--sw)); color: var(--muted); font-weight: 500; }
-  .meta .chip {
-    color: var(--ink);
-    border: 1px solid rgba(247,242,231,0.45);
-    border-radius: calc(0.8 * var(--sw)); padding: calc(0.3 * var(--sw)) calc(1.3 * var(--sw));
-    font-weight: 600;
-  }
-  .meta .dot { width: calc(0.7 * var(--sw)); height: calc(0.7 * var(--sw)); border-radius: 50%; background: var(--gold); opacity: 0.7; }
-  .director { margin-top: calc(1.8 * var(--sw)); font-size: calc(2.6 * var(--sw)); color: var(--muted); }
-  .director b { color: var(--ink); font-weight: 600; }
-
-  .progress { margin-top: calc(3.4 * var(--sw)); }
-  .bar { position: relative; height: calc(0.9 * var(--sw)); border-radius: calc(1 * var(--sw)); background: rgba(247,242,231,0.14); overflow: hidden; }
-  .bar i {
-    position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
-    border-radius: calc(1 * var(--sw));
-    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
-    box-shadow: 0 0 calc(1.2 * var(--sw)) var(--gold-glow);
-    transition: width 1s linear;
-  }
-  .times { display: flex; justify-content: space-between; margin-top: calc(1.4 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: var(--muted); font-variant-numeric: tabular-nums; }
-  .times b { color: var(--ink); font-weight: 600; }
+  /* Info card */
+  .np-card { left: calc(6 * var(--sw)); right: calc(6 * var(--sw)); bottom: calc(5 * var(--sw)); padding: calc(5.5 * var(--sw)) calc(6.5 * var(--sw)) calc(6 * var(--sw)); border-radius: calc(4.5 * var(--sw)); }
+  .np-title { font-family: "Righteous", sans-serif; font-size: calc(9 * var(--sw)); line-height: 1.02; letter-spacing: 0.01em; }
+  .np-episode { margin-top: calc(1.2 * var(--sw)); font-size: calc(3 * var(--sw)); font-weight: 600; }
+  .np-meta { margin-top: calc(2 * var(--sw)); font-size: calc(2.7 * var(--sw)); color: rgba(255,255,255,0.85); line-height: 1.4; }
+  .np-row { display: flex; align-items: center; gap: calc(3 * var(--sw)); margin-top: calc(5 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums; }
+  .bar { flex: 1; position: relative; height: calc(0.8 * var(--sw)); border-radius: calc(1 * var(--sw)); background: rgba(255,255,255,0.28); overflow: hidden; }
+  .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; border-radius: calc(1 * var(--sw)); background: #fff; transition: width 1s linear; }
+  .np-ends { margin-top: calc(2.4 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); }
+  .np-ends b { color: #fff; font-weight: 600; }
   .hide { display: none !important; }
 
   /* Fallback card if there's no image at all */
@@ -160,21 +97,15 @@
 <div id="b" class="layer"></div>
 
 <div id="np">
-  <div class="marquee">
-    <div class="inner">
-      <div class="label" id="np-label">Now Playing</div>
-      <div class="where" id="np-where">Tonight's Feature</div>
-    </div>
-  </div>
+  <div class="glass np-banner"><span class="np-dot"></span><span class="np-label soft" id="np-label">Now Playing</span></div>
 
-  <div class="panel">
-    <div class="title" id="np-title"></div>
-    <div class="episode hide" id="np-episode"></div>
-    <div class="meta" id="np-meta"></div>
-    <div class="director hide" id="np-director"></div>
-    <div class="progress hide" id="np-progress">
-      <div class="bar"><i id="np-bar"></i></div>
-      <div class="times"><span id="np-elapsed"></span><span id="np-ends"></span><span id="np-left"></span></div>
+  <div class="glass np-card">
+    <div class="np-title soft" id="np-title"></div>
+    <div class="np-episode soft hide" id="np-episode"></div>
+    <div class="np-meta soft" id="np-meta"></div>
+    <div id="np-progress" class="hide">
+      <div class="np-row soft"><span id="np-elapsed"></span><div class="bar"><i id="np-bar"></i></div><span id="np-left"></span></div>
+      <div class="np-ends soft" id="np-ends"></div>
     </div>
   </div>
 </div>
@@ -378,27 +309,16 @@
 
   function buildOverlay(s) {
     $("np-title").textContent = s.title || "";
-
     const ep = $("np-episode");
     ep.textContent = s.subtitle || "";
     ep.classList.toggle("hide", !s.subtitle);
-
-    const meta = $("np-meta");
-    meta.innerHTML = "";
-    const add = (text, cls) => { if (!text) return; const el = document.createElement("span"); if (cls) el.className = cls; el.textContent = text; meta.appendChild(el); };
-    const dot = () => { const el = document.createElement("span"); el.className = "dot"; meta.appendChild(el); };
     const bits = [];
-    if (s.year) bits.push(() => add(String(s.year)));
-    if (s.rating) bits.push(() => add(s.rating, "chip"));
-    if (s.duration) bits.push(() => add(fmtDur(s.duration)));
-    if (s.genres && s.genres.length) bits.push(() => add(s.genres.join(" · ")));
-    bits.forEach((fn, i) => { if (i) dot(); fn(); });
-
-    const dir = $("np-director");
-    if (s.director) { dir.innerHTML = "Directed by <b></b>"; dir.querySelector("b").textContent = s.director; }
-    dir.classList.toggle("hide", !s.director);
-
-    $("np-where").textContent = s.type === "episode" ? "Now Showing" : "Tonight's Feature";
+    if (s.year) bits.push(String(s.year));
+    if (s.rating) bits.push(s.rating);
+    if (s.duration) bits.push(fmtDur(s.duration));
+    if (s.genres && s.genres.length) bits.push(s.genres.slice(0, 2).join(" / "));
+    if (s.director) bits.push(s.director);
+    $("np-meta").textContent = bits.join("  ·  ");
   }
 
   // Work out how far through we are, counting on from the last alert
@@ -417,17 +337,17 @@
     const left = s.duration - off;
     $("np-bar").style.width = (100 * off / s.duration).toFixed(2) + "%";
     $("np-elapsed").textContent = fmtClock(off);
-    $("np-left").textContent = "-" + fmtClock(left);
+    $("np-left").textContent = "\u2212" + fmtClock(left);
     const ends = $("np-ends");
     if (s.state === "paused") ends.innerHTML = "<b>Paused</b>";
-    else { ends.innerHTML = "Ends <b></b>"; ends.querySelector("b").textContent = fmtTime(new Date(Date.now() + left)); }
+    else { ends.innerHTML = "Ends at <b></b>"; ends.querySelector("b").textContent = fmtTime(new Date(Date.now() + left)); }
   }
 
   function setOverlay(s) {
     current = s;
     const np = $("np");
     np.classList.toggle("paused", s.state === "paused");
-    $("np-label").textContent = s.state === "paused" ? "Intermission" : "Now Playing";
+    $("np-label").textContent = s.state === "paused" ? "Paused" : "Now Playing";
     buildOverlay(s);
     tickProgress();
     np.classList.add("show");
