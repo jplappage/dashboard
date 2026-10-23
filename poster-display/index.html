@@ -431,6 +431,17 @@
     }
   }
 
+  // Full screen: browsers only allow it after a button press, so the first press of the
+  // remote's middle (select) button — or a click — switches the page to full screen.
+  function goFullScreen() {
+    const el = document.documentElement;
+    if (document.fullscreenElement || document.webkitFullscreenElement) return;
+    const fn = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (fn) { try { const p = fn.call(el); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+  }
+  document.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.keyCode === 13 || e.keyCode === 23) goFullScreen(); });
+  document.addEventListener("click", goFullScreen);
+
   (async () => {
     await loadPosters();
     await checkPlex();
