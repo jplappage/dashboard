@@ -120,7 +120,7 @@
 <script>
   const ROTATE_MS = 5 * 60 * 1000;   // each poster stays up 5 minutes
   const CHECK_MS = 15 * 1000;        // check Plex every 15 seconds…
-  const NIGHT_CHECK_MS = 60 * 1000;  // …or once a minute between 1am and 7am (keeps Netlify usage low)
+  const QUIET_CHECK_MS = 60 * 1000;  // …or once a minute from midnight to 5pm (keeps Netlify usage low)
   const RELOAD_MS = 3 * 60 * 60 * 1000; // re-read the watchlist every 3 hours (when nothing's playing)
   const PLEX_API = "https://jp-poster-display.netlify.app/api";
   const FAV_LISTING = "https://api.github.com/repos/jplappage/dashboard/contents/poster-display/posters/favourites";
@@ -422,7 +422,7 @@
     startRotation();
     const nextCheck = () => {
       const h = new Date().getHours();
-      setTimeout(async () => { await checkPlex(); nextCheck(); }, (h >= 1 && h < 7) ? NIGHT_CHECK_MS : CHECK_MS);
+      setTimeout(async () => { await checkPlex(); nextCheck(); }, (h < 17) ? QUIET_CHECK_MS : CHECK_MS);
     };
     nextCheck();
     setInterval(tickProgress, 1000);
