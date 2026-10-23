@@ -198,9 +198,22 @@
   (function () {
     let r = params.get("rotate");
     try {
-      if (r !== null) localStorage.setItem("rotate", r);
+      if (r === "auto") { localStorage.removeItem("rotate"); }
+      else if (r !== null) localStorage.setItem("rotate", r);
       else r = localStorage.getItem("rotate");
     } catch (e) {}
+    // No setting saved: if the screen is wider than it is tall, assume a portrait TV
+    // fed a landscape picture and turn it upright (270 suits JP's Frame).
+    if (r === null || r === "" || r === "auto") {
+      const apply = () => {
+        const html = document.documentElement;
+        html.classList.remove("rot90", "rot270");
+        if (window.innerWidth > window.innerHeight) html.classList.add("rot270");
+      };
+      apply();
+      window.addEventListener("resize", apply);
+      return;
+    }
     if (r === "90" || r === "270") document.documentElement.classList.add("rot" + r);
   })();
   const demo = params.get("demo");   // e.g. ?demo=Inception to preview the overlay
