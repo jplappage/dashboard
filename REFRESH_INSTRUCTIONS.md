@@ -261,6 +261,8 @@ If main is ahead of origin and the watcher hasn't pushed within a minute, tell J
 
 ## Data rules
 
+**Posters for the TV poster display — text-free is the rule (JP, 23 Oct 2026):** every poster in `watchlist-posters.js`, `favourite-posters.js`, `retro-posters.js` and `show-posters.js` should be a TMDB "No Language" poster (`image_language=xx`), at least ~1000px wide (prefer ≥1400). Only fall back to the official English poster when no sharp text-free one exists. Some posters tagged "No Language" still carry the title — eyeball picks as a thumbnail grid and skip those.
+
 **VOD dates:** Confirmed = streaming now or specific announced date. Pre-order or "coming soon" = do not set `vodDate`.
 **IMDb ratings:** Only from the film's actual IMDb page. No guesses.
 **Runtime:** Integer minutes, scraped from the film's Letterboxd page (`runtime: 95`). No guesses — if Letterboxd doesn't list it, leave the field absent. Powers the runtime badge on the films-watchlist card.
