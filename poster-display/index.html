@@ -183,6 +183,7 @@
 <!-- Your watchlist (from the Watchlist v4 dashboard) and its text-free posters -->
 <script src="../films-data.js"></script>
 <script src="../watchlist-posters.js"></script>
+<script src="../favourite-posters.js"></script>
 <script>
   const ROTATE_MS = 5 * 60 * 1000;   // each poster stays up 5 minutes
   const CHECK_MS = 5 * 1000;         // check Plex every 5 seconds
@@ -258,9 +259,21 @@
     } catch (e) { return null; }
   }
 
+  // Favourites = your Letterboxd likes (favourite-posters.js) + any images in the folder
+  const posterTitle = {};            // picture address → film title, for "now playing" matching
+  function likedPosters() {
+    if (typeof FAVOURITE_POSTERS === "undefined") return [];
+    return FAVOURITE_POSTERS.filter((f) => f.poster).map((f) => {
+      const src = TMDB_IMG + f.poster;
+      posterTitle[src] = f.title;
+      return src;
+    });
+  }
+
   async function loadPosters() {
-    const fav = await listFavourites();
-    if (fav && fav.length) {
+    const folder = (await listFavourites()) || [];
+    const fav = likedPosters().concat(folder);
+    if (fav.length) {
       allPosters = fav;
       if (fav.join() !== posters.join()) { posters = fav; order = shuffle(fav); idx = 0; }
     }
@@ -321,8 +334,9 @@
   function findOwnPoster(title) {
     const s = slug(title);
     if (!s) return null;
-    const matches = allPosters.filter((p) =>
-      slug(decodeURIComponent(p.split("/").pop()).replace(/\.[a-z]+$/i, "").replace(/-\d+$/, "")) === s);
+    const matches = allPosters.filter((p) => posterTitle[p]
+      ? norm(posterTitle[p]) === norm(title)
+      : slug(decodeURIComponent(p.split("/").pop()).replace(/\.[a-z]+$/i, "").replace(/-\d+$/, "")) === s);
     return matches.length ? matches[Math.floor(Math.random() * matches.length)] : null;
   }
 
