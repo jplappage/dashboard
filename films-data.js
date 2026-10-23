@@ -83,14 +83,9 @@ const FILMS = [
     imdbRating: 7.6,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/0/2/7/1/7/1302717-untitled-resident-evil-reboot-0-600-0-900-crop.jpg?v=2eb2af9c80',
     vodDate: '2026-11-03',
-<<<<<<< HEAD
-    platform: 'Digital',
-    estimated: false,
-=======
     platform: null,
     estimated: true,
     note: 'Est. — cinemas 18 Sep 2026 (Sony · Zach Cregger) · WhenToStream sources say PVOD 3 Nov 2026, not yet confirmed by Sony (WhenToStream 10/23)',
->>>>>>> 6b050e3 (update 23/10/2026 13:27:27.03)
     runtime: 89,
   },
   {
@@ -136,14 +131,9 @@ const FILMS = [
     imdbRating: 7.3,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/4/7/4/6/8/1147468-heart-of-the-beast-2026-0-600-0-900-crop.jpg?v=9503afe033',
     vodDate: '2026-11-10',
-<<<<<<< HEAD
-    platform: 'Digital',
-    estimated: false,
-=======
     platform: null,
     estimated: true,
     note: 'Est. — cinemas 25 Sep 2026 (Paramount · David Ayer / Brad Pitt) + mandated 45-day window · WhenToStream expects PVOD 10 Nov 2026, not yet confirmed (WhenToStream 10/23)',
->>>>>>> 6b050e3 (update 23/10/2026 13:27:27.03)
     runtime: 101,
   },
   {
@@ -160,20 +150,6 @@ const FILMS = [
     runtime: 112,
   },
   {
-<<<<<<< HEAD
-    title: 'Verity',
-    year: 2026,
-    slug: 'verity-2026',
-    imdbRating: 6.1,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/1/5/1/1167151-verity-2026-0-600-0-900-crop.jpg?v=3169444893',
-    vodDate: '2026-10-27',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 114,
-  },
-  {
-=======
->>>>>>> 6b050e3 (update 23/10/2026 13:27:27.03)
     title: 'The Social Reckoning',
     year: 2026,
     slug: 'the-social-reckoning',
