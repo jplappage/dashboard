@@ -185,6 +185,7 @@
 <script src="../watchlist-posters.js"></script>
 <script src="../favourite-posters.js"></script>
 <script src="../retro-posters.js"></script>
+<script src="../show-posters.js"></script>
 <script>
   const ROTATE_MS = 5 * 60 * 1000;   // each poster stays up 5 minutes
   const CHECK_MS = 5 * 1000;         // check Plex every 5 seconds
@@ -278,6 +279,18 @@
       allPosters = fav;
       if (fav.join() !== posters.join()) { posters = fav; order = shuffle(fav); idx = 0; }
     }
+  }
+
+  // TV shows (show-posters.js) — matched on the show's name, or another name Plex uses
+  function showPoster(name) {
+    if (typeof SHOW_POSTERS === "undefined") return null;
+    const t = norm(name);
+    if (!t) return null;
+    const names = (sh) => [sh.name].concat(sh.also || []).map(norm);
+    let hit = SHOW_POSTERS.find((sh) => names(sh).includes(t));
+    // e.g. Plex "Star Wars: Something" for a show stored as "Something"
+    if (!hit) hit = SHOW_POSTERS.find((sh) => { const n = norm(sh.name); return n.length >= 8 && t.endsWith("-" + n); });
+    return hit && hit.poster ? TMDB_IMG + hit.poster : null;
   }
 
   // Unwatched retro watchlist films (retro-posters.js)
@@ -452,9 +465,10 @@
       if (key !== nowKey) {
         nowKey = key;
         // Best picture first: your favourite's poster → watchlist text-free poster → Plex's own
-        const pic = findOwnPoster(s.title)
-          || (s.type !== "episode" && watchlistPoster(s.title, Number(s.year) || 0))
-          || (s.type !== "episode" && retroPoster(s.title, Number(s.year) || 0))
+        const yr = Number(s.year) || 0;
+        const pic = (s.type === "episode"
+            ? showPoster(s.title)
+            : (findOwnPoster(s.title) || watchlistPoster(s.title, yr) || retroPoster(s.title, yr)))
           || (s.hasThumb ? PLEX_API + "/thumb?t=" + s.updatedAt : null);
         show(pic, s.title);
       }

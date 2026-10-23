@@ -72,6 +72,7 @@
 <script src="../../watchlist-posters.js"></script>
 <script src="../../favourite-posters.js"></script>
 <script src="../../retro-posters.js"></script>
+<script src="../../show-posters.js"></script>
 <script>
   const THUMB = "https://image.tmdb.org/t/p/w342/";
   const FULL = "https://image.tmdb.org/t/p/original/";
@@ -94,6 +95,11 @@
       .map((f) => ({ title: f.title, year: f.year, file: f.poster }));
   }
 
+  function shows() {
+    return (typeof SHOW_POSTERS === "undefined" ? [] : SHOW_POSTERS)
+      .map((f) => ({ title: f.name, file: f.poster }));
+  }
+
   const sections = [
     { id: "favourites", name: "Favourites", items: favourites(),
       note: "Your Letterboxd likes. These are the posters the TV rotates through, one every 5 minutes." },
@@ -101,6 +107,8 @@
       note: "Only shown when that film is playing in Plex. Text-free where TMDB has one." },
     { id: "retro", name: "Retro (unwatched)", items: retro(),
       note: "Unwatched films from your retro watchlist. Only shown when that film is playing in Plex." },
+    { id: "shows", name: "Shows", items: shows(),
+      note: "Your shows. Shown when an episode is playing in Plex. Text-free where TMDB has a sharp one." },
   ];
 
   let current = "favourites";
