@@ -85,6 +85,9 @@
   html.rot90 #stage  { transform: translate(-50%, -50%) rotate(90deg); }
   html.rot270 #stage { transform: translate(-50%, -50%) rotate(-90deg); }
   html.rot90, html.rot270 { --sw: 1vh; --sh: 1vw; }
+  /* Screen dims to half brightness while a film is playing */
+  #dim { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity 2s ease; will-change: opacity; }
+  .playing-mode #dim { opacity: 0.5; }
 </style>
 </head>
 <body>
@@ -105,6 +108,7 @@
     </div>
   </div>
 </div>
+<div id="dim"></div>
 </div><!-- /stage -->
 
 <!-- Your watchlist (from the Watchlist v4 dashboard) and its text-free posters -->
@@ -119,6 +123,7 @@
   const QUIET_CHECK_MS = 60 * 1000;  // …or once a minute from midnight to 5pm (keeps Netlify usage low)
   const RELOAD_MS = 3 * 60 * 60 * 1000; // re-read the watchlist every 3 hours (when nothing's playing)
   const PLEX_API = "https://jp-poster-display.netlify.app/api";
+  const PLEX_PLAYER = "LG OLED65C26LD";  // only this Plex device triggers "now playing"
   const FAV_LISTING = "https://api.github.com/repos/jplappage/dashboard/contents/poster-display/posters/favourites";
   const TMDB_IMG = "https://image.tmdb.org/t/p/w1280/";
 
@@ -396,6 +401,8 @@
         if (!r.ok) return;
         s = await r.json();
       } catch (e) { return; }
+      // Ignore anything played on other devices
+      if (s.player !== PLEX_PLAYER) s = { state: "stopped" };
     }
 
     if (s.state === "playing" || s.state === "paused") {
