@@ -391,6 +391,10 @@
     };
   }
 
+  // Tell the Pi's freeze check the page is alive (does nothing on other devices)
+  const pingPi = () => fetch("http://127.0.0.1:8765/ping", { cache: "no-store" }).catch(() => {});
+  pingPi(); setInterval(pingPi, 30 * 1000);
+
   let npReady = false;   // true once the film's own poster is on screen
   async function checkPlex() {
     let s;
