@@ -12,7 +12,7 @@ const FAVOURITE_POSTERS = [
   { slug: "michael-2026", title: "Michael", year: 2026, tmdb: 936075, poster: "5HgVwIzug5iCoprtj4ZSvcHjjI1.jpg" },
   { slug: "project-hail-mary", title: "Project Hail Mary", year: 2026, tmdb: 687163, poster: "50FMVzBBt0ReMvNg493UAqcRoNX.jpg" },
   { slug: "avatar-fire-and-ash", title: "Avatar: Fire and Ash", year: 2025, tmdb: 83533, poster: "dVv28yL7kyeMK3sUTWVSKrZC6tV.jpg" },
-  { slug: "sinners-2025", title: "Sinners", year: 2025, tmdb: 1233413, poster: "7Ma7ex9a3PIJ38ShHtobzUHpd9F.jpg" },
+  { slug: "sinners-2025", title: "Sinners", year: 2025, tmdb: 1233413, poster: "h1krEXZJIM3BGtee94MzN5hYLmZ.jpg" },
   { slug: "i-swear", title: "I Swear", year: 2025, tmdb: 1317149, poster: "181J468XuzY4WoeQdetYA5TC94H.jpg" },
   { slug: "one-battle-after-another", title: "One Battle After Another", year: 2025, tmdb: 1054867, poster: "mPKI17bw3qbv9h5wbrpUAlbanjw.jpg" },
   { slug: "deadpool-wolverine", title: "Deadpool & Wolverine", year: 2024, tmdb: 533535, poster: "gKjB6s1sElrjr2giLiXbaUsGOUU.jpg" },
