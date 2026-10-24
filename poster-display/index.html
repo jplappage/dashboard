@@ -252,7 +252,6 @@
       bg.className = "bg";
       bg.width = 90; bg.height = 160;
       const small = new Image();
-      small.crossOrigin = "anonymous";
       small.onload = () => {
         const c = bg.getContext("2d");
         const k = Math.max(bg.width / small.width, bg.height / small.height);
