@@ -168,4 +168,9 @@ const FAVOURITE_POSTERS = [
   { slug: "training-day", title: "Training Day", year: 2001, tmdb: 2034, poster: "zRLuLrPvPBpCBinwEtupk7MB8ub.jpg" },
   { slug: "shogun-2024", title: "Shōgun", year: 2024, tmdb: 126308, poster: "23wScEz9Tr5N1cE58K9FAtN00y4.jpg", tv: true },
   { slug: "gone-in-sixty-seconds", title: "Gone in Sixty Seconds", year: 2000, tmdb: 9679, poster: "dbGJcp9LaHJXkDOBxAunPeSx4G8.jpg" },
+  // TV shows JP asked to include in the rotation (24 Oct 2026) — same posters as show-posters.js
+  { slug: "friends", title: "Friends", year: 1994, tmdb: 1668, poster: "h2nvuo60bvjisIDt3FJTdjhL3jb.jpg", tv: true },
+  { slug: "breaking-bad", title: "Breaking Bad", year: 2008, tmdb: 1396, poster: "bMSbEx9vXCSGN4NEktjVIEuibn2.jpg", tv: true },
+  { slug: "stranger-things", title: "Stranger Things", year: 2016, tmdb: 66732, poster: "uhFL71Ki2YIrhEq5Gsg2tTLa9eW.jpg", tv: true },
+  { slug: "the-last-of-us", title: "The Last of Us", year: 2023, tmdb: 100088, poster: "qD7rmFLD5ZChiVP13uqnTeypYEF.jpg", tv: true },
 ];
