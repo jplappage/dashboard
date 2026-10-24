@@ -268,7 +268,12 @@
       img.alt = "";
       img.src = src;
       back.append(bg, img);
-      img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(swapDone); };
+      img.onload = () => {
+        let fired = false;
+        const go = () => { if (!fired) { fired = true; swapDone(); } };
+        if (img.decode) img.decode().then(go, go);
+        setTimeout(go, 1000);   // never wait more than a second
+      };
       img.onerror = () => { back.innerHTML = `<div class="card"></div>`; back.firstChild.textContent = fallbackText || ""; swapDone(); };
     } else {
       back.innerHTML = `<div class="card"></div>`;
