@@ -22,7 +22,7 @@
     --ink: #f7f2e7;
     --muted: rgba(247, 242, 231, 0.68);
     --glass: rgba(12, 10, 8, 0.72);
-    --fade: 2.5s;
+    --fade: 1.5s;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 100%; height: 100%; background: var(--bg); overflow: hidden; cursor: none; }
@@ -257,7 +257,7 @@
       img.className = "poster";
       img.alt = "";
       img.src = src;
-      back.append(bg, img);
+      back.append(img);
       img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(swap); };
       img.onerror = () => { back.innerHTML = `<div class="card"></div>`; back.firstChild.textContent = fallbackText || ""; swap(); };
     } else {
