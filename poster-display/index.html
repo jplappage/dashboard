@@ -29,12 +29,12 @@
   body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); }
 
   /* ---------- Poster layers ---------- */
-  .layer { position: absolute; inset: 0; opacity: 0; transition: opacity var(--fade) ease; }
+  .layer { position: absolute; inset: 0; opacity: 0; transition: opacity var(--fade) ease; will-change: opacity; }
   .layer.show { opacity: 1; }
   .layer .bg {
     position: absolute; inset: -6%;
     background-size: cover; background-position: center;
-    filter: blur(40px) brightness(0.45) saturate(1.2);
+    filter: brightness(0.45) saturate(1.2);
   }
   .layer .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
   /* While a film is on, the poster stays full size and drifts very slowly */
@@ -124,7 +124,7 @@
   const RELOAD_MS = 3 * 60 * 60 * 1000; // re-read the watchlist every 3 hours (when nothing's playing)
   const PLEX_API = "https://jp-poster-display.netlify.app/api";
   const FAV_LISTING = "https://api.github.com/repos/jplappage/dashboard/contents/poster-display/posters/favourites";
-  const TMDB_IMG = "https://image.tmdb.org/t/p/original/";
+  const TMDB_IMG = "https://image.tmdb.org/t/p/w1280/";
 
   const params = new URLSearchParams(location.search);
 
@@ -252,13 +252,13 @@
     if (src) {
       const bg = document.createElement("div");
       bg.className = "bg";
-      bg.style.backgroundImage = `url("${src}")`;
+      bg.style.backgroundImage = `url("${src.replace("/t/p/w1280/", "/t/p/w92/")}")`;
       const img = document.createElement("img");
       img.className = "poster";
       img.alt = "";
       img.src = src;
       back.append(bg, img);
-      img.onload = swap;
+      img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(swap); };
       img.onerror = () => { back.innerHTML = `<div class="card"></div>`; back.firstChild.textContent = fallbackText || ""; swap(); };
     } else {
       back.innerHTML = `<div class="card"></div>`;
