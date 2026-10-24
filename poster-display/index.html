@@ -243,7 +243,10 @@
     return film.poster ? film.poster.replace(/-0-\d+-0-\d+-crop/, "-0-1000-0-1500-crop") : null;
   }
 
+  // Shows a picture; the returned promise finishes once it is on screen.
   function show(src, fallbackText) {
+    return new Promise((done) => {
+    const swapDone = () => { swap(); done(); };
     back.innerHTML = "";
     if (src) {
       // Blurred backdrop, drawn once into a tiny canvas and stretched,
@@ -265,13 +268,14 @@
       img.alt = "";
       img.src = src;
       back.append(bg, img);
-      img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(swap); };
-      img.onerror = () => { back.innerHTML = `<div class="card"></div>`; back.firstChild.textContent = fallbackText || ""; swap(); };
+      img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(swapDone); };
+      img.onerror = () => { back.innerHTML = `<div class="card"></div>`; back.firstChild.textContent = fallbackText || ""; swapDone(); };
     } else {
       back.innerHTML = `<div class="card"></div>`;
       back.firstChild.textContent = fallbackText || "";
-      swap();
+      swapDone();
     }
+    });
   }
   function swap() {
     back.classList.add("show");
@@ -377,6 +381,7 @@
     };
   }
 
+  let npReady = false;   // true once the film's own poster is on screen
   async function checkPlex() {
     let s;
     if (demo) s = demoState();
@@ -398,11 +403,19 @@
             ? showPoster(s.title)
             : (findOwnPoster(s.title) || watchlistPoster(s.title, yr) || retroPoster(s.title, yr)))
           || (s.hasThumb ? PLEX_API + "/thumb?t=" + s.updatedAt : null);
-        show(pic, s.title);
+        // Hide the overlay, wait for the film's poster to appear, then bring the overlay in.
+        npReady = false;
+        current = s;
+        $("np").classList.remove("show");
+        show(pic, s.title).then(() => setTimeout(() => {
+          if (nowKey === key) { npReady = true; setOverlay(current); }
+        }, 700));
+        return;
       }
-      setOverlay(s);
+      if (npReady) setOverlay(s); else current = s;
     } else if (nowKey) {
       nowKey = null;
+      npReady = false;
       current = null;
       $("np").classList.remove("show");
       document.body.classList.remove("playing-mode");
