@@ -10,17 +10,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'The Weight',
-    year: 2026,
-    slug: 'the-weight-2026',
-    imdbRating: 6.9,
-    poster: 'https://a.ltrbxd.com/resized/sm/upload/5c/wi/1f/au/weight-0-600-0-900-crop.jpg?v=558a8cef6a',
-    vodDate: '2026-10-20',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 115,
-  },
-  {
     title: 'The Dog Stars',
     year: 2026,
     slug: 'the-dog-stars',
@@ -86,18 +75,6 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     runtime: 89,
-  },
-  {
-    title: 'Bad Apples',
-    year: 2025,
-    slug: 'bad-apples-2025',
-    plexSlug: 'bad-apples-2026',
-    imdbRating: 7.1,
-    poster: 'https://image.tmdb.org/t/p/w342/sDgb5jVuZ6ZOh4YjtSMMnbovkCi.jpg',
-    vodDate: '2026-11-03',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 100,
   },
   {
     title: 'Digger',
@@ -321,4 +298,6 @@ const WATCHED = [
   { title: 'Buddy', vodDate: '2026-10-13', imdbRating: 7 },
   { title: 'Hope', vodDate: '2026-10-13', imdbRating: 6.9 },
   { title: 'The Incomer', vodDate: '2026-11-03', imdbRating: 7.2 },
+  { title: 'The Weight', vodDate: '2026-10-20', imdbRating: 6.9 },
+  { title: 'Bad Apples', vodDate: '2026-11-03', imdbRating: 7.1 },
 ];

@@ -181,9 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 18 Oct 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 24 Oct 2026)
 const RETRO_LETTERBOXD = {
 
+  93: "2026-10-23", // Frankenweenie
   35: "2026-10-18", // Groundhog Day
   56: "2026-10-11", // Erin Brockovich
   132:"2026-10-10", // Triangle of Sadness
@@ -303,6 +304,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  93:  3.0,  // Frankenweenie
   35:  3.5,  // Groundhog Day
   56:  3.5,  // Erin Brockovich
   132: 3.5,  // Triangle of Sadness
