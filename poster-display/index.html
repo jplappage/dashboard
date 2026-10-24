@@ -31,11 +31,7 @@
   /* ---------- Poster layers ---------- */
   .layer { position: absolute; inset: 0; opacity: 0; transition: opacity var(--fade) ease; will-change: opacity; }
   .layer.show { opacity: 1; }
-  .layer .bg {
-    position: absolute; inset: -6%;
-    background-size: cover; background-position: center;
-    filter: brightness(0.45) saturate(1.2);
-  }
+  .layer .bg { position: absolute; left: -6%; top: -6%; width: 112%; height: 112%; display: block; }
   .layer .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
   /* While a film is on, the poster stays full size and drifts very slowly */
   .playing-mode .layer.show .poster { animation: drift 60s ease-in-out infinite alternate; }
@@ -250,14 +246,26 @@
   function show(src, fallbackText) {
     back.innerHTML = "";
     if (src) {
-      const bg = document.createElement("div");
+      // Blurred backdrop, drawn once into a tiny canvas and stretched,
+      // so the fade never has to blur anything live (keeps the Pi smooth).
+      const bg = document.createElement("canvas");
       bg.className = "bg";
-      bg.style.backgroundImage = `url("${src.replace("/t/p/w1280/", "/t/p/w92/")}")`;
+      bg.width = 90; bg.height = 160;
+      const small = new Image();
+      small.crossOrigin = "anonymous";
+      small.onload = () => {
+        const c = bg.getContext("2d");
+        const k = Math.max(bg.width / small.width, bg.height / small.height);
+        const w = small.width * k, h = small.height * k;
+        c.filter = "blur(3px) brightness(0.45) saturate(1.2)";
+        c.drawImage(small, (bg.width - w) / 2, (bg.height - h) / 2, w, h);
+      };
+      small.src = src.replace("/t/p/w1280/", "/t/p/w92/");
       const img = document.createElement("img");
       img.className = "poster";
       img.alt = "";
       img.src = src;
-      back.append(img);
+      back.append(bg, img);
       img.onload = () => { (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(swap); };
       img.onerror = () => { back.innerHTML = `<div class="card"></div>`; back.firstChild.textContent = fallbackText || ""; swap(); };
     } else {
