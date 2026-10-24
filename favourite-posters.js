@@ -66,7 +66,7 @@ const FAVOURITE_POSTERS = [
   { slug: "scarface-1983", title: "Scarface", year: 1983, tmdb: 111, poster: "a1Y7gDd6Ks49dv1kRBGdzESZzFU.jpg" },
   { slug: "superbad", title: "Superbad", year: 2007, tmdb: 8363, poster: "wZg21q4TXqaf7EcTg2x1xGi7SAl.jpg" },
   { slug: "gladiator-2000", title: "Gladiator", year: 2000, tmdb: 98, poster: "jKCaGq8dJoc4IDGqmDSjU36b7ee.jpg" },
-  { slug: "aliens", title: "Aliens", year: 1986, tmdb: 679, poster: "wSnhwlXbywmOidxgfx1LOUJssgO.jpg" },
+  { slug: "aliens", title: "Aliens", year: 1986, tmdb: 679, poster: "4GC3oDfVwbcLPB4Sjlp2Z4AZJ9E.jpg" },
   { slug: "terminator-2-judgment-day", title: "Terminator 2: Judgment Day", year: 1991, tmdb: 280, poster: "dPw6Nq8CgCKMjU8T5VJTRVqfH93.jpg" },
   { slug: "x-men-days-of-future-past", title: "X-Men: Days of Future Past", year: 2014, tmdb: 127585, poster: "7OGasY5l2DrWqBDMRqKcKZOriiA.jpg" },
   { slug: "leon-the-professional", title: "Léon: The Professional", year: 1994, tmdb: 101, poster: "z4pKjZ7m8twgafsace8vpdwVH7v.jpg" },
