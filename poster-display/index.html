@@ -88,7 +88,21 @@
   /* Screen dims to half brightness while a film is playing */
   #dim { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity 2s ease; will-change: opacity; }
   .playing-mode #dim { opacity: 0.5; }
+  /* Raspberry Pi: same look without the live blur and slow zoom, which crash its graphics chip */
+  html.lite .glass {
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    background: linear-gradient(135deg, rgba(60,60,70,0.78), rgba(25,25,32,0.72) 55%, rgba(45,45,55,0.75));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -1px 0 rgba(255,255,255,0.12);
+  }
+  html.lite .playing-mode .layer.show .poster { animation: none; }
+  html.lite .np-dot { animation: livepulse-lite 2s infinite; }
+  @keyframes livepulse-lite { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 </style>
+<script>
+  // Raspberry Pi (and other small ARM boxes): use the lighter overlay
+  if (/aarch64|armv7|armv8|Linux arm/i.test(navigator.userAgent) || new URLSearchParams(location.search).has("lite"))
+    document.documentElement.classList.add("lite");
+</script>
 </head>
 <body>
 <div id="stage">
