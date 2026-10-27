@@ -175,12 +175,7 @@ const FAVOURITE_POSTERS = [
   { slug: "the-last-of-us", title: "The Last of Us", year: 2023, tmdb: 100088, poster: "qD7rmFLD5ZChiVP13uqnTeypYEF.jpg", tv: true },
   // Games JP asked for (27 Oct 2026) — official Xbox Store 4K artwork, shown as a tall slice (focus = how far across)
   { slug: "ac-shadows-1", title: "Assassin's Creed Shadows", game: true, image: "https://store-images.s-microsoft.com/image/apps.18685.14601317961808017.7b103743-3dbd-479d-b77a-f82e7f0548c6.117374c6-d4eb-4046-a93b-2e60c73df398", focus: "60%" },
-  { slug: "ac-shadows-2", title: "Assassin's Creed Shadows", game: true, image: "https://store-images.s-microsoft.com/image/apps.26235.14601317961808017.092ccde1-42a5-494a-b19b-e92e5f2632fb.418428f9-4502-437b-9646-44bf5fd031e6", focus: "15%" },
-  { slug: "ac-shadows-3", title: "Assassin's Creed Shadows", game: true, image: "https://store-images.s-microsoft.com/image/apps.59796.14601317961808017.092ccde1-42a5-494a-b19b-e92e5f2632fb.9c121fa8-c970-4baa-8369-ab730155f1c9", focus: "15%" },
   { slug: "destiny-2-1", title: "Destiny 2", game: true, image: "https://store-images.s-microsoft.com/image/apps.17712.14134992626562533.488a0dea-3d31-463e-ad2e-6ba61492e19e.485090c7-2202-4bc7-9890-6031cf87ce07", focus: "45%" },
-  { slug: "destiny-2-2", title: "Destiny 2", game: true, image: "https://store-images.s-microsoft.com/image/apps.5671.14134992626562533.488a0dea-3d31-463e-ad2e-6ba61492e19e.e6748255-c0d0-471e-8c76-cc7eb6fd9fba", focus: "60%" },
-  { slug: "destiny-2-3", title: "Destiny 2", game: true, image: "https://store-images.s-microsoft.com/image/apps.28188.14134992626562533.488a0dea-3d31-463e-ad2e-6ba61492e19e.30c95f47-c67f-45ba-b224-1fc6a87ab4e6", focus: "30%" },
   // Splinter Cell: Deathwatch (2025 series) text-free TMDB posters — no sharp text-free game art exists
   { slug: "splinter-cell-deathwatch", title: "Splinter Cell: Deathwatch", year: 2025, tmdb: 127366, poster: "ywSwacfcb7NB9Rg2tkm4bFrcTwt.jpg", tv: true },
-  { slug: "splinter-cell-deathwatch-2", title: "Splinter Cell: Deathwatch", year: 2025, tmdb: 127366, poster: "x9Wt9psMkp31cz8ClwqX037tful.jpg", tv: true },
 ];
