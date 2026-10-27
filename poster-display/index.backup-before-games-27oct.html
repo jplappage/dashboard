@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poster Display</title>
+<style>
+  @font-face { font-family: "Bebas Neue"; src: url("fonts/bebas-neue-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Righteous"; src: url("fonts/righteous-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Inter"; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Inter"; src: url("fonts/inter-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Inter"; src: url("fonts/inter-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+  :root {
+    --sw: 1vw;   /* 1% of the poster screen's width  */
+    --sh: 1vh;   /* 1% of the poster screen's height */
+    --bg: #000;
+    --gold: #f6c453;
+    --gold-deep: #b8862b;
+    --gold-glow: rgba(246, 196, 83, 0.6);
+    --velvet: #3b0a0f;
+    --velvet-deep: #1a0306;
+    --ink: #f7f2e7;
+    --muted: rgba(247, 242, 231, 0.68);
+    --glass: rgba(12, 10, 8, 0.72);
+    --fade: 1.5s;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; background: var(--bg); overflow: hidden; cursor: none; }
+  body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); }
+
+  /* ---------- Poster layers ---------- */
+  .layer { position: absolute; inset: 0; opacity: 0; transition: opacity var(--fade) ease; will-change: opacity; }
+  .layer.show { opacity: 1; }
+  .layer .bg { position: absolute; left: -6%; top: -6%; width: 112%; height: 112%; display: block; }
+  .layer .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  /* While a film is on, the poster stays full size and drifts very slowly */
+  .playing-mode .layer.show .poster { animation: drift 60s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: scale(1); } to { transform: scale(1.03); } }
+
+  /* ---------- Now playing overlay: frosted glass ---------- */
+  #np { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+  #np.show { opacity: 1; }
+
+  .glass {
+    position: absolute; z-index: 2; overflow: hidden;
+    background: linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08) 55%, rgba(255,255,255,0.14));
+    border: 1px solid rgba(255,255,255,0.42);
+    backdrop-filter: blur(22px) saturate(1.7) brightness(1.08);
+    -webkit-backdrop-filter: blur(22px) saturate(1.7) brightness(1.08);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(255,255,255,0.12), 0 calc(2 * var(--sw)) calc(6 * var(--sw)) rgba(0,0,0,0.35);
+  }
+  .glass::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 50%; background: linear-gradient(to bottom, rgba(255,255,255,0.22), transparent); pointer-events: none; }
+  .glass > * { position: relative; z-index: 1; }
+  .soft { text-shadow: 0 calc(0.3 * var(--sw)) calc(1.2 * var(--sw)) rgba(0,0,0,0.45); }
+
+  /* Big "Now Playing" banner */
+  .np-banner { top: calc(4.5 * var(--sw)); left: calc(6 * var(--sw)); right: calc(6 * var(--sw)); border-radius: 999px; padding: calc(3.8 * var(--sw)) calc(5 * var(--sw)); display: flex; align-items: center; justify-content: center; gap: calc(3.4 * var(--sw)); }
+  .np-dot { width: calc(3.4 * var(--sw)); height: calc(3.4 * var(--sw)); border-radius: 50%; background: #ff3b3b; flex: none; animation: livepulse 2s infinite; }
+  @keyframes livepulse { 0% { box-shadow: 0 0 0 0 rgba(255,59,59,0.6); } 70% { box-shadow: 0 0 0 calc(3 * var(--sw)) rgba(255,59,59,0); } 100% { box-shadow: 0 0 0 0 rgba(255,59,59,0); } }
+  .np-label { font-family: "Righteous", sans-serif; font-size: calc(7.6 * var(--sw)); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+  .paused .np-dot { animation: none; background: #fff; opacity: 0.75; border-radius: calc(0.6 * var(--sw)); width: calc(3 * var(--sw)); height: calc(3 * var(--sw)); }
+
+  /* Info card */
+  .np-card { left: calc(6 * var(--sw)); right: calc(6 * var(--sw)); bottom: calc(5 * var(--sw)); padding: calc(5.5 * var(--sw)) calc(6.5 * var(--sw)) calc(6 * var(--sw)); border-radius: calc(4.5 * var(--sw)); }
+  .np-title { font-family: "Righteous", sans-serif; font-size: calc(9 * var(--sw)); line-height: 1.02; letter-spacing: 0.01em; }
+  .np-episode { margin-top: calc(1.2 * var(--sw)); font-size: calc(3 * var(--sw)); font-weight: 600; }
+  .np-meta { margin-top: calc(2 * var(--sw)); font-size: calc(2.7 * var(--sw)); color: rgba(255,255,255,0.85); line-height: 1.4; }
+  .np-row { display: flex; align-items: center; gap: calc(3 * var(--sw)); margin-top: calc(5 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums; }
+  .bar { flex: 1; position: relative; height: calc(0.8 * var(--sw)); border-radius: calc(1 * var(--sw)); background: rgba(255,255,255,0.28); overflow: hidden; }
+  .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; border-radius: calc(1 * var(--sw)); background: #fff; transition: width 1s linear; }
+  .np-ends { margin-top: calc(2.4 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); }
+  .np-ends b { color: #fff; font-weight: 600; }
+  .hide { display: none !important; }
+
+  /* Fallback card if there's no image at all */
+  .card {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: "Bebas Neue", sans-serif; font-size: calc(12 * var(--sw)); text-align: center; padding: calc(8 * var(--sw));
+    background: radial-gradient(circle at 50% 40%, #2a2216 0%, #000 70%);
+  }
+
+  /* Everything sits on a "stage" that can be turned to suit a sideways TV */
+  #stage { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; overflow: hidden; background: var(--bg); }
+  html.rot90 #stage, html.rot270 #stage { width: 100vh; height: 100vw; left: 50%; top: 50%; transform-origin: center; }
+  html.rot90 #stage  { transform: translate(-50%, -50%) rotate(90deg); }
+  html.rot270 #stage { transform: translate(-50%, -50%) rotate(-90deg); }
+  html.rot90, html.rot270 { --sw: 1vh; --sh: 1vw; }
+  /* Screen dims to half brightness while a film is playing */
+  #dim { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity 2s ease; will-change: opacity; }
+  .playing-mode #dim { opacity: 0.5; }
+  /* Raspberry Pi: same look without the live blur and slow zoom, which crash its graphics chip */
+  html.lite .glass {
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    background: linear-gradient(135deg, rgba(60,60,70,0.78), rgba(25,25,32,0.72) 55%, rgba(45,45,55,0.75));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -1px 0 rgba(255,255,255,0.12);
+  }
+  html.lite .playing-mode .layer.show .poster { animation: none; }
+  html.lite .np-dot { animation: livepulse-lite 2s infinite; }
+  @keyframes livepulse-lite { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+</style>
+<script>
+  // Raspberry Pi (and other small ARM boxes): use the lighter overlay
+  (function () {
+    let pi = /aarch64|armv7|armv8|Linux arm/i.test(navigator.userAgent) || new URLSearchParams(location.search).has("lite");
+    try {
+      const gl = document.createElement("canvas").getContext("webgl");
+      const ext = gl && gl.getExtension("WEBGL_debug_renderer_info");
+      const r = gl ? String(gl.getParameter(ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER)) : "";
+      if (/V3D|VideoCore|Broadcom|llvmpipe|softpipe|SwiftShader/i.test(r)) pi = true;   // Pi graphics, or no graphics chip at all
+      if (gl) { const lose = gl.getExtension("WEBGL_lose_context"); if (lose) lose.loseContext(); }
+    } catch (e) {}
+    if (pi) document.documentElement.classList.add("lite");
+  })();
+</script>
+</head>
+<body>
+<div id="stage">
+<div id="a" class="layer"></div>
+<div id="b" class="layer"></div>
+
+<div id="np">
+  <div class="glass np-banner"><span class="np-dot"></span><span class="np-label soft" id="np-label">Now Playing</span></div>
+
+  <div class="glass np-card">
+    <div class="np-title soft" id="np-title"></div>
+    <div class="np-episode soft hide" id="np-episode"></div>
+    <div class="np-meta soft" id="np-meta"></div>
+    <div id="np-progress" class="hide">
+      <div class="np-row soft"><span id="np-elapsed"></span><div class="bar"><i id="np-bar"></i></div><span id="np-left"></span></div>
+      <div class="np-ends soft" id="np-ends"></div>
+    </div>
+  </div>
+</div>
+<div id="dim"></div>
+</div><!-- /stage -->
+
+<!-- Your watchlist (from the Watchlist v4 dashboard) and its text-free posters -->
+<script src="../films-data.js"></script>
+<script src="../watchlist-posters.js"></script>
+<script src="../favourite-posters.js"></script>
+<script src="../retro-posters.js"></script>
+<script src="../show-posters.js"></script>
+<script>
+  const ROTATE_MS = 5 * 60 * 1000;   // each poster stays up 5 minutes
+  const CHECK_MS = 15 * 1000;        // check Plex every 15 seconds…
+  const QUIET_CHECK_MS = 60 * 1000;  // …or once a minute from midnight to 5pm (keeps Netlify usage low)
+  const RELOAD_MS = 3 * 60 * 60 * 1000; // re-read the watchlist every 3 hours (when nothing's playing)
+  const PLEX_API = "https://jp-poster-display.netlify.app/api";
+  const PLEX_PLAYER = "LG OLED65C26LD";  // only this Plex device triggers "now playing"
+  const FAV_LISTING = "https://api.github.com/repos/jplappage/dashboard/contents/poster-display/posters/favourites";
+  const TMDB_IMG = "https://image.tmdb.org/t/p/w1280/";
+
+  const params = new URLSearchParams(location.search);
+
+  // Turn the picture for a portrait TV fed a landscape signal (e.g. Fire TV Stick).
+  // Open the page once with ?rotate=90 or ?rotate=270 and the choice is remembered; ?rotate=0 clears it.
+  (function () {
+    let r = params.get("rotate");
+    try {
+      if (r === "auto") { localStorage.removeItem("rotate"); }
+      else if (r !== null) localStorage.setItem("rotate", r);
+      else r = localStorage.getItem("rotate");
+    } catch (e) {}
+    // No setting saved: if the screen is wider than it is tall, assume a portrait TV
+    // fed a landscape picture and turn it upright (270 suits JP's Frame).
+    if (r === null || r === "" || r === "auto") {
+      const apply = () => {
+        const html = document.documentElement;
+        html.classList.remove("rot90", "rot270");
+        if (window.innerWidth > window.innerHeight) html.classList.add("rot270");
+      };
+      apply();
+      window.addEventListener("resize", apply);
+      return;
+    }
+    if (r === "90" || r === "270") document.documentElement.classList.add("rot" + r);
+  })();
+  const demo = params.get("demo");   // e.g. ?demo=Inception to preview the overlay
+  const demoStart = Date.now();
+
+  let posters = [];                  // favourites: the rotation
+  let allPosters = [];               // favourites + watchlist: used to find "now playing" posters
+  let order = [];
+  let idx = 0;
+  let front = document.getElementById("a");
+  let back = document.getElementById("b");
+  let nowKey = null;                 // what's currently on screen for "now playing"
+  let current = null;                // latest now-playing details
+  let rotateTimer = null;
+
+  const $ = (id) => document.getElementById(id);
+  const slug = (s) => String(s || "").toLowerCase()
+    .replace(/&/g, "and").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+
+  // Favourites: whatever images are in the posters/favourites folder.
+  // Reads the folder straight from GitHub, so dropping a new image in is enough;
+  // falls back to posters.json if GitHub can't be reached.
+  async function listFavourites() {
+    try {
+      const r = await fetch(FAV_LISTING, { cache: "no-store" });
+      if (r.ok) {
+        const items = await r.json();
+        const list = items.filter((i) => i.type === "file" && /\.(jpe?g|png|webp)$/i.test(i.name))
+          .map((i) => "posters/favourites/" + encodeURIComponent(i.name)).sort();
+        if (list.length) return list;
+      }
+    } catch (e) {}
+    try {
+      const r = await fetch("posters.json?t=" + Date.now(), { cache: "no-store" });
+      return (await r.json()).favourites || [];
+    } catch (e) { return null; }
+  }
+
+  // Favourites = your Letterboxd likes (favourite-posters.js) + any images in the folder
+  const posterTitle = {};            // picture address → film title, for "now playing" matching
+  function likedPosters() {
+    if (typeof FAVOURITE_POSTERS === "undefined") return [];
+    return FAVOURITE_POSTERS.filter((f) => f.poster).map((f) => {
+      const src = TMDB_IMG + f.poster;
+      posterTitle[src] = f.title;
+      return src;
+    });
+  }
+
+  async function loadPosters() {
+    const folder = (await listFavourites()) || [];
+    const fav = likedPosters().concat(folder);
+    if (fav.length) {
+      allPosters = fav;
+      if (fav.join() !== posters.join()) { posters = fav; order = shuffle(fav); idx = 0; }
+    }
+  }
+
+  // TV shows (show-posters.js) — matched on the show's name, or another name Plex uses
+  function showPoster(name) {
+    if (typeof SHOW_POSTERS === "undefined") return null;
+    const t = norm(name);
+    if (!t) return null;
+    const names = (sh) => [sh.name].concat(sh.also || []).map(norm);
+    let hit = SHOW_POSTERS.find((sh) => names(sh).includes(t));
+    // e.g. Plex "Star Wars: Something" for a show stored as "Something"
+    if (!hit) hit = SHOW_POSTERS.find((sh) => { const n = norm(sh.name); return n.length >= 8 && t.endsWith("-" + n); });
+    return hit && hit.poster ? TMDB_IMG + hit.poster : null;
+  }
+
+  // Unwatched retro watchlist films (retro-posters.js)
+  function retroPoster(title, year) {
+    if (typeof RETRO_POSTERS === "undefined") return null;
+    const t = norm(title);
+    const hits = RETRO_POSTERS.filter((f) => norm(f.title) === t);
+    const film = hits.find((f) => !year || Math.abs(f.year - year) <= 1) || hits[0];
+    return film && film.poster ? TMDB_IMG + film.poster : null;
+  }
+
+  // Your watchlist, from films-data.js, with the text-free posters where we have them
+  const norm = (s) => slug(String(s || "").replace(/^the\s+/i, ""));
+  function watchlistPoster(title, year) {
+    if (typeof FILMS === "undefined") return null;
+    const t = norm(title);
+    const hits = FILMS.filter((f) => norm(f.title) === t);
+    const film = hits.find((f) => !year || Math.abs((f.year || 0) - year) <= 1) || hits[0];
+    if (!film) return null;
+    const tl = (typeof WATCHLIST_POSTERS !== "undefined") && WATCHLIST_POSTERS[film.slug];
+    if (tl && tl.poster) return TMDB_IMG + tl.poster;
+    return film.poster ? film.poster.replace(/-0-\d+-0-\d+-crop/, "-0-1000-0-1500-crop") : null;
+  }
+
+  // Shows a picture; the returned promise finishes once it is on screen.
+  function show(src, fallbackText) {
+    return new Promise((done) => {
+    const swapDone = () => { swap(); done(); };
+    back.innerHTML = "";
+    if (src) {
+      // Blurred backdrop, drawn once into a tiny canvas and stretched,
+      // so the fade never has to blur anything live (keeps the Pi smooth).
+      const bg = document.createElement("canvas");
+      bg.className = "bg";
+      bg.width = 90; bg.height = 160;
+      const small = new Image();
+      small.onload = () => {
+        const c = bg.getContext("2d");
+        const k = Math.max(bg.width / small.width, bg.height / small.height);
+        const w = small.width * k, h = small.height * k;
+        c.filter = "blur(3px) brightness(0.45) saturate(1.2)";
+        c.drawImage(small, (bg.width - w) / 2, (bg.height - h) / 2, w, h);
+      };
+      small.src = src.replace("/t/p/w1280/", "/t/p/w92/");
+      const img = document.createElement("img");
+      img.className = "poster";
+      img.alt = "";
+      img.src = src;
+      back.append(bg, img);
+      img.onload = () => {
+        let fired = false;
+        const go = () => { if (!fired) { fired = true; swapDone(); } };
+        if (img.decode) img.decode().then(go, go);
+        setTimeout(go, 1000);   // never wait more than a second
+      };
+      img.onerror = () => { back.innerHTML = `<div class="card"></div>`; back.firstChild.textContent = fallbackText || ""; swapDone(); };
+    } else {
+      back.innerHTML = `<div class="card"></div>`;
+      back.firstChild.textContent = fallbackText || "";
+      swapDone();
+    }
+    });
+  }
+  function swap() {
+    back.classList.add("show");
+    front.classList.remove("show");
+    [front, back] = [back, front];
+  }
+
+  async function nextPoster() {
+    if (nowKey) return;              // don't rotate while a film is on
+    await loadPosters();
+    if (!order.length) return show(null, "Add some posters");
+    if (idx >= order.length) { order = shuffle(posters); idx = 0; }
+    show(order[idx++]);
+  }
+
+  function startRotation() {
+    clearInterval(rotateTimer);
+    rotateTimer = setInterval(nextPoster, ROTATE_MS);
+  }
+
+  // Find one of your own (sharper) posters that matches the film's title
+  function findOwnPoster(title) {
+    const s = slug(title);
+    if (!s) return null;
+    const matches = allPosters.filter((p) => posterTitle[p]
+      ? norm(posterTitle[p]) === norm(title)
+      : slug(decodeURIComponent(p.split("/").pop()).replace(/\.[a-z]+$/i, "").replace(/-\d+$/, "")) === s);
+    return matches.length ? matches[Math.floor(Math.random() * matches.length)] : null;
+  }
+
+  // ---------- Overlay ----------
+  const fmtDur = (ms) => {
+    const m = Math.max(0, Math.round(ms / 60000));
+    const h = Math.floor(m / 60);
+    return h ? `${h}h ${String(m % 60).padStart(2, "0")}m` : `${m}m`;
+  };
+  const fmtClock = (ms) => {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(sec).padStart(2, "0");
+  };
+  const fmtTime = (d) => d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+
+  function buildOverlay(s) {
+    $("np-title").textContent = s.title || "";
+    const ep = $("np-episode");
+    ep.textContent = s.subtitle || "";
+    ep.classList.toggle("hide", !s.subtitle);
+    const bits = [];
+    if (s.year) bits.push(String(s.year));
+    if (s.rating) bits.push(s.rating);
+    if (s.duration) bits.push(fmtDur(s.duration));
+    if (s.genres && s.genres.length) bits.push(s.genres.slice(0, 2).join(" / "));
+    if (s.director) bits.push(s.director);
+    $("np-meta").textContent = bits.join("  ·  ");
+  }
+
+  // Work out how far through we are, counting on from the last alert
+  function currentOffset(s) {
+    let off = s.viewOffset || 0;
+    if (s.state === "playing") off += Date.now() - (s.updatedAt || Date.now());
+    return Math.min(off, s.duration || off);
+  }
+
+  function tickProgress() {
+    const s = current;
+    const wrap = $("np-progress");
+    if (!s || !s.duration) { wrap.classList.add("hide"); return; }
+    wrap.classList.remove("hide");
+    const off = currentOffset(s);
+    const left = s.duration - off;
+    $("np-bar").style.width = (100 * off / s.duration).toFixed(2) + "%";
+    $("np-elapsed").textContent = fmtClock(off);
+    $("np-left").textContent = "\u2212" + fmtClock(left);
+    const ends = $("np-ends");
+    if (s.state === "paused") ends.innerHTML = "<b>Paused</b>";
+    else { ends.innerHTML = "Ends at <b></b>"; ends.querySelector("b").textContent = fmtTime(new Date(Date.now() + left)); }
+  }
+
+  function setOverlay(s) {
+    current = s;
+    const np = $("np");
+    np.classList.toggle("paused", s.state === "paused");
+    $("np-label").textContent = s.state === "paused" ? "Paused" : "Now Playing";
+    buildOverlay(s);
+    tickProgress();
+    np.classList.add("show");
+    document.body.classList.add("playing-mode");
+  }
+
+  function demoState() {
+    // Preview only: fills in sample details for the film named in ?demo=
+    return {
+      state: params.get("state") || "playing",
+      title: demo,
+      year: params.get("year") || "",
+      rating: params.get("rating") || "",
+      duration: (Number(params.get("mins")) || 0) * 60000,
+      viewOffset: (Number(params.get("at")) || 0) * 60000,
+      genres: (params.get("genres") || "").split(",").filter(Boolean),
+      director: params.get("director") || "",
+      updatedAt: demoStart,
+    };
+  }
+
+  // Tell the Pi's freeze check the page is alive (does nothing on other devices)
+  const pingPi = () => fetch("http://127.0.0.1:8765/ping", { cache: "no-store" }).catch(() => {});
+  pingPi(); setInterval(pingPi, 30 * 1000);
+
+  let npReady = false;   // true once the film's own poster is on screen
+  async function checkPlex() {
+    let s;
+    if (demo) s = demoState();
+    else {
+      try {
+        const r = await fetch(PLEX_API + "/now", { cache: "no-store" });
+        if (!r.ok) return;
+        s = await r.json();
+      } catch (e) { return; }
+      // Ignore anything played on other devices
+      if (s.player !== PLEX_PLAYER) s = { state: "stopped" };
+    }
+
+    if (s.state === "playing" || s.state === "paused") {
+      const key = s.title + "|" + (s.subtitle || "");
+      if (key !== nowKey) {
+        nowKey = key;
+        // Best picture first: your favourite's poster → watchlist text-free poster → Plex's own
+        const yr = Number(s.year) || 0;
+        const pic = (s.type === "episode"
+            ? showPoster(s.title)
+            : (findOwnPoster(s.title) || watchlistPoster(s.title, yr) || retroPoster(s.title, yr)))
+          || (s.hasThumb ? PLEX_API + "/thumb?t=" + s.updatedAt : null);
+        // Hide the overlay, wait for the film's poster to appear, then bring the overlay in.
+        npReady = false;
+        current = s;
+        $("np").classList.remove("show");
+        show(pic, s.title).then(() => setTimeout(() => {
+          if (nowKey === key) { npReady = true; setOverlay(current); }
+        }, 700));
+        return;
+      }
+      if (npReady) setOverlay(s); else current = s;
+    } else if (nowKey) {
+      nowKey = null;
+      npReady = false;
+      current = null;
+      $("np").classList.remove("show");
+      document.body.classList.remove("playing-mode");
+      nextPoster();
+      startRotation();
+    }
+  }
+
+  // Full screen: browsers only allow it after a button press, so the first press of the
+  // remote's middle (select) button — or a click — switches the page to full screen.
+  function goFullScreen() {
+    const el = document.documentElement;
+    if (document.fullscreenElement || document.webkitFullscreenElement) return;
+    const fn = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (fn) { try { const p = fn.call(el); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+  }
+  document.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.keyCode === 13 || e.keyCode === 23) goFullScreen(); });
+  document.addEventListener("click", goFullScreen);
+
+  (async () => {
+    await loadPosters();
+    await checkPlex();
+    if (!nowKey) nextPoster();
+    startRotation();
+    const nextCheck = () => {
+      const h = new Date().getHours();
+      setTimeout(async () => { await checkPlex(); nextCheck(); }, (h < 17) ? QUIET_CHECK_MS : CHECK_MS);
+    };
+    nextCheck();
+    setInterval(tickProgress, 1000);
+    // Pick up watchlist changes from the latest refresh (only while nothing's playing)
+    setInterval(() => { if (!nowKey && !demo) location.reload(); }, RELOAD_MS);
+  })();
+</script>
+</body>
+</html>
