@@ -79,7 +79,9 @@
 
   function favourites() {
     return (typeof FAVOURITE_POSTERS === "undefined" ? [] : FAVOURITE_POSTERS)
-      .map((f) => ({ title: f.title, year: f.year, file: f.poster }));
+      .map((f) => f.image
+        ? { title: f.title, year: f.year, src: f.image + "?w=600", fullSrc: f.image, focus: f.focus }
+        : { title: f.title, year: f.year, file: f.poster });
   }
   function watchlist() {
     if (typeof FILMS === "undefined") return [];
@@ -138,12 +140,12 @@
     if (!items.length) { grid.innerHTML = '<p class="empty">No films match.</p>'; return; }
     for (const i of items) {
       const thumb = i.file ? THUMB + i.file : i.src;
-      const full = i.file ? FULL + i.file : (i.src || "").replace(/-0-\d+-0-\d+-crop/, "-0-1000-0-1500-crop");
+      const full = i.fullSrc || (i.file ? FULL + i.file : (i.src || "").replace(/-0-\d+-0-\d+-crop/, "-0-1000-0-1500-crop"));
       const fig = document.createElement("figure");
       const a = document.createElement("a");
       a.href = full; a.target = "_blank"; a.rel = "noopener";
       const img = document.createElement("img");
-      img.loading = "lazy"; img.alt = i.title; img.src = thumb;
+      img.loading = "lazy"; img.alt = i.title; img.src = thumb; if (i.focus) img.style.objectPosition = i.focus + " 50%";
       a.appendChild(img);
       const cap = document.createElement("figcaption");
       cap.textContent = i.title + " ";
