@@ -10,28 +10,6 @@ const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'The Dog Stars',
-    year: 2026,
-    slug: 'the-dog-stars',
-    imdbRating: 6.5,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/9/2/8/7/1269287-the-dog-stars-0-600-0-900-crop.jpg?v=b44af504b0',
-    vodDate: '2026-10-27',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 119,
-  },
-  {
-    title: 'Forgotten Island',
-    year: 2026,
-    slug: 'forgotten-island-2026',
-    imdbRating: 7.8,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/4/1/7/3/7/1341737-forgotten-island-2026-0-600-0-900-crop.jpg?v=92321a8101',
-    vodDate: '2026-10-27',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 109,
-  },
-  {
     title: 'Verity',
     year: 2026,
     slug: 'verity-2026',
@@ -299,4 +277,6 @@ const WATCHED = [
   { title: 'The Incomer', vodDate: '2026-11-03', imdbRating: 7.2 },
   { title: 'The Weight', vodDate: '2026-10-20', imdbRating: 6.9 },
   { title: 'Bad Apples', vodDate: '2026-11-03', imdbRating: 7.1 },
+  { title: 'The Dog Stars', vodDate: '2026-10-27', imdbRating: 6.5 },
+  { title: 'Forgotten Island', vodDate: '2026-10-27', imdbRating: 7.8 },
 ];
