@@ -49,7 +49,7 @@ const FAVOURITE_POSTERS = [
   { slug: "four-lions", title: "Four Lions", year: 2010, tmdb: 37495, poster: "mtboZ1ywJtgh7sEgnUTjbQSaf52.jpg" },
   { slug: "chappie", title: "Chappie", year: 2015, tmdb: 198184, poster: "Aga77chRb8ANY2OmgtcKOrTZM8p.jpg" },
   { slug: "the-gentlemen", title: "The Gentlemen", year: 2019, tmdb: 522627, poster: "1L5t6OfBzuX1sJ0LZNV6ZM1MjCr.jpg" },
-  { slug: "lock-stock-and-two-smoking-barrels", title: "Lock, Stock and Two Smoking Barrels", year: 1998, tmdb: 100, poster: "j52WXGoIcfIjKHF294dYEnii5Ey.jpg" },
+  { slug: "lock-stock-and-two-smoking-barrels", title: "Lock, Stock and Two Smoking Barrels", year: 1998, tmdb: 100, poster: "ok7XU4JwQMtGcZjs1SGQLOwqCyI.jpg" },
   { slug: "rocknrolla", title: "RocknRolla", year: 2008, tmdb: 13809, poster: "1DDAs2MAphK5MwvVGwoKFcdaJsL.jpg" },
   { slug: "straight-outta-compton", title: "Straight Outta Compton", year: 2015, tmdb: 277216, poster: "15zKxsxbfshXDnJKARhCwuSh7qh.jpg" },
   { slug: "transformers", title: "Transformers", year: 2007, tmdb: 1858, poster: "fg2EyGLnIRmiH4TieHu4MoH08Q0.jpg" },
