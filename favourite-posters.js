@@ -74,7 +74,7 @@ const FAVOURITE_POSTERS = [
   { slug: "oldboy", title: "Oldboy", year: 2003, tmdb: 670, poster: "p9AkSw8e8P1oxr0qxS5Y7do8jJD.jpg" },
   { slug: "star-wars-episode-iii-revenge-of-the-sith", title: "Star Wars: Episode III – Revenge of the Sith", year: 2005, tmdb: 1895, poster: "8ZXP0btDwyjETrJgRqbY4AO3Pem.jpg" },
   { slug: "avatar", title: "Avatar", year: 2009, tmdb: 19995, poster: "fwmoeF44DXBk1tC30QFAiE0nwjT.jpg" },
-  { slug: "the-departed", title: "The Departed", year: 2006, tmdb: 1422, poster: "ywmoAomTToJF8EQj6BDKqb1hB1m.jpg" },
+  { slug: "the-departed", title: "The Departed", year: 2006, tmdb: 1422, poster: "qGYTGm7oqatlyXC8bltSjiLYVII.jpg" },
   { slug: "the-lord-of-the-rings-the-two-towers", title: "The Lord of the Rings: The Two Towers", year: 2002, tmdb: 121, poster: "nGTbPsTnwgfUe4HqHgAobyBGvuA.jpg" },
   { slug: "the-lion-king", title: "The Lion King", year: 1994, tmdb: 8587, poster: "vvvO0YCqdfhYuohp7ZNecgukLkp.jpg" },
   { slug: "the-lord-of-the-rings-the-return-of-the-king", title: "The Lord of the Rings: The Return of the King", year: 2003, tmdb: 122, poster: "rhxmHG1MwdbHo4ifoTnD0IeRgH2.jpg" },
