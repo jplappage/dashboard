@@ -181,8 +181,10 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 24 Oct 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 27 Oct 2026)
 const RETRO_LETTERBOXD = {
+  7:  "2026-10-26", // The Texas Chain Saw Massacre
+  43: "2026-10-25", // Fear and Loathing in Las Vegas
 
   93: "2026-10-23", // Frankenweenie
   35: "2026-10-18", // Groundhog Day
@@ -304,6 +306,8 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  7:   4.0,  // The Texas Chain Saw Massacre
+  43:  2.0,  // Fear and Loathing in Las Vegas
   93:  3.0,  // Frankenweenie
   35:  3.5,  // Groundhog Day
   56:  3.5,  // Erin Brockovich

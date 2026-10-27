@@ -3,7 +3,7 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 23 Oct 2026
+// Last full refresh: 27 Oct 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
@@ -48,10 +48,9 @@ const FILMS = [
     slug: 'ali-g-who-iz-i',
     imdbRating: 5.7,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/5/9/4/1/9/3/1594193-ali-g-who-iz-i-0-600-0-900-crop.jpg?v=0e3e07fb61',
-    vodDate: '2026-11-03',
+    vodDate: '2026-10-28',
     platform: 'Prime Video',
-    estimated: true,
-    note: 'Est. — cinemas 23 Oct 2026, one weekend only (Amazon MGM) · fast-tracked straight to Prime Video, est. early Nov 2026 (WhenToStream 10/23)',
+    estimated: false,
     runtime: 89,
   },
   {
