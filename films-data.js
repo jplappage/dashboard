@@ -132,9 +132,8 @@ const FILMS = [
     imdbRating: 7.6,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/8/5/1/6/8/1285168-fjord-2026-0-600-0-900-crop.jpg?v=12a10d5226',
     vodDate: '2026-11-24',
-    platform: null,
-    estimated: true,
-    note: 'Est. — US cinemas 9 Oct 2026 (NEON, limited; nationwide 23 Oct) · UK cinemas 13 Nov · PVOD est. late Nov 2026, Thanksgiving week Tuesday drop (pre-order open — WhenToStream 10/16)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 146,
   },
   {
