@@ -90,21 +90,6 @@ const FILMS = [
     runtime: 101,
   },
   {
-<<<<<<< HEAD
-    title: 'Your Mother Your Mother Your Mother',
-    year: 2026,
-    slug: 'your-mother-your-mother-your-mother',
-    plexSlug: 'your-mother-your-mother-your-mother-2026',
-    imdbRating: 7.9,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/1/5/2/1/6/1315216-your-mother-your-mother-your-mother-0-600-0-900-crop.jpg?v=a644997d58',
-    vodDate: '2026-11-03',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 112,
-  },
-  {
-=======
->>>>>>> f5cd16e (update 29/10/2026 23:15:01.99)
     title: 'The Social Reckoning',
     year: 2026,
     slug: 'the-social-reckoning',
