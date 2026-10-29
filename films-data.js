@@ -95,10 +95,9 @@ const FILMS = [
     plexSlug: 'your-mother-your-mother-your-mother-2026',
     imdbRating: 7.9,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/1/5/2/1/6/1315216-your-mother-your-mother-your-mother-0-600-0-900-crop.jpg?v=a644997d58',
-    vodDate: '2026-11-10',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 25 Sep 2026 (Amazon MGM / Orion · limited, expanding through Oct) + ~45-day window, Tuesday drop · PVOD est. early Nov 2026 (WhenToStream 10/16)',
+    vodDate: '2026-11-03',
+    platform: 'Digital',
+    estimated: false,
     runtime: 112,
   },
   {
