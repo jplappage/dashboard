@@ -3,7 +3,7 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 27 Oct 2026
+// Last full refresh: 29 Oct 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
@@ -19,17 +19,6 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     runtime: 114,
-  },
-  {
-    title: 'Ali G: Who Iz I?',
-    year: 2026,
-    slug: 'ali-g-who-iz-i',
-    imdbRating: 5.7,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/5/9/4/1/9/3/1594193-ali-g-who-iz-i-0-600-0-900-crop.jpg?v=0e3e07fb61',
-    vodDate: '2026-10-28',
-    platform: 'Prime Video',
-    estimated: false,
-    runtime: 89,
   },
   {
     title: 'Primetime',
@@ -54,15 +43,27 @@ const FILMS = [
     runtime: 89,
   },
   {
+    title: 'Your Mother Your Mother Your Mother',
+    year: 2026,
+    slug: 'your-mother-your-mother-your-mother',
+    plexSlug: 'your-mother-your-mother-your-mother-2026',
+    imdbRating: 7.9,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/1/5/2/1/6/1315216-your-mother-your-mother-your-mother-0-600-0-900-crop.jpg?v=a644997d58',
+    vodDate: '2026-11-03',
+    platform: 'Digital',
+    estimated: false,
+    runtime: 112,
+  },
+  {
     title: 'Digger',
     year: 2026,
     slug: 'digger-2026',
     imdbRating: 7.3,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/2/6/8/8/1132688-digger-2026-0-600-0-900-crop.jpg?v=81ec883a95',
-    vodDate: '2026-11-03',
+    vodDate: '2026-11-10',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · weak run, WB expected to go to PVOD early · est. late Oct / early Nov 2026, Tuesday drop (WhenToStream 10/16)',
+    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · weak run, WB expected to go to PVOD early · no digital date announced as of 29 Oct, so pushed to the next Tuesday drop (WhenToStream: TBA)',
     runtime: 129,
   },
   {
@@ -89,6 +90,7 @@ const FILMS = [
     runtime: 101,
   },
   {
+<<<<<<< HEAD
     title: 'Your Mother Your Mother Your Mother',
     year: 2026,
     slug: 'your-mother-your-mother-your-mother',
@@ -101,6 +103,8 @@ const FILMS = [
     runtime: 112,
   },
   {
+=======
+>>>>>>> f5cd16e (update 29/10/2026 23:15:01.99)
     title: 'The Social Reckoning',
     year: 2026,
     slug: 'the-social-reckoning',
@@ -277,4 +281,5 @@ const WATCHED = [
   { title: 'Bad Apples', vodDate: '2026-11-03', imdbRating: 7.1 },
   { title: 'The Dog Stars', vodDate: '2026-10-27', imdbRating: 6.5 },
   { title: 'Forgotten Island', vodDate: '2026-10-27', imdbRating: 7.8 },
+  { title: 'Ali G: Who Iz I?', vodDate: '2026-10-28', imdbRating: 5.7 },
 ];

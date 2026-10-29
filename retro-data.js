@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 27 Oct 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 29 Oct 2026)
 const RETRO_LETTERBOXD = {
   7:  "2026-10-26", // The Texas Chain Saw Massacre
   43: "2026-10-25", // Fear and Loathing in Las Vegas
