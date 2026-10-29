@@ -172,12 +172,20 @@ Both the watched date AND the personal rating come straight from the **diary pag
 ```
 This is still JP's own rating (the rateit widget is the owner's), so it's safe from the friend-sidebar trap — don't fall back to the review page.
 
+**TV channels for Liverpool + France games (added 29 Oct 2026) — every refresh:**
+JP wants the **exact UK channel** on the hub (e.g. `Sky Sports Main Event`, `TNT Sports 1`), not just the broadcaster. The hub's Lineup Builder card reads it from `fixtures-tv.js`.
+1. List upcoming fixtures (~8 weeks) from ESPN in a browser tab — league scoreboards per month (`site.api.espn.com/apis/site/v2/sports/soccer/<league>/scoreboard?dates=YYYYMM&limit=300`; Liverpool: `eng.1`, `uefa.champions`, `eng.fa`, `eng.league_cup`; France: `uefa.nations`, `fifa.friendly`, `fifa.worldq.uefa`). ESPN names read "Away at Home".
+2. Liverpool channels: WebFetch `https://www.live-footballontv.com/liverpool-on-tv.html` (lists the exact channels per game; it works from WebFetch). Cross-check against LFC's "TV channels … guide" article for the next game if it's out.
+3. France channels: open `https://www.live-footballontv.com/france-on-tv.html` in the built-in browser (WebFetch refuses that URL). If it shows "No Upcoming TV Fixtures", use the UK rights holder — **Prime Video** for Nations League games not involving the home nations (2026–27) — with `confirmed: false`.
+4. Update `fixtures-tv.js`: one entry per game `{ date: 'YYYY-MM-DD' (UK date), team: 'liverpool'|'france', ko: 'HH:MM' (UK), match, channel, confirmed }`. Use the main linear channel (first listed — ignore Ultra HDR / HBO Max / discovery+ extras). Where only "Sky Sports TBC" / "TNT Sports TBC" is known, set `channel: 'Sky Sports'` or `'TNT Sports'` with `confirmed: false` (hub shows "(TBC)"). Drop past games, update the "Last checked" line. Never guess a channel.
+
 **Before moving to Phase 4, verify:**
 - [ ] Every film with `vodDate: null` or `estimated: true` was searched OR listed as skipped (pre-theatrical)
 - [ ] Every film with no `imdbRating` was searched OR listed as skipped (pre-theatrical)
 - [ ] Every film with no `runtime` had a Letterboxd runtime scrape attempted (set if found, left absent if Letterboxd doesn't list it yet)
 - [ ] Every film with a confirmed future `vodDate` was re-verified against WhenToStream (date unchanged or updated)
 - [ ] Every show with a vague `next` field was searched OR listed as skipped (recheck not due) — check counts against Phase 2 lists
+- [ ] Every Liverpool/France game in the next ~8 weeks has a `fixtures-tv.js` entry with the exact channel (or broadcaster + `confirmed: false`)
 - [ ] All results have been applied or explicitly noted as no-change
 
 ---
@@ -196,6 +204,9 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 **`watchlist-posters.js`** (text-free posters for the TV poster display)
 - (`show-posters.js`: add `{ name: '<show name>', imdb: '<imdbId>', tmdb: <tv id>, poster: '<file>.jpg' },` for each new show.)
 - Add `'<slug>': { tmdb: <id>, poster: '<file>.jpg' },` for each film found in the text-free poster step (key = the film's `slug` in films-data.js). Leave entries for archived films — harmless. Validate with `node --check` like the other data files.
+
+**`fixtures-tv.js`** (exact UK TV channel per Liverpool/France game — read by index.html)
+- Apply the TV-channel step results; validate with `node --check`.
 
 **`watchlist-dashboard.html`** — no manual edits. The footer (`Last updated` + refresh #) auto-stamps via `.github/workflows/stamp-last-updated.yml` whenever a data file is pushed.
 
@@ -221,7 +232,7 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 
 **Validate before finishing (catches broken pushes before they deploy):**
 ```
-for f in films-data.js shows-data.js retro-data.js; do
+for f in films-data.js shows-data.js retro-data.js fixtures-tv.js; do
   tr -d '\000' < "$f" > /tmp/check.js && node --check /tmp/check.js || echo "FAIL: $f"
 done
 ```
