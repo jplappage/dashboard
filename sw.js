@@ -15,11 +15,11 @@
  * CACHE_VERSION below and redeploy.
  */
 
-const CACHE_VERSION = 'v8';
+const CACHE_VERSION = 'v9';
 const CACHE_NAME = 'jp-dashboards-' + CACHE_VERSION;
 
 // Files fetched fresh every load (fall back to cache only when offline).
-const DATA_FILES = ['films-data.js', 'shows-data.js', 'retro-data.js'];
+const DATA_FILES = ['films-data.js', 'shows-data.js', 'retro-data.js', 'fixtures-tv.js'];
 
 // Warm the cache on install so the first standalone launch is instant.
 const PRECACHE = [

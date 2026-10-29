@@ -345,6 +345,7 @@ window.gistData = (function () {
 <script src="films-data.js"></script>
 <script src="shows-data.js"></script>
 <script src="retro-data.js"></script>
+<script src="fixtures-tv.js"></script>
 <script>
 (async function retroTeaser() {
   const el = document.getElementById('retro-sub');
@@ -789,6 +790,16 @@ window.gistData = (function () {
                : days === 1 ? 'tomorrow ' + time
                : days + ' days';
     nextLine = 'next: <span class="soon">' + nxt.label + '</span> · ' + when;
+
+    // Exact UK TV channel, from fixtures-tv.js (kept up to date by /refresh).
+    // Matched on the game's UK date + team, so ESPN's team-name spelling doesn't matter.
+    try {
+      const ukDate = nxt.d.toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      const tv = (typeof FIXTURE_TV !== 'undefined' ? FIXTURE_TV : [])
+        .find(f => f.date === ukDate && f.team === nxt.team);
+      if (tv) nextLine += '<br>📺 <span class="soon">' + tv.channel + '</span>' +
+                          (tv.confirmed === false ? ' (TBC)' : '');
+    } catch (_) {}
 
     // Availability for the team playing next only
     const c = avail && avail[nxt.team];
