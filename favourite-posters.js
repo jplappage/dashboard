@@ -175,7 +175,7 @@ const FAVOURITE_POSTERS = [
   { slug: "the-last-of-us", title: "The Last of Us", year: 2023, tmdb: 100088, poster: "qD7rmFLD5ZChiVP13uqnTeypYEF.jpg", tv: true },
   // Games JP asked for (27 Oct 2026) — official Xbox Store 4K artwork, shown as a tall slice (focus = how far across)
   { slug: "ac-shadows-1", title: "Assassin's Creed Shadows", game: true, image: "https://store-images.s-microsoft.com/image/apps.18685.14601317961808017.7b103743-3dbd-479d-b77a-f82e7f0548c6.117374c6-d4eb-4046-a93b-2e60c73df398", focus: "60%" },
-  { slug: "destiny-2-1", title: "Destiny 2", game: true, image: "https://store-images.s-microsoft.com/image/apps.17712.14134992626562533.488a0dea-3d31-463e-ad2e-6ba61492e19e.485090c7-2202-4bc7-9890-6031cf87ce07", focus: "45%" },
+  { slug: "destiny-2-1", title: "Destiny 2", game: true, image: "https://store-images.s-microsoft.com/image/apps.17712.14134992626562533.488a0dea-3d31-463e-ad2e-6ba61492e19e.485090c7-2202-4bc7-9890-6031cf87ce07", focus: "50%" },
   // Splinter Cell: Deathwatch (2025 series) text-free TMDB posters — no sharp text-free game art exists
   { slug: "splinter-cell-deathwatch", title: "Splinter Cell: Deathwatch", year: 2025, tmdb: 127366, poster: "ywSwacfcb7NB9Rg2tkm4bFrcTwt.jpg", tv: true },
 ];
