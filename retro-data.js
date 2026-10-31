@@ -183,6 +183,8 @@ const RETRO_FILMS = [
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
 // Pre-populated from zidanejp's Letterboxd diary (scraped 31 Oct 2026)
 const RETRO_LETTERBOXD = {
+  31: "2026-10-31", // Hellraiser
+  54: "2026-10-31", // Corpse Bride
   7:  "2026-10-26", // The Texas Chain Saw Massacre
   43: "2026-10-25", // Fear and Loathing in Las Vegas
 
@@ -419,4 +421,6 @@ const RETRO_RATINGS = {
   168: 4.0,  // The Secret Life of Walter Mitty
   169: 3.5,  // The Princess Bride
   170: 3.0,  // Ferris Bueller's Day Off
+  31: 3.5,  // Hellraiser
+  54: 4.0,  // Corpse Bride
 };
