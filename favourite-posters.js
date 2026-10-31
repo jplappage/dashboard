@@ -130,7 +130,7 @@ const FAVOURITE_POSTERS = [
   { slug: "oppenheimer-2023", title: "Oppenheimer", year: 2023, tmdb: 872585, poster: "eHjIEiEKTnb9euehI7IbCxtGH5N.jpg" },
   { slug: "barbarian-2022", title: "Barbarian", year: 2022, tmdb: 913290, poster: "iChMivDTlxTfnNW3fQCLr5fQlMv.jpg" },
   { slug: "no-time-to-die-2021", title: "No Time to Die", year: 2021, tmdb: 370172, poster: "bw9Eeiq692dS8BQwWVAZUOKjX8a.jpg" },
-  { slug: "talk-to-me-2022", title: "Talk to Me", year: 2022, tmdb: 1008042, poster: "uPSthtiPU1gRK55Szjex31R4fmU.jpg" },
+  { slug: "talk-to-me-2022", title: "Talk to Me", year: 2022, tmdb: 1008042, poster: "1WWJ5BR7CT6syrzi2JIAo6m7XMz.jpg" },
   { slug: "the-order-2024", title: "The Order", year: 2024, tmdb: 1082195, poster: "mSE1DGQ69ClSMfKusHYLDyK5oBU.jpg" },
   { slug: "1917", title: "1917", year: 2019, tmdb: 530915, poster: "oG1mL3IgPJQsEdqilmXOpw5uDV0.jpg" },
   { slug: "kneecap", title: "Kneecap", year: 2024, tmdb: 1180629, poster: "1nBMkpMRrnZJbEwMHPHsIntWoKe.jpg" },
