@@ -144,7 +144,7 @@ const FAVOURITE_POSTERS = [
   { slug: "the-batman", title: "The Batman", year: 2022, tmdb: 414906, poster: "fqrrLsQ5S6NyX7OHWqhnTFozaEh.jpg" },
   { slug: "about-time", title: "About Time", year: 2013, tmdb: 122906, poster: "y5wXoCJVmkW0iE8VDT9aIfkBue6.jpg" },
   { slug: "nimona-2023", title: "Nimona", year: 2023, tmdb: 961323, poster: "upJ8tLhlk8aHWcJuTpqGPTpZEVa.jpg" },
-  { slug: "crazy-stupid-love", title: "Crazy, Stupid, Love.", year: 2011, tmdb: 50646, poster: "6czDNFBMlMS5VEfSIxvzxQ0KVsv.jpg" },
+  { slug: "crazy-stupid-love", title: "Crazy, Stupid, Love.", year: 2011, tmdb: 50646, poster: "90RJu26s63sbPBZG12iLugrULUW.jpg" },
   { slug: "inside-llewyn-davis", title: "Inside Llewyn Davis", year: 2013, tmdb: 86829, poster: "cdgr2QzFunb34wEkn5cLSktwejk.jpg" },
   { slug: "prometheus", title: "Prometheus", year: 2012, tmdb: 70981, poster: "xLk489QX97PXodQUsPExKMNfwmG.jpg" },
   { slug: "immortals", title: "Immortals", year: 2011, tmdb: 37958, poster: "tbilWQ9YQWohsQTudYScJ1iGOrs.jpg" },
