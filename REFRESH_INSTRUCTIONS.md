@@ -173,11 +173,11 @@ Both the watched date AND the personal rating come straight from the **diary pag
 This is still JP's own rating (the rateit widget is the owner's), so it's safe from the friend-sidebar trap — don't fall back to the review page.
 
 **4.5★+ films → TV favourites (added 31 Oct 2026, JP's rule) — every refresh:**
-Any film JP rates **4.5★ or 5★** goes into the TV display's favourites rotation (`favourite-posters.js`). Check **every** diary entry (watchlist films, retro films, anything else) logged after the `Favourites checked up to:` date in the header of `favourite-posters.js` — use the same diary extractor as above (owner view or logged-out view), reading JP's own rating only.
-For each entry with stars ≥ 4.5:
-1. Skip it if `FAVOURITE_POSTERS` already has an entry with that film's TMDB id.
-2. Poster: reuse the film's existing text-free poster — `WATCHLIST_POSTERS[<slug>]` in `watchlist-posters.js`, or its entry in `retro-posters.js` (same `tmdb` + `poster`). That's the "move from watchlist to favourites". If neither has one, find a text-free TMDB poster using the text-free rule (Data rules) — eyeball it, skip any with the title on.
-3. Queue `{ slug: "<slug>", title: "<Title>", year: <year>, tmdb: <id>, poster: "<file>.jpg" },` for Phase 4.
+Any film JP rates **4.5★ or 5★** goes into the TV display's favourites rotation (`favourite-posters.js`). Source of truth = his rated-films pages, which catch ratings with or without a diary entry: `https://letterboxd.com/zidanejp/films/rated/4.5/` and `https://letterboxd.com/zidanejp/films/rated/5/` (all pages). On a letterboxd.com tab, collect every `[data-item-slug]` (slug + `data-item-name`) by fetching `/zidanejp/films/rated/<4.5|5>/page/<n>/` until a page comes back empty.
+For each film not already in `FAVOURITE_POSTERS` (match on slug, then on title + year — favourites slugs are Letterboxd slugs):
+1. Poster: reuse the film's existing text-free poster — `WATCHLIST_POSTERS[<slug>]` in `watchlist-posters.js`, or its entry in `retro-posters.js` (same `tmdb` + `poster`). That's the "move from watchlist to favourites". If neither has one, find a text-free TMDB poster using the text-free rule (Data rules) — eyeball it, skip any with the title on.
+2. Queue `{ slug: "<slug>", title: "<Title>", year: <year>, tmdb: <id>, poster: "<file>.jpg" },` for Phase 4.
+Never remove a favourite because its rating dropped — JP edits favourites by hand.
 List them in the Phase 3 summary as "Added to TV favourites (4.5★+): …" (or "none").
 
 **TV channels for Liverpool + France games (added 29 Oct 2026) — every refresh:**
@@ -194,7 +194,7 @@ JP wants the **exact UK channel** on the hub (e.g. `Sky Sports Main Event`, `TNT
 - [ ] Every film with a confirmed future `vodDate` was re-verified against WhenToStream (date unchanged or updated)
 - [ ] Every show with a vague `next` field was searched OR listed as skipped (recheck not due) — check counts against Phase 2 lists
 - [ ] Every Liverpool/France game in the next ~8 weeks has a `fixtures-tv.js` entry with the exact channel (or broadcaster + `confirmed: false`)
-- [ ] Every diary entry since the favourites cutoff was checked for a 4.5★+ rating, and each one is queued for `favourite-posters.js` (or already there)
+- [ ] Every film on the 4.5★ and 5★ rated pages is in `favourite-posters.js` or queued for it
 - [ ] All results have been applied or explicitly noted as no-change
 
 ---
@@ -215,7 +215,7 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 - Add `'<slug>': { tmdb: <id>, poster: '<file>.jpg' },` for each film found in the text-free poster step (key = the film's `slug` in films-data.js). Leave entries for archived films — harmless. Validate with `node --check` like the other data files.
 
 **`favourite-posters.js`** (TV display favourites rotation)
-- Add each queued 4.5★+ film to `FAVOURITE_POSTERS`, placed in year order (the list runs newest year first). Then set the `Favourites checked up to:` date in the header to the newest diary date checked. Validate with `node --check`.
+- Add each queued 4.5★+ film to `FAVOURITE_POSTERS`, placed in year order (the list runs newest year first). Validate with `node --check`.
 
 **`fixtures-tv.js`** (exact UK TV channel per Liverpool/France game — read by index.html)
 - Apply the TV-channel step results; validate with `node --check`.

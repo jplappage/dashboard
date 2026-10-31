@@ -6,7 +6,6 @@
 // (served from https://image.tmdb.org/t/p/original/<poster>).
 // Also every film JP rates 4.5★ or 5★ on Letterboxd — added on each refresh
 // (REFRESH_INSTRUCTIONS.md, "4.5★+ films → TV favourites").
-// Favourites checked up to: 2026-10-31
 // Read by poster-display/index.html. Any images dropped into
 // poster-display/posters/favourites/ are added to the rotation too.
 // ═══════════════════════════════════════════════════════════════════════════
