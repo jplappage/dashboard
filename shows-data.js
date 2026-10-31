@@ -12,7 +12,6 @@ const SHOWS = [
   {name:"Splinter Cell: Deathwatch",             status:"ongoing",  aired:1, next:"S2 · 2026", recheck:"2026-11-06", imdbId:"tt12809802"},
   {name:"Alien: Earth",                          status:"ongoing",  aired:1, next:"S2 · est. 2027", recheck:"2026-11-06", imdbId:"tt13623632"},
   {name:"The Paper",                             status:"ongoing",  aired:2, next:null, recheck:"2026-11-06", imdbId:"tt32159809"},
-  {name:"Peacemaker",                            status:"ongoing",  aired:2, next:null, recheck:"2026-11-06", imdbId:"tt13146488"},
   {name:"The Studio",                            status:"ongoing",  aired:1, next:"S2 · est. Mar 2027", recheck:"2026-11-06", imdbId:"tt23649128"},
   {name:"Dexter: Resurrection",                  status:"ongoing",  aired:2, next:null, recheck:"2026-11-06", airing:"S2 · Fridays", airingUntil:"2027-01-01", imdbId:"tt33043892"},
   {name:"MobLand",                               status:"ongoing",  aired:2, next:"S3 · renewed, date TBA", recheck:"2026-11-06", airing:"S2 · Fridays", airingUntil:"2026-11-20", imdbId:"tt31510819"},
@@ -83,4 +82,5 @@ const SHOWS = [
   {name:"Gen V",                                 status:"cancelled",aired:2, imdbId:"tt13159924"},
   {name:"Westworld",                             status:"cancelled",aired:4, imdbId:"tt0475784"},
   {name:"Spider-Noir",                           status:"cancelled",aired:1, imdbId:"tt30460310"},
+  {name:"Peacemaker",                           status:"cancelled",aired:2, imdbId:"tt13146488"},
 ];
