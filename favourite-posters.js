@@ -4,6 +4,9 @@
 // poster = file name of a text-free ("No Language") poster on TMDB — the project rule;
 // the official English poster only where no sharp text-free one exists (8 Mile)
 // (served from https://image.tmdb.org/t/p/original/<poster>).
+// Also every film JP rates 4.5★ or 5★ on Letterboxd — added on each refresh
+// (REFRESH_INSTRUCTIONS.md, "4.5★+ films → TV favourites").
+// Favourites checked up to: 2026-10-31
 // Read by poster-display/index.html. Any images dropped into
 // poster-display/posters/favourites/ are added to the rotation too.
 // ═══════════════════════════════════════════════════════════════════════════

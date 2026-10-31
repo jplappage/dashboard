@@ -172,6 +172,14 @@ Both the watched date AND the personal rating come straight from the **diary pag
 ```
 This is still JP's own rating (the rateit widget is the owner's), so it's safe from the friend-sidebar trap — don't fall back to the review page.
 
+**4.5★+ films → TV favourites (added 31 Oct 2026, JP's rule) — every refresh:**
+Any film JP rates **4.5★ or 5★** goes into the TV display's favourites rotation (`favourite-posters.js`). Check **every** diary entry (watchlist films, retro films, anything else) logged after the `Favourites checked up to:` date in the header of `favourite-posters.js` — use the same diary extractor as above (owner view or logged-out view), reading JP's own rating only.
+For each entry with stars ≥ 4.5:
+1. Skip it if `FAVOURITE_POSTERS` already has an entry with that film's TMDB id.
+2. Poster: reuse the film's existing text-free poster — `WATCHLIST_POSTERS[<slug>]` in `watchlist-posters.js`, or its entry in `retro-posters.js` (same `tmdb` + `poster`). That's the "move from watchlist to favourites". If neither has one, find a text-free TMDB poster using the text-free rule (Data rules) — eyeball it, skip any with the title on.
+3. Queue `{ slug: "<slug>", title: "<Title>", year: <year>, tmdb: <id>, poster: "<file>.jpg" },` for Phase 4.
+List them in the Phase 3 summary as "Added to TV favourites (4.5★+): …" (or "none").
+
 **TV channels for Liverpool + France games (added 29 Oct 2026) — every refresh:**
 JP wants the **exact UK channel** on the hub (e.g. `Sky Sports Main Event`, `TNT Sports 1`), not just the broadcaster. The hub's Lineup Builder card reads it from `fixtures-tv.js`.
 1. List upcoming fixtures (~8 weeks) from ESPN in a browser tab — league scoreboards per month (`site.api.espn.com/apis/site/v2/sports/soccer/<league>/scoreboard?dates=YYYYMM&limit=300`; Liverpool: `eng.1`, `uefa.champions`, `eng.fa`, `eng.league_cup`; France: `uefa.nations`, `fifa.friendly`, `fifa.worldq.uefa`). ESPN names read "Away at Home".
@@ -186,6 +194,7 @@ JP wants the **exact UK channel** on the hub (e.g. `Sky Sports Main Event`, `TNT
 - [ ] Every film with a confirmed future `vodDate` was re-verified against WhenToStream (date unchanged or updated)
 - [ ] Every show with a vague `next` field was searched OR listed as skipped (recheck not due) — check counts against Phase 2 lists
 - [ ] Every Liverpool/France game in the next ~8 weeks has a `fixtures-tv.js` entry with the exact channel (or broadcaster + `confirmed: false`)
+- [ ] Every diary entry since the favourites cutoff was checked for a 4.5★+ rating, and each one is queued for `favourite-posters.js` (or already there)
 - [ ] All results have been applied or explicitly noted as no-change
 
 ---
@@ -204,6 +213,9 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 **`watchlist-posters.js`** (text-free posters for the TV poster display)
 - (`show-posters.js`: add `{ name: '<show name>', imdb: '<imdbId>', tmdb: <tv id>, poster: '<file>.jpg' },` for each new show.)
 - Add `'<slug>': { tmdb: <id>, poster: '<file>.jpg' },` for each film found in the text-free poster step (key = the film's `slug` in films-data.js). Leave entries for archived films — harmless. Validate with `node --check` like the other data files.
+
+**`favourite-posters.js`** (TV display favourites rotation)
+- Add each queued 4.5★+ film to `FAVOURITE_POSTERS`, placed in year order (the list runs newest year first). Then set the `Favourites checked up to:` date in the header to the newest diary date checked. Validate with `node --check`.
 
 **`fixtures-tv.js`** (exact UK TV channel per Liverpool/France game — read by index.html)
 - Apply the TV-channel step results; validate with `node --check`.
