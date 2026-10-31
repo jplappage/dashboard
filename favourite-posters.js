@@ -56,7 +56,7 @@ const FAVOURITE_POSTERS = [
   { slug: "saw", title: "Saw", year: 2004, tmdb: 176, poster: "gOe1xpXecYXFpG0Oaahsex5LvBz.jpg" },
   { slug: "the-intouchables", title: "The Intouchables", year: 2011, tmdb: 77338, poster: "8potEHABkPW5mMyOPblnUzYccFR.jpg" },
   { slug: "braveheart", title: "Braveheart", year: 1995, tmdb: 197, poster: "4LnviAY5VFEafHq627Zww3wG9mK.jpg" },
-  { slug: "300", title: "300", year: 2006, tmdb: 1271, poster: "bHyriLmcnbgLEEFnlfixKeKbyUk.jpg" },
+  { slug: "300", title: "300", year: 2006, tmdb: 1271, poster: "xRsYJbBac6pKnQopnuzbhI5a1OX.jpg" },
   { slug: "i-am-legend", title: "I Am Legend", year: 2007, tmdb: 6479, poster: "dDLL8JGBnLK5klfzlBflDT5ojRW.jpg" },
   { slug: "snatch", title: "Snatch", year: 2000, tmdb: 107, poster: "fPrCXcSWoOrLBOkeYY4wSYPLVhY.jpg" },
   { slug: "rise-of-the-planet-of-the-apes", title: "Rise of the Planet of the Apes", year: 2011, tmdb: 61791, poster: "i2CG5ROfgIE0syXr9WtgEK3km1W.jpg" },
