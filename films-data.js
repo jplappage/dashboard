@@ -3,23 +3,12 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 29 Oct 2026
+// Last full refresh: 31 Oct 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
-  {
-    title: 'Verity',
-    year: 2026,
-    slug: 'verity-2026',
-    imdbRating: 6.1,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/7/1/5/1/1167151-verity-2026-0-600-0-900-crop.jpg?v=3169444893',
-    vodDate: '2026-10-27',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 114,
-  },
   {
     title: 'Primetime',
     year: 2026,
@@ -63,7 +52,7 @@ const FILMS = [
     vodDate: '2026-11-10',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · weak run, WB expected to go to PVOD early · no digital date announced as of 29 Oct, so pushed to the next Tuesday drop (WhenToStream: TBA)',
+    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · weak run, WB expected to go to PVOD early · WhenToStream 10/30 now expects PVOD early/mid Nov (no pre-order yet) · Tuesday drop',
     runtime: 129,
   },
   {
@@ -145,7 +134,7 @@ const FILMS = [
     vodDate: '2026-12-01',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 23 Oct 2026 (Sony · Taika Waititi · soft wide release) + at least 30 days · PVOD est. late Nov / early Dec 2026, Tuesday drop (pre-order open — WhenToStream 10/23)',
+    note: 'Est. — cinemas 23 Oct 2026 (Sony · Taika Waititi · soft wide release) + at least 30 days · PVOD est. late Nov / early Dec 2026, Tuesday drop (pre-order open — WhenToStream 10/30)',
     runtime: 117,
   },
   {
@@ -267,4 +256,5 @@ const WATCHED = [
   { title: 'The Dog Stars', vodDate: '2026-10-27', imdbRating: 6.5 },
   { title: 'Forgotten Island', vodDate: '2026-10-27', imdbRating: 7.8 },
   { title: 'Ali G: Who Iz I?', vodDate: '2026-10-28', imdbRating: 5.7 },
+  { title: 'Verity', vodDate: '2026-10-27', imdbRating: 6.1 },
 ];
