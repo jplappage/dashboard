@@ -183,6 +183,7 @@ const RETRO_FILMS = [
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
 // Pre-populated from zidanejp's Letterboxd diary (scraped 31 Oct 2026)
 const RETRO_LETTERBOXD = {
+  127: "2026-11-01", // West Side Story
   31: "2026-10-31", // Hellraiser
   54: "2026-10-31", // Corpse Bride
   7:  "2026-10-26", // The Texas Chain Saw Massacre
@@ -423,4 +424,5 @@ const RETRO_RATINGS = {
   170: 3.0,  // Ferris Bueller's Day Off
   31: 3.5,  // Hellraiser
   54: 4.0,  // Corpse Bride
+  127: 2.5,  // West Side Story
 };
