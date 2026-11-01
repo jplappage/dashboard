@@ -62,9 +62,8 @@ const FILMS = [
     imdbRating: 5.5,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/8/4/4/8/0/1284480-other-mommy-0-600-0-900-crop.jpg?v=297427826f',
     vodDate: '2026-11-10',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 9 Oct 2026 (Universal) + 30-day window, Tuesday drop · PVOD est. early Nov 2026 (pre-order open — WhenToStream 10/16)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 93,
   },
   {
