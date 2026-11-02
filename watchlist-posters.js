@@ -29,4 +29,13 @@ const WATCHLIST_POSTERS = {
   'street-fighter-2026': { tmdb: 1153576, poster: 'mjdWojP3rMpu83Idxp1KSa9mFKY.jpg' },
   'you-can-see-everything': { tmdb: 1765072, poster: 'gH5580ALwx5aEVjl2gYr58RE6Af.jpg' },
   'whalefall': { tmdb: 1255833, poster: 'jlmhrUgJ4oigabcysbEkfgR4QUu.jpg' },
+  'wild-horse-nine': { tmdb: 891621, poster: '5ioXPM9F4k0NMktEImMVi9VSkjl.jpg' },
+  'godzilla-minus-zero': { tmdb: 1381071, poster: 'q7gaYKraFOlI4InFq4rFlSfSOe9.jpg' },
+  'i-play-rocky': { tmdb: 1286656, poster: 'YwxtAkRLO3aOolu2QfS7w8bZRH.jpg' },
+  'ebenezer-2026': { tmdb: 1567605, poster: '5J00g52JePaoJpRjq4yfpMMxrZL.jpg' },
+  'how-to-rob-a-bank-2026': { tmdb: 1437511, poster: 'klsxdu8ubLerJxlDr631Kc3TDsF.jpg' },
+  'the-hunger-games-sunrise-on-the-reaping': { tmdb: 1300968, poster: 'xtAfkYImY13kPpqKmsdePQYzK3s.jpg' },
+  'hexed-2026': { tmdb: 1538497, poster: 'gPws3PNKHuBDEUGwZrxwLAEu340.jpg' },
+  'the-further-mis-adventures-of-cliff-booth': { tmdb: 1457866, poster: 'KNXCjWdArPedBV401h7OHw2FWT.jpg' },
+  'focker-in-law': { tmdb: 1400336, poster: 'lPjpY0OpOfrfbj2nmR1Td6EpvvO.jpg' },
 };
