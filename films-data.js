@@ -132,10 +132,9 @@ const FILMS = [
     slug: 'the-social-reckoning',
     imdbRating: 6.8,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/4/6/6/9/1164669-the-social-reckoning-0-600-0-900-crop.jpg?v=e880229a7f',
-    vodDate: '2026-11-17',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 9 Oct 2026 (Sony · Aaron Sorkin) + 5-6 week window, Tuesday drop · PVOD est. early/mid Nov 2026 (pre-order open — WhenToStream 10/16)',
+    vodDate: '2026-11-24',
+    platform: 'Digital',
+    estimated: false,
     runtime: 112,
   },
   {
