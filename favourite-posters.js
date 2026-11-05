@@ -11,6 +11,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FAVOURITE_POSTERS = [
+  { slug: "resident-evil-2026", title: "Resident Evil", year: 2026, tmdb: 1423191, poster: "9YzsMLLSpCbAiDiEXlwkZr3m5Ri.jpg" }, // 4.5★, added 5 Nov 2026
   { slug: "michael-2026", title: "Michael", year: 2026, tmdb: 936075, poster: "5HgVwIzug5iCoprtj4ZSvcHjjI1.jpg" },
   { slug: "project-hail-mary", title: "Project Hail Mary", year: 2026, tmdb: 687163, poster: "50FMVzBBt0ReMvNg493UAqcRoNX.jpg" },
   { slug: "grand-theft-auto-vi-an-extended-look", title: "Grand Theft Auto VI: An Extended Look", year: 2026, tmdb: 1744462, poster: "1SAGuyPOE6POYY6Gxg67uJZYJgo.jpg" },

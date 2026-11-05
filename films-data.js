@@ -3,7 +3,7 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 2 Nov 2026
+// Last full refresh: 5 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
@@ -19,30 +19,6 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     runtime: 110,
-  },
-  {
-    title: 'Your Mother Your Mother Your Mother',
-    year: 2026,
-    slug: 'your-mother-your-mother-your-mother',
-    plexSlug: 'your-mother-your-mother-your-mother-2026',
-    imdbRating: 7.9,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/1/5/2/1/6/1315216-your-mother-your-mother-your-mother-0-600-0-900-crop.jpg?v=a644997d58',
-    vodDate: '2026-11-03',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 112,
-  },
-  {
-    title: 'Wild Horse Nine',
-    year: 2026,
-    slug: 'wild-horse-nine',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/8/0/2/6/3/2/802632-wild-horse-nine-0-600-0-900-crop.jpg?v=eade7a541c',
-    vodDate: '2026-11-04',
-    platform: null,
-    cinema: true,
-    estimated: true,
-    note: 'In cinemas 4 Nov 2026 UK / 6 Nov US (Searchlight · Martin McDonagh) · digital TBA',
-    runtime: 117,
   },
   {
     title: 'Godzilla Minus Zero',
@@ -127,6 +103,7 @@ const FILMS = [
     runtime: 122,
   },
   {
+<<<<<<< HEAD
     title: 'The Social Reckoning',
     year: 2026,
     slug: 'the-social-reckoning',
@@ -138,6 +115,8 @@ const FILMS = [
     runtime: 112,
   },
   {
+=======
+>>>>>>> 89b0b3c (update 05/11/2026 22:32:52.01)
     title: 'The Hunger Games: Sunrise on the Reaping',
     year: 2026,
     slug: 'the-hunger-games-sunrise-on-the-reaping',
@@ -149,6 +128,17 @@ const FILMS = [
     estimated: true,
     note: 'In cinemas 20 Nov 2026 UK & US (Lionsgate) · digital TBA',
     runtime: 158,
+  },
+  {
+    title: 'The Social Reckoning',
+    year: 2026,
+    slug: 'the-social-reckoning',
+    imdbRating: 6.8,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/4/6/6/9/1164669-the-social-reckoning-0-600-0-900-crop.jpg?v=e880229a7f',
+    vodDate: '2026-11-24',
+    platform: 'Digital',
+    estimated: false,
+    runtime: 112,
   },
   {
     title: 'Clayface',
@@ -196,6 +186,15 @@ const FILMS = [
     cinema: true,
     estimated: true,
     note: 'In cinemas 25 Nov 2026 UK & US (limited IMAX) · Netflix 23 Dec 2026',
+  },
+  {
+    title: 'Blade Runner 2099',
+    year: 2026,
+    slug: 'blade-runner-2099',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/6/6/3/1/2/5/1663125-blade-runner-2099-0-600-0-900-crop.jpg?v=bd4dcd78d5',
+    vodDate: '2026-11-25',
+    platform: 'Prime Video',
+    estimated: false,
   },
   {
     title: 'Focker-in-Law',
@@ -282,6 +281,18 @@ const FILMS = [
     note: 'Est. — cinemas 16 Oct 2026 (20th Century) + usual 7-8 week window, Tuesday drop · PVOD est. mid Dec 2026 (WhenToStream 10/16)',
     runtime: 98,
   },
+  {
+    title: 'Wild Horse Nine',
+    year: 2026,
+    slug: 'wild-horse-nine',
+    imdbRating: 8.1,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/8/0/2/6/3/2/802632-wild-horse-nine-0-600-0-900-crop.jpg?v=eade7a541c',
+    vodDate: '2026-12-22',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 4 Nov 2026 UK / 6 Nov US (Searchlight · Martin McDonagh) + ~45-day window, Tuesday drop · theatrical only for now (WhenToStream VOD TBA 11/5)',
+    runtime: 117,
+  },
 ];
 
 // ── WATCHED ARCHIVE ──────────────────────────────────────────────────────────
@@ -354,4 +365,5 @@ const WATCHED = [
   { title: 'Ali G: Who Iz I?', vodDate: '2026-10-28', imdbRating: 5.7 },
   { title: 'Verity', vodDate: '2026-10-27', imdbRating: 6.1 },
   { title: 'Resident Evil', vodDate: '2026-11-03', imdbRating: 7.6 },
+  { title: 'Your Mother Your Mother Your Mother', vodDate: '2026-11-03', imdbRating: 7.1 },
 ];
