@@ -103,20 +103,6 @@ const FILMS = [
     runtime: 122,
   },
   {
-<<<<<<< HEAD
-    title: 'The Social Reckoning',
-    year: 2026,
-    slug: 'the-social-reckoning',
-    imdbRating: 6.8,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/4/6/6/9/1164669-the-social-reckoning-0-600-0-900-crop.jpg?v=e880229a7f',
-    vodDate: '2026-11-24',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 112,
-  },
-  {
-=======
->>>>>>> 89b0b3c (update 05/11/2026 22:32:52.01)
     title: 'The Hunger Games: Sunrise on the Reaping',
     year: 2026,
     slug: 'the-hunger-games-sunrise-on-the-reaping',
