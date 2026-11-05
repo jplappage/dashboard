@@ -72,6 +72,7 @@
 <script src="../../watchlist-posters.js"></script>
 <script src="../../favourite-posters.js"></script>
 <script src="../../retro-posters.js"></script>
+<script src="../../collection-posters.js"></script>
 <script src="../../show-posters.js"></script>
 <script>
   const THUMB = "https://image.tmdb.org/t/p/w342/";
@@ -97,6 +98,11 @@
       .map((f) => ({ title: f.title, year: f.year, file: f.poster }));
   }
 
+  function collection() {
+    return (typeof COLLECTION_POSTERS === "undefined" ? [] : COLLECTION_POSTERS)
+      .map((f) => ({ title: f.title, year: f.year, file: f.poster }));
+  }
+
   function shows() {
     return (typeof SHOW_POSTERS === "undefined" ? [] : SHOW_POSTERS)
       .map((f) => ({ title: f.name, file: f.poster }));
@@ -109,6 +115,8 @@
       note: "Only shown when that film is playing in Plex. Text-free where TMDB has one." },
     { id: "retro", name: "Retro (unwatched)", items: retro(),
       note: "Unwatched films from your retro watchlist. Only shown when that film is playing in Plex." },
+    { id: "collection", name: "Collection", items: collection(),
+      note: "Films you own but don't want rotating (e.g. Spider-Man). Only shown when that film is playing in Plex." },
     { id: "shows", name: "Shows", items: shows(),
       note: "Your shows. Shown when an episode is playing in Plex. Text-free where TMDB has a sharp one." },
   ];
