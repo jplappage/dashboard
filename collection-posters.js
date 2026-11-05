@@ -7,15 +7,15 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const COLLECTION_POSTERS = [
-  { slug: "spider-man-2002", title: "Spider-Man", year: 2002, tmdb: 557, poster: "wSdPLwKmjSH55UH9zeYI37A9pwp.jpg" },
+  { slug: "spider-man-2002", title: "Spider-Man", year: 2002, tmdb: 557, poster: "h3XFBmEShoE8WsWuB1J6p4SqmsH.jpg" },
   { slug: "spider-man-2", title: "Spider-Man 2", year: 2004, tmdb: 558, poster: "f5SU1y2pHZgfwAUpDH0vSvPCHhb.jpg" },
-  { slug: "spider-man-3", title: "Spider-Man 3", year: 2007, tmdb: 559, poster: "nAesO7mXxareNwruAREPgLjBXq1.jpg" },
-  { slug: "the-amazing-spider-man", title: "The Amazing Spider-Man", year: 2012, tmdb: 1930, poster: "tZZON2b3YmUpo5CPHbqkw0kxX82.jpg" },
-  { slug: "the-amazing-spider-man-2", title: "The Amazing Spider-Man 2", year: 2014, tmdb: 102382, poster: "8zxZjETeOVfLXj5yrE0y7CJq1nj.jpg" },
+  { slug: "spider-man-3", title: "Spider-Man 3", year: 2007, tmdb: 559, poster: "x9NyPwENdLxppSTK7lPMLEXtyeW.jpg" },
+  { slug: "the-amazing-spider-man", title: "The Amazing Spider-Man", year: 2012, tmdb: 1930, poster: "563aELaufKmblKYAbYVlf5ETyRo.jpg" },
+  { slug: "the-amazing-spider-man-2", title: "The Amazing Spider-Man 2", year: 2014, tmdb: 102382, poster: "dUDTo9leg6MqITR9clD2XAup5VU.jpg" },
   { slug: "spider-man-homecoming", title: "Spider-Man: Homecoming", year: 2017, tmdb: 315635, poster: "26G7HEQCwpmttrG32dlo9TVu25x.jpg" },
-  { slug: "spider-man-into-the-spider-verse", title: "Spider-Man: Into the Spider-Verse", year: 2018, tmdb: 324857, poster: "6NQfnl49iw9lz453ZXbyARtdGKK.jpg" },
-  { slug: "spider-man-far-from-home", title: "Spider-Man: Far From Home", year: 2019, tmdb: 429617, poster: "zP9C0LOGyISLhfkEIftLYLC3ruc.jpg" },
-  { slug: "spider-man-no-way-home", title: "Spider-Man: No Way Home", year: 2021, tmdb: 634649, poster: "4evZ6c9HcAvvEtNcRz5dO1IxDHf.jpg" },
-  { slug: "spider-man-across-the-spider-verse", title: "Spider-Man: Across the Spider-Verse", year: 2023, tmdb: 569094, poster: "uc5U4GCZu9Z2Zb3yqk5fZfLwawR.jpg" },
-  { slug: "spider-man-brand-new-day", title: "Spider-Man: Brand New Day", year: 2026, tmdb: 969681, poster: "yxOxOBxspl3NgC676W62G02g1cR.jpg" },
+  { slug: "spider-man-into-the-spider-verse", title: "Spider-Man: Into the Spider-Verse", year: 2018, tmdb: 324857, poster: "6a6MYwY8aPCeCYoxnxp7cPnLyUz.jpg" },
+  { slug: "spider-man-far-from-home", title: "Spider-Man: Far From Home", year: 2019, tmdb: 429617, poster: "aKUje0BYhOToSPYGme5gg2QR6p4.jpg" },
+  { slug: "spider-man-no-way-home", title: "Spider-Man: No Way Home", year: 2021, tmdb: 634649, poster: "rQaNXBcZxWSbJtmJbi8jrrtYSjF.jpg" },
+  { slug: "spider-man-across-the-spider-verse", title: "Spider-Man: Across the Spider-Verse", year: 2023, tmdb: 569094, poster: "z9yEqj5pkcZR8sNXAiGt48oV44f.jpg" },
+  { slug: "spider-man-brand-new-day", title: "Spider-Man: Brand New Day", year: 2026, tmdb: 969681, poster: "p5QFVX6B3VZTb4M5dfeVw8YMorO.jpg" },
 ];
