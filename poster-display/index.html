@@ -139,6 +139,7 @@
 <script src="../watchlist-posters.js"></script>
 <script src="../favourite-posters.js"></script>
 <script src="../retro-posters.js"></script>
+<script src="../collection-posters.js"></script>
 <script src="../show-posters.js"></script>
 <script>
   const ROTATE_MS = 5 * 60 * 1000;   // each poster stays up 5 minutes
@@ -256,6 +257,15 @@
     if (typeof RETRO_POSTERS === "undefined") return null;
     const t = norm(title);
     const hits = RETRO_POSTERS.filter((f) => norm(f.title) === t);
+    const film = hits.find((f) => !year || Math.abs(f.year - year) <= 1) || hits[0];
+    return film && film.poster ? TMDB_IMG + film.poster : null;
+  }
+
+  // Films you own but don't want in the rotation (collection-posters.js), e.g. Spider-Man
+  function collectionPoster(title, year) {
+    if (typeof COLLECTION_POSTERS === "undefined") return null;
+    const t = norm(title);
+    const hits = COLLECTION_POSTERS.filter((f) => norm(f.title) === t);
     const film = hits.find((f) => !year || Math.abs(f.year - year) <= 1) || hits[0];
     return film && film.poster ? TMDB_IMG + film.poster : null;
   }
@@ -443,7 +453,7 @@
         const yr = Number(s.year) || 0;
         const pic = (s.type === "episode"
             ? showPoster(s.title)
-            : (findOwnPoster(s.title) || watchlistPoster(s.title, yr) || retroPoster(s.title, yr)))
+            : (findOwnPoster(s.title) || watchlistPoster(s.title, yr) || retroPoster(s.title, yr) || collectionPoster(s.title, yr)))
           || (s.hasThumb ? PLEX_API + "/thumb?t=" + s.updatedAt : null);
         // Hide the overlay, wait for the film's poster to appear, then bring the overlay in.
         npReady = false;
