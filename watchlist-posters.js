@@ -8,6 +8,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const WATCHLIST_POSTERS = {
+  'a-story-of-derry': { tmdb: 1813355, poster: 'qCGWDJg1Y9qXfW1F55BNPNvOyjW.jpg' },
   'the-weight-2026': { tmdb: 1433583, poster: 'qvq82aNmGD4fyE9kK1YJV91sC7K.jpg' },
   'the-dog-stars': { tmdb: 1384216, poster: 'o3TY0dc236CM7eMwAsyghcXIzBL.jpg' },
   'forgotten-island-2026': { tmdb: 1465063, poster: 'ahpuDhrazxYkpmzRqbPZAZdiFuA.jpg' },

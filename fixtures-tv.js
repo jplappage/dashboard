@@ -7,7 +7,7 @@
 // broadcaster is known so far (exact channel not yet allocated) → shown as "(TBC)".
 // Source: live-footballontv.com (Liverpool) · Prime Video holds UK rights to
 // Nations League games not involving the home nations (France).
-// Last checked: 5 Nov 2026
+// Last checked: 6 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FIXTURE_TV = [

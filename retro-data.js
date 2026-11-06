@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 5 Nov 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 6 Nov 2026)
 const RETRO_LETTERBOXD = {
   127: "2026-11-01", // West Side Story
   31: "2026-10-31", // Hellraiser
