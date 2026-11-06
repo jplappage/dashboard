@@ -3,12 +3,22 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 5 Nov 2026
+// Last full refresh: 6 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
+  {
+    title: 'A Story of Derry',
+    year: 2026,
+    slug: 'a-story-of-derry',
+    imdbRating: 6.7,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/6/6/4/3/7/0/1664370-a-story-of-derry-0-600-0-900-crop.jpg?v=00dcda5509',
+    vodDate: '2026-10-31',
+    platform: 'HBO Max',
+    estimated: false,
+  },
   {
     title: 'Primetime',
     year: 2026,
@@ -19,30 +29,6 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     runtime: 110,
-  },
-  {
-    title: 'Godzilla Minus Zero',
-    year: 2026,
-    slug: 'godzilla-minus-zero',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/6/6/8/4/1266684-godzilla-minus-zero-0-600-0-900-crop.jpg?v=38989be61d',
-    vodDate: '2026-11-06',
-    platform: null,
-    cinema: true,
-    estimated: true,
-    note: 'In cinemas 6 Nov 2026 UK & US (Toho · IMAX previews from 3 Nov) · digital TBA',
-    runtime: 135,
-  },
-  {
-    title: 'Digger',
-    year: 2026,
-    slug: 'digger-2026',
-    imdbRating: 7.3,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/2/6/8/8/1132688-digger-2026-0-600-0-900-crop.jpg?v=81ec883a95',
-    vodDate: '2026-11-10',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · weak run, WB expected to go to PVOD early · WhenToStream 10/30 now expects PVOD early/mid Nov (no pre-order yet) · Tuesday drop',
-    runtime: 129,
   },
   {
     title: 'Other Mommy',
@@ -101,6 +87,18 @@ const FILMS = [
     estimated: true,
     note: 'In cinemas 13 Nov 2026 UK & US · digital TBA',
     runtime: 122,
+  },
+  {
+    title: 'Digger',
+    year: 2026,
+    slug: 'digger-2026',
+    imdbRating: 7.3,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/2/6/8/8/1132688-digger-2026-0-600-0-900-crop.jpg?v=81ec883a95',
+    vodDate: '2026-11-17',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · mostly out of cinemas but still no pre-order · WhenToStream 11/6 pushed estimate to mid/late Nov · Tuesday drop',
+    runtime: 129,
   },
   {
     title: 'The Hunger Games: Sunrise on the Reaping',
@@ -273,11 +271,23 @@ const FILMS = [
     slug: 'wild-horse-nine',
     imdbRating: 8.1,
     poster: 'https://a.ltrbxd.com/resized/film-poster/8/0/2/6/3/2/802632-wild-horse-nine-0-600-0-900-crop.jpg?v=eade7a541c',
-    vodDate: '2026-12-22',
+    vodDate: '2027-01-05',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 4 Nov 2026 UK / 6 Nov US (Searchlight · Martin McDonagh) + ~45-day window, Tuesday drop · theatrical only for now (WhenToStream VOD TBA 11/5)',
+    note: 'Est. — cinemas 4 Nov 2026 UK / 6 Nov US (Searchlight · Martin McDonagh) + Searchlight\'s usual ~60-day window · WhenToStream 11/6 expects PVOD early Jan 2027 · Tuesday drop',
     runtime: 117,
+  },
+  {
+    title: 'Godzilla Minus Zero',
+    year: 2026,
+    slug: 'godzilla-minus-zero',
+    imdbRating: 8.1,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/6/6/8/4/1266684-godzilla-minus-zero-0-600-0-900-crop.jpg?v=38989be61d',
+    vodDate: '2027-01-12',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 6 Nov 2026 UK & US (Toho / GKIDS) · theatrical only, no pre-order · WhenToStream 11/6 expects PVOD early/mid Jan 2027, could stay in cinemas to year end · Tuesday drop',
+    runtime: 135,
   },
 ];
 
