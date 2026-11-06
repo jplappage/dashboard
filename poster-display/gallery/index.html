@@ -116,7 +116,11 @@
     });
   }
   function retro() {
+    // Watched retro films have moved to Collection, so leave them out here.
+    const owned = new Set((typeof COLLECTION_POSTERS === "undefined" ? [] : COLLECTION_POSTERS)
+      .map((f) => f.title.toLowerCase() + "|" + f.year));
     return (typeof RETRO_POSTERS === "undefined" ? [] : RETRO_POSTERS)
+      .filter((f) => !owned.has(f.title.toLowerCase() + "|" + f.year))
       .map((f) => ({ title: f.title, year: f.year, file: f.poster }));
   }
 
@@ -138,7 +142,7 @@
     { id: "retro", name: "Retro (unwatched)", items: retro(),
       note: "Unwatched films from your retro watchlist. Only shown when that film is playing in Plex." },
     { id: "collection", name: "Collection", items: collection(),
-      note: "Films you own but don't want rotating (e.g. Spider-Man). Only shown when that film is playing in Plex." },
+      note: "Your library: every film you've watched that isn't a favourite, plus films you own (e.g. Spider-Man). Grows with each refresh and is never cleared. Only shown when that film is playing in Plex." },
     { id: "shows", name: "Shows", items: shows(),
       note: "Your shows. Shown when an episode is playing in Plex. Text-free where TMDB has a sharp one." },
   ];

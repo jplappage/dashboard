@@ -4,6 +4,8 @@
 // watchlist. Used only when the film is playing in Plex (matched on title+year).
 // poster = TMDB "No Language" poster, served from
 // https://image.tmdb.org/t/p/original/<poster>. Added 5 Nov 2026 (Spider-Man).
+// LIBRARY (6 Nov 2026): every film JP has watched (watchlist archive + retro list)
+// that isn't a favourite is added here on each refresh and never removed.
 // ═══════════════════════════════════════════════════════════════════════════
 
 const COLLECTION_POSTERS = [
