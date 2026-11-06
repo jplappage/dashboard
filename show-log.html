@@ -735,6 +735,8 @@ async function loadThumbs() {
 
 function applyThumbs() {
   for (const [name, url] of Object.entries(thumbCache)) {
+    const show = SHOWS.find(x => x.name === name);
+    if (show && textFreePoster(show)) continue;   // text-free poster wins
     const img = document.getElementById('img-' + cid(name));
     const ph  = document.getElementById('ph-'  + cid(name));
     if (img) { img.src = url; img.style.display = 'block'; }
