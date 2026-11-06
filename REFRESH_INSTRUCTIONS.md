@@ -180,6 +180,12 @@ For each film not already in `FAVOURITE_POSTERS` (match on slug, then on title +
 Never remove a favourite because its rating dropped — JP edits favourites by hand.
 List them in the Phase 3 summary as "Added to TV favourites (4.5★+): …" (or "none").
 
+**Watched films → TV Collection library (added 6 Nov 2026, JP's rule) — every refresh:**
+The poster gallery's **Collection** is a growing library of everything JP has watched that isn't a favourite. Nothing is ever removed from it. Each refresh, for every film that was **archived from the watchlist** (moved to WATCHED) **or newly watched on the retro list** — and that is NOT going into favourites (4.5★+):
+1. Poster: reuse its text-free poster from `watchlist-posters.js` (by slug) or `retro-posters.js` (by id). If neither has one, find one on TMDB using the text-free rule.
+2. Queue `{ slug: "<letterboxd slug>", title: "<Title>", year: <release year>, tmdb: <id>, poster: "<file>.jpg" },` for `collection-posters.js` (skip if the title + year is already there).
+List them in the Phase 3 summary as "Added to TV collection: …" (or "none"). It's only text, so size is not a concern for the Pi.
+
 **TV channels for Liverpool + France games (added 29 Oct 2026) — every refresh:**
 JP wants the **exact UK channel** on the hub (e.g. `Sky Sports Main Event`, `TNT Sports 1`), not just the broadcaster. The hub's Lineup Builder card reads it from `fixtures-tv.js`.
 1. List upcoming fixtures (~8 weeks) from ESPN in a browser tab — league scoreboards per month (`site.api.espn.com/apis/site/v2/sports/soccer/<league>/scoreboard?dates=YYYYMM&limit=300`; Liverpool: `eng.1`, `uefa.champions`, `eng.fa`, `eng.league_cup`; France: `uefa.nations`, `fifa.friendly`, `fifa.worldq.uefa`). ESPN names read "Away at Home".
@@ -195,6 +201,7 @@ JP wants the **exact UK channel** on the hub (e.g. `Sky Sports Main Event`, `TNT
 - [ ] Every show with a vague `next` field was searched OR listed as skipped (recheck not due) — check counts against Phase 2 lists
 - [ ] Every Liverpool/France game in the next ~8 weeks has a `fixtures-tv.js` entry with the exact channel (or broadcaster + `confirmed: false`)
 - [ ] Every film on the 4.5★ and 5★ rated pages is in `favourite-posters.js` or queued for it
+- [ ] Every film archived from the watchlist / newly watched on the retro list this refresh is in `favourite-posters.js` or `collection-posters.js` (or queued)
 - [ ] All results have been applied or explicitly noted as no-change
 
 ---
@@ -216,6 +223,9 @@ Apply everything found in Phases 2–3 in a single editing pass per file:
 
 **`favourite-posters.js`** (TV display favourites rotation)
 - Add each queued 4.5★+ film to `FAVOURITE_POSTERS`, placed in year order (the list runs newest year first). Validate with `node --check`.
+
+**`collection-posters.js`** (TV display Collection library — watched films that aren't favourites)
+- Append each queued watched film to `COLLECTION_POSTERS` (never remove entries). Validate with `node --check`.
 
 **`fixtures-tv.js`** (exact UK TV channel per Liverpool/France game — read by index.html)
 - Apply the TV-channel step results; validate with `node --check`.
