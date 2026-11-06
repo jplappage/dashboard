@@ -471,6 +471,7 @@
 </div>
 
 <script src="films-data.js"></script>
+<script src="watchlist-posters.js"></script>
 <script>
 const TODAY = (() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); })();
 
@@ -579,8 +580,12 @@ function renderCard(film) {
   const fmtRuntime = (m) => m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? ' ' + (m % 60) + 'm' : ''}` : `${m}m`;
   const runtimeBadge = film.runtime ? `<span class="runtime-badge">🕐 ${fmtRuntime(film.runtime)}</span>` : '';
 
-  const posterHtml = film.poster
-    ? `<img src="${film.poster}" alt="${film.title}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`
+  // Text-free TMDB poster (same artwork as the TV poster display); Letterboxd poster as fallback.
+  const tf = (typeof WATCHLIST_POSTERS !== 'undefined') && WATCHLIST_POSTERS[film.slug];
+  const posterSrc = tf ? `https://image.tmdb.org/t/p/w500/${tf.poster}` : film.poster;
+  const posterFallback = (tf && film.poster) ? film.poster : '';
+  const posterHtml = posterSrc
+    ? `<img src="${posterSrc}" alt="${film.title}" loading="lazy" data-fallback="${posterFallback}" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.style.display='none'; this.nextElementSibling.style.display='flex'}">`
     : '';
 
   const lbUrl = `https://letterboxd.com/film/${film.lbSlug || film.slug}/`;
@@ -590,7 +595,7 @@ function renderCard(film) {
     <div class="card" onclick="window.open('${lbUrl}','_blank')" role="link" tabindex="0">
       <div class="poster-wrap">
         ${posterHtml}
-        <div class="poster-placeholder" style="${film.poster ? 'display:none' : ''}">🎬</div>
+        <div class="poster-placeholder" style="${posterSrc ? 'display:none' : ''}">🎬</div>
         ${imdbBadge}
         ${runtimeBadge}
       </div>

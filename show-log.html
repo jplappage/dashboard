@@ -490,6 +490,7 @@
 <footer id="footer"></footer>
 
 <script src="shows-data.js"></script>
+<script src="show-posters.js"></script>
 <script>
 // ── JSONBin sync ─────────────────────────────────────────────────────────────
 const GIST_ID      = '5411ac8d12fdc31aa3fa73e4d66f6377';
@@ -698,8 +699,14 @@ function clearAll() {
 }
 
 // ── Thumbnails ───────────────────────────────────────────────────────────────
+// Text-free TMDB poster from show-posters.js (same artwork as the TV poster display).
+function textFreePoster(s) {
+  if (typeof SHOW_POSTERS === 'undefined' || !s.imdbId) return null;
+  const p = SHOW_POSTERS.find(x => x.imdb === s.imdbId);
+  return p ? `https://image.tmdb.org/t/p/w500/${p.poster}` : null;
+}
 async function loadThumbs() {
-  const missing = SHOWS.filter(s => !s.poster && !thumbCache[s.name]);
+  const missing = SHOWS.filter(s => !textFreePoster(s) && !s.poster && !thumbCache[s.name]);
   for (const show of missing) {
     try {
       const endpoint = show.tvmazeId
@@ -938,9 +945,10 @@ function buildCard(s) {
   const badgeCls = s.status === 'ongoing' ? 'badge-ongoing' : s.status === 'cancelled' ? 'badge-cancelled' : 'badge-ended';
   const badgeTxt = s.status === 'ongoing' ? 'Ongoing' : s.status === 'cancelled' ? 'Cancelled' : 'Ended';
 
-  const url = s.poster || thumbCache[s.name];
+  const url = textFreePoster(s) || s.poster || thumbCache[s.name];
+  const fallback = (url !== (s.poster || thumbCache[s.name])) ? (s.poster || thumbCache[s.name] || '') : '';
   const imgHtml = url
-    ? `<img id="img-${cid(s.name)}" src="${url}" alt="${s.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    ? `<img id="img-${cid(s.name)}" src="${url}" alt="${s.name}" loading="lazy" data-fallback="${fallback}" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.style.display='none';this.nextElementSibling.style.display='flex'}">`
     : `<img id="img-${cid(s.name)}" src="" alt="" style="display:none">`;
 
   // Parse upcoming season info — pill shows just the season label, note goes under title
