@@ -461,7 +461,7 @@ function loadImg(el, sfId, ssId, full, pos, lfcImg) {
   el.referrerPolicy = 'no-referrer';   // SofaScore blocks cross-origin hotlinks by Referer; weserv blocks the domain
   const sources = [];
   if (lfcImg) sources.push(lfcImg);
-  if (ssId) sources.push(`https://api.sofascore.com/api/v1/player/${ssId}/image`);
+  if (ssId) sources.push(`https://img.sofascore.com/api/v1/player/${ssId}/image`);
   if (sfId) {
     sources.push(`https://cdn.sofifa.net/players/${sfId}/25_120.png`);
     sources.push(`https://cdn.sofifa.net/players/${sfId}/24_120.png`);
@@ -504,7 +504,7 @@ const FRANCE_PLAYERS = [
   { id:'doue',       name:'Doué',         full:'Désiré Doué',          pos:'ATT', sec:'squad',  sfId:268960,  tmImg:'914562-1667317075.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/e04b9b08e1bdc310cb6aae9dd6572b08.png?twic=v1/resize=400' },
   { id:'mbappe',     name:'Mbappé',       full:'Kylian Mbappé',        pos:'ATT', sec:'squad',  sfId:231747,  tmImg:'342229-1682683695.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/6603fdc34dc59cdc97f993a1260e5432.png?twic=v1/resize=400' },
   { id:'olise',      name:'Olise',        full:'Michael Olise',        pos:'ATT', sec:'squad',  sfId:258177,  tmImg:'566723-1762944477.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/2a1f9a654eda3a124018bcebcb46223f.png?twic=v1/resize=400' },
-  { id:'pagis',      name:'Pagis',        full:'Pablo Pagis',          pos:'ATT', sec:'squad',  sfId:null,    lfcImg:null },
+  { id:'pagis',      name:'Pagis',        full:'Pablo Pagis',          pos:'ATT', sec:'squad',  sfId:null, ssId:1174462, lfcImg:null },
   { id:'thuram',     name:'Thuram',       full:'Marcus Thuram',        pos:'ATT', sec:'squad',  sfId:259358,  tmImg:'318528-1746041509.jpg'  , lfcImg:'https://fff.twic.pics/https://media.fff.fr/uploads/images/b6c575766c446f10634e366e142e9528.png?twic=v1/resize=400' },
   // ══ FRINGE — previously called up, not in the 6 Nov 2026 list
   // ── FRINGE GK
