@@ -180,6 +180,9 @@ For each film not already in `FAVOURITE_POSTERS` (match on slug, then on title +
 Never remove a favourite because its rating dropped — JP edits favourites by hand.
 List them in the Phase 3 summary as "Added to TV favourites (4.5★+): …" (or "none").
 
+**Finished shows → TV Collection (added 8 Nov 2026, JP's rule) — every refresh:**
+A show moves from the gallery's **Shows** tab to **Collection** once it has **ended** (`status:"finished"` or `"cancelled"` in `shows-data.js`) **and** JP has watched every season (gist `showLog` has `s1`…`s<aired>` all marked `w`, or `a` for abandoned). For each such show whose `show-posters.js` entry lacks it, add `done: true` to that entry (match on `imdb`). Nothing else changes — the display still finds the poster when an episode plays. Never remove `done`. List them in the Phase 3 summary as "Shows moved to TV collection: …" (or "none").
+
 **Watched films → TV Collection library (added 6 Nov 2026, JP's rule) — every refresh:**
 The poster gallery's **Collection** is a growing library of everything JP has watched that isn't a favourite. Nothing is ever removed from it. Each refresh, for every film that was **archived from the watchlist** (moved to WATCHED) **or newly watched on the retro list** — and that is NOT going into favourites (4.5★+):
 1. Poster: reuse its text-free poster from `watchlist-posters.js` (by slug) or `retro-posters.js` (by id). If neither has one, find one on TMDB using the text-free rule.

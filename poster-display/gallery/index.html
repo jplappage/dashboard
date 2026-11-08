@@ -125,13 +125,16 @@
   }
 
   function collection() {
-    return (typeof COLLECTION_POSTERS === "undefined" ? [] : COLLECTION_POSTERS)
+    const films = (typeof COLLECTION_POSTERS === "undefined" ? [] : COLLECTION_POSTERS)
       .map((f) => ({ title: f.title, year: f.year, file: f.poster }));
+    const doneShows = (typeof SHOW_POSTERS === "undefined" ? [] : SHOW_POSTERS)
+      .filter((f) => f.done).map((f) => ({ title: f.name, file: f.poster }));
+    return films.concat(doneShows);
   }
 
   function shows() {
     return (typeof SHOW_POSTERS === "undefined" ? [] : SHOW_POSTERS)
-      .map((f) => ({ title: f.name, file: f.poster }));
+      .filter((f) => !f.done).map((f) => ({ title: f.name, file: f.poster }));
   }
 
   const sections = [
@@ -142,9 +145,9 @@
     { id: "retro", name: "Retro (unwatched)", items: retro(),
       note: "Unwatched films from your retro watchlist. Only shown when that film is playing in Plex." },
     { id: "collection", name: "Collection", items: collection(),
-      note: "Your library: every film you've watched that isn't a favourite, plus films you own (e.g. Spider-Man). Grows with each refresh and is never cleared. Only shown when that film is playing in Plex." },
+      note: "Your library: every film you've watched that isn't a favourite, plus films you own (e.g. Spider-Man) and shows that have ended and you've watched all of. Grows with each refresh and is never cleared. Only shown when that film is playing in Plex." },
     { id: "shows", name: "Shows", items: shows(),
-      note: "Your shows. Shown when an episode is playing in Plex. Text-free where TMDB has a sharp one." },
+      note: "Shows still going, or not fully watched yet. Shown when an episode is playing in Plex. Text-free where TMDB has a sharp one." },
   ];
 
   let current = "favourites";
