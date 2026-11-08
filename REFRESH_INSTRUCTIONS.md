@@ -300,6 +300,7 @@ If main is ahead of origin and the watcher hasn't pushed within a minute, tell J
 **Posters for the TV poster display — text-free is the rule (JP, 23 Oct 2026):** every poster in `watchlist-posters.js`, `favourite-posters.js`, `retro-posters.js` and `show-posters.js` should be a TMDB "No Language" poster (`image_language=xx`), at least ~1000px wide (prefer ≥1400). Only fall back to the official English poster when no sharp text-free one exists. Some posters tagged "No Language" still carry the title — eyeball picks as a thumbnail grid and skip those.
 
 **VOD dates:** Confirmed = streaming now or specific announced date. Pre-order or "coming soon" = do not set `vodDate`.
+**JP says a film is out / gives a date himself:** set that `vodDate` (`estimated: false`) AND add `vodLocked: true`. The 6-hourly `update-vod-dates` workflow skips locked films, otherwise it reverts the date to WhenToStream's (happened with Heart of the Beast, 8 Nov 2026).
 **IMDb ratings:** Only from the film's actual IMDb page. No guesses.
 **Runtime:** Integer minutes, scraped from the film's Letterboxd page (`runtime: 95`). No guesses — if Letterboxd doesn't list it, leave the field absent. Powers the runtime badge on the films-watchlist card.
 **Estimated dates:** Set `estimated: true` and add a `note` string explaining the expected window.

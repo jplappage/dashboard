@@ -18,6 +18,8 @@ Behaviour, deliberately conservative:
     (so a manually-set date is never downgraded).
   * If WhenToStream shows a DIFFERENT confirmed date than we hold, we adopt it
     (this is what catches delays like Robin Hood 21 Jul -> 4 Aug).
+  * Films marked `vodLocked: true` are skipped entirely — JP confirmed the date
+    himself (e.g. "it's out"), so WhenToStream must not overwrite it.
 
 Never guesses. Only acts on a specific "Month DD, YYYY" date in the confirmed
 field. Writes films-data.js only if something actually changed, and the caller
@@ -251,6 +253,10 @@ def main():
         year = year_m.group(1)
         title = get_field(block, 'title') or slug
         print(f'  {title} ({slug})')
+        if get_field(block, 'vodLocked') is True:
+            # JP confirmed this date himself (e.g. "it's out") — never overwrite it.
+            print('    vodLocked: confirmed by JP, leaving as-is')
+            continue
 
         html = None
         for url in wts_candidates(slug, year):
