@@ -183,6 +183,7 @@ const RETRO_FILMS = [
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
 // Pre-populated from zidanejp's Letterboxd diary (scraped 8 Nov 2026)
 const RETRO_LETTERBOXD = {
+  1: "2026-11-08", // Nosferatu
   127: "2026-11-01", // West Side Story
   31: "2026-10-31", // Hellraiser
   54: "2026-10-31", // Corpse Bride
@@ -309,6 +310,7 @@ const RETRO_LETTERBOXD = {
 
 // ── PERSONAL RATINGS (scraped from Letterboxd diary, May 2026) ─────────────
 const RETRO_RATINGS = {
+  1:   3.5,  // Nosferatu
   7:   4.0,  // The Texas Chain Saw Massacre
   43:  2.0,  // Fear and Loathing in Las Vegas
   93:  3.0,  // Frankenweenie
