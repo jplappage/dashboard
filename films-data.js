@@ -3,32 +3,22 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 6 Nov 2026
+// Last full refresh: 8 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'A Story of Derry',
+    title: 'Heart of the Beast',
     year: 2026,
-    slug: 'a-story-of-derry',
-    imdbRating: 6.7,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/6/6/4/3/7/0/1664370-a-story-of-derry-0-600-0-900-crop.jpg?v=00dcda5509',
-    vodDate: '2026-10-31',
-    platform: 'HBO Max',
-    estimated: false,
-  },
-  {
-    title: 'Primetime',
-    year: 2026,
-    slug: 'primetime-2026',
+    slug: 'heart-of-the-beast-2026',
     imdbRating: 7.3,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/6/2/0/1/9/1262019-primetime-2026-0-600-0-900-crop.jpg?v=ffa882dc9a',
-    vodDate: '2026-11-03',
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/4/7/4/6/8/1147468-heart-of-the-beast-2026-0-600-0-900-crop.jpg?v=9503afe033',
+    vodDate: '2026-11-08',
     platform: 'Digital',
     estimated: false,
-    runtime: 110,
+    runtime: 101,
   },
   {
     title: 'Other Mommy',
@@ -40,17 +30,6 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     runtime: 93,
-  },
-  {
-    title: 'Heart of the Beast',
-    year: 2026,
-    slug: 'heart-of-the-beast-2026',
-    imdbRating: 7.3,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/4/7/4/6/8/1147468-heart-of-the-beast-2026-0-600-0-900-crop.jpg?v=9503afe033',
-    vodDate: '2026-11-10',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 101,
   },
   {
     title: 'I Play Rocky',
@@ -148,6 +127,17 @@ const FILMS = [
     runtime: 146,
   },
   {
+    title: 'Wicker',
+    year: 2026,
+    slug: 'wicker',
+    imdbRating: 7.4,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/8/0/8/9/2/1080892-wicker-0-600-0-900-crop.jpg?v=7bc9498e8b',
+    vodDate: '2026-11-24',
+    platform: 'Digital',
+    estimated: false,
+    runtime: 105,
+  },
+  {
     title: 'Hexed',
     year: 2026,
     slug: 'hexed-2026',
@@ -217,18 +207,6 @@ const FILMS = [
     runtime: 117,
   },
   {
-    title: 'Wicker',
-    year: 2026,
-    slug: 'wicker',
-    imdbRating: 7.4,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/8/0/8/9/2/1080892-wicker-0-600-0-900-crop.jpg?v=7bc9498e8b',
-    vodDate: '2026-12-01',
-    platform: null,
-    estimated: true,
-    note: 'Est. — US cinemas 23 Oct 2026 (Black Bear · limited, nationwide 30 Oct) + usual 5-6 week window · PVOD est. early Dec 2026, Tuesday drop (pre-order open — WhenToStream 10/23)',
-    runtime: 105,
-  },
-  {
     title: 'Street Fighter',
     year: 2026,
     slug: 'street-fighter-2026',
@@ -264,6 +242,18 @@ const FILMS = [
     estimated: true,
     note: 'Est. — cinemas 16 Oct 2026 (20th Century) + usual 7-8 week window, Tuesday drop · PVOD est. mid Dec 2026 (WhenToStream 10/16)',
     runtime: 98,
+  },
+  {
+    title: 'Ramayana: Rise of a Legend',
+    year: 2026,
+    slug: 'ramayana-rise-of-a-legend',
+    imdbRating: 8.5,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/5/8/2/4/6/6/582466-ramayana-rise-of-a-legend-0-600-0-900-crop.jpg?v=68491e1f52',
+    vodDate: '2026-12-22',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 6 Nov 2026 UK / 5 Nov US & India (Sony Pictures Releasing outside India) + ~45-day Sony window · streaming on JioHotstar in India after its cinema run · UK digital TBA · Tuesday drop',
+    runtime: 197,
   },
   {
     title: 'Wild Horse Nine',
@@ -362,4 +352,6 @@ const WATCHED = [
   { title: 'Verity', vodDate: '2026-10-27', imdbRating: 6.1 },
   { title: 'Resident Evil', vodDate: '2026-11-03', imdbRating: 7.6 },
   { title: 'Your Mother Your Mother Your Mother', vodDate: '2026-11-03', imdbRating: 7.1 },
+  { title: 'A Story of Derry', vodDate: '2026-10-31', imdbRating: 6.7 },
+  { title: 'Primetime', vodDate: '2026-11-03', imdbRating: 7.3 },
 ];

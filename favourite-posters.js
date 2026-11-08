@@ -59,6 +59,7 @@ const FAVOURITE_POSTERS = [
   { slug: "straight-outta-compton", title: "Straight Outta Compton", year: 2015, tmdb: 277216, poster: "15zKxsxbfshXDnJKARhCwuSh7qh.jpg" },
   { slug: "transformers", title: "Transformers", year: 2007, tmdb: 1858, poster: "3SLZywmfsuIATrd1vA6zaIPSUAt.jpg" },
   { slug: "saw", title: "Saw", year: 2004, tmdb: 176, poster: "gOe1xpXecYXFpG0Oaahsex5LvBz.jpg" },
+  { slug: "spider-man-2", title: "Spider-Man 2", year: 2004, tmdb: 558, poster: "f5SU1y2pHZgfwAUpDH0vSvPCHhb.jpg" }, // 4.5★, added 8 Nov 2026
   { slug: "the-intouchables", title: "The Intouchables", year: 2011, tmdb: 77338, poster: "8potEHABkPW5mMyOPblnUzYccFR.jpg" },
   { slug: "braveheart", title: "Braveheart", year: 1995, tmdb: 197, poster: "4LnviAY5VFEafHq627Zww3wG9mK.jpg" },
   { slug: "300", title: "300", year: 2006, tmdb: 1271, poster: "xRsYJbBac6pKnQopnuzbhI5a1OX.jpg" },

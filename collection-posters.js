@@ -10,7 +10,6 @@
 
 const COLLECTION_POSTERS = [
   { slug: "spider-man-2002", title: "Spider-Man", year: 2002, tmdb: 557, poster: "h3XFBmEShoE8WsWuB1J6p4SqmsH.jpg" },
-  { slug: "spider-man-2", title: "Spider-Man 2", year: 2004, tmdb: 558, poster: "f5SU1y2pHZgfwAUpDH0vSvPCHhb.jpg" },
   { slug: "spider-man-3", title: "Spider-Man 3", year: 2007, tmdb: 559, poster: "x9NyPwENdLxppSTK7lPMLEXtyeW.jpg" },
   { slug: "the-amazing-spider-man", title: "The Amazing Spider-Man", year: 2012, tmdb: 1930, poster: "563aELaufKmblKYAbYVlf5ETyRo.jpg" },
   { slug: "the-amazing-spider-man-2", title: "The Amazing Spider-Man 2", year: 2014, tmdb: 102382, poster: "dUDTo9leg6MqITR9clD2XAup5VU.jpg" },
@@ -21,6 +20,8 @@ const COLLECTION_POSTERS = [
   { slug: "spider-man-across-the-spider-verse", title: "Spider-Man: Across the Spider-Verse", year: 2023, tmdb: 569094, poster: "z9yEqj5pkcZR8sNXAiGt48oV44f.jpg" },
   { slug: "spider-man-brand-new-day", title: "Spider-Man: Brand New Day", year: 2026, tmdb: 969681, poster: "p5QFVX6B3VZTb4M5dfeVw8YMorO.jpg" },
   // ── Watched library (added 6 Nov 2026) ──
+  { slug: "a-story-of-derry", title: "A Story of Derry", year: 2026, tmdb: 1813355, poster: "qCGWDJg1Y9qXfW1F55BNPNvOyjW.jpg" },
+  { slug: "primetime-2026", title: "Primetime", year: 2026, tmdb: 1375441, poster: "CZEiZZn9yYD0zybwCIitDWM0nq.jpg" },
   { slug: "ali-g-who-iz-i", title: "Ali G: Who Iz I?", year: 2026, tmdb: 1727734, poster: "wzoz6SDhcTyHJCZmG5pjvwRF2Dj.jpg" },
   { slug: "backrooms", title: "Backrooms", year: 2026, tmdb: 1083381, poster: "7NVnp7XHiW99nYLqEH5A63uPSJN.jpg" },
   { slug: "bad-apples-2025", title: "Bad Apples", year: 2026, tmdb: 1198654, poster: "lCNO4GjKuLRKRgMqobHJ7d2N2qF.jpg" },
