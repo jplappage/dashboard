@@ -150,6 +150,11 @@
       note: "Shows still going, or not fully watched yet. Shown when an episode is playing in Plex. Text-free where TMDB has a sharp one." },
   ];
 
+  // A–Z in every tab, ignoring a leading "The"/"A"/"An"; same title → by year
+  const sortKey = (t) => String(t || "").toLowerCase().replace(/^(the|a|an)\s+/, "");
+  sections.forEach((s) => s.items.sort((a, b) =>
+    sortKey(a.title).localeCompare(sortKey(b.title), "en", { numeric: true }) || (a.year || 0) - (b.year || 0)));
+
   let current = "favourites";
   try { current = localStorage.getItem("galleryTab") || current; } catch (e) {}
   if (!sections.some((s) => s.id === current)) current = "favourites";
