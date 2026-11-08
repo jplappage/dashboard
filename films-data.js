@@ -15,7 +15,7 @@ const FILMS = [
     slug: 'heart-of-the-beast-2026',
     imdbRating: 7.3,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/4/7/4/6/8/1147468-heart-of-the-beast-2026-0-600-0-900-crop.jpg?v=9503afe033',
-    vodDate: '2026-11-08',
+    vodDate: '2026-11-10',
     platform: 'Digital',
     estimated: false,
     runtime: 101,
