@@ -192,4 +192,5 @@ const COLLECTION_POSTERS = [
   { slug: "the-graduate", title: "The Graduate", year: 1967, tmdb: 37247, poster: "8DSrLvpMWwWXMzIEJ188kDIEF4r.jpg" },
   { slug: "singin-in-the-rain", title: "Singin' in the Rain", year: 1952, tmdb: 872, poster: "qBC7F0vWDDTMNSycn1WjDOI3Fmm.jpg" },
   { slug: "nosferatu", title: "Nosferatu", year: 1922, tmdb: 653, poster: "p7kbfApTOF2LQQj82Efe18QSw9y.jpg" },
+  { slug: "heart-of-the-beast-2026", title: "Heart of the Beast", year: 2026, tmdb: 1263337, poster: "4RLhArdnymkf2WpQ5R2RxbUC21e.jpg" }, // watched 9 Nov 2026, 3.5★
 ];

@@ -3,24 +3,12 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 8 Nov 2026 (late)
+// Last full refresh: 9 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
-  {
-    title: 'Heart of the Beast',
-    year: 2026,
-    slug: 'heart-of-the-beast-2026',
-    imdbRating: 7.3,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/4/7/4/6/8/1147468-heart-of-the-beast-2026-0-600-0-900-crop.jpg?v=9503afe033',
-    vodDate: '2026-11-08',
-    platform: 'Digital',
-    estimated: false,
-    vodLocked: true,
-    runtime: 101,
-  },
   {
     title: 'Other Mommy',
     year: 2026,
@@ -355,4 +343,5 @@ const WATCHED = [
   { title: 'Your Mother Your Mother Your Mother', vodDate: '2026-11-03', imdbRating: 7.1 },
   { title: 'A Story of Derry', vodDate: '2026-10-31', imdbRating: 6.7 },
   { title: 'Primetime', vodDate: '2026-11-03', imdbRating: 7.3 },
+  { title: 'Heart of the Beast', vodDate: '2026-11-08', imdbRating: 7.3 },
 ];
