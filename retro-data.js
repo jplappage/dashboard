@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 9 Nov 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 11 Nov 2026)
 const RETRO_LETTERBOXD = {
   1: "2026-11-08", // Nosferatu
   127: "2026-11-01", // West Side Story

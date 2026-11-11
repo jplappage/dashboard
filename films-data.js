@@ -3,35 +3,12 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 9 Nov 2026
+// Last full refresh: 11 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
-  {
-    title: 'Other Mommy',
-    year: 2026,
-    slug: 'other-mommy',
-    imdbRating: 5.5,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/8/4/4/8/0/1284480-other-mommy-0-600-0-900-crop.jpg?v=297427826f',
-    vodDate: '2026-11-10',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 93,
-  },
-  {
-    title: 'I Play Rocky',
-    year: 2026,
-    slug: 'i-play-rocky',
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/2/2/8/1170228-i-play-rocky-0-600-0-900-crop.jpg?v=d568ec1f72',
-    vodDate: '2026-11-11',
-    platform: null,
-    cinema: true,
-    estimated: true,
-    note: 'In cinemas 11 Nov 2026 UK (US limited 6 Nov, wide 20 Nov) · digital TBA',
-    runtime: 128,
-  },
   {
     title: 'Ebenezer',
     year: 2026,
@@ -257,6 +234,30 @@ const FILMS = [
     runtime: 117,
   },
   {
+    title: 'I Play Rocky',
+    year: 2026,
+    slug: 'i-play-rocky',
+    imdbRating: 8,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/2/2/8/1170228-i-play-rocky-0-600-0-900-crop.jpg?v=d568ec1f72',
+    vodDate: '2027-01-05',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 11 Nov 2026 UK / US limited 6 Nov, wide 20 Nov (Amazon MGM) · theatrical only, no digital listing yet (WhenToStream TBA) · ~45 days after US wide release, Tuesday drop',
+    runtime: 128,
+  },
+  {
+    title: 'Club Kid',
+    year: 2026,
+    slug: 'club-kid',
+    plexSlug: 'club-kid-2026',
+    imdbRating: 8.2,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/4/5/6/2/4/2/1456242-club-kid-0-600-0-900-crop.jpg?v=b2d52aad9d',
+    vodDate: '2027-01-05',
+    platform: null,
+    estimated: true,
+    note: 'Est. — US limited cinemas 6 Nov 2026 (A24 · Jordan Firstman), nationwide rollout to follow · UK cinema date TBC · A24 digital usually ~45–60 days after release, Tuesday drop (WhenToStream TBA)',
+  },
+  {
     title: 'Godzilla Minus Zero',
     year: 2026,
     slug: 'godzilla-minus-zero',
@@ -344,4 +345,5 @@ const WATCHED = [
   { title: 'A Story of Derry', vodDate: '2026-10-31', imdbRating: 6.7 },
   { title: 'Primetime', vodDate: '2026-11-03', imdbRating: 7.3 },
   { title: 'Heart of the Beast', vodDate: '2026-11-08', imdbRating: 7.3 },
+  { title: 'Other Mommy', vodDate: '2026-11-10', imdbRating: 5.5 },
 ];

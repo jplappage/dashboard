@@ -20,6 +20,7 @@ const WATCHLIST_POSTERS = {
   'bad-apples-2025': { tmdb: 1198654, poster: 'lCNO4GjKuLRKRgMqobHJ7d2N2qF.jpg' },
   'digger-2026': { tmdb: 1248832, poster: 'giPJSxvIdNVfNacwIhmM5WFXvDj.jpg' },
   'other-mommy': { tmdb: 1400837, poster: 'lA8kKIWLouCn4OHjeIOtP46F3aZ.jpg' },
+  'club-kid': { tmdb: 1585239, poster: 'caTy24FKCa7vwE6wgCvNKBezQVt.jpg' },
   'heart-of-the-beast-2026': { tmdb: 1263337, poster: '4RLhArdnymkf2WpQ5R2RxbUC21e.jpg' },
   'your-mother-your-mother-your-mother': { tmdb: 1437396, poster: '3x66cnqi9koCEaoBEEggy3w3CZA.jpg' },
   'the-social-reckoning': { tmdb: 1281331, poster: '79Tk3eivIt67JRJgo8y1GQbTrOj.jpg' },

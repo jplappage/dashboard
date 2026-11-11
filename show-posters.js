@@ -44,7 +44,7 @@ const SHOW_POSTERS = [
   { name: "Maul: Shadow Lord", imdb: "tt36594331", tmdb: 289219, poster: "8OOsXT0jJoLk5PM6GuOYcOLS9Rf.jpg", also: ["Star Wars: Maul - Shadow Lord", "Star Wars: Maul – Shadow Lord"] },
   { name: "SAS: Rogue Heroes", imdb: "tt10405370", tmdb: 93870, poster: "yP2ZvT60vCYtWc9AQoRkaOLZQzk.jpg" },
   { name: "Lanterns", imdb: "tt26545992", tmdb: 95350, poster: "9i6966Py1jvnGHFFwxf3CGku7GV.jpg" },
-  { name: "VisionQuest", imdb: "tt23112594", tmdb: 213375, poster: "jfltxthL5nDD14AxOd6gxbBYX6v.jpg" },
+  { name: "VisionQuest", imdb: "tt23112594", tmdb: 213375, poster: "jfltxthL5nDD14AxOd6gxbBYX6v.jpg", done: true },
   { name: "Extras", imdb: "tt0445114", tmdb: 2693, poster: "tzASUw256kaFGwCDBjxf20nWdGb.jpg", done: true },
   { name: "Derek", imdb: "tt2616280", tmdb: 60655, poster: "nfcvAjfV4u6uFtrA9X55nyJjrN7.jpg", done: true },
   { name: "After Life", imdb: "tt8398600", tmdb: 79410, poster: "xx92PGtAPZTqWwGrgOBLcDJTbmn.jpg", done: true },

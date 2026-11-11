@@ -21,7 +21,7 @@ const SHOWS = [
   {name:"Fallout",                               status:"ongoing",  aired:2, next:"S3 · est. mid/late 2027", recheck:"2026-11-13", imdbId:"tt12637874"},
   {name:"The Gentlemen",                         status:"ongoing",  aired:2, next:"S3 · est. late 2027", recheck:"2026-11-13", imdbId:"tt13210838"},
   {name:"Severance",                             status:"ongoing",  aired:2, next:"S3 · est. Summer 2027", recheck:"2026-11-13", imdbId:"tt11280740"},
-  {name:"Rings of Power",                        status:"ongoing",  aired:2, next:"S3 · 11 Nov 2026", imdbId:"tt7631058"},
+  {name:"Rings of Power",                        status:"ongoing",  aired:3, next:"S4 · renewed, date TBA", recheck:"2026-11-20", airing:"S3 · Wednesdays", airingUntil:"2026-11-25", imdbId:"tt7631058"},
   {name:"House of the Dragon",                   status:"ongoing",  aired:3, next:"S4 · 2028", recheck:"2026-11-13", imdbId:"tt11198330"},
   {name:"Ted Lasso",                             status:"ongoing",  aired:4, next:null, recheck:"2026-11-13", imdbId:"tt10986410"},
   {name:"Ted",                                   status:"finished", aired:2, imdbId:"tt14824792"},
@@ -38,7 +38,6 @@ const SHOWS = [
   {name:"Maul: Shadow Lord",                     status:"ongoing",  aired:1, next:"S2 · est. 2027", recheck:"2026-11-13", imdbId:"tt36594331"},
   {name:"SAS: Rogue Heroes",                     status:"ongoing",  aired:2, next:"S3 · est. late 2026", recheck:"2026-11-13", imdbId:"tt10405370"},
   {name:"Lanterns",                              status:"ongoing",  aired:1, next:"S2 · unannounced", recheck:"2026-11-13", tvmazeId:44776, imdbId:"tt26545992"},
-  {name:"VisionQuest",                           status:"ongoing",  aired:1, next:null, recheck:"2026-11-13", airing:"S1 · Wednesdays", airingUntil:"2026-11-11", imdbId:"tt23112594"},
   // ENDED (finished)
   {name:"Extras",                                   status:"finished", aired:2, imdbId:"tt0445114"},
   {name:"Derek",                                    status:"finished", aired:2, imdbId:"tt2616280"},
