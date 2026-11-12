@@ -71,6 +71,7 @@
   .np-ends { margin-top: 0; white-space: nowrap; padding-left: calc(1.5 * var(--sw)); border-left: 1px solid rgba(255,255,255,0.35); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); }
   .np-ends b { color: #fff; font-weight: 600; }
   .hide { display: none !important; }
+  .np-year { opacity: 0.7; }
 
   /* Fallback card if there's no image at all */
   .card {
@@ -365,10 +366,18 @@
   const fmtTime = (d) => d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
   function buildOverlay(s) {
-    $("np-title").textContent = s.title || "";
+    // Films: "Title (Year)". Shows: just the show's name, no episode line
+    const t = $("np-title");
+    t.textContent = s.title || "";
+    if (s.type !== "episode" && s.year) {
+      const y = document.createElement("span");
+      y.className = "np-year";
+      y.textContent = " (" + s.year + ")";
+      t.append(y);
+    }
     const ep = $("np-episode");
-    ep.textContent = s.subtitle || "";
-    ep.classList.toggle("hide", !s.subtitle);
+    ep.textContent = "";
+    ep.classList.add("hide");
     const bits = [];
     if (s.year) bits.push(String(s.year));
     if (s.rating) bits.push(s.rating);
