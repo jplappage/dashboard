@@ -68,7 +68,7 @@
   .np-row { display: flex; align-items: center; gap: calc(3 * var(--sw)); margin-top: calc(3.2 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums; }
   .bar { flex: 1; position: relative; height: calc(0.8 * var(--sw)); border-radius: calc(1 * var(--sw)); background: rgba(255,255,255,0.28); overflow: hidden; }
   .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; border-radius: calc(1 * var(--sw)); background: #fff; transition: width 1s linear; }
-  .np-ends { margin-top: calc(1.6 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); }
+  .np-ends { margin-top: 0; white-space: nowrap; padding-left: calc(1.5 * var(--sw)); border-left: 1px solid rgba(255,255,255,0.35); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); }
   .np-ends b { color: #fff; font-weight: 600; }
   .hide { display: none !important; }
 
@@ -126,8 +126,7 @@
     <div class="np-episode soft hide" id="np-episode"></div>
     <div class="np-meta soft" id="np-meta"></div>
     <div id="np-progress" class="hide">
-      <div class="np-row soft"><span id="np-elapsed"></span><div class="bar"><i id="np-bar"></i></div><span id="np-left"></span></div>
-      <div class="np-ends soft" id="np-ends"></div>
+      <div class="np-row soft"><span id="np-elapsed"></span><div class="bar"><i id="np-bar"></i></div><span id="np-left"></span><span class="np-ends" id="np-ends"></span></div>
     </div>
   </div>
 </div>
@@ -447,7 +446,7 @@
     $("np-left").textContent = "\u2212" + fmtClock(left);
     const ends = $("np-ends");
     if (s.state === "paused") ends.innerHTML = "<b>Paused</b>";
-    else { ends.innerHTML = "Ends at <b></b>"; ends.querySelector("b").textContent = fmtTime(new Date(Date.now() + left)); }
+    else { ends.innerHTML = "Ends <b></b>"; ends.querySelector("b").textContent = fmtTime(new Date(Date.now() + left)); }
   }
 
   function setOverlay(s) {
