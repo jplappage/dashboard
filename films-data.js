@@ -179,9 +179,8 @@ const FILMS = [
     imdbRating: 6.3,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/0/4/0/2/9/0/1040290-street-fighter-2026-0-600-0-900-crop.jpg?v=5cc9002644',
     vodDate: '2026-12-01',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 16 Oct 2026 (Paramount) + mandated 45-day window, Tuesday drop · PVOD est. early Dec 2026 (pre-order open — WhenToStream 10/16)',
+    platform: 'Digital',
+    estimated: false,
     runtime: 125,
   },
   {
