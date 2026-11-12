@@ -54,10 +54,10 @@
   .soft { text-shadow: 0 calc(0.3 * var(--sw)) calc(1.2 * var(--sw)) rgba(0,0,0,0.45); }
 
   /* Big "Now Playing" banner */
-  .np-banner { top: calc(4 * var(--sw)); left: calc(10 * var(--sw)); right: calc(10 * var(--sw)); border-radius: 999px; padding: calc(2.6 * var(--sw)) calc(4 * var(--sw)); display: flex; align-items: center; justify-content: center; gap: calc(3.4 * var(--sw)); }
-  .np-dot { width: calc(3.4 * var(--sw)); height: calc(3.4 * var(--sw)); border-radius: 50%; background: #ff3b3b; flex: none; animation: livepulse 2s infinite; }
+  .np-banner { --band: max(calc((100 * var(--sh) - 150 * var(--sw)) / 2), calc(12 * var(--sw))); top: calc(var(--band) * 0.16); height: calc(var(--band) * 0.68); left: calc(14 * var(--sw)); right: calc(14 * var(--sw)); border-radius: 999px; padding: 0 calc(4 * var(--sw)); display: flex; align-items: center; justify-content: center; gap: calc(var(--band) * 0.14); }
+  .np-dot { width: calc(var(--band) * 0.17); height: calc(var(--band) * 0.17); border-radius: 50%; background: #ff3b3b; flex: none; animation: livepulse 2s infinite; }
   @keyframes livepulse { 0% { box-shadow: 0 0 0 0 rgba(255,59,59,0.6); } 70% { box-shadow: 0 0 0 calc(3 * var(--sw)) rgba(255,59,59,0); } 100% { box-shadow: 0 0 0 0 rgba(255,59,59,0); } }
-  .np-label { font-family: "Righteous", sans-serif; font-size: calc(5.8 * var(--sw)); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+  .np-label { font-family: "Righteous", sans-serif; font-size: calc(var(--band) * 0.34); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
   .paused .np-dot { animation: none; background: #fff; opacity: 0.75; border-radius: calc(0.6 * var(--sw)); width: calc(3 * var(--sw)); height: calc(3 * var(--sw)); }
 
   /* Info card */
