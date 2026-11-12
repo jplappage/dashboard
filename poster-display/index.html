@@ -54,23 +54,24 @@
   .soft { text-shadow: 0 calc(0.3 * var(--sw)) calc(1.2 * var(--sw)) rgba(0,0,0,0.45); }
 
   /* Big "Now Playing" banner */
-  .np-banner { top: calc(4.5 * var(--sw)); left: calc(6 * var(--sw)); right: calc(6 * var(--sw)); border-radius: 999px; padding: calc(3.8 * var(--sw)) calc(5 * var(--sw)); display: flex; align-items: center; justify-content: center; gap: calc(3.4 * var(--sw)); }
-  .np-dot { width: calc(3.4 * var(--sw)); height: calc(3.4 * var(--sw)); border-radius: 50%; background: #ff3b3b; flex: none; animation: livepulse 2s infinite; }
+  .np-banner { --band: max(calc((100 * var(--sh) - 150 * var(--sw)) / 2), calc(12 * var(--sw))); top: calc(var(--band) * 0.16); height: calc(var(--band) * 0.68); left: calc(14 * var(--sw)); right: calc(14 * var(--sw)); border-radius: 999px; padding: 0 calc(4 * var(--sw)); display: flex; align-items: center; justify-content: center; gap: calc(var(--band) * 0.14); }
+  .np-dot { width: calc(var(--band) * 0.17); height: calc(var(--band) * 0.17); border-radius: 50%; background: #ff3b3b; flex: none; animation: livepulse 2s infinite; }
   @keyframes livepulse { 0% { box-shadow: 0 0 0 0 rgba(255,59,59,0.6); } 70% { box-shadow: 0 0 0 calc(3 * var(--sw)) rgba(255,59,59,0); } 100% { box-shadow: 0 0 0 0 rgba(255,59,59,0); } }
-  .np-label { font-family: "Righteous", sans-serif; font-size: calc(7.6 * var(--sw)); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+  .np-label { font-family: "Righteous", sans-serif; font-size: calc(var(--band) * 0.34); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
   .paused .np-dot { animation: none; background: #fff; opacity: 0.75; border-radius: calc(0.6 * var(--sw)); width: calc(3 * var(--sw)); height: calc(3 * var(--sw)); }
 
   /* Info card */
-  .np-card { left: calc(6 * var(--sw)); right: calc(6 * var(--sw)); bottom: calc(5 * var(--sw)); padding: calc(5.5 * var(--sw)) calc(6.5 * var(--sw)) calc(6 * var(--sw)); border-radius: calc(4.5 * var(--sw)); }
-  .np-title { font-family: "Righteous", sans-serif; font-size: calc(9 * var(--sw)); line-height: 1.02; letter-spacing: 0.01em; }
+  .np-card { left: calc(6 * var(--sw)); right: calc(6 * var(--sw)); bottom: calc(5 * var(--sw)); padding: calc(3.8 * var(--sw)) calc(5 * var(--sw)) calc(4.2 * var(--sw)); border-radius: calc(3.6 * var(--sw)); }
+  .np-title { font-family: "Righteous", sans-serif; font-size: calc(6.6 * var(--sw)); line-height: 1.05; letter-spacing: 0.01em; }
   .np-episode { margin-top: calc(1.2 * var(--sw)); font-size: calc(3 * var(--sw)); font-weight: 600; }
-  .np-meta { margin-top: calc(2 * var(--sw)); font-size: calc(2.7 * var(--sw)); color: rgba(255,255,255,0.85); line-height: 1.4; }
-  .np-row { display: flex; align-items: center; gap: calc(3 * var(--sw)); margin-top: calc(5 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums; }
+  .np-meta { display: none; margin-top: calc(2 * var(--sw)); font-size: calc(2.7 * var(--sw)); color: rgba(255,255,255,0.85); line-height: 1.4; }
+  .np-row { display: flex; align-items: center; gap: calc(3 * var(--sw)); margin-top: calc(3.2 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums; }
   .bar { flex: 1; position: relative; height: calc(0.8 * var(--sw)); border-radius: calc(1 * var(--sw)); background: rgba(255,255,255,0.28); overflow: hidden; }
   .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; border-radius: calc(1 * var(--sw)); background: #fff; transition: width 1s linear; }
-  .np-ends { margin-top: calc(2.4 * var(--sw)); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); }
+  .np-ends { margin-top: 0; white-space: nowrap; padding-left: calc(1.5 * var(--sw)); border-left: 1px solid rgba(255,255,255,0.35); font-size: calc(2.5 * var(--sw)); color: rgba(255,255,255,0.85); }
   .np-ends b { color: #fff; font-weight: 600; }
   .hide { display: none !important; }
+  .np-year { opacity: 0.7; }
 
   /* Fallback card if there's no image at all */
   .card {
@@ -126,8 +127,7 @@
     <div class="np-episode soft hide" id="np-episode"></div>
     <div class="np-meta soft" id="np-meta"></div>
     <div id="np-progress" class="hide">
-      <div class="np-row soft"><span id="np-elapsed"></span><div class="bar"><i id="np-bar"></i></div><span id="np-left"></span></div>
-      <div class="np-ends soft" id="np-ends"></div>
+      <div class="np-row soft"><span id="np-elapsed"></span><div class="bar"><i id="np-bar"></i></div><span id="np-left"></span><span class="np-ends" id="np-ends"></span></div>
     </div>
   </div>
 </div>
@@ -366,21 +366,78 @@
   const fmtTime = (d) => d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
   function buildOverlay(s) {
-    $("np-title").textContent = s.title || "";
+    // Films: "Title (Year)". Shows: just the show's name, no episode line
+    const t = $("np-title");
+    t.textContent = s.title || "";
+    if (s.type !== "episode" && s.year) {
+      const y = document.createElement("span");
+      y.className = "np-year";
+      y.textContent = " (" + s.year + ")";
+      t.append(y);
+    }
     const ep = $("np-episode");
-    ep.textContent = s.subtitle || "";
-    ep.classList.toggle("hide", !s.subtitle);
+    ep.textContent = "";
+    ep.classList.add("hide");
     const bits = [];
     if (s.year) bits.push(String(s.year));
     if (s.rating) bits.push(s.rating);
     if (s.duration) bits.push(fmtDur(s.duration));
     if (s.genres && s.genres.length) bits.push(s.genres.slice(0, 2).join(" / "));
     if (s.director) bits.push(s.director);
-    $("np-meta").textContent = bits.join("  ·  ");
+    $("np-meta").textContent = "";
+    fitTitle();
+  }
+
+  // Shrink long titles so they never take more than two lines
+  function fitTitle() {
+    const t = $("np-title");
+    let size = 6.6;
+    t.style.fontSize = "";
+    for (let i = 0; i < 12; i++) {
+      const lh = parseFloat(getComputedStyle(t).lineHeight) || parseFloat(getComputedStyle(t).fontSize) * 1.05;
+      if (t.scrollHeight <= lh * 2 + 2 || size <= 4) break;
+      size -= 0.3;
+      t.style.fontSize = "calc(" + size.toFixed(1) + " * var(--sw))";
+    }
+  }
+
+  // Episode running times: Plex doesn't send them, so look them up (free TV listings, TVmaze)
+  const runtimeCache = {};
+  async function lookupRuntime(s) {
+    const key = s.title + "|" + (s.subtitle || "");
+    if (key in runtimeCache) return runtimeCache[key];
+    runtimeCache[key] = null;
+    try {
+      const m = /S(\d+)\s*E(\d+)/i.exec(s.subtitle || "");
+      const r = await fetch("https://api.tvmaze.com/singlesearch/shows?embed=episodes&q=" + encodeURIComponent(s.title));
+      if (!r.ok) return null;
+      const show = await r.json();
+      let mins = 0;
+      if (m && show._embedded && show._embedded.episodes) {
+        const ep = show._embedded.episodes.find((e) => e.season === +m[1] && e.number === +m[2]);
+        if (ep && ep.runtime) mins = ep.runtime;
+      }
+      if (!mins) mins = show.averageRuntime || show.runtime || 0;
+      runtimeCache[key] = mins ? mins * 60000 : null;
+    } catch (e) {}
+    return runtimeCache[key];
+  }
+
+  // For episodes Plex also doesn't say how far in you are, so keep our own clock
+  let clk = { key: null, acc: 0, since: null };
+  function updateClock(s) {
+    const key = s.title + "|" + (s.subtitle || "");
+    if (clk.key !== key) clk = { key, acc: s.viewOffset || 0, since: null };
+    if (s.state === "playing") { if (clk.since === null) clk.since = Date.now(); }
+    else if (clk.since !== null) { clk.acc += Date.now() - clk.since; clk.since = null; }
   }
 
   // Work out how far through we are, counting on from the last alert
   function currentOffset(s) {
+    if (!s.viewOffset) {
+      const off = clk.acc + (clk.since !== null ? Date.now() - clk.since : 0);
+      return Math.min(off, s.duration || off);
+    }
     let off = s.viewOffset || 0;
     if (s.state === "playing") off += Date.now() - (s.updatedAt || Date.now());
     return Math.min(off, s.duration || off);
@@ -398,7 +455,7 @@
     $("np-left").textContent = "\u2212" + fmtClock(left);
     const ends = $("np-ends");
     if (s.state === "paused") ends.innerHTML = "<b>Paused</b>";
-    else { ends.innerHTML = "Ends at <b></b>"; ends.querySelector("b").textContent = fmtTime(new Date(Date.now() + left)); }
+    else { ends.innerHTML = "Ends <b></b>"; ends.querySelector("b").textContent = fmtTime(new Date(Date.now() + left)); }
   }
 
   function setOverlay(s) {
@@ -406,8 +463,14 @@
     const np = $("np");
     np.classList.toggle("paused", s.state === "paused");
     $("np-label").textContent = s.state === "paused" ? "Paused" : "Now Playing";
+    const key = s.title + "|" + (s.subtitle || "");
+    if (!s.duration && runtimeCache[key]) s.duration = runtimeCache[key];
+    updateClock(s);
     buildOverlay(s);
     tickProgress();
+    if (!s.duration && !(key in runtimeCache)) {
+      lookupRuntime(s).then((ms) => { if (ms && current && current.title === s.title) { current.duration = ms; tickProgress(); } });
+    }
     np.classList.add("show");
     document.body.classList.add("playing-mode");
   }
@@ -417,9 +480,11 @@
     return {
       state: params.get("state") || "playing",
       title: demo,
+      subtitle: params.get("sub") || "",
+      type: params.get("type") || "movie",
       year: params.get("year") || "",
       rating: params.get("rating") || "",
-      duration: (Number(params.get("mins")) || 0) * 60000,
+      duration: (Number(params.get("mins")) || 0) * 60000 || null,
       viewOffset: (Number(params.get("at")) || 0) * 60000,
       genres: (params.get("genres") || "").split(",").filter(Boolean),
       director: params.get("director") || "",
