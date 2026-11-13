@@ -7,12 +7,11 @@
 // broadcaster is known so far (exact channel not yet allocated) → shown as "(TBC)".
 // Source: live-footballontv.com (Liverpool) · Prime Video holds UK rights to
 // Nations League games not involving the home nations (France).
-// Last checked: 11 Nov 2026
+// Last checked: 13 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FIXTURE_TV = [
-  { date: '2026-11-12', team: 'france',    ko: '19:45', match: 'Italy v France',               channel: 'Prime Video (PPV)',     confirmed: true },
-  { date: '2026-11-15', team: 'france',    ko: '19:45', match: 'France v Türkiye',             channel: 'Prime Video',           confirmed: false },
+  { date: '2026-11-15', team: 'france',    ko: '19:45', match: 'France v Türkiye',             channel: 'Prime Video (PPV)',     confirmed: true },
   { date: '2026-11-22', team: 'liverpool', ko: '16:30', match: 'Liverpool v Manchester United', channel: 'Sky Sports Main Event', confirmed: true },
   { date: '2026-11-25', team: 'liverpool', ko: '20:00', match: 'Club Brugge v Liverpool',      channel: 'TNT Sports 2',          confirmed: true },
   { date: '2026-11-29', team: 'liverpool', ko: '12:00', match: 'Everton v Liverpool',          channel: 'TNT Sports 1',          confirmed: true },
