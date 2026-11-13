@@ -99,10 +99,12 @@ Fire all searches simultaneously. Use the lists from Phase 2 — do not rely on 
 WebSearch `site:whentostream.com weekly tracking report` to find the latest report URL, then open it via Chrome MCP `navigate` + `get_page_text` (whentostream.com is blocked for direct fetch). Apply any dates/estimates it gives for queued films. Per-title searches below are then only needed for films the report did not cover.
 
 **IMDb checks — one batched call, not per-title fetches (imdb.com is blocked for direct fetch):**
-Navigate a Chrome tab to `https://www.imdb.com/`, then run a single `javascript_tool` call that loops over all queued titles:
+Navigate a browser tab to `https://www.imdb.com/`, then run a single `javascript_tool` call that loops over all queued titles. Use IMDb's **suggestion API** to find each title's id, matching on the release year — do NOT scrape `/find/?q=` (changed 13 Nov 2026: the find page's first `/title/tt…` link is a homepage/nav link, so every title returned the same wrong film):
 ```js
-(async()=>{const titles=[/* queued titles */];const out={};for(const t of titles){const h=await(await fetch('https://www.imdb.com/find/?q='+encodeURIComponent(t),{credentials:'same-origin'})).text();const m=h.match(/\/title\/(tt\d+)\//);if(!m){out[t]='no result';continue}const th=await(await fetch('https://www.imdb.com/title/'+m[1]+'/',{credentials:'same-origin'})).text();const r=th.match(/"aggregateRating"[^}]*"ratingValue":([\d.]+)/);out[t]={id:m[1],rating:r?r[1]:null}}return JSON.stringify(out)})()
+const titles=[/* ['Title', year], ... */];const out={};
+await Promise.all(titles.map(async([t,y])=>{const j=await(await fetch('https://v3.sg.media-imdb.com/suggestion/x/'+encodeURIComponent(t.toLowerCase())+'.json')).json();const hit=(j.d||[]).find(x=>x.id.startsWith('tt')&&Math.abs((x.y||0)-y)<=1);if(!hit){out[t]='none';return}const th=await(await fetch('https://www.imdb.com/title/'+hit.id+'/',{credentials:'same-origin'})).text();const r=th.match(/"aggregateRating"[^}]*"ratingValue":([\d.]+)/);out[t]=[hit.id,hit.l,hit.y,r?r[1]:null].join('|')}));JSON.stringify(out)
 ```
+Check the returned title + year match the film before using the rating. If the IMDb homepage autoplays a trailer and navigates the tab mid-script, just re-run it.
 Has a rating = released, add `imdbRating`. No rating = leave null.
 
 **For each film still needing a streaming date after Step 0:**
