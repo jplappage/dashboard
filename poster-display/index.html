@@ -143,8 +143,14 @@
 <script src="../show-posters.js"></script>
 <script>
   const ROTATE_MS = 5 * 60 * 1000;   // each poster stays up 5 minutes
-  const CHECK_MS = 15 * 1000;        // check Plex every 15 seconds…
-  const QUIET_CHECK_MS = 60 * 1000;  // …or once a minute from midnight to 5pm (keeps Netlify usage low)
+  // How often to check Plex (keeps Netlify usage low):
+  //   10am–8pm every 15 seconds · 8pm–11pm every 5 seconds · 11pm–10am once a minute
+  const checkEvery = () => {
+    const h = new Date().getHours();
+    if (h >= 20 && h < 23) return 5 * 1000;
+    if (h >= 10 && h < 20) return 15 * 1000;
+    return 60 * 1000;
+  };
   const RELOAD_MS = 3 * 60 * 60 * 1000; // re-read the watchlist every 3 hours (when nothing's playing)
   const PLEX_API = "https://jp-poster-display.netlify.app/api";
   const PLEX_PLAYER = "LG OLED65C26LD";  // only this Plex device triggers "now playing"
@@ -558,8 +564,7 @@
     if (!nowKey) nextPoster();
     startRotation();
     const nextCheck = () => {
-      const h = new Date().getHours();
-      setTimeout(async () => { await checkPlex(); nextCheck(); }, (h < 17) ? QUIET_CHECK_MS : CHECK_MS);
+      setTimeout(async () => { await checkPlex(); nextCheck(); }, checkEvery());
     };
     nextCheck();
     setInterval(tickProgress, 1000);
