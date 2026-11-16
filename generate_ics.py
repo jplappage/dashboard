@@ -110,7 +110,7 @@ def build_ics(film_objs, watched_objs):
         imdb     = get_field(obj, 'imdbRating')
         if not vod_date:
             continue
-        summary = f'Watched: {title}'
+        summary = f'✓ {title}'
         desc    = f'IMDB: {imdb}' if imdb else ''
         events += vevent(summary, vod_date, make_uid(title + '-watched', vod_date), desc)
 
