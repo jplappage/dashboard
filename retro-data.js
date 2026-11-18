@@ -181,8 +181,11 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 13 Nov 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 18 Nov 2026)
 const RETRO_LETTERBOXD = {
+  30: "2026-11-18", // Labyrinth
+  88: "2026-11-17", // Midnight in Paris
+  20: "2026-11-14", // Grave of the Fireflies
   1: "2026-11-08", // Nosferatu
   127: "2026-11-01", // West Side Story
   31: "2026-10-31", // Hellraiser
@@ -427,4 +430,7 @@ const RETRO_RATINGS = {
   31: 3.5,  // Hellraiser
   54: 4.0,  // Corpse Bride
   127: 2.5,  // West Side Story
+  20: 4.5,  // Grave of the Fireflies
+  88: 2.5,  // Midnight in Paris
+  30: 3.5,  // Labyrinth
 };

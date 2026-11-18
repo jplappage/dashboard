@@ -194,4 +194,6 @@ const COLLECTION_POSTERS = [
   { slug: "nosferatu", title: "Nosferatu", year: 1922, tmdb: 653, poster: "p7kbfApTOF2LQQj82Efe18QSw9y.jpg" },
   { slug: "heart-of-the-beast-2026", title: "Heart of the Beast", year: 2026, tmdb: 1263337, poster: "4RLhArdnymkf2WpQ5R2RxbUC21e.jpg" }, // watched 9 Nov 2026, 3.5★
   { slug: "other-mommy", title: "Other Mommy", year: 2026, tmdb: 1400837, poster: "lA8kKIWLouCn4OHjeIOtP46F3aZ.jpg" }, // watched 10 Nov 2026, 3★
+  { slug: "midnight-in-paris", title: "Midnight in Paris", year: 2011, tmdb: 59436, poster: "1hOUxksEytg9HusvjEYc8uHH94Z.jpg" }, // retro, watched 17 Nov 2026, 2.5★
+  { slug: "labyrinth", title: "Labyrinth", year: 1986, tmdb: 13597, poster: "lGdztzQJUyjpbBCJERKvfwtbXuE.jpg" }, // retro, watched 18 Nov 2026, 3.5★
 ];

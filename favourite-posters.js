@@ -69,6 +69,7 @@ const FAVOURITE_POSTERS = [
   { slug: "the-green-mile", title: "The Green Mile", year: 1999, tmdb: 497, poster: "hLZKchHFAF6dSfo1tIStnmuTVJ3.jpg" },
   { slug: "american-history-x", title: "American History X", year: 1998, tmdb: 73, poster: "erC3JT4yjhxHK4K2BO5kUpyrgIB.jpg" },
   { slug: "the-hangover", title: "The Hangover", year: 2009, tmdb: 18785, poster: "z3tyJpEFZQvERBC8ZqBFnzpoJ33.jpg" },
+  { slug: "grave-of-the-fireflies", title: "Grave of the Fireflies", year: 1988, tmdb: 12477, poster: "823qQzmY52Nus91mEVc0oY1an1Q.jpg" }, // 4.5★, added 18 Nov 2026
   { slug: "scarface-1983", title: "Scarface", year: 1983, tmdb: 111, poster: "a1Y7gDd6Ks49dv1kRBGdzESZzFU.jpg" },
   { slug: "superbad", title: "Superbad", year: 2007, tmdb: 8363, poster: "wZg21q4TXqaf7EcTg2x1xGi7SAl.jpg" },
   { slug: "gladiator-2000", title: "Gladiator", year: 2000, tmdb: 98, poster: "jKCaGq8dJoc4IDGqmDSjU36b7ee.jpg" },
