@@ -126,20 +126,6 @@ const FILMS = [
     runtime: 105,
   },
   {
-<<<<<<< HEAD
-    title: 'Wildwood',
-    year: 2026,
-    slug: 'wildwood-2026',
-    imdbRating: 8.6,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/7/0/9/4/6/0/709460-wildwood-2026-0-600-0-900-crop.jpg?v=e0b4be5769',
-    vodDate: '2026-12-08',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 132,
-  },
-  {
-=======
->>>>>>> bc1c41d (update 18/11/2026 23:27:14.21)
     title: 'Klara and the Sun',
     year: 2026,
     slug: 'klara-and-the-sun',
