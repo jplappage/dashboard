@@ -130,10 +130,9 @@ const FILMS = [
     slug: 'wildwood-2026',
     imdbRating: 8.6,
     poster: 'https://a.ltrbxd.com/resized/film-poster/7/0/9/4/6/0/709460-wildwood-2026-0-600-0-900-crop.jpg?v=e0b4be5769',
-    vodDate: '2026-12-01',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 23 Oct 2026 (Laika · ultra-wide) · PVOD est. early Dec 2026, Tuesday drop (pre-order open — WhenToStream 10/23)',
+    vodDate: '2026-12-08',
+    platform: 'Digital',
+    estimated: false,
     runtime: 132,
   },
   {
