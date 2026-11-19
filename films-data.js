@@ -131,10 +131,9 @@ const FILMS = [
     slug: 'klara-and-the-sun',
     imdbRating: 6.4,
     poster: 'https://a.ltrbxd.com/resized/film-poster/7/7/2/2/4/2/772242-klara-and-the-sun-0-600-0-900-crop.jpg?v=96606d0ee5',
-    vodDate: '2026-12-01',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 23 Oct 2026 (Sony · Taika Waititi · soft wide release) + at least 30 days · PVOD est. late Nov / early Dec 2026, Tuesday drop (pre-order open — WhenToStream 10/30)',
+    vodDate: '2026-12-08',
+    platform: 'Digital',
+    estimated: false,
     runtime: 117,
   },
   {
