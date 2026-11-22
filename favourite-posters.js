@@ -156,7 +156,7 @@ const FAVOURITE_POSTERS = [
   { slug: "crash-2004", title: "Crash", year: 2004, tmdb: 1640, poster: "rseIFgenBkW4xAPoSNuo1D7upyh.jpg" },
   { slug: "pans-labyrinth", title: "Pan's Labyrinth", year: 2006, tmdb: 1417, poster: "loGh5DXfEOp7VhlpQCgSEiiWYna.jpg" },
   { slug: "taken", title: "Taken", year: 2008, tmdb: 8681, poster: "uUVdeb7gbopr2VfDhq5wYYGHlie.jpg" },
-  { slug: "casino-royale-2006", title: "Casino Royale", year: 2006, tmdb: 36557, poster: "qCgom16E4uywM5QBfpoIz0X5Ywk.jpg" },
+  { slug: "casino-royale-2006", title: "Casino Royale", year: 2006, tmdb: 36557, poster: "c5e2taPa6KYeh98mnXjCK9Gnyln.jpg" }, // Bond & Vesper, white background (JP pick, 22 Nov 2026)
   { slug: "man-on-fire-2004", title: "Man on Fire", year: 2004, tmdb: 9509, poster: "dKFoJT2Bh6puUyQ3MlZqTPXwl1d.jpg" },
   { slug: "the-40-year-old-virgin", title: "The 40 Year Old Virgin", year: 2005, tmdb: 6957, poster: "bM80mTxFie3Yp29wqMR0QOji47q.jpg" },
   { slug: "alpha-dog", title: "Alpha Dog", year: 2006, tmdb: 7457, poster: "8F0HaCNxVIYMEfRh65PzDqi6XVG.jpg" },
