@@ -189,4 +189,7 @@ const FAVOURITE_POSTERS = [
   { slug: "dune-part-three", title: "Dune: Part Three", year: 2026, tmdb: 1170608, poster: "lGViEh29Bk68Ixjg46Sqj4xMUQw.jpg" }, // Paul in a cloak, sunlit desert
   { slug: "x-men-origins-wolverine", title: "X-Men Origins: Wolverine", year: 2009, tmdb: 2080, poster: "sCxV2M8RN4Fc2G0ULzLe2XYx052.jpg" }, // claws across face, dark (JP pick, 22 Nov 2026)
   { slug: "the-wolverine", title: "The Wolverine", year: 2013, tmdb: 76170, poster: "lJdpWqoLqgjdiD46SxZdPd4qD3i.jpg" }, // kneeling with sword, red claw-mark sun (JP pick, 22 Nov 2026)
+  { slug: "the-incredible-hulk", title: "The Incredible Hulk", year: 2008, tmdb: 1724, poster: "ebK5g7FhJRuGMANsoDGOTXeZGrx.jpg" }, // JP pick, 22 Nov 2026
+  { slug: "iron-man-2", title: "Iron Man 2", year: 2010, tmdb: 10138, poster: "vioYkmuRlnWr4dZQSblkGSIlzS9.jpg" }, // JP pick, 22 Nov 2026
+  { slug: "captain-america-brave-new-world", title: "Captain America: Brave New World", year: 2025, tmdb: 822119, poster: "56mIu1630ALe3F9RP1Szlv0qVyb.jpg" }, // JP pick, 22 Nov 2026
 ];
