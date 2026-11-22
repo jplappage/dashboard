@@ -196,4 +196,5 @@ const COLLECTION_POSTERS = [
   { slug: "other-mommy", title: "Other Mommy", year: 2026, tmdb: 1400837, poster: "lA8kKIWLouCn4OHjeIOtP46F3aZ.jpg" }, // watched 10 Nov 2026, 3★
   { slug: "midnight-in-paris", title: "Midnight in Paris", year: 2011, tmdb: 59436, poster: "1hOUxksEytg9HusvjEYc8uHH94Z.jpg" }, // retro, watched 17 Nov 2026, 2.5★
   { slug: "labyrinth", title: "Labyrinth", year: 1986, tmdb: 13597, poster: "lGdztzQJUyjpbBCJERKvfwtbXuE.jpg" }, // retro, watched 18 Nov 2026, 3.5★
+  { slug: "hans-zimmer-friends-diamond-in-the-desert", title: "Hans Zimmer & Friends: Diamond in the Desert", year: 2025, tmdb: 1425725, poster: "2GD7pcFA3lK2p0tkp3wAPAsdKys.jpg" }, // moved from favourites at JP's request, 22 Nov 2026
 ];
