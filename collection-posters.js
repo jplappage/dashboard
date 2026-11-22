@@ -198,4 +198,5 @@ const COLLECTION_POSTERS = [
   { slug: "labyrinth", title: "Labyrinth", year: 1986, tmdb: 13597, poster: "lGdztzQJUyjpbBCJERKvfwtbXuE.jpg" }, // retro, watched 18 Nov 2026, 3.5★
   { slug: "hans-zimmer-friends-diamond-in-the-desert", title: "Hans Zimmer & Friends: Diamond in the Desert", year: 2025, tmdb: 1425725, poster: "2GD7pcFA3lK2p0tkp3wAPAsdKys.jpg" }, // moved from favourites at JP's request, 22 Nov 2026
   { slug: "how-to-make-millions-before-grandma-dies", title: "How to Make Millions Before Grandma Dies", year: 2024, tmdb: 1103621, poster: "rwmnAVOUoMRD2kGTWluY74Rre6I.jpg" }, // moved from favourites at JP's request, 22 Nov 2026
+  { slug: "the-voice-of-hind-rajab", title: "The Voice of Hind Rajab", year: 2025, tmdb: 1480382, poster: "q7M8kQB46T11vmDMD6E239jsqTz.jpg" }, // moved from favourites at JP's request, 22 Nov 2026
 ];

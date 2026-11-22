@@ -117,7 +117,6 @@ const FAVOURITE_POSTERS = [
   { slug: "pulp-fiction", title: "Pulp Fiction", year: 1994, tmdb: 680, poster: "AmyQTQsNxITitCM0Ya5l5bpYGpn.jpg" },
   { slug: "joker-2019", title: "Joker", year: 2019, tmdb: 475557, poster: "onwnTFCEF5CvB8AFi9BzZqm6cng.jpg" },
   // Added 24 Oct 2026 from JP's 4.5-star ratings (letterboxd.com/zidanejp/films/rated/4.5/)
-  { slug: "the-voice-of-hind-rajab", title: "The Voice of Hind Rajab", year: 2025, tmdb: 1480382, poster: "q7M8kQB46T11vmDMD6E239jsqTz.jpg" },
   { slug: "roofman", title: "Roofman", year: 2025, tmdb: 1242419, poster: "eSILGQEGCTHsJFLUKc353FgIpaY.jpg" },
   { slug: "predator-killer-of-killers", title: "Predator: Killer of Killers", year: 2025, tmdb: 1376434, poster: "zzabkI1wx3PdOLkpmdPmI3xne6.jpg" },
   { slug: "the-odyssey-2026", title: "The Odyssey", year: 2026, tmdb: 1368337, poster: "ugEXTmwvFj8oqOui6ZwXjQgSwAp.jpg" },
