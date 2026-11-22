@@ -124,7 +124,6 @@ const FAVOURITE_POSTERS = [
   { slug: "obsession-2025", title: "Obsession", year: 2025, tmdb: 1339713, poster: "lnrZbLQOq3lOoqjpeghrQo9kxHL.jpg" },
   { slug: "the-rivals-of-amziah-king", title: "The Rivals of Amziah King", year: 2025, tmdb: 1124142, poster: "rHYtPf1qFFZZ3gjmVG48VxyYa6v.jpg" },
   { slug: "spider-man-brand-new-day", title: "Spider-Man: Brand New Day", year: 2026, tmdb: 969681, poster: "p5QFVX6B3VZTb4M5dfeVw8YMorO.jpg" },
-  { slug: "how-to-make-millions-before-grandma-dies", title: "How to Make Millions Before Grandma Dies", year: 2024, tmdb: 1103621, poster: "rwmnAVOUoMRD2kGTWluY74Rre6I.jpg" },
   { slug: "the-fantastic-4-first-steps", title: "The Fantastic 4: First Steps", year: 2025, tmdb: 617126, poster: "63ZbwVdLPG8zjyMCqvhzVtDdL0W.jpg" },
   { slug: "it-ends-with-us", title: "It Ends with Us", year: 2024, tmdb: 1079091, poster: "4PoYmD44dShbKWgOGRBvATFjGXI.jpg" },
   { slug: "the-creator-2023", title: "The Creator", year: 2023, tmdb: 670292, poster: "6rKt7KiyMjOQPrtvbhPuC4bnuaT.jpg" },

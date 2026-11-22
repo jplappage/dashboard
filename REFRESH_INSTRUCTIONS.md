@@ -180,7 +180,7 @@ For each film not already in `FAVOURITE_POSTERS` (match on slug, then on title +
 1. Poster: reuse the film's existing text-free poster — `WATCHLIST_POSTERS[<slug>]` in `watchlist-posters.js`, or its entry in `retro-posters.js` (same `tmdb` + `poster`). That's the "move from watchlist to favourites". If neither has one, find a text-free TMDB poster using the text-free rule (Data rules) — eyeball it, skip any with the title on.
 2. Queue `{ slug: "<slug>", title: "<Title>", year: <year>, tmdb: <id>, poster: "<file>.jpg" },` for Phase 4.
 Never remove a favourite because its rating dropped — JP edits favourites by hand.
-**Kept out of favourites by JP — never add these to `favourite-posters.js`, whatever the rating** (they live in `collection-posters.js`): `hans-zimmer-friends-diamond-in-the-desert` (22 Nov 2026).
+**Kept out of favourites by JP — never add these to `favourite-posters.js`, whatever the rating** (they live in `collection-posters.js`): `hans-zimmer-friends-diamond-in-the-desert`, `how-to-make-millions-before-grandma-dies` (22 Nov 2026).
 List them in the Phase 3 summary as "Added to TV favourites (4.5★+): …" (or "none").
 
 **Finished shows → TV Collection (added 8 Nov 2026, JP's rule) — every refresh:**
