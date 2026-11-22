@@ -181,7 +181,7 @@ const RETRO_FILMS = [
 ];
 
 // ── LETTERBOXD WATCHED DATA ────────────────────────────────
-// Pre-populated from zidanejp's Letterboxd diary (scraped 18 Nov 2026)
+// Pre-populated from zidanejp's Letterboxd diary (scraped 22 Nov 2026)
 const RETRO_LETTERBOXD = {
   30: "2026-11-18", // Labyrinth
   88: "2026-11-17", // Midnight in Paris

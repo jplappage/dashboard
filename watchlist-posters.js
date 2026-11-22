@@ -42,4 +42,5 @@ const WATCHLIST_POSTERS = {
   'the-further-mis-adventures-of-cliff-booth': { tmdb: 1457866, poster: 'KNXCjWdArPedBV401h7OHw2FWT.jpg' },
   'focker-in-law': { tmdb: 1400336, poster: 'lPjpY0OpOfrfbj2nmR1Td6EpvvO.jpg' },
   'blade-runner-2099': { tmdb: 171802, poster: 'xlzlL5l127bRGZO1HUfVnNn016x.jpg' }, // TMDB TV id (limited series)
+  'steps-2026': { tmdb: 1595124, poster: 'idfbOZ6QBziR6suqFGIMJsSk3lV.jpg' },
 };

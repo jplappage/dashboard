@@ -7,14 +7,14 @@
 // broadcaster is known so far (exact channel not yet allocated) → shown as "(TBC)".
 // Source: live-footballontv.com (Liverpool) · Prime Video holds UK rights to
 // Nations League games not involving the home nations (France).
-// Last checked: 18 Nov 2026
+// Last checked: 22 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FIXTURE_TV = [
   { date: '2026-11-22', team: 'liverpool', ko: '16:30', match: 'Liverpool v Manchester United', channel: 'Sky Sports Main Event', confirmed: true },
   { date: '2026-11-25', team: 'liverpool', ko: '20:00', match: 'Club Brugge v Liverpool',      channel: 'TNT Sports 2',          confirmed: true },
   { date: '2026-11-29', team: 'liverpool', ko: '12:00', match: 'Everton v Liverpool',          channel: 'TNT Sports 1',          confirmed: true },
-  { date: '2026-12-02', team: 'liverpool', ko: '19:30', match: 'Liverpool v Sunderland',       channel: 'Sky Sports',            confirmed: false },
+  { date: '2026-12-02', team: 'liverpool', ko: '19:30', match: 'Liverpool v Sunderland',       channel: 'Sky Sports Main Event', confirmed: true },
   { date: '2026-12-05', team: 'liverpool', ko: '12:30', match: 'Chelsea v Liverpool',          channel: 'TNT Sports 1',          confirmed: true },
   { date: '2026-12-09', team: 'liverpool', ko: '20:00', match: 'Liverpool v FC Porto',         channel: 'TNT Sports',            confirmed: false },
   { date: '2026-12-16', team: 'liverpool', ko: '20:00', match: 'Liverpool v AFC Bournemouth',  channel: 'ITV1',                  confirmed: true },
