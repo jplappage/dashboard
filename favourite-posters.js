@@ -181,6 +181,8 @@ const FAVOURITE_POSTERS = [
   { slug: "ac-shadows-1", title: "Assassin's Creed Shadows", game: true, image: "https://store-images.s-microsoft.com/image/apps.18685.14601317961808017.7b103743-3dbd-479d-b77a-f82e7f0548c6.117374c6-d4eb-4046-a93b-2e60c73df398", focus: "75%" },
   { slug: "destiny-2-1", title: "Destiny 2", game: true, image: "https://store-images.s-microsoft.com/image/apps.17712.14134992626562533.488a0dea-3d31-463e-ad2e-6ba61492e19e.485090c7-2202-4bc7-9890-6031cf87ce07", focus: "50%" },
   { slug: "ac-valhalla-1", title: "Assassin's Creed Valhalla", game: true, image: "https://store-images.s-microsoft.com/image/apps.3825.13727749104652029.e9e11819-555f-4e87-a53e-2108613adca1.5f00782d-9b8f-4666-a204-7ea922c983ee", focus: "85%" }, // Eivor with axe, dark background (JP pick, 22 Nov 2026)
+  { slug: "tlou-part-1-game", title: "The Last of Us Part I", game: true, image: "https://image.api.playstation.com/vulcan/img/rnd/202010/2716/wYq1UsVEyQp6dT6cS1omgKiJ.png", focus: "60%" }, // PlayStation Store key art: Joel & Ellie, black and white (JP pick, 22 Nov 2026)
+  { slug: "tlou-part-2-game", title: "The Last of Us Part II", game: true, image: "https://image.api.playstation.com/vulcan/ap/rnd/202312/0117/0b68ebf352db559cb45a75bd32fed3381f34dc52c5480192.png", focus: "40%" }, // PlayStation Store key art: Ellie, flooded Seattle (JP pick, 22 Nov 2026)
   // Splinter Cell: Deathwatch (2025 series) text-free TMDB posters — no sharp text-free game art exists
   { slug: "splinter-cell-deathwatch", title: "Splinter Cell: Deathwatch", year: 2025, tmdb: 127366, poster: "ywSwacfcb7NB9Rg2tkm4bFrcTwt.jpg", tv: true },
   // Added 22 Nov 2026 at JP's request
