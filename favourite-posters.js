@@ -185,4 +185,6 @@ const FAVOURITE_POSTERS = [
   { slug: "destiny-2-1", title: "Destiny 2", game: true, image: "https://store-images.s-microsoft.com/image/apps.17712.14134992626562533.488a0dea-3d31-463e-ad2e-6ba61492e19e.485090c7-2202-4bc7-9890-6031cf87ce07", focus: "50%" },
   // Splinter Cell: Deathwatch (2025 series) text-free TMDB posters — no sharp text-free game art exists
   { slug: "splinter-cell-deathwatch", title: "Splinter Cell: Deathwatch", year: 2025, tmdb: 127366, poster: "ywSwacfcb7NB9Rg2tkm4bFrcTwt.jpg", tv: true },
+  // Added 22 Nov 2026 at JP's request
+  { slug: "loki", title: "Loki", year: 2021, tmdb: 84958, poster: "qNDZjNUS16lnGWZNiNwcH71zSG1.jpg", tv: true }, // green robes in green lightning (text-free)
 ];
