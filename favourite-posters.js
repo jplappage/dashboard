@@ -187,4 +187,6 @@ const FAVOURITE_POSTERS = [
   { slug: "loki", title: "Loki", year: 2021, tmdb: 84958, poster: "qNDZjNUS16lnGWZNiNwcH71zSG1.jpg", tv: true }, // green robes in green lightning (text-free)
   { slug: "avengers-doomsday", title: "Avengers: Doomsday", year: 2026, tmdb: 1003596, poster: "gyYdLwD4wC4r3j1X4h36daTVOa.jpg" }, // Doctor Doom on his throne
   { slug: "dune-part-three", title: "Dune: Part Three", year: 2026, tmdb: 1170608, poster: "lGViEh29Bk68Ixjg46Sqj4xMUQw.jpg" }, // Paul in a cloak, sunlit desert
+  { slug: "x-men-origins-wolverine", title: "X-Men Origins: Wolverine", year: 2009, tmdb: 2080, poster: "sCxV2M8RN4Fc2G0ULzLe2XYx052.jpg" }, // claws across face, dark (JP pick, 22 Nov 2026)
+  { slug: "the-wolverine", title: "The Wolverine", year: 2013, tmdb: 76170, poster: "lJdpWqoLqgjdiD46SxZdPd4qD3i.jpg" }, // kneeling with sword, red claw-mark sun (JP pick, 22 Nov 2026)
 ];
