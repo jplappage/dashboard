@@ -3,37 +3,21 @@
 // Loaded by watchlist-dashboard.html and read by generate_ics.py.
 // During a refresh, edit THIS file only — not the HTML, not the python script.
 // (Saving this file also triggers an automatic watchlist.ics rebuild on GitHub.)
-// Last full refresh: 18 Nov 2026
+// Last full refresh: 22 Nov 2026
 // ═══════════════════════════════════════════════════════════════════════════
 
 const FILMS = [
   // Sorted by vodDate. estimated:false = confirmed · estimated:true = best-guess
   // actual date (release window + films usually drop on a Tuesday) — see note.
   {
-    title: 'The Hunger Games: Sunrise on the Reaping',
+    title: 'Steps',
     year: 2026,
-    slug: 'the-hunger-games-sunrise-on-the-reaping',
-    plexSlug: 'the-hunger-games-sunrise-on-the-reaping-2026',
-    imdbRating: 7.7,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/8/2/6/9/2/1182692-the-hunger-games-sunrise-on-the-reaping-0-600-0-900-crop.jpg?v=91001efc76',
+    slug: 'steps-2026',
+    imdbRating: 6.8,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/4/6/4/2/8/1/1464281-steps-2026-0-600-0-900-crop.jpg?v=f16cfb947e',
     vodDate: '2026-11-20',
-    platform: null,
-    cinema: true,
-    estimated: true,
-    note: 'In cinemas 20 Nov 2026 UK & US (Lionsgate) · digital TBA',
-    runtime: 158,
-  },
-  {
-    title: 'Digger',
-    year: 2026,
-    slug: 'digger-2026',
-    imdbRating: 7.5,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/2/6/8/8/1132688-digger-2026-0-600-0-900-crop.jpg?v=81ec883a95',
-    vodDate: '2026-11-24',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · mostly out of cinemas but still no pre-order · still no digital date or pre-order on 13 Nov (WhenToStream TBA), so 17 Nov unlikely · est. Thanksgiving week, Tuesday drop',
-    runtime: 129,
+    platform: 'Netflix',
+    estimated: false,
   },
   {
     title: 'The Social Reckoning',
@@ -126,8 +110,9 @@ const FILMS = [
     runtime: 105,
   },
   {
-    title: 'Klara and the Sun',
+    title: 'Digger',
     year: 2026,
+<<<<<<< HEAD
     slug: 'klara-and-the-sun',
     imdbRating: 6.4,
     poster: 'https://a.ltrbxd.com/resized/film-poster/7/7/2/2/4/2/772242-klara-and-the-sun-0-600-0-900-crop.jpg?v=96606d0ee5',
@@ -135,6 +120,16 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     runtime: 117,
+=======
+    slug: 'digger-2026',
+    imdbRating: 7.5,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/2/6/8/8/1132688-digger-2026-0-600-0-900-crop.jpg?v=81ec883a95',
+    vodDate: '2026-12-01',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · still no pre-order or digital date on 22 Nov · WhenToStream 11/20 pushed its estimate to late Nov / early Dec 2026, Tuesday drop',
+    runtime: 129,
+>>>>>>> bb522a7 (update 22/11/2026  9:27:43.87)
   },
   {
     title: 'Street Fighter',
@@ -146,6 +141,17 @@ const FILMS = [
     platform: 'Digital',
     estimated: false,
     runtime: 125,
+  },
+  {
+    title: 'Klara and the Sun',
+    year: 2026,
+    slug: 'klara-and-the-sun',
+    imdbRating: 6.4,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/7/7/2/2/4/2/772242-klara-and-the-sun-0-600-0-900-crop.jpg?v=96606d0ee5',
+    vodDate: '2026-12-08',
+    platform: 'Digital',
+    estimated: false,
+    runtime: 117,
   },
   {
     title: 'Clayface',
@@ -195,6 +201,31 @@ const FILMS = [
     runtime: 98,
   },
   {
+    title: 'I Play Rocky',
+    year: 2026,
+    slug: 'i-play-rocky',
+    imdbRating: 8,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/2/2/8/1170228-i-play-rocky-0-600-0-900-crop.jpg?v=d568ec1f72',
+    vodDate: '2026-12-15',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 11 Nov 2026 UK / US limited 6 Nov, wide 20 Nov (Amazon MGM) · pre-order now open · WhenToStream 11/20 moved its estimate up to mid Dec 2026, Tuesday drop',
+    runtime: 128,
+  },
+  {
+    title: 'The Hunger Games: Sunrise on the Reaping',
+    year: 2026,
+    slug: 'the-hunger-games-sunrise-on-the-reaping',
+    plexSlug: 'the-hunger-games-sunrise-on-the-reaping-2026',
+    imdbRating: 7.6,
+    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/8/2/6/9/2/1182692-the-hunger-games-sunrise-on-the-reaping-0-600-0-900-crop.jpg?v=91001efc76',
+    vodDate: '2026-12-22',
+    platform: null,
+    estimated: true,
+    note: 'Est. — cinemas 20 Nov 2026 UK & US (Lionsgate) · pre-order open · last Hunger Games hit PVOD after ~a month · WhenToStream 11/20 expects late Dec 2026, Tuesday drop',
+    runtime: 158,
+  },
+  {
     title: 'Ramayana: Rise of a Legend',
     year: 2026,
     slug: 'ramayana-rise-of-a-legend',
@@ -205,18 +236,6 @@ const FILMS = [
     estimated: true,
     note: 'Est. — cinemas 6 Nov 2026 UK / 5 Nov US & India (Sony Pictures Releasing outside India) + ~45-day Sony window · streaming on JioHotstar in India after its cinema run · UK digital TBA · Tuesday drop',
     runtime: 197,
-  },
-  {
-    title: 'I Play Rocky',
-    year: 2026,
-    slug: 'i-play-rocky',
-    imdbRating: 8,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/7/0/2/2/8/1170228-i-play-rocky-0-600-0-900-crop.jpg?v=d568ec1f72',
-    vodDate: '2026-12-22',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 11 Nov 2026 UK / US limited 6 Nov, wide 20 Nov (Amazon MGM) · no pre-order yet · WhenToStream 11/13 expects PVOD late Dec 2026 for Christmas, Tuesday drop',
-    runtime: 128,
   },
   {
     title: 'Club Kid',
@@ -240,7 +259,7 @@ const FILMS = [
     vodDate: '2026-12-29',
     platform: null,
     estimated: true,
-    note: 'Est. — cinemas 13 Nov 2026 UK & US (Paramount) · theatrical only, no digital listing yet (WhenToStream TBA) · ~45-day window, Tuesday drop',
+    note: 'Est. — cinemas 13 Nov 2026 UK & US (Paramount) · pre-order now open (WhenToStream 11/20 expects post-Christmas PVOD) · ~45-day window, Tuesday drop',
     runtime: 115,
   },
   {
