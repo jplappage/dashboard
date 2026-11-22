@@ -150,9 +150,8 @@ const FILMS = [
     imdbRating: 7.5,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/2/8/4/6/3/6/1284636-clayface-0-600-0-900-crop.jpg?v=eb305849d5',
     vodDate: '2026-12-08',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 23 Oct 2026 (DC Studios / Warner Bros) · WB now on 45-day windows under Skydance · pre-order open · WhenToStream 11/13 expects PVOD early Dec 2026, Tuesday drop',
+    platform: 'Digital',
+    estimated: false,
     runtime: 108,
   },
   {
