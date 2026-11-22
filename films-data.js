@@ -112,15 +112,6 @@ const FILMS = [
   {
     title: 'Digger',
     year: 2026,
-<<<<<<< HEAD
-    slug: 'klara-and-the-sun',
-    imdbRating: 6.4,
-    poster: 'https://a.ltrbxd.com/resized/film-poster/7/7/2/2/4/2/772242-klara-and-the-sun-0-600-0-900-crop.jpg?v=96606d0ee5',
-    vodDate: '2026-12-08',
-    platform: 'Digital',
-    estimated: false,
-    runtime: 117,
-=======
     slug: 'digger-2026',
     imdbRating: 7.5,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/2/6/8/8/1132688-digger-2026-0-600-0-900-crop.jpg?v=81ec883a95',
@@ -129,7 +120,6 @@ const FILMS = [
     estimated: true,
     note: 'Est. — cinemas 2 Oct 2026 (Warner Bros · Iñárritu / Tom Cruise) · still no pre-order or digital date on 22 Nov · WhenToStream 11/20 pushed its estimate to late Nov / early Dec 2026, Tuesday drop',
     runtime: 129,
->>>>>>> bb522a7 (update 22/11/2026  9:27:43.87)
   },
   {
     title: 'Street Fighter',
