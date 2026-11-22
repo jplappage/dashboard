@@ -192,4 +192,5 @@ const FAVOURITE_POSTERS = [
   { slug: "the-incredible-hulk", title: "The Incredible Hulk", year: 2008, tmdb: 1724, poster: "ebK5g7FhJRuGMANsoDGOTXeZGrx.jpg" }, // JP pick, 22 Nov 2026
   { slug: "iron-man-2", title: "Iron Man 2", year: 2010, tmdb: 10138, poster: "vioYkmuRlnWr4dZQSblkGSIlzS9.jpg" }, // JP pick, 22 Nov 2026
   { slug: "captain-america-brave-new-world", title: "Captain America: Brave New World", year: 2025, tmdb: 822119, poster: "56mIu1630ALe3F9RP1Szlv0qVyb.jpg" }, // JP pick, 22 Nov 2026
+  { slug: "doctor-strange-in-the-multiverse-of-madness", title: "Doctor Strange in the Multiverse of Madness", year: 2022, tmdb: 453395, poster: "evqNkeT0xxIXllE36RnrUXuUwDQ.jpg" }, // multi-armed Strange on white (JP pick, 22 Nov 2026)
 ];
