@@ -187,4 +187,6 @@ const FAVOURITE_POSTERS = [
   { slug: "splinter-cell-deathwatch", title: "Splinter Cell: Deathwatch", year: 2025, tmdb: 127366, poster: "ywSwacfcb7NB9Rg2tkm4bFrcTwt.jpg", tv: true },
   // Added 22 Nov 2026 at JP's request
   { slug: "loki", title: "Loki", year: 2021, tmdb: 84958, poster: "qNDZjNUS16lnGWZNiNwcH71zSG1.jpg", tv: true }, // green robes in green lightning (text-free)
+  { slug: "avengers-doomsday", title: "Avengers: Doomsday", year: 2026, tmdb: 1003596, poster: "gyYdLwD4wC4r3j1X4h36daTVOa.jpg" }, // Doctor Doom on his throne
+  { slug: "dune-part-three", title: "Dune: Part Three", year: 2026, tmdb: 1170608, poster: "lGViEh29Bk68Ixjg46Sqj4xMUQw.jpg" }, // Paul in a cloak, sunlit desert
 ];
