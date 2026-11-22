@@ -169,7 +169,7 @@ const FAVOURITE_POSTERS = [
   { slug: "the-matrix-reloaded", title: "The Matrix Reloaded", year: 2003, tmdb: 604, poster: "jzaop55irphUkq6ISuydmTOZpJr.jpg" },
   { slug: "se7en", title: "Se7en", year: 1995, tmdb: 807, poster: "ctthGIrHLXXAy893Qnvj3SXhhPz.jpg" },
   { slug: "bad-boys-1995", title: "Bad Boys", year: 1995, tmdb: 9737, poster: "4cLEh3i7LYZs91IOsYtINBDRpu5.jpg" },
-  { slug: "training-day", title: "Training Day", year: 2001, tmdb: 2034, poster: "zxYzamkJ4fs6RtSbFN8fzfugybp.jpg" }, // both faces over red LA skyline (JP pick, 22 Nov 2026)
+  { slug: "training-day", title: "Training Day", year: 2001, tmdb: 2034, poster: "qRSWWbZEvFOECKTEppkY5Muapz7.jpg" }, // Denzel & Hawke walking, full colour (JP pick, 22 Nov 2026)
   { slug: "shogun-2024", title: "Shōgun", year: 2024, tmdb: 126308, poster: "23wScEz9Tr5N1cE58K9FAtN00y4.jpg", tv: true },
   { slug: "gone-in-sixty-seconds", title: "Gone in Sixty Seconds", year: 2000, tmdb: 9679, poster: "dbGJcp9LaHJXkDOBxAunPeSx4G8.jpg" },
   // TV shows JP asked to include in the rotation (24 Oct 2026) — same posters as show-posters.js
