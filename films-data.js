@@ -183,10 +183,9 @@ const FILMS = [
     slug: 'whalefall',
     imdbRating: 6.6,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/1/3/9/8/3/4/1139834-whalefall-0-600-0-900-crop.jpg?v=e0ec86ea62',
-    vodDate: '2026-12-15',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 16 Oct 2026 (20th Century) + usual 7-8 week window, Tuesday drop · PVOD est. mid Dec 2026 (WhenToStream 10/16)',
+    vodDate: '2026-12-01',
+    platform: 'Digital',
+    estimated: false,
     runtime: 98,
   },
   {
