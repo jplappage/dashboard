@@ -172,9 +172,8 @@ const FILMS = [
     imdbRating: 6.4,
     poster: 'https://a.ltrbxd.com/resized/film-poster/1/3/1/5/2/9/3/1315293-how-to-rob-a-bank-2026-0-600-0-900-crop.jpg?v=0a5382a9dc',
     vodDate: '2026-12-08',
-    platform: null,
-    estimated: true,
-    note: 'Est. — cinemas 13 Nov 2026 UK & US (Amazon MGM US / Sony UK) · pre-order open · Amazon MGM fast-tracking titles to PVOD · WhenToStream 11/13 expects early Dec 2026, Tuesday drop',
+    platform: 'Digital',
+    estimated: false,
     runtime: 122,
   },
   {
